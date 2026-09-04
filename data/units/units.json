@@ -1,0 +1,750 @@
+[
+  {
+    "id": "SAM_COMMANDER_EMBER-BANNER-DAIMYO",
+    "name": "Ember Banner Daimyo",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1500,
+    "atk": 1750,
+    "def": 1700,
+    "mov": 4,
+    "range": 1,
+    "initiative": 6,
+    "morale": 80,
+    "commandRadius": 3,
+    "capacityCost": 9,
+    "passives": [],
+    "actives": [
+      "ABL_COORDINATED_CUT"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "art": {
+      "concept": "art/samples/SAM_COMMANDER_EMBER-BANNER-DAIMYO_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_COMMANDER_EMBER-BANNER-DAIMYO_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "SAM_SECOND_WHITE-CRANE-RETAINER",
+    "name": "White Crane Retainer",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Second"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1350,
+    "atk": 1600,
+    "def": 1650,
+    "mov": 4,
+    "range": 2,
+    "initiative": 6,
+    "morale": 75,
+    "commandRadius": 2,
+    "capacityCost": 7,
+    "passives": [],
+    "actives": [
+      "ABL_LAST_OATH"
+    ],
+    "slots": [
+      "Second"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_support"
+  },
+  {
+    "id": "SAM_ELITE_ONI-GATE-CHAMPION",
+    "name": "Oni-Gate Champion",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1800,
+    "atk": 2350,
+    "def": 1850,
+    "mov": 4,
+    "range": 1,
+    "initiative": 5,
+    "morale": 80,
+    "capacityCost": 10,
+    "passives": [],
+    "actives": [
+      "ABL_FORMAL_DUEL"
+    ],
+    "slots": [
+      "Elite"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "line_breaker"
+  },
+  {
+    "id": "SAM_FOOT_EMBERLINE-ASHIGARU",
+    "name": "Emberline Ashigaru",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 1100,
+    "atk": 1400,
+    "def": 1450,
+    "mov": 4,
+    "range": 1,
+    "initiative": 4,
+    "morale": 70,
+    "capacityCost": 4,
+    "passives": [
+      "ABL_SPEAR_WALL"
+    ],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "formation_hold",
+    "art": {
+      "concept": "art/samples/SAM_FOOT_EMBERLINE-ASHIGARU_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_FOOT_EMBERLINE-ASHIGARU_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "SHI_COMMANDER_VEILED-MOON-JONIN",
+    "name": "Veiled Moon Jōnin",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1300,
+    "atk": 1800,
+    "def": 1400,
+    "mov": 6,
+    "range": 1,
+    "initiative": 8,
+    "morale": 80,
+    "commandRadius": 4,
+    "capacityCost": 9,
+    "passives": [],
+    "actives": [
+      "ABL_SILENT_DIRECTIVE"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_flank",
+    "art": {
+      "concept": "art/samples/SHI_COMMANDER_VEILED-MOON-JONIN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_COMMANDER_VEILED-MOON-JONIN_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "SHI_SECOND_REED-SIGNAL-LIEUTENANT",
+    "name": "Reed-Signal Lieutenant",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "Second"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1250,
+    "atk": 1550,
+    "def": 1400,
+    "mov": 6,
+    "range": 2,
+    "initiative": 8,
+    "morale": 75,
+    "commandRadius": 2,
+    "capacityCost": 7,
+    "passives": [],
+    "actives": [
+      "ABL_SMOKE_RELAY"
+    ],
+    "slots": [
+      "Second"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_support"
+  },
+  {
+    "id": "SHI_ELITE_MIRROR-SHADE-ADEPT",
+    "name": "Mirror Shade Adept",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1400,
+    "atk": 2100,
+    "def": 1350,
+    "mov": 6,
+    "range": 1,
+    "initiative": 9,
+    "morale": 80,
+    "capacityCost": 10,
+    "passives": [],
+    "actives": [
+      "ABL_TWIN_ECHO"
+    ],
+    "slots": [
+      "Elite"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "assassin",
+    "art": {
+      "concept": "art/samples/SHI_ELITE_MIRROR-SHADE-ADEPT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_ELITE_MIRROR-SHADE-ADEPT_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "SHI_FOOT_NIGHT-THREAD-OPERATIVE",
+    "name": "Night-Thread Operative",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 950,
+    "atk": 1500,
+    "def": 1150,
+    "mov": 6,
+    "range": 1,
+    "initiative": 7,
+    "morale": 70,
+    "capacityCost": 4,
+    "passives": [
+      "ABL_CUT_THE_THREAD"
+    ],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider"
+  },
+  {
+    "id": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL",
+    "name": "Solar Bastion Marshal",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1700,
+    "atk": 1650,
+    "def": 2000,
+    "mov": 3,
+    "range": 1,
+    "initiative": 4,
+    "morale": 85,
+    "commandRadius": 3,
+    "capacityCost": 9,
+    "passives": [],
+    "actives": [
+      "ABL_HOLD_THE_STANDARD"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "art": {
+      "concept": "art/samples/KNI_COMMANDER_SOLAR-BASTION-MARSHAL_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_COMMANDER_SOLAR-BASTION-MARSHAL_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "KNI_SECOND_OATHBOUND-CASTELLAN",
+    "name": "Oathbound Castellan",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "Second"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1550,
+    "atk": 1550,
+    "def": 1900,
+    "mov": 3,
+    "range": 1,
+    "initiative": 4,
+    "morale": 80,
+    "commandRadius": 2,
+    "capacityCost": 7,
+    "passives": [],
+    "actives": [
+      "ABL_INHERITED_WALL"
+    ],
+    "slots": [
+      "Second"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_support"
+  },
+  {
+    "id": "KNI_ELITE_SKY-LANCE-DRAGOON",
+    "name": "Sky-Lance Dragoon",
+    "faction": "KNI",
+    "themes": [
+      "Knight",
+      "Dragon Cavalry"
+    ],
+    "roles": [
+      "Elite",
+      "Cavalry"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1900,
+    "atk": 2400,
+    "def": 1650,
+    "mov": 8,
+    "range": 1,
+    "initiative": 7,
+    "morale": 80,
+    "capacityCost": 12,
+    "flying": true,
+    "passives": [],
+    "actives": [
+      "ABL_DIVING_CHARGE"
+    ],
+    "slots": [
+      "Elite"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "cavalry_raid",
+    "art": {
+      "concept": "art/samples/KNI_ELITE_SKY-LANCE-DRAGOON_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_ELITE_SKY-LANCE-DRAGOON_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "KNI_FOOT_BASTION-MAN-AT-ARMS",
+    "name": "Bastion Man-at-Arms",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 1250,
+    "atk": 1300,
+    "def": 1650,
+    "mov": 3,
+    "range": 1,
+    "initiative": 3,
+    "morale": 75,
+    "capacityCost": 4,
+    "passives": [
+      "ABL_SHIELD_LOCK"
+    ],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "formation_hold",
+    "art": {
+      "concept": "art/samples/KNI_FOOT_BASTION-MAN-AT-ARMS_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_FOOT_BASTION-MAN-AT-ARMS_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "DRG_COMMANDER_RIFTWING-DOMINANT",
+    "name": "Riftwing Dominant",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Large",
+    "hp": 2000,
+    "atk": 2000,
+    "def": 1900,
+    "mov": 7,
+    "range": 1,
+    "initiative": 6,
+    "morale": 85,
+    "commandRadius": 4,
+    "capacityCost": 14,
+    "flying": true,
+    "passives": [],
+    "actives": [
+      "ABL_WING_ROAR"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_flank",
+    "art": {
+      "concept": "art/samples/DRG_COMMANDER_RIFTWING-DOMINANT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_COMMANDER_RIFTWING-DOMINANT_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "DRG_SECOND_STORMCLAW-WINGSECOND",
+    "name": "Stormclaw Wingsecond",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "Second"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1600,
+    "atk": 1800,
+    "def": 1600,
+    "mov": 8,
+    "range": 1,
+    "initiative": 8,
+    "morale": 80,
+    "commandRadius": 2,
+    "capacityCost": 10,
+    "flying": true,
+    "passives": [],
+    "actives": [
+      "ABL_SLIPSTREAM"
+    ],
+    "slots": [
+      "Second"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_support"
+  },
+  {
+    "id": "DRG_ELITE_OBSIDIAN-MAW",
+    "name": "Obsidian Maw",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 2100,
+    "atk": 2600,
+    "def": 1800,
+    "mov": 6,
+    "range": 1,
+    "initiative": 6,
+    "morale": 80,
+    "capacityCost": 13,
+    "flying": true,
+    "passives": [],
+    "actives": [
+      "ABL_CRUSHING_DIVE"
+    ],
+    "slots": [
+      "Elite"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "line_breaker"
+  },
+  {
+    "id": "DRG_FOOT_SLATEWING-DRAKE",
+    "name": "Slatewing Drake",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 1200,
+    "atk": 1550,
+    "def": 1300,
+    "mov": 7,
+    "range": 1,
+    "initiative": 6,
+    "morale": 70,
+    "capacityCost": 6,
+    "flying": true,
+    "passives": [
+      "ABL_PACK_WING"
+    ],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider",
+    "art": {
+      "concept": "art/samples/DRG_FOOT_SLATEWING-DRAKE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_FOOT_SLATEWING-DRAKE_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "RIT_LEADER_AFFILIATED-SUMMONER",
+    "name": "Affiliated Summoner",
+    "faction": "RIT",
+    "themes": [
+      "Ritual Cult"
+    ],
+    "roles": [
+      "Ritualist",
+      "Support"
+    ],
+    "rank": "Specialist",
+    "size": "Standard",
+    "hp": 1200,
+    "atk": 1300,
+    "def": 1300,
+    "mov": 3,
+    "range": 2,
+    "initiative": 5,
+    "morale": 80,
+    "capacityCost": 8,
+    "ritual": {
+      "knowledge": 3,
+      "language": 3,
+      "affinity": 3,
+      "channeling": 3
+    },
+    "passives": [],
+    "actives": [
+      "ABL_CHANNEL"
+    ],
+    "slots": [
+      "Specialist"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "ritualist"
+  },
+  {
+    "id": "RIT_FOOT_FOREIGN-RITUALIST",
+    "name": "Foreign Ritualist",
+    "faction": "RIT",
+    "themes": [
+      "Ritual Cult"
+    ],
+    "roles": [
+      "Ritualist"
+    ],
+    "rank": "Specialist",
+    "size": "Standard",
+    "hp": 1000,
+    "atk": 1100,
+    "def": 1200,
+    "mov": 3,
+    "range": 2,
+    "initiative": 4,
+    "morale": 70,
+    "capacityCost": 5,
+    "ritual": {
+      "knowledge": 3,
+      "language": 1,
+      "affinity": 1,
+      "channeling": 2
+    },
+    "passives": [],
+    "actives": [
+      "ABL_CHANNEL"
+    ],
+    "slots": [
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "ritualist"
+  },
+  {
+    "id": "KNI_SUPPORT_PORTAL-KEEPER",
+    "name": "Bastion Portal Keeper",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "PortalKeeper",
+      "Support"
+    ],
+    "rank": "Specialist",
+    "size": "Standard",
+    "hp": 1100,
+    "atk": 1000,
+    "def": 1400,
+    "mov": 3,
+    "range": 1,
+    "initiative": 4,
+    "morale": 75,
+    "capacityCost": 5,
+    "passives": [],
+    "actives": [
+      "ABL_OPEN_PORTAL"
+    ],
+    "slots": [
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "portal_keeper"
+  },
+  {
+    "id": "DIV_BOSS_SOVEREIGN-OF-MEMORY",
+    "name": "Sovereign of Memory",
+    "faction": "DIV",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 3600,
+    "atk": 3200,
+    "def": 3000,
+    "mov": 4,
+    "range": 3,
+    "initiative": 10,
+    "morale": 100,
+    "capacityCost": 0,
+    "flying": true,
+    "divine": {
+      "manifestation": 3,
+      "anchors": 3,
+      "arrival": "RevealHidden"
+    },
+    "passives": [],
+    "actives": [],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "deity"
+  },
+  {
+    "id": "DIV_BOSS_SOVEREIGN-OF-TORMENT",
+    "name": "Sovereign of Torment",
+    "faction": "DIV",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 4000,
+    "atk": 3400,
+    "def": 3200,
+    "mov": 3,
+    "range": 1,
+    "initiative": 8,
+    "morale": 100,
+    "capacityCost": 0,
+    "divine": {
+      "manifestation": 3,
+      "anchors": 3,
+      "arrival": "FearPulse"
+    },
+    "passives": [],
+    "actives": [],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "deity"
+  },
+  {
+    "id": "DIV_BOSS_SOVEREIGN-OF-REINCARNATION",
+    "name": "Sovereign of Reincarnation",
+    "faction": "DIV",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 3800,
+    "atk": 3000,
+    "def": 3100,
+    "mov": 4,
+    "range": 2,
+    "initiative": 9,
+    "morale": 100,
+    "capacityCost": 0,
+    "divine": {
+      "manifestation": 3,
+      "anchors": 3,
+      "arrival": "ReturnFallen"
+    },
+    "passives": [],
+    "actives": [],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "deity"
+  }
+]

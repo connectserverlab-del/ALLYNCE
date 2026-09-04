@@ -1,0 +1,42 @@
+{
+  "SAM": {
+    "id": "SAM", "name": "Samurai Army", "identity": "Disciplined counteroffense",
+    "palette": ["ember red", "charcoal black", "aged bronze"],
+    "primaryTheme": "Samurai",
+    "platoonOrder": "ORD_MEASURED_ADVANCE",
+    "passiveDoctrine": "DOC_OATH_LINE",
+    "weakness": "Less effective when scattered or attacked from multiple directions."
+  },
+  "SHI": {
+    "id": "SHI", "name": "Shinobi Army", "identity": "Stealth, deception, disruption",
+    "palette": ["midnight indigo", "muted jade", "moon-silver"],
+    "primaryTheme": "Shinobi",
+    "platoonOrder": "ORD_VEIL_CROSSING",
+    "passiveDoctrine": "DOC_UNSEEN_NETWORK",
+    "weakness": "Lower sustained DEF and reduced power in prolonged frontal engagements."
+  },
+  "KNI": {
+    "id": "KNI", "name": "Knight Army", "identity": "Defense, protection, controlled cavalry",
+    "palette": ["deep blue", "ivory", "restrained gold"],
+    "primaryTheme": "Knight",
+    "platoonOrder": "ORD_BASTION_FORMATION",
+    "passiveDoctrine": "DOC_OATH_OF_INTERCESSION",
+    "weakness": "Lower mobility without cavalry; vulnerable to being surrounded."
+  },
+  "DRG": {
+    "id": "DRG", "name": "Dragon Host", "identity": "Aerial force and territorial dominance",
+    "palette": ["slate blue", "charcoal", "pale mineral"],
+    "primaryTheme": "Dragon",
+    "platoonOrder": "ORD_WING_DOMINION",
+    "passiveDoctrine": "DOC_PREDATORY_AIRSPACE",
+    "weakness": "Anti-air zones, enclosed maps, ritual bindings, limited objective capture."
+  },
+  "RIT": {
+    "id": "RIT", "name": "Ritual Cult", "identity": "Foreign channelers and affiliated summoners",
+    "palette": ["marsh green", "weathered teal", "pale mineral"],
+    "primaryTheme": "Ritual Cult",
+    "platoonOrder": null,
+    "passiveDoctrine": null,
+    "weakness": "Specialist teams only; cannot unlock extra commanders or elites."
+  }
+}

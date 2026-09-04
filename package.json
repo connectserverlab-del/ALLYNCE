@@ -1,0 +1,32 @@
+{
+  "name": "allynce",
+  "version": "0.1.0",
+  "description": "Original tactical army strategy game: data-first simulation core and asset pipeline",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json",
+    "sim:demo": "npx tsx core/src/demo.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/connectserverlab-del/ALLYNCE.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/connectserverlab-del/ALLYNCE/issues"
+  },
+  "homepage": "https://github.com/connectserverlab-del/ALLYNCE#readme",
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
+  },
+  "private": true,
+  "type": "module"
+}
