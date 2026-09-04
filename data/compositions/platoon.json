@@ -1,0 +1,26 @@
+{
+  "standardPlatoon": {
+    "slots": { "Commander": 1, "Second": 1, "Elite": 1, "FootSoldier": 5 },
+    "total": 8,
+    "doctrine": {
+      "full":    { "atk": 100, "def": 100, "morale": 10, "minFoot": 5, "requiresLeader": true, "requiresElite": true },
+      "reduced": { "atk": 50,  "def": 50,  "morale": 0,  "minFoot": 3, "requiresLeader": true, "requiresElite": true },
+      "broken":  { "atk": 0,   "def": 0,   "morale": 0 }
+    },
+    "continuityRounds": 1
+  },
+  "themeCohesion": { "perAdjacentAlly": 50, "maxConnections": 4, "disorderedCap": 100 },
+  "organizations": {
+    "Patrol":    { "leaders": 1, "compatibleUnits": 2, "effect": "Increased sight and scouting movement" },
+    "Platoon":   { "platoons": 1, "effect": "Platoon Doctrine" },
+    "Company":   { "platoons": 3, "extra": ["CompanyCommander", "CompanySecond"], "effect": "One army-level order per round" },
+    "Battalion": { "companies": 3, "extra": ["BattalionCommander", "BattalionSecond"], "effect": "Campaign-scale; not in vertical slice" }
+  },
+  "limits": {
+    "eliteSlotsPerPlatoon": 1,
+    "uniqueCopiesPerArmy": 1,
+    "bossDeityStartingDeployment": false,
+    "wizardsPerPlatoon": 1,
+    "clonesCountTowardComposition": false
+  }
+}
