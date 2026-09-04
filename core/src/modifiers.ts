@@ -5,8 +5,9 @@ import { doctrineState } from "./composition.js";
 import { commandBonus } from "./command.js";
 import { moraleBand } from "./morale.js";
 import { attackArc, type AttackArc } from "./hex.js";
+import { privileges, commandRadiusOf } from "./ranks.js";
 
-export interface CombatContext { attacker?: UnitState; defender?: UnitState; arc?: AttackArc; ranged?: boolean }
+export interface CombatContext { attacker?: UnitState; defender?: UnitState; arc?: AttackArc; ranged?: boolean; reaction?: boolean }
 
 /**
  * Modifier pipeline. Every contribution records its source so the UI can show the breakdown
@@ -56,6 +57,13 @@ export function computeStat(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: C
 
   // 7. Ability conditionals and platoon orders (data-driven)
   if (!u.isClone) mods.push(...abilityModifiers(b, u, stat, ctx));
+
+  // 8. Faction rank privileges
+  if (!u.isClone && !isDivine) {
+    const pv = privileges(b, u);
+    if (stat === "ATK" && ctx.reaction && pv.twoSwords) mods.push({ source: "Rank: two swords (reaction)", stat, value: 50 });
+    if (stat === "DEF" && u.pos && b.terrainAt(u.pos) === "Fortification" && castleLordNearby(b, u)) mods.push({ source: "Rank: castle lord nearby", stat, value: 100 });
+  }
 
   // Divine entities' stats scale down with lost anchors
   let final = base + mods.reduce((s, m) => s + m.value, 0);
@@ -120,4 +128,10 @@ export function clearTempMods(u: UnitState, predicate?: (m: Modifier) => boolean
 export function arcFor(b: Battle, attacker: UnitState, defender: UnitState): AttackArc {
   if (!attacker.pos || !defender.pos) return "front";
   return attackArc(defender.pos, defender.facing, attacker.pos);
+}
+
+/** A castle-holding rank on the same side whose command radius covers `u`. */
+function castleLordNearby(b: Battle, u: UnitState): boolean {
+  for (const l of b.activeUnits(u.side)) if (l.uid !== u.uid && privileges(b, l).castle && b.distance(l, u) <= commandRadiusOf(b, l)) return true;
+  return false;
 }

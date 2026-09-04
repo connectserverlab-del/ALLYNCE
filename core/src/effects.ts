@@ -4,6 +4,7 @@ import { hexNeighbors, hexKey } from "./hex.js";
 import { platoonMorale, platoonMembers, tempPreventRouted, changeMorale } from "./morale.js";
 import { addTempMod } from "./modifiers.js";
 import { computeStat } from "./modifiers.js";
+import { commandRadiusOf } from "./ranks.js";
 
 export interface EffectContext { platoon?: PlatoonState; target?: UnitState; targetHex?: { q: number; r: number } }
 
@@ -32,7 +33,7 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
       for (const uid of platoonMembers(p)) { const m = b.units.get(uid); if (m && !m.defeated) addTempMod(m, { source: ability.name, stat: "MOV", value: e.mov }); }
       return true;
     case "PreventRouted": {
-      const radius = b.def(user).commandRadius ?? 0;
+      const radius = commandRadiusOf(b, user);
       for (const a of b.activeUnits(user.side)) if (b.distance(user, a) <= radius) { tempPreventRouted.add(a.uid); b.removeStatus(a, "Routed"); }
       b.log("Ability", { ability: ability.id, uid: user.uid });
       return true;

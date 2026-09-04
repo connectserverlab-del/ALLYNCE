@@ -33,7 +33,8 @@
     "art": {
       "concept": "art/samples/SAM_COMMANDER_EMBER-BANNER-DAIMYO_CONCEPT_V01.jpg",
       "cutout": "art/samples/SAM_COMMANDER_EMBER-BANNER-DAIMYO_CUTOUT_V01.png"
-    }
+    },
+    "factionRank": "HATAMOTO"
   },
   {
     "id": "SAM_SECOND_WHITE-CRANE-RETAINER",
@@ -65,7 +66,8 @@
     ],
     "unique": true,
     "summonOnly": false,
-    "ai": "leader_support"
+    "ai": "leader_support",
+    "factionRank": "CHURO"
   },
   {
     "id": "SAM_ELITE_ONI-GATE-CHAMPION",
@@ -96,7 +98,8 @@
     ],
     "unique": true,
     "summonOnly": false,
-    "ai": "line_breaker"
+    "ai": "line_breaker",
+    "factionRank": "UMAMAWARI"
   },
   {
     "id": "SAM_FOOT_EMBERLINE-ASHIGARU",
@@ -131,7 +134,8 @@
     "art": {
       "concept": "art/samples/SAM_FOOT_EMBERLINE-ASHIGARU_CONCEPT_V01.jpg",
       "cutout": "art/samples/SAM_FOOT_EMBERLINE-ASHIGARU_CUTOUT_V01.png"
-    }
+    },
+    "factionRank": "KOYAKUNIN"
   },
   {
     "id": "SHI_COMMANDER_VEILED-MOON-JONIN",

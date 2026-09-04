@@ -18,6 +18,7 @@ export interface UnitDef {
   passives: string[]; actives: string[]; slots: SlotName[];
   unique: boolean; summonOnly: boolean; ai: string; flying?: boolean;
   ritual?: RitualRatings; divine?: DivineDef;
+  factionRank?: string;
   art?: Record<string, string>;
 }
 

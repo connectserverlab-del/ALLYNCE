@@ -11,6 +11,7 @@ import { tickPortal, checkCaptureInterrupt, attackPortal, captureStep, type Port
 import { commandRadiusRecovery, surroundedPenalty, moraleBand, changeMorale } from "./morale.js";
 import { doctrineState } from "./composition.js";
 import { evaluateObjective, markSynchronized, type ObjectiveDef, type ObjectiveProgress } from "./objectives.js";
+import { mountedMoveBonus, commandRadiusOf } from "./ranks.js";
 
 export interface VictoryRules { sides: Record<string, ObjectiveDef[]>; roundLimit: number; roundLimitWinner?: string }
 
@@ -84,7 +85,7 @@ export class BattleController {
 
   movementAllowance(u: UnitState): number {
     const d = this.b.def(u);
-    return d.mov + tempMods(u).filter((m) => m.stat === "MOV").reduce((s, m) => s + m.value, 0);
+    return d.mov + mountedMoveBonus(this.b, u) + tempMods(u).filter((m) => m.stat === "MOV").reduce((s, m) => s + m.value, 0);
   }
 
   /** BFS pathfinding with terrain costs, zone of control and flying rules. Returns reachable hexes with cost. */
@@ -131,7 +132,7 @@ export class BattleController {
     for (const p of b.platoons.values()) {
       if (p.side === u.side || p.faction !== "DRG" || !p.commanderUid) continue;
       const c = b.units.get(p.commanderUid);
-      if (c && !c.defeated && c.pos && hexDistance(c.pos, h) <= (b.def(c).commandRadius ?? 0)) return true;
+      if (c && !c.defeated && c.pos && hexDistance(c.pos, h) <= commandRadiusOf(b, c)) return true;
     }
     return false;
   }
@@ -151,13 +152,13 @@ export class BattleController {
     if (zocEnemies.length && !opts.disengage && !ignoreZoc) {
       const reactor = zocEnemies[0]!;
       b.log("ReactionAttack", { by: reactor.uid, on: u.uid });
-      resolveAttack(b, reactor, u);
+      resolveAttack(b, reactor, u, { reaction: true });
       if (u.defeated) return;
     }
     // Overwatch: first valid enemy entering range gets shot
     for (const e of b.activeUnits()) {
       if (e.side === u.side || !e.overwatch || !e.pos) continue;
-      if (hexDistance(e.pos, to) <= b.def(e).range && hexDistance(e.pos, from) > b.def(e).range) { b.log("OverwatchTriggered", { by: e.uid, on: u.uid }); resolveAttack(b, e, u, { ranged: b.def(e).range > 1 }); if (u.defeated) return; }
+      if (hexDistance(e.pos, to) <= b.def(e).range && hexDistance(e.pos, from) > b.def(e).range) { b.log("OverwatchTriggered", { by: e.uid, on: u.uid }); resolveAttack(b, e, u, { ranged: b.def(e).range > 1, reaction: true }); if (u.defeated) return; }
     }
     b.place(u, to);
     u.facing = directionTo(from, to);
