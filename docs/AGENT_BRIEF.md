@@ -21,6 +21,14 @@ You are working in the ALLYNCE repository, an original tactical army strategy ga
 7. Move the finished item from "Next" to "Done" in `docs/ROADMAP.md`. Add at least one dated line to the brainstorm log:
    an idea that follows from the owner's stated intent, marked as a proposal.
 
+## Standing design facts
+
+- Cards: 100-card main deck, 20-card ritual/fusion side deck, stars 1-10. Rules in `data/cards/`, engine in
+  `core/src/cards.ts`, reference in `docs/cards-and-kingdom.md`.
+- The holding: `data/kingdom/`, `core/src/kingdom.ts`. Everything it grants must reach battle as a named,
+  source-tracked modifier so the attack breakdown stays honest.
+- Maps are painted straight down from above. Never commission a three-quarter battlefield painting.
+
 ## Guardrails
 
 - Do not change approved art or rename units without an owner decision recorded in the roadmap.

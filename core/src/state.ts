@@ -5,6 +5,8 @@ import type { Registry } from "./data.js";
 import { Rng } from "./rng.js";
 import type { RitualCircle } from "./rituals.js";
 import type { Portal } from "./portals.js";
+import type { DeckState } from "./cards.js";
+import type { KingdomEffects } from "./kingdom.js";
 
 export type Phase = "Command" | "Activation" | "Objective" | "End" | "Ended";
 
@@ -24,6 +26,8 @@ export class Battle {
   readonly rituals = new Map<string, RitualCircle>();
   readonly portals = new Map<string, Portal>();
   readonly sides = new Map<string, SideState>();
+  readonly decks = new Map<string, DeckState>();
+  readonly kingdomEffects = new Map<string, KingdomEffects>();
   readonly events: GameEvent[] = [];
   readonly rng: Rng;
   width: number; height: number;

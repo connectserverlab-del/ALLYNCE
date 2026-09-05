@@ -7,6 +7,7 @@ import { commandBonus } from "./command.js";
 import { moraleBand } from "./morale.js";
 import { attackArc, type AttackArc } from "./hex.js";
 import { privileges, commandRadiusOf } from "./ranks.js";
+import { kingdomMods } from "./kingdom.js";
 
 export interface CombatContext { attacker?: UnitState; defender?: UnitState; arc?: AttackArc; ranged?: boolean; reaction?: boolean }
 
@@ -66,7 +67,10 @@ export function computeStat(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: C
     if (t === "Fortification" || t === "Ruins" || t === "Trench") mods.push({ source: "Breaching Shot", stat, value: d.siege.structureAtk });
   }
 
-  // 9. Faction rank privileges
+  // 9. Holding: buildings and completed research
+  if (!u.isClone && !isDivine) mods.push(...kingdomMods(b, u.side, d.roles, stat));
+
+  // 10. Faction rank privileges
   if (!u.isClone && !isDivine) {
     const pv = privileges(b, u);
     if (stat === "ATK" && ctx.reaction && pv.twoSwords) mods.push({ source: "Rank: two swords (reaction)", stat, value: 50 });

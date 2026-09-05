@@ -18,7 +18,7 @@ export function privileges(b: Battle, u: UnitState): RankPrivileges { return ran
 
 /** Command radius including rank bonus. Used by auras, morale recovery and Predatory Airspace. */
 export function commandRadiusOf(b: Battle, u: UnitState): number {
-  return (b.def(u).commandRadius ?? 0) + (privileges(b, u).commandRadiusBonus ?? 0);
+  return (b.def(u).commandRadius ?? 0) + (privileges(b, u).commandRadiusBonus ?? 0) + (b.kingdomEffects.get(u.side)?.commandRadius ?? 0);
 }
 
 /** Mounted privilege: +1 MOV always, or only while an enemy is within 6 hexes ("war"). */

@@ -19,6 +19,7 @@ export interface UnitDef {
   unique: boolean; summonOnly: boolean; ai: string; flying?: boolean;
   ritual?: RitualRatings; divine?: DivineDef;
   factionRank?: string;
+  stars?: number;
   minRange?: number;
   siege?: { setupRequired: boolean; structureAtk: number };
   art?: Record<string, string>;

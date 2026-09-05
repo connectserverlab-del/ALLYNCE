@@ -19,13 +19,13 @@ describe("irregular battlefield generator", () => {
     for (const t of ["Mountain", "Valley", "Forest", "Trench", "Road", "HighGround"]) expect(counts[t] ?? 0, t).toBeGreaterThan(0);
     // every hex is connected to the rest
     const set = new Set(a.hexes.map(hexKey));
-    const seen = new Set<string>([hexKey(a.hexes[0]!)]); const stack = [a.hexes[0]!];
+    const seen = new Set<string>([hexKey(a.hexes[0]!)]); const stack: Array<{ q: number; r: number }> = [{ q: a.hexes[0]!.q, r: a.hexes[0]!.r }];
     while (stack.length) { const h = stack.pop()!; for (const n of hexNeighbors(h)) { const k = hexKey(n); if (set.has(k) && !seen.has(k)) { seen.add(k); stack.push(n); } } }
     expect(seen.size).toBe(set.size);
     // deployment zones are standable and far apart
     expect(a.deployZones.A.length).toBeGreaterThanOrEqual(8);
     expect(a.deployZones.B.length).toBeGreaterThanOrEqual(8);
-    const byKey = new Map(a.hexes.map((h) => [hexKey(h), h]));
+    const byKey = new Map(a.hexes.map((h) => [hexKey({ q: h.q, r: h.r }), h]));
     for (const z of [...a.deployZones.A, ...a.deployZones.B]) expect(["Water", "Mountain", "Trench"]).not.toContain(byKey.get(hexKey(z))!.terrain);
   });
 

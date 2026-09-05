@@ -47,6 +47,7 @@ export class BattleController {
       clearTempMods(u, (m) => m.stat === "DEF" && m.source === "Inherited Wall" ? false : true); // only Inherited Wall persists one round
       // Suppressed: -1 AP on next activation is applied at activation time
     }
+    for (const [side, deck] of b.decks) { const drawn = deck.draw(b.reg.deckRules.drawPerRound); if (drawn.length) b.log("Draw", { side, cards: drawn, hand: deck.hand.length }); }
     commandRadiusRecovery(b);
     b.activatedGroupsThisRound.clear();
     b.activeSide = b.round % 2 === 1 ? "A" : "B";
@@ -90,7 +91,7 @@ export class BattleController {
 
   movementAllowance(u: UnitState): number {
     const d = this.b.def(u);
-    return d.mov + mountedMoveBonus(this.b, u) + (movementTraits(this.b, u).bonusMov ?? 0) + tempMods(u).filter((m) => m.stat === "MOV").reduce((s, m) => s + m.value, 0);
+    return d.mov + mountedMoveBonus(this.b, u) + (movementTraits(this.b, u).bonusMov ?? 0) + (this.b.kingdomEffects.get(u.side)?.movement ?? 0) + tempMods(u).filter((m) => m.stat === "MOV").reduce((s, m) => s + m.value, 0);
   }
 
   /** BFS pathfinding with terrain costs, zone of control and flying rules. Returns reachable hexes with cost. */

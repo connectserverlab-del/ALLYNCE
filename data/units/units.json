@@ -34,7 +34,8 @@
       "concept": "art/samples/SAM_COMMANDER_EMBER-BANNER-DAIMYO_CONCEPT_V01.jpg",
       "cutout": "art/samples/SAM_COMMANDER_EMBER-BANNER-DAIMYO_CUTOUT_V01.png"
     },
-    "factionRank": "HATAMOTO"
+    "factionRank": "HATAMOTO",
+    "stars": 6
   },
   {
     "id": "SAM_SECOND_WHITE-CRANE-RETAINER",
@@ -67,7 +68,8 @@
     "unique": true,
     "summonOnly": false,
     "ai": "leader_support",
-    "factionRank": "CHURO"
+    "factionRank": "CHURO",
+    "stars": 5
   },
   {
     "id": "SAM_ELITE_ONI-GATE-CHAMPION",
@@ -99,7 +101,8 @@
     "unique": true,
     "summonOnly": false,
     "ai": "line_breaker",
-    "factionRank": "UMAMAWARI"
+    "factionRank": "UMAMAWARI",
+    "stars": 7
   },
   {
     "id": "SAM_FOOT_EMBERLINE-ASHIGARU",
@@ -135,7 +138,8 @@
       "concept": "art/samples/SAM_FOOT_EMBERLINE-ASHIGARU_CONCEPT_V01.jpg",
       "cutout": "art/samples/SAM_FOOT_EMBERLINE-ASHIGARU_CUTOUT_V01.png"
     },
-    "factionRank": "KOYAKUNIN"
+    "factionRank": "KOYAKUNIN",
+    "stars": 2
   },
   {
     "id": "SHI_COMMANDER_VEILED-MOON-JONIN",
@@ -172,7 +176,8 @@
       "concept": "art/samples/SHI_COMMANDER_VEILED-MOON-JONIN_CONCEPT_V01.jpg",
       "cutout": "art/samples/SHI_COMMANDER_VEILED-MOON-JONIN_CUTOUT_V01.png"
     },
-    "factionRank": "JOUNIN"
+    "factionRank": "JOUNIN",
+    "stars": 6
   },
   {
     "id": "SHI_SECOND_REED-SIGNAL-LIEUTENANT",
@@ -205,7 +210,8 @@
     "unique": true,
     "summonOnly": false,
     "ai": "leader_support",
-    "factionRank": "CHUNIN"
+    "factionRank": "CHUNIN",
+    "stars": 4
   },
   {
     "id": "SHI_ELITE_MIRROR-SHADE-ADEPT",
@@ -241,7 +247,8 @@
       "concept": "art/samples/SHI_ELITE_MIRROR-SHADE-ADEPT_CONCEPT_V01.jpg",
       "cutout": "art/samples/SHI_ELITE_MIRROR-SHADE-ADEPT_CUTOUT_V01.png"
     },
-    "factionRank": "ANBU"
+    "factionRank": "ANBU",
+    "stars": 7
   },
   {
     "id": "SHI_FOOT_NIGHT-THREAD-OPERATIVE",
@@ -273,7 +280,8 @@
     "unique": false,
     "summonOnly": false,
     "ai": "raider",
-    "factionRank": "GENIN"
+    "factionRank": "GENIN",
+    "stars": 2
   },
   {
     "id": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL",
@@ -309,7 +317,8 @@
     "art": {
       "concept": "art/samples/KNI_COMMANDER_SOLAR-BASTION-MARSHAL_CONCEPT_V01.jpg",
       "cutout": "art/samples/KNI_COMMANDER_SOLAR-BASTION-MARSHAL_CUTOUT_V01.png"
-    }
+    },
+    "stars": 6
   },
   {
     "id": "KNI_SECOND_OATHBOUND-CASTELLAN",
@@ -341,7 +350,8 @@
     ],
     "unique": true,
     "summonOnly": false,
-    "ai": "leader_support"
+    "ai": "leader_support",
+    "stars": 5
   },
   {
     "id": "KNI_ELITE_SKY-LANCE-DRAGOON",
@@ -379,7 +389,8 @@
     "art": {
       "concept": "art/samples/KNI_ELITE_SKY-LANCE-DRAGOON_CONCEPT_V01.jpg",
       "cutout": "art/samples/KNI_ELITE_SKY-LANCE-DRAGOON_CUTOUT_V01.png"
-    }
+    },
+    "stars": 7
   },
   {
     "id": "KNI_FOOT_BASTION-MAN-AT-ARMS",
@@ -414,7 +425,8 @@
     "art": {
       "concept": "art/samples/KNI_FOOT_BASTION-MAN-AT-ARMS_CONCEPT_V01.jpg",
       "cutout": "art/samples/KNI_FOOT_BASTION-MAN-AT-ARMS_CUTOUT_V01.png"
-    }
+    },
+    "stars": 2
   },
   {
     "id": "DRG_COMMANDER_RIFTWING-DOMINANT",
@@ -451,7 +463,8 @@
     "art": {
       "concept": "art/samples/DRG_COMMANDER_RIFTWING-DOMINANT_CONCEPT_V01.jpg",
       "cutout": "art/samples/DRG_COMMANDER_RIFTWING-DOMINANT_CUTOUT_V01.png"
-    }
+    },
+    "stars": 8
   },
   {
     "id": "DRG_SECOND_STORMCLAW-WINGSECOND",
@@ -484,7 +497,8 @@
     ],
     "unique": true,
     "summonOnly": false,
-    "ai": "leader_support"
+    "ai": "leader_support",
+    "stars": 6
   },
   {
     "id": "DRG_ELITE_OBSIDIAN-MAW",
@@ -516,7 +530,8 @@
     ],
     "unique": true,
     "summonOnly": false,
-    "ai": "line_breaker"
+    "ai": "line_breaker",
+    "stars": 8
   },
   {
     "id": "DRG_FOOT_SLATEWING-DRAKE",
@@ -552,7 +567,8 @@
     "art": {
       "concept": "art/samples/DRG_FOOT_SLATEWING-DRAKE_CONCEPT_V01.jpg",
       "cutout": "art/samples/DRG_FOOT_SLATEWING-DRAKE_CUTOUT_V01.png"
-    }
+    },
+    "stars": 3
   },
   {
     "id": "RIT_LEADER_AFFILIATED-SUMMONER",
@@ -590,7 +606,8 @@
     ],
     "unique": true,
     "summonOnly": false,
-    "ai": "ritualist"
+    "ai": "ritualist",
+    "stars": 5
   },
   {
     "id": "RIT_FOOT_FOREIGN-RITUALIST",
@@ -627,7 +644,8 @@
     ],
     "unique": false,
     "summonOnly": false,
-    "ai": "ritualist"
+    "ai": "ritualist",
+    "stars": 3
   },
   {
     "id": "KNI_SUPPORT_PORTAL-KEEPER",
@@ -659,7 +677,8 @@
     ],
     "unique": false,
     "summonOnly": false,
-    "ai": "portal_keeper"
+    "ai": "portal_keeper",
+    "stars": 3
   },
   {
     "id": "DIV_BOSS_SOVEREIGN-OF-MEMORY",
@@ -691,7 +710,8 @@
     "slots": [],
     "unique": true,
     "summonOnly": true,
-    "ai": "deity"
+    "ai": "deity",
+    "stars": 10
   },
   {
     "id": "DIV_BOSS_SOVEREIGN-OF-TORMENT",
@@ -722,7 +742,8 @@
     "slots": [],
     "unique": true,
     "summonOnly": true,
-    "ai": "deity"
+    "ai": "deity",
+    "stars": 10
   },
   {
     "id": "DIV_BOSS_SOVEREIGN-OF-REINCARNATION",
@@ -753,7 +774,8 @@
     "slots": [],
     "unique": true,
     "summonOnly": true,
-    "ai": "deity"
+    "ai": "deity",
+    "stars": 10
   },
   {
     "id": "SAM_SIEGE_EMBER-OZUTSU-BATTERY",
@@ -796,7 +818,8 @@
     "art": {
       "concept": "art/samples/SAM_SIEGE_EMBER-OZUTSU-BATTERY_CONCEPT_V01.jpg",
       "cutout": "art/samples/SAM_SIEGE_EMBER-OZUTSU-BATTERY_CUTOUT_V01.png"
-    }
+    },
+    "stars": 5
   },
   {
     "id": "SAM_CAVALRY_CRIMSON-UMAMAWARI-LANCER",
@@ -833,7 +856,8 @@
     "art": {
       "concept": "art/samples/SAM_CAVALRY_CRIMSON-UMAMAWARI-LANCER_CONCEPT_V01.jpg",
       "cutout": "art/samples/SAM_CAVALRY_CRIMSON-UMAMAWARI-LANCER_CUTOUT_V01.png"
-    }
+    },
+    "stars": 5
   },
   {
     "id": "SHI_SIEGE_REED-SMOKE-MORTAR",
@@ -876,7 +900,8 @@
     "art": {
       "concept": "art/samples/SHI_SIEGE_REED-SMOKE-MORTAR_CONCEPT_V01.jpg",
       "cutout": "art/samples/SHI_SIEGE_REED-SMOKE-MORTAR_CUTOUT_V01.png"
-    }
+    },
+    "stars": 4
   },
   {
     "id": "SHI_CAVALRY_NIGHT-COURIER-RIDER",
@@ -912,7 +937,8 @@
     "art": {
       "concept": "art/samples/SHI_CAVALRY_NIGHT-COURIER-RIDER_CONCEPT_V01.jpg",
       "cutout": "art/samples/SHI_CAVALRY_NIGHT-COURIER-RIDER_CUTOUT_V01.png"
-    }
+    },
+    "stars": 4
   },
   {
     "id": "KNI_SIEGE_BASTION-BOMBARD",
@@ -954,7 +980,8 @@
     "art": {
       "concept": "art/samples/KNI_SIEGE_BASTION-BOMBARD_CONCEPT_V01.jpg",
       "cutout": "art/samples/KNI_SIEGE_BASTION-BOMBARD_CUTOUT_V01.png"
-    }
+    },
+    "stars": 5
   },
   {
     "id": "KNI_CAVALRY_DAWN-LANCER",
@@ -990,7 +1017,8 @@
     "art": {
       "concept": "art/samples/KNI_CAVALRY_DAWN-LANCER_CONCEPT_V01.jpg",
       "cutout": "art/samples/KNI_CAVALRY_DAWN-LANCER_CUTOUT_V01.png"
-    }
+    },
+    "stars": 5
   },
   {
     "id": "DRG_SIEGE_CINDERTHROAT-SIEGEWYRM",
@@ -1032,7 +1060,8 @@
     "art": {
       "concept": "art/samples/DRG_SIEGE_CINDERTHROAT-SIEGEWYRM_CONCEPT_V01.jpg",
       "cutout": "art/samples/DRG_SIEGE_CINDERTHROAT-SIEGEWYRM_CUTOUT_V01.png"
-    }
+    },
+    "stars": 7
   },
   {
     "id": "DRG_CAVALRY_RIDGEBACK-RUNNER",
@@ -1069,7 +1098,8 @@
     "art": {
       "concept": "art/samples/DRG_CAVALRY_RIDGEBACK-RUNNER_CONCEPT_V01.jpg",
       "cutout": "art/samples/DRG_CAVALRY_RIDGEBACK-RUNNER_CUTOUT_V01.png"
-    }
+    },
+    "stars": 4
   },
   {
     "id": "DIV_BOSS_CALAMITY-FORM",
@@ -1101,6 +1131,311 @@
     "slots": [],
     "unique": true,
     "summonOnly": true,
-    "ai": "deity"
+    "ai": "deity",
+    "stars": 10
+  },
+  {
+    "id": "SAM_LEVY_ASHFIELD-CONSCRIPT",
+    "name": "Ashfield Conscript",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Levy",
+    "size": "Standard",
+    "stars": 1,
+    "hp": 800,
+    "atk": 1000,
+    "def": 950,
+    "mov": 4,
+    "range": 1,
+    "initiative": 3,
+    "morale": 55,
+    "capacityCost": 2,
+    "factionRank": "KOYAKUNIN",
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "formation_hold"
+  },
+  {
+    "id": "SHI_LEVY_THREAD-APPRENTICE",
+    "name": "Thread Apprentice",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Levy",
+    "size": "Standard",
+    "stars": 1,
+    "hp": 700,
+    "atk": 1050,
+    "def": 800,
+    "mov": 6,
+    "range": 1,
+    "initiative": 5,
+    "morale": 55,
+    "capacityCost": 2,
+    "factionRank": "APPRENTICE",
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider"
+  },
+  {
+    "id": "KNI_LEVY_BASTION-SQUIRE",
+    "name": "Bastion Squire",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Levy",
+    "size": "Standard",
+    "stars": 1,
+    "hp": 900,
+    "atk": 900,
+    "def": 1150,
+    "mov": 3,
+    "range": 1,
+    "initiative": 2,
+    "morale": 60,
+    "capacityCost": 2,
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "formation_hold"
+  },
+  {
+    "id": "DRG_LEVY_SCREE-HATCHLING",
+    "name": "Scree Hatchling",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Levy",
+    "size": "Standard",
+    "stars": 1,
+    "hp": 750,
+    "atk": 1100,
+    "def": 850,
+    "mov": 6,
+    "range": 1,
+    "initiative": 4,
+    "morale": 55,
+    "capacityCost": 2,
+    "flying": true,
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider"
+  },
+  {
+    "id": "SAM_LORD_ASHFALL-DAIMYO",
+    "name": "Ashfall Daimyo",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Lord",
+    "size": "Standard",
+    "stars": 9,
+    "hp": 2400,
+    "atk": 2300,
+    "def": 2400,
+    "mov": 5,
+    "range": 1,
+    "initiative": 8,
+    "morale": 95,
+    "commandRadius": 5,
+    "capacityCost": 18,
+    "factionRank": "JOSHU_DAIMYO",
+    "passives": [],
+    "actives": [
+      "ABL_COORDINATED_CUT",
+      "ABL_HOLD_THE_STANDARD"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold"
+  },
+  {
+    "id": "DRG_ELDER_HOLLOW-CROWN-ELDER",
+    "name": "Hollow Crown Elder",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "Commander",
+      "Boss"
+    ],
+    "rank": "Elder",
+    "size": "Large",
+    "stars": 9,
+    "hp": 3000,
+    "atk": 2900,
+    "def": 2500,
+    "mov": 8,
+    "range": 2,
+    "initiative": 9,
+    "morale": 95,
+    "commandRadius": 5,
+    "capacityCost": 20,
+    "flying": true,
+    "passives": [
+      "ABL_PACK_WING"
+    ],
+    "actives": [
+      "ABL_WING_ROAR"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_flank"
+  },
+  {
+    "id": "SHI_KAGE_VOID-CROWN-KAGE",
+    "name": "Void Crown Kage",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "Commander",
+      "Boss"
+    ],
+    "rank": "Kage",
+    "size": "Standard",
+    "stars": 10,
+    "hp": 2800,
+    "atk": 3100,
+    "def": 2400,
+    "mov": 8,
+    "range": 1,
+    "initiative": 12,
+    "morale": 100,
+    "commandRadius": 6,
+    "capacityCost": 0,
+    "factionRank": "KAGE",
+    "passives": [
+      "ABL_CUT_THE_THREAD"
+    ],
+    "actives": [
+      "ABL_SILENT_DIRECTIVE",
+      "ABL_SHADOW_STEP"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "leader_flank"
+  },
+  {
+    "id": "SAM_SHOGUN_IRON-TIDE-SHOGUN",
+    "name": "Iron Tide Shogun",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Commander",
+      "Boss"
+    ],
+    "rank": "Shogun",
+    "size": "Standard",
+    "stars": 10,
+    "hp": 3200,
+    "atk": 3200,
+    "def": 3000,
+    "mov": 5,
+    "range": 1,
+    "initiative": 11,
+    "morale": 100,
+    "commandRadius": 7,
+    "capacityCost": 0,
+    "factionRank": "SHOGUN",
+    "passives": [],
+    "actives": [
+      "ABL_COORDINATED_CUT",
+      "ABL_HOLD_THE_STANDARD"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "leader_hold"
+  },
+  {
+    "id": "KNI_KING_OATHBREAKER-KING",
+    "name": "Oathbreaker King",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "Commander",
+      "Boss"
+    ],
+    "rank": "King",
+    "size": "Standard",
+    "stars": 10,
+    "hp": 3400,
+    "atk": 3000,
+    "def": 3300,
+    "mov": 4,
+    "range": 1,
+    "initiative": 10,
+    "morale": 100,
+    "commandRadius": 7,
+    "capacityCost": 0,
+    "passives": [],
+    "actives": [
+      "ABL_HOLD_THE_STANDARD",
+      "ABL_INHERITED_WALL"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "leader_hold"
   }
 ]

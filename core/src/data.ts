@@ -4,6 +4,8 @@ import { dirname, resolve } from "node:path";
 import type { UnitDef, AbilityDef, FactionDef } from "./types.js";
 import type { RankLadder } from "./ranks.js";
 import type { FusionRecipe } from "./fusion.js";
+import type { DeckRules, SideCard } from "./cards.js";
+import type { KingdomData, ResearchDef, BannerDef } from "./kingdom.js";
 import { existsSync } from "node:fs";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -30,8 +32,18 @@ export class Registry {
   readonly rules: CompositionRules;
   readonly ranks = new Map<string, RankLadder>();
   readonly fusions = new Map<string, FusionRecipe>();
+  readonly sideCards = new Map<string, SideCard>();
+  readonly deckRules: DeckRules;
+  readonly kingdom: KingdomData;
+  readonly research = new Map<string, ResearchDef>();
+  readonly banners = new Map<string, BannerDef>();
 
-  constructor(units: UnitDef[], abilities: AbilityDef[], factions: Record<string, FactionDef>, rules: CompositionRules, ladders: RankLadder[] = [], fusions: FusionRecipe[] = []) {
+  constructor(units: UnitDef[], abilities: AbilityDef[], factions: Record<string, FactionDef>, rules: CompositionRules, ladders: RankLadder[] = [], fusions: FusionRecipe[] = [], deckRules?: DeckRules, sideCards: SideCard[] = [], kingdom?: KingdomData, research: ResearchDef[] = [], banners: BannerDef[] = []) {
+    this.kingdom = kingdom!;
+    for (const r of research) this.research.set(r.id, r);
+    for (const bn of banners) this.banners.set(bn.id, bn);
+    this.deckRules = deckRules!;
+    for (const c of sideCards) this.sideCards.set(c.id, c);
     for (const l of ladders) this.ranks.set(l.faction, l);
     for (const f of fusions) this.fusions.set(f.id, f);
     for (const u of units) this.units.set(u.id, u);
@@ -58,6 +70,11 @@ export class Registry {
       if (u.faction !== "DIV" && !this.factions.has(u.faction)) throw new Error(`${u.id} references missing faction ${u.faction}`);
       if (u.factionRank) { const l = this.ranks.get(u.faction); if (!l || !l.ranks.some((r) => r.id === u.factionRank)) throw new Error(`${u.id} references unknown rank ${u.factionRank}`); }
     }
+    for (const c of this.sideCards.values()) {
+      if (c.kind === "ritual" && (!c.result || !this.units.has(c.result))) throw new Error(`Side card ${c.id} names a missing unit ${c.result}`);
+      if (c.kind === "fusion" && (!c.recipe || !this.fusions.has(c.recipe))) throw new Error(`Side card ${c.id} names a missing recipe ${c.recipe}`);
+    }
+    for (const r of this.research.values()) for (const q of r.requires) if (!this.research.has(q)) throw new Error(`Research ${r.id} requires a missing study ${q}`);
     for (const f of this.factions.values()) {
       if (f.platoonOrder && !this.abilities.has(f.platoonOrder)) throw new Error(`Faction ${f.id} missing order ${f.platoonOrder}`);
       if (f.passiveDoctrine && !this.abilities.has(f.passiveDoctrine)) throw new Error(`Faction ${f.id} missing doctrine ${f.passiveDoctrine}`);
@@ -77,6 +94,11 @@ export function loadRegistry(): Registry {
     readJson<CompositionRules>("compositions/platoon.json"),
     ["SAM", "SHI", "KNI", "DRG", "RIT"].filter((f) => existsSync(resolve(DATA_ROOT, `factions/ranks/${f}.json`))).map((f) => readJson<RankLadder>(`factions/ranks/${f}.json`)),
     readJson<FusionRecipe[]>("abilities/fusions.json"),
+    readJson<DeckRules>("cards/deck_rules.json"),
+    readJson<SideCard[]>("cards/side_cards.json"),
+    readJson<KingdomData>("kingdom/buildings.json"),
+    readJson<ResearchDef[]>("kingdom/research.json"),
+    readJson<BannerDef[]>("kingdom/banners.json"),
   );
 }
 

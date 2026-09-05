@@ -17,6 +17,15 @@ where they conflict.**
 - Every faction gets cannons (siege) and cavalry that fit its theme. Four of each exist with art.
 - Ritual and Fusion are first-class functions of the engine.
 - Samples first. Show the owner a sample of any new visual direction before scaling it.
+- Maps are painted **straight down from above**, like a hand-painted satellite photograph, with readable regions,
+  roads and rooftops. The three-quarter battlefield paintings were rejected. A Samurai province with a Japanese
+  aesthetic is the reference region.
+- The army is a **100-card deck** plus a **20-card ritual/fusion side deck**. Cards carry 1 to 10 stars; 10 is
+  reserved for deities, gods, Kage, shoguns and kings, 1 for levy and squires. Higher units demand sacrifices,
+  as in the collectible card games the owner named.
+- Beyond match-to-match battles there is a **permanent holding**: base building, research that upgrades units,
+  and recruitment draws.
+- Every asset must sit beside the existing characters without breaking immersion. Interface and icons included.
 
 ## Done
 
@@ -30,9 +39,26 @@ where they conflict.**
 - 17 unit concepts with cutouts, 2 battlefield paintings, 1 HUD material sheet.
 - Interactive map + HUD sample (see `docs/ui-sample.md`).
 
+### Done in the card and holding pass
+
+- Star scale 1-10 across all 40 units, with levy, named lords and 10-star sovereigns for each mortal faction.
+- 100-card main deck and 20-card side deck: validation, copy limits, faction leadership, shuffle, draw, hand cap.
+- Tribute summoning, ritual summoning by star total, fusion summoning by named materials, playable-card detection.
+- The holding: eleven buildings with Keep gating and timers, resource production with storage, twelve-node
+  research tree, three recruitment banners with pity, and carry-over into battle as named modifiers.
+- New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
+- Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
+
 ## Next, in priority order
 
-1. **Owner review of the map and HUD sample.** Do not scale the UI until the three decisions in the sample page are
+1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
+   retired; the new top-down direction and the card-led interface both need a verdict before scaling.
+2. **Card art for the blank cards.** Twenty-three of the forty units have no cutout yet, so their cards read
+   "no art yet". Highest value art task.
+3. **More cards per faction.** A hundred-card deck currently leans on levy and foot because each faction has
+   only eight to eleven distinct cards. Fifteen to twenty per faction would let the faction minimum rise from
+   40 back toward 60.
+4. **Old item:** Do not scale the UI until the three decisions in the sample page are
    answered (map look, command bar material, field size).
 2. Knight, Dragon Host and Ritual Cult rank ladders with one mechanical trait each per rank.
 3. Remaining unit art (see `pending` in `art/ASSET_MANIFEST.json`), then construction sheets for approved units.
@@ -53,4 +79,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   breaks charges) for one round.
 - 2026-09-05: Shinobi Kage as an Army-tier unique with a once-per-battle "Night Falls" that hides every Shinobi in
   forest for one round.
+- 2026-09-05: Proposal — a Samurai province campaign map where each region is a scenario, won regions feed the
+  holding's resource production, and losing a region costs the buildings raised there.
+- 2026-09-05: Proposal — duplicate cards from recruitment could feed a "reforge" that raises a card's star by
+  one, giving duplicates a purpose instead of dead weight.
+- 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
+  one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
