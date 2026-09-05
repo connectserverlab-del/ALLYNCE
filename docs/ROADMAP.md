@@ -75,6 +75,21 @@ where they conflict.**
   same file plays a different, still-legal battlefield every seed. Exercises all three of objectives, a ritual and
   a portal on generated ground.
 
+### Done in the AI positioning pass
+
+- Terrain-seeking movement: Trench and HighGround now score alongside the existing Fortification bonus when the
+  AI closes on any goal, so it settles on defensible ground rather than open terrain when the choice is otherwise
+  even.
+- Siege pieces never advance into their own minimum range: each activation they retreat if an enemy has closed
+  inside it, close only as far as their own range needs, and Set Up rather than charge further once in the firing
+  band.
+- Cavalry's charge goal is the nearest hex adjacent to its target that is outside that target's front arc, so the
+  path swings wide onto a flank or rear hex instead of walking into the front.
+- Surrender is no longer dead code: a side yields once every platoon has fallen out of Doctrine (no living
+  commander and no Continuity left) *and* its average morale has collapsed into the Broken band, exercised once
+  per round for both sides. In today's matches this rarely fires in practice — see `OWN-3` in
+  `docs/CHECKLIST.md` for why.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -90,8 +105,6 @@ where they conflict.**
 3. Remaining unit art (see `pending` in `art/ASSET_MANIFEST.json`), then construction sheets for approved units.
 4. Map generator: named biomes (Ashfall, Marsh, Highland pass), scenario-authored overrides on top of generated ground,
    deployment-zone balance check (path cost between anchors within 10 percent both ways).
-5. AI: use trenches and high ground, siege positioning behind the line, cavalry flank routing, surrender when the
-   leader is dead and average morale is below 20.
 6. Army builder validation UI in the sample page (drag units into slots, live doctrine and capacity readout).
 7. Formation Sandbox mode as a page: place units, see cohesion and doctrine live.
 8. Unity port scaffolding once the owner confirms the engine target (see `docs/mechanics.md`).
@@ -120,3 +133,9 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the same role vocabulary (`anchor`, `lerp`, `near`) could place a campaign map's per-region
   scenario objectives, so a won region's fortification always sits sensibly relative to that region's own generated
   anchors instead of needing hand-tuned coordinates for every region added to the campaign map from Q-5.
+- 2026-09-05: Proposal — an Army Standard, a bannerman specialist distinct from the Commander, carried near the
+  command group and capturable or destroyable like a small portal. Losing it (with no bearer left to recover it,
+  after Continuity's succession attempt has run) would be what actually ends the match on "leader killed", rather
+  than the very first Commander's death alone deciding it outright as it does today (see `OWN-3`). This would give
+  the Samurai banner privilege and every faction's rank ladder a piece of real mechanical weight to protect, and
+  would let all three win conditions carry closer to equal odds of deciding a given match instead of one dominating.
