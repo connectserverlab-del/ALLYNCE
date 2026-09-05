@@ -195,6 +195,23 @@ function spawnClones(b: Battle, user: UnitState, ability: AbilityDef, e: Record<
   return true;
 }
 
+/**
+ * Every effect.kind the interpreter above understands, plus the passive kinds it defers to other
+ * systems (see the `default` case). The Unity port scaffold and the ability-data test both read
+ * this list, so a kind added to the switch above and left out here is a drift bug, not a silent gap.
+ */
+export const EFFECT_KINDS = [
+  "RallyPlatoon", "PlatoonAtkVsTarget", "PlatoonDef", "PlatoonMove", "PreventRouted", "SpawnClones",
+  "SpawnTerrain", "ChargeBonus", "MoraleShock", "GrantHideAfterAttack", "GrantStatusAdjacent",
+  "FormationStep", "PhaseMove", "SequencedMove", "Duel", "SiegeSetup", "SpawnTerrainAt", "AreaShock",
+  "SelfSacrificeBuff", "BandAtk", "SelfHaste", "EnemyAtkDebuff", "EnemySlow", "Surrender",
+  "RitualChannel", "PortalCall", "ShadowStep",
+  // Passive kinds, evaluated where relevant rather than through applyEffect's switch.
+  "ConditionalDef", "ConditionalAtk", "SharedVision", "Intercept", "DenyFlyingMovement",
+  "StructureAtk", "FreeMoveAfterAttack",
+] as const;
+export type EffectKind = (typeof EFFECT_KINDS)[number];
+
 export const hideAfterAttack = new Set<string>();
 /** Terrain placed by abilities (smoke) with a lifetime in rounds. */
 export const timedTerrain: Array<{ key: string; rounds: number }> = [];

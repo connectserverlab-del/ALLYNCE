@@ -80,3 +80,22 @@ breakdown contains each named source.
 - `computeStat` → `ModifierPipeline.Compute(unit, stat, ctx)` returning the same `StatBreakdown` for tooltips.
 - `applyEffect` → `IEffectHandler` per `effect.kind`, registered in a dictionary.
 - `events` → `List<GameEvent>` serialized with the save; replay by re-applying actions with the same seed.
+
+### Scaffold status
+
+A structural scaffold following the mapping above lives under `unity/` — see `unity/README.md` for what
+is stubbed versus real. It is not a working Unity project (no `.unity` scene, no package manifest, nothing
+compiled), just the C# shapes and an editor importer sketch to build the real port against.
+
+`unity/Generated/` is regenerated from this repository's own source of truth rather than hand-written:
+
+- `EffectKinds.g.cs` mirrors `EFFECT_KINDS` in `core/src/effects.ts` — every `effect.kind` the interpreter
+  (and the passive systems it defers to) understands.
+- `TerrainRules.g.cs` mirrors `TERRAIN_RULES` in `core/src/types.ts`, field for field.
+- `DataManifest.g.json` is a count-and-id summary of the loaded registry, for the importer to sanity-check
+  against once it runs inside a real Unity project.
+
+Run `npm run unity:scaffold` and commit the result after changing any of those three sources, the same way
+`npm run assets` is re-run after an art or building-tier change. `core/tests/unityExport.test.ts` and
+`core/tests/effect_kinds.test.ts` fail if the generated output or the ability data drift from the reference
+TypeScript, so a forgotten regeneration shows up as a red test rather than a silent gap on the Unity side.

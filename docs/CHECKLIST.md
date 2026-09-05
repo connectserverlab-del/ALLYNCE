@@ -54,7 +54,6 @@ Three things bite:
 | `Q-6` | Weather and time of day as round modifiers (rain turns open ground to mud near rivers, fog cuts ranged range) | Deepens the terrain system already in place |
 | `Q-7` | Duplicate-card reforge: spend copies to raise a card's star by one | Duplicates now arrive from warrants as well as recruitment and need a sink beyond deck depth |
 | `Q-8` | Stratagem cards as a third side-deck kind, one-round battlefield effects | Fills out the side deck beyond ritual and fusion |
-| `Q-9` | Unity port scaffolding: ScriptableObject importer for `data/`, and the C# module skeleton in `docs/mechanics.md` | The engine target the brief names |
 | `Q-10` | Replay viewer: step through a saved event log | The event log already exists and is unused |
 | `Q-11` | Warrant board screen in the sample page: read the posted writs, take one, and see which of them close the gaps in the current deck | The board exists in the core and has no interface |
 | `Q-12` | Give the sworn companies and the seven divisions depth: each has four cards, enough to hire but not to lead | A division is a flavour of ally until it can field a line of its own |
@@ -87,3 +86,4 @@ Three things bite:
 | `D-20` | Card face: name across the top band, ATK and DEF in dark ink on the paper, copy badge moved to the foot |
 | `D-21` | Cloning splits attack and defence across the original and its copies instead of duplicating them, and the original reclaims each share as a copy falls |
 | `D-22` | AI spends the six card skills on their own terms, fights the ground it stands on (terrain, elevation, siege screening, cavalry flanking) and yields a lost field |
+| `D-23` | Unity port scaffold: `unity/Runtime` and `unity/Editor` C# skeleton matching `docs/mechanics.md`'s guidance, plus a generator (`npm run unity:scaffold`) that mirrors `EFFECT_KINDS` and `TERRAIN_RULES` into checked-in C#, tested against the TypeScript reference so the two cannot silently drift |
