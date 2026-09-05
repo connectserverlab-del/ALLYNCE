@@ -1,0 +1,52 @@
+{
+  "mainDeckSize": 100,
+  "sideDeckSize": 20,
+  "openingHand": 5,
+  "drawPerRound": 1,
+  "maxHandSize": 7,
+  "starScale": {
+    "1": "Levy and squires: untrained bodies pressed into the line.",
+    "2": "Rank-and-file foot soldiers.",
+    "3": "Trained foot, drakes, junior specialists.",
+    "4": "Specialists, scouts, light riders, cell leaders.",
+    "5": "Seconds-in-command, cavalry, siege crews.",
+    "6": "Commanders and platoon leaders.",
+    "7": "Elites and champions.",
+    "8": "Greater elites, true dragons, siege beasts.",
+    "9": "Named lords and legendary heroes.",
+    "10": "Deities, gods, Kage, shoguns and kings."
+  },
+  "copyLimitByStar": {
+    "1": 20,
+    "2": 16,
+    "3": 12,
+    "4": 8,
+    "5": 6,
+    "6": 4,
+    "7": 3,
+    "8": 2,
+    "9": 1,
+    "10": 0
+  },
+  "tributeByStar": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 1,
+    "5": 1,
+    "6": 1,
+    "7": 2,
+    "8": 2,
+    "9": 3,
+    "10": null
+  },
+  "notes": {
+    "tribute": "Tributes are your own deployed units sacrificed to summon the card. A null tribute cost means the unit cannot be summoned from the main deck at all: it arrives only through a ritual or fusion card in the side deck.",
+    "copyLimit": "A zero copy limit means the card may not sit in the main deck. Named unique units are always limited to one regardless of star.",
+    "sideDeck": "The side deck holds only ritual and fusion cards. They are never drawn; they are played from the side deck when their requirements are met on the field.",
+    "primaryFaction": "A deck is led by one faction: at least 40 of its 100 cards must belong to it. The rest may be sworn allies, so a Samurai host can field borrowed Knight guns and hired Cobalt Conclave magi without becoming their deck. Raise this toward 60 once each host army has fifteen or more distinct cards.",
+    "cardPool": "Copy limits are generous at the low stars because a hundred-card deck is mostly line soldiers. As the card pool grows these limits should tighten.",
+    "ownership": "A copy limit is a ceiling, not a grant. When a deck is validated against a holding's collection, every card is also capped at the copies that holding actually owns; owning one copy never entitles a deck to several. Copies arrive from recruitment draws and from wanted warrants."
+  },
+  "primaryFactionMin": 40
+}
