@@ -7,6 +7,7 @@ import type { FusionRecipe } from "./fusion.js";
 import type { DeckRules, SideCard } from "./cards.js";
 import type { KingdomData, ResearchDef, BannerDef } from "./kingdom.js";
 import type { WantedRules } from "./wanted.js";
+import type { MarchRules } from "./march.js";
 import { existsSync } from "node:fs";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -39,10 +40,12 @@ export class Registry {
   readonly research = new Map<string, ResearchDef>();
   readonly banners = new Map<string, BannerDef>();
   readonly wanted: WantedRules;
+  readonly march: MarchRules;
 
-  constructor(units: UnitDef[], abilities: AbilityDef[], factions: Record<string, FactionDef>, rules: CompositionRules, ladders: RankLadder[] = [], fusions: FusionRecipe[] = [], deckRules?: DeckRules, sideCards: SideCard[] = [], kingdom?: KingdomData, research: ResearchDef[] = [], banners: BannerDef[] = [], wanted?: WantedRules) {
+  constructor(units: UnitDef[], abilities: AbilityDef[], factions: Record<string, FactionDef>, rules: CompositionRules, ladders: RankLadder[] = [], fusions: FusionRecipe[] = [], deckRules?: DeckRules, sideCards: SideCard[] = [], kingdom?: KingdomData, research: ResearchDef[] = [], banners: BannerDef[] = [], wanted?: WantedRules, march?: MarchRules) {
     this.kingdom = kingdom!;
     this.wanted = wanted!;
+    this.march = march!;
     for (const r of research) this.research.set(r.id, r);
     for (const bn of banners) this.banners.set(bn.id, bn);
     this.deckRules = deckRules!;
@@ -103,6 +106,7 @@ export function loadRegistry(): Registry {
     readJson<ResearchDef[]>("kingdom/research.json"),
     readJson<BannerDef[]>("kingdom/banners.json"),
     readJson<WantedRules>("missions/wanted.json"),
+    readJson<MarchRules>("movement/march.json"),
   );
 }
 

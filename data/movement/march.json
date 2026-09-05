@@ -1,0 +1,28 @@
+{
+  "travelCapSeconds": 45,
+  "referenceMov": 5,
+  "minPace": 0.35,
+  "maxPace": 2,
+  "referenceTerrainCost": 1,
+  "roadHaste": 1.35,
+  "flightIgnoresGround": true,
+  "joinRadius": 2.5,
+  "arriveRadius": 0.08,
+  "formationSpacing": 1.15,
+  "formationRingSlots": 6,
+  "sampleStep": 0.75,
+  "notes": {
+    "travelCapSeconds": "The longest walk on any field. Walking speed is the map diagonal divided by this, so a shorter trip is proportionally shorter and nothing ever takes longer. Raise it and the map feels vast but a redeployment costs a coffee break; lower it and the army teleports.",
+    "referenceMov": "The MOV that walks at exactly the field speed, so a unit with this MOV crosses the whole map in the cap. Set to the middle of the roster: heavier units press against the cap, riders come in well under it. Raise it and everyone slows.",
+    "minPace": "Floor on the MOV pace multiplier. Guards against a definition with a tiny MOV standing still forever rather than merely being slow.",
+    "maxPace": "Ceiling on the MOV pace multiplier. The fastest rider is twice the reference at most; without it a future MOV 20 courier would cross the field in a blink and make the cap meaningless.",
+    "referenceTerrainCost": "The TERRAIN_RULES movement cost that counts as normal going. Open ground costs 1, so a terrain speed multiplier is this over that terrain's cost: mud and forest at 2 walk at half pace, rock at 5 at a fifth. Terrain is read from that one table so the hex rules and the walk never disagree.",
+    "roadHaste": "The one thing the cost table cannot say. A road prices the same as open ground for a hex step, which is right for a turn budget and wrong for a march: a made road is faster than a field. Raise it and roads become the only sane way to cross a map.",
+    "flightIgnoresGround": "A flier reads only whether the ground is closed to it, never how rough it is, so wings cross mud and forest at their own pace. Turn it off and fliers pay the table's flying costs, which makes woods slow for a wyvern.",
+    "joinRadius": "How close a loose unit must get to a squad before it falls in. Wide and units snap into formation from across a field; narrow and a follower trails the body it is chasing without ever catching it.",
+    "arriveRadius": "How close counts as arrived. Small enough to look exact, large enough that a unit never jitters across its destination on a fixed timestep.",
+    "formationSpacing": "World distance between formation rings, in the same units as the hex layout, where one hex is roughly 1.7 across. Tight formations read as a body but overlap sprites; loose ones sprawl and arrive raggedly.",
+    "formationRingSlots": "Slots added per formation ring: ring one holds six, ring two twelve. Six matches the hex neighbourhood, so a squad standing still lines up on ground the turn-based rules would also recognise.",
+    "sampleStep": "How finely a planned walk samples the ground under it, in world units. Finer means a thin ribbon of mud or a ford is not stepped over when the travel time is worked out, and costs proportionally more work per order."
+  }
+}
