@@ -26,8 +26,8 @@ That is why it is tens of megabytes and why the packer downscales as hard as it 
 | Screen | What it shows |
 |---|---|
 | **Field** | The generated battlefield, painted ground clipped to the irregular shape, pan and zoom with a minimap. Round and phase, both sides' morale bands, cohesion links, the selected unit's reach and the summon zone, and a command bar carrying the engine's own ATK and DEF breakdowns term by term. |
-| **Deck** | All hundred cards on paper stock, filterable by faction and sortable by star, copies or name. Each card face shows its star row, its tribute cost and its copy count; the detail panel adds how many copies the hold physically owns, because the copy limit is a ceiling and not a grant. |
-| **Rites** | The twenty-card side deck. Rituals name a star total to sacrifice; fusions name exact adjacent materials. Cards playable on the current field are lit; the rest are dimmed with their requirements spelled out. |
+| **Deck** | Editable. Every card that could ever sit in the main deck is browsable, filterable by faction and sortable by star, copies or name, with a − / + stepper to sleeve or unsleeve one copy at a time. A live legality panel above the grid tracks deck size, the leading faction's minimum and the star-based copy limits as you edit, capped by how many copies the hold physically owns. |
+| **Rites** | Editable. Every ritual and fusion card is browsable with the same stepper, capped at the twenty-card side deck and each card's own copy limit. Rituals name a star total to sacrifice; fusions name exact adjacent materials. Cards playable on the current field are marked ready; the rest spell out their requirements. |
 | **Writs** | The wanted board: five warrants posted, what each pays in cards and bounty, the escort standing in the way, and how the target is taken alive. Below it, every card the current deck asks for that the hold cannot cover. |
 | **Hold** | The stronghold seen from above with a pin per building, each at its real level and tier art, plus the research tree and the recruitment banners. |
 | **Lands** | The world and province paintings, and the art-direction notes behind them. |

@@ -65,6 +65,19 @@ where they conflict.**
 - New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
 - Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
 
+### Done in the deck editor pass
+
+- The Deck and Rites screens are no longer read-only: every card that could ever sit in the main or side deck is
+  browsable, with a stepper to sleeve or unsleeve one copy at a time. The main deck grid spans all eleven
+  factions now, not just the ones already sleeved.
+- A live legality panel sits above both grids and updates on every edit: deck size, the leading faction's
+  minimum, each card's star-based copy limit, and the collection cap on top of it for the main deck. It mirrors
+  `validateDeck` in `core/src/cards.ts` — that function stays the single source of truth for the rule, and the
+  page's arithmetic is kept in step with it by hand, since the page has no build step to import the engine at
+  runtime.
+- `moveCard` in `core/src/cards.ts` is the tested, single place a deck list gains or loses one physical copy,
+  capped by the same rules the legality panel checks.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -102,3 +115,9 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-05: Proposal — now that the Deck and Rites screens let a player sleeve any card they own, the Rites
+  grid could show, for each ritual or fusion still in the browsing pool, whether the muster being built in the
+  Deck screen actually has the sacrifices or materials it would need — a theme's stars for a ritual, the named
+  roles for a fusion — so a deck built card by card can be steered toward the rite it is meant to feed, rather
+  than the two screens being checked against each other by eye. Ritual and Fusion are supposed to be first-class
+  functions of the engine; right now they are only checked against the field once a battle has already started.

@@ -69,8 +69,6 @@ const unitCard = (id: string) => {
     abilities: [...d.passives, ...d.actives].map((a) => ({ id: a, name: reg.ability(a).name, text: reg.ability(a).text, category: reg.ability(a).category })),
     art: d.art ?? null, themes: d.themes };
 };
-const group = (ids: string[]) => { const m = new Map<string, number>(); for (const i of ids) m.set(i, (m.get(i) ?? 0) + 1); return [...m].map(([id, n]) => ({ ...unitCard(id), count: n })).sort((a, c) => a.stars - c.stars || a.name.localeCompare(c.name)); };
-const sideGroup = (ids: string[]) => { const m = new Map<string, number>(); for (const i of ids) m.set(i, (m.get(i) ?? 0) + 1); return [...m].map(([id, n]) => { const c = reg.sideCards.get(id)!; const recipe = c.recipe ? reg.fusions.get(c.recipe) : null; return { ...c, count: n, resultCard: c.result ? unitCard(c.result) : null, materials: recipe ? recipe.inputs.map((i: any) => i.defId ? reg.unit(i.defId).name : (i.roles ?? []).join("+")) : null, recipeText: recipe?.text ?? null }; }).sort((a, c) => c.stars - a.stars); };
 
 const board = rollBoard(reg, k, deckList);
 acceptContract(reg, k, board.find((c) => c.stars >= 5)?.id ?? board[0]!.id, deckList);
@@ -91,9 +89,14 @@ const out = {
     playableSide: playableSideCards(b, "B").map((x) => ({ id: x.card.id, name: x.card.name, materials: x.materials.map((m) => b.def(m).name) })),
     morale: { A: ctrl.moraleSummary("A"), B: ctrl.moraleSummary("B") },
   },
-  deck: { ...deckList, cards: group(deckList.main), side: sideGroup(deckList.side), validation: validateDeck(reg, deckList, { collection: k.collection }), curve: STARTER_CURVE,
+  deck: { ...deckList, validation: validateDeck(reg, deckList, { collection: k.collection }), curve: STARTER_CURVE,
     owned: Object.fromEntries(deckList.main.map((id) => [id, k.collection[id] ?? 0])),
-    missing: missingForDeck(reg, deckList, k.collection) },
+    missing: missingForDeck(reg, deckList, k.collection),
+    // Every card that could ever go in a main or side deck, and everything the hold owns of it — the
+    // deck editor browses these two lists rather than only what happens to be sleeved already.
+    catalog: [...reg.units.values()].map((d) => unitCard(d.id)).sort((a, c) => a.stars - c.stars || a.name.localeCompare(c.name)),
+    sideCatalog: [...reg.sideCards.values()].map((c) => { const recipe = c.recipe ? reg.fusions.get(c.recipe) : null; return { ...c, resultCard: c.result ? unitCard(c.result) : null, materials: recipe ? recipe.inputs.map((i: any) => i.defId ? reg.unit(i.defId).name : (i.roles ?? []).join("+")) : null, recipeText: recipe?.text ?? null }; }).sort((a, c) => c.stars - a.stars),
+    collection: k.collection },
   warrants: {
     rules: reg.wanted,
     board: board.map((c) => ({ ...c, target: unitCard(c.targetId), taken: k.wanted.accepted.includes(c.id), short: shortfall(reg, k, c.targetId, deckList), owned: k.collection[c.targetId] ?? 0 })),
@@ -110,4 +113,4 @@ const out = {
   },
 };
 writeFileSync(process.argv[2]!, JSON.stringify(out));
-console.log("warrants", out.warrants.board.length, "deck gaps", out.deck.missing.length, "collection", Object.keys(k.collection).length, "\nunits", out.battle.units.length, "hand", out.battle.hand.length, "deck cards", out.deck.cards.length, "side", out.deck.side.length, "sel", out.battle.selected.name, atk.final, "reach", out.battle.reachable.length, "playable", out.battle.playableSide.length, "kingdom cap+", kEff.armyCapacity);
+console.log("warrants", out.warrants.board.length, "deck gaps", out.deck.missing.length, "collection", Object.keys(k.collection).length, "\nunits", out.battle.units.length, "hand", out.battle.hand.length, "deck main", out.deck.main.length, "side", out.deck.side.length, "catalog", out.deck.catalog.length, "sideCatalog", out.deck.sideCatalog.length, "sel", out.battle.selected.name, atk.final, "reach", out.battle.reachable.length, "playable", out.battle.playableSide.length, "kingdom cap+", kEff.armyCapacity);

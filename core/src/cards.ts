@@ -296,6 +296,42 @@ function findFusionMaterials(b: Battle, pool: UnitState[], size: number, recipeI
   return null;
 }
 
+export type DeckZone = "main" | "side";
+
+/**
+ * Add or remove one physical copy of a card from a deck's main or side zone. A no-op past what the
+ * rules (and, for the main deck, the collection) allow: full zones, over-limit cards and cards not
+ * present to remove all return the deck unchanged rather than throwing, so a caller — the sample
+ * page's deck editor included — can offer a stepper control without pre-checking every rule itself.
+ */
+export function moveCard(reg: Registry, deck: DeckList, zone: DeckZone, cardId: string, direction: 1 | -1, opts: { collection?: Collection } = {}): DeckList {
+  if (zone === "main") {
+    if (!reg.units.has(cardId)) throw new Error(`Unknown card: ${cardId}`);
+    const count = deck.main.filter((id) => id === cardId).length;
+    if (direction > 0) {
+      if (deck.main.length >= reg.deckRules.mainDeckSize) return deck;
+      if (count >= effectiveCopyLimit(reg, cardId, opts.collection)) return deck;
+      return { ...deck, main: [...deck.main, cardId] };
+    }
+    const i = deck.main.indexOf(cardId);
+    if (i < 0) return deck;
+    const main = [...deck.main]; main.splice(i, 1);
+    return { ...deck, main };
+  }
+  const card = reg.sideCards.get(cardId);
+  if (!card) throw new Error(`Unknown side card: ${cardId}`);
+  const count = deck.side.filter((id) => id === cardId).length;
+  if (direction > 0) {
+    if (deck.side.length >= reg.deckRules.sideDeckSize) return deck;
+    if (count >= card.copyLimit) return deck;
+    return { ...deck, side: [...deck.side, cardId] };
+  }
+  const i = deck.side.indexOf(cardId);
+  if (i < 0) return deck;
+  const side = [...deck.side]; side.splice(i, 1);
+  return { ...deck, side };
+}
+
 /** A hundred-card deck is mostly line soldiers, but it still needs a curve rather than a wall of levy. */
 export const STARTER_CURVE: Record<number, number> = { 1: 18, 2: 20, 3: 16, 4: 14, 5: 12, 6: 8, 7: 6, 8: 4, 9: 2 };
 
