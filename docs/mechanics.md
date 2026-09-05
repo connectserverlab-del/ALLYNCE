@@ -57,6 +57,35 @@ activation instead of an annoyance to be ignored. A body that has already split 
 A test in `core/tests/skills.test.ts` walks the whole registry and fails if any card at four stars or above is
 carrying no ability it can activate, so the rule cannot quietly rot as the roster grows.
 
+## Division doctrines and platoon orders
+
+`FactionDef.platoonOrder` and `FactionDef.passiveDoctrine` name one ability each: an `Order` the platoon
+commander may spend once a round (`Battle.useAbility`, gated on the platoon not being Broken), and a `Passive`
+folded automatically into every one of that faction's units through `abilityModifiers`. The four host armies
+(Samurai, Shinobi, Knight, Dragon Host) have carried one of each since the rank-ladder pass. The five sworn
+companies still do not, by design: they are hired depth for someone else's platoon, never enough on their own
+to fill Commander, Second, Elite and five foot at once.
+
+The seven themed divisions (Choir Militant, Ashpit Legion, Spiral Warband, Half-Born Host, Winter Famine, Ridge
+Kin, Formic Swarm) now do. Two of them — Spiral Warband and Winter Famine — were missing a card that could
+stand in the Second slot at all, so `SlotName` was widened on their existing Cavalry/Elite card
+(`CHR_CAVALRY_SPIRAL-MARKED-LANCER`, `WEN_ELITE_ANTLER-WRAITH`) rather than inventing a new one; Formic Swarm
+already covers both from its one Elite by fielding a second physical copy. Every division's order and doctrine
+reuses an existing `effects.ts` handler and, for the passive half, one of the two ability kinds
+`abilityModifiers` actually turns into a stat line (`ConditionalDef`, `ConditionalAtk`) — nothing here needed a
+new interpreter. `core/tests/divisions.test.ts` deploys a full platoon for all seven from nothing but their own
+four cards, checks it lands on Full doctrine rather than Broken, and exercises each order and passive by name.
+
+| Faction | Order | Doctrine |
+|---|---|---|
+| Choir Militant (ANG) | Judgement Hymn — rallies the platoon's morale | Angelic Ward — +45 DEF beside another Celestial |
+| Ashpit Legion (DEM) | Ashen Warcry — morale shock to adjacent enemies | Ashen Toll — +90 ATK against enemy leaders and elites |
+| Spiral Warband (CHR) | Broken Charge — +2 platoon Movement | No Second Plan — +70 ATK, unconditional |
+| Half-Born Host (DMG) | Ascendant Push — a formation step into +90 ATK next melee | Mortal Weight — +50 DEF, unconditional |
+| Winter Famine (WEN) | Crawling Cold — slows enemies within 3 hexes | Starveling Bite — +90 ATK against foot soldiers |
+| Ridge Kin (SAS) | Stone Stand — +70 platoon DEF | Lone Hunt — +80 ATK against an isolated target |
+| Formic Swarm (FMC) | Swarm Convergence — marks a target for +110 platoon ATK | One Will — +40 DEF with two Swarm allies adjacent |
+
 ## Worked example (from the brief §7)
 
 Foot soldier 1,500 base ATK, two matching neighbours (+100), full Doctrine (+100), commander order (+150) = 1,850.

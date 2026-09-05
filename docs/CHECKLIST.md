@@ -56,10 +56,8 @@ Three things bite:
 | `Q-8` | Stratagem cards as a third side-deck kind, one-round battlefield effects | Fills out the side deck beyond ritual and fusion |
 | `Q-9` | Unity port scaffolding: ScriptableObject importer for `data/`, and the C# module skeleton in `docs/mechanics.md` | The engine target the brief names |
 | `Q-10` | Replay viewer: step through a saved event log | The event log already exists and is unused |
-| `Q-11` | Warrant board screen in the sample page: read the posted writs, take one, and see which of them close the gaps in the current deck | The board exists in the core and has no interface |
 | `Q-12` | Give the sworn companies and the seven divisions depth: each has four cards, enough to hire but not to lead | A division is a flavour of ally until it can field a line of its own |
 | `Q-13` | Escort composition for warrants: build the escort around the target's own company rather than a generic host starter deck | The escort currently reads as a borrowed army with the target bolted on |
-| `Q-15` | A division's own doctrine and platoon order, so a Choir or a Swarm can lead a deck instead of only joining one | Seven divisions is a lot of flavour with no army identity behind it |
 
 ## Done
 
@@ -90,3 +88,5 @@ Three things bite:
 | `D-23` | Marching: continuous movement in seconds, squads with formation slots, a 45-second cap scaled by distance, and hex routing round anything a straight line cannot cross |
 | `D-24` | March screen: click the ground to send a squad, drag a name onto a squad to have that unit walk over and fall in, with the real engine bundled into the page rather than a recording of it |
 | `D-25` | `scripts/audit-cutouts.py` fails a cutout that kept its background or lost its figure, so a card cannot ship as a pale slab again |
+| `D-26` | Warrant board screen in the sample page: posted writs, what each pays, the escort standing in the way, and the current deck's gaps below it — turned out already built in the card-and-holding pass (`c57816b`), just never checked off. Q-11 removed from the Queue rather than left to be reopened by a future pass. |
+| `D-27` | A division's own doctrine and platoon order: the seven themed divisions can now fill Commander, Second, Elite and five foot from their own four cards and carry a faction Order plus a passive Doctrine the way the four host armies do, so a Choir or a Swarm can lead a deck instead of only joining one. Widened `SlotName` on one existing card each for Spiral Warband and Winter Famine (their only Second-eligible member); no new cards, no new art. |
