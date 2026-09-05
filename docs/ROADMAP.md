@@ -102,3 +102,8 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-05: Proposal — gate a recipe behind rank, not just unit id: a fusion could require its anchor hold at
+  least a named rung on its faction's ladder (only a Marshal-or-higher Knight leads the Oathbound Wall fusion,
+  only a Jounin-or-higher Shinobi triggers a fusion with a shed-shadow effect). This gives the rank ladders
+  mechanical weight over which fusions a platoon can even reach, the same way they already gate command radius
+  and who may lead a platoon, rather than leaving fusion eligibility to unit id and theme alone.
