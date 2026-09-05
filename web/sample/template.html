@@ -161,20 +161,29 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 .card .art img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
 
 .card .art .none{align-self:center;font-size:10px;color:#5a5750;font-family:"Alegreya SC";letter-spacing:.08em}
-.card .pips{position:absolute;left:7%;top:80%;width:70%;display:flex;justify-content:center;gap:1%;align-items:center;flex-wrap:wrap}
+.card .pips{position:absolute;left:7%;top:79.5%;width:70%;display:flex;justify-content:center;gap:1%;align-items:center;flex-wrap:wrap}
 .card .pips img{width:7.6%;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
 .card .pips img.off{opacity:.42}
 
 
 .card .nm{position:absolute;left:7%;top:5.5%;width:86%;height:11%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:"Alegreya SC";font-weight:700;font-size:10.5px;line-height:1.04;color:#241d13;text-shadow:0 1px 0 rgba(220,206,180,.55);overflow:hidden}
-.card .sub{position:absolute;left:7%;top:74%;width:70%;text-align:center;font-size:8.5px;color:#40382b}
+/* the small face carries name, art, three stats and stars; role and rank live in the detail panel */
+.card .sub{display:none}
 /* The paper foot is scorched almost black and the space between the name and the star row is
    already spoken for, so the stat line rides the bottom of the art window instead, where the dark
    backing gives it the contrast the paper never could. */
 /* ATK and DEF sit on the paper under the art in dark ink, the darkest type on the card. */
-.card .nums{position:absolute;left:9%;right:9%;top:66.5%;height:7%;display:flex;align-items:center;justify-content:space-between;padding:0 4%;
-  font-family:"JetBrains Mono";font-weight:700;font-size:9.5px;color:#1b150c}
+/* Three stats on the paper under the art, in dark ink. A grid rather than space-between: equal
+   columns cannot push a four-digit number under the frame's inner bevel the way justified ends did. */
+.card .nums{position:absolute;left:12%;right:12%;top:68%;height:10%;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;
+  font-family:"JetBrains Mono";color:#1b150c;overflow:hidden}
+.card .nums b{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5px;font-weight:700;font-size:9.5px;line-height:1}
+.card .nums i{font-style:normal;font-family:"Alegreya SC";font-weight:700;font-size:7px;letter-spacing:.04em;color:#3f3a2d;text-shadow:0 1px 0 rgba(226,214,190,.7)}
 .card .nums .faint,.detail .big .nums .faint{color:#6a604e;font-weight:400}
+/* rite and warrant faces carry a pair of labels rather than unit stats, so they keep a two-up line */
+.card .pair{position:absolute;left:12%;right:12%;top:69%;height:8%;display:flex;align-items:center;justify-content:space-between;
+  font-family:"JetBrains Mono";font-weight:700;font-size:8.5px;color:#1b150c;overflow:hidden}
+.card .pair .faint{color:#6a604e;font-weight:400}
 
 /* the copy badge moved to the foot: the top of the card belongs to the name now */
 .card .cnt{position:absolute;left:8%;bottom:10%;background:#12141a;border:1px solid var(--edge-2);color:var(--parch);font-family:"JetBrains Mono";font-size:10px;padding:1px 5px;box-shadow:0 2px 5px rgba(0,0,0,.6)}
@@ -193,9 +202,11 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 .detail .big .pips img.off{opacity:.42}
 
 .detail .big .nm{position:absolute;left:7%;top:5.5%;width:86%;height:11%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:"Alegreya SC";font-weight:700;font-size:16px;line-height:1.04;color:#241d13}
-.detail .big .sub{position:absolute;left:7%;top:73.5%;width:72%;text-align:center;font-size:12px;color:#5c5344}
-.detail .big .nums{position:absolute;left:9%;right:9%;top:66.5%;height:7%;display:flex;align-items:center;justify-content:space-between;padding:0 4%;
-  font-family:"JetBrains Mono";font-weight:700;font-size:13px;color:#1b150c}
+.detail .big .sub{position:absolute;left:7%;top:76.5%;width:72%;text-align:center;font-size:12px;color:#5c5344}
+.detail .big .nums{position:absolute;left:12%;right:12%;top:68%;height:10%;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;
+  font-family:"JetBrains Mono";color:#1b150c;overflow:hidden}
+.detail .big .nums b{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:700;font-size:13px;line-height:1}
+.detail .big .nums i{font-style:normal;font-family:"Alegreya SC";font-weight:700;font-size:9px;letter-spacing:.09em;color:#3f3a2d;text-shadow:0 1px 0 rgba(226,214,190,.7)}
 .detail h3{font-size:20px}
 .detail .close{position:absolute;right:14px;top:10px;font-size:22px;color:var(--dim);line-height:1}
 .abil{border-left:2px solid var(--edge-2);padding:2px 0 2px 10px;margin:9px 0}
@@ -579,11 +590,15 @@ function cardHTML(c){
     <div class="pips">${starRow(c.stars)}</div>
     <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
     <div class="nm">${esc(c.name)}</div>
-    <div class="sub">${esc(c.roles[0])}${c.factionRank?' · '+esc(c.factionRank.replace(/_/g,' ').toLowerCase()):''}</div>
-    <div class="nums"><span>${c.atk}</span><span class="faint">${c.tribute===null?'RITE':c.tribute?('T'+c.tribute):'—'}</span><span>${c.def}</span></div>
+    <div class="nums">${statRow(c)}</div>
     ${c.count>1?`<div class="cnt">×${c.count}</div>`:''}
   </div>`;
 }
+/** The three numbers every card carries: what it can take, what it deals, what it turns aside. */
+const statRow = (c)=>`<b><i>LIFE</i>${c.hp}</b><b><i>ATK</i>${c.atk}</b><b><i>DEF</i>${c.def}</b>`;
+/** Summon cost, shown beside the role rather than between the stats where it read as one of them. */
+const tributeMark = (c)=> c.tribute===null ? ' · rite only' : c.tribute ? ` · tribute ${c.tribute}` : '';
+
 /** How many of this card the hold owns, so the deck screen never shows copies out of thin air. */
 const ownedOf = (id)=> (D.deck.owned||{})[id] ?? 0;
 function openCard(c){
@@ -592,8 +607,8 @@ function openCard(c){
   $('detailbox').innerHTML=`<div class="big"><img class="fr" src="${FRAME(c)}" alt="">
       <div class="pips">${starRow(c.stars,true)}</div>
       <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
-      <div class="nm">${esc(c.name)}</div><div class="sub">${esc(c.roles.join(' · '))}</div>
-      <div class="nums"><span>${c.atk}</span><span>${c.def}</span></div></div>
+      <div class="nm">${esc(c.name)}</div><div class="sub">${esc(c.roles.join(' · '))}${tributeMark(c)}</div>
+      <div class="nums">${statRow(c)}</div></div>
     <div style="position:relative">
       <button class="close" aria-label="Close">×</button>
       <h3 class="sc">${esc(c.name)}</h3>
@@ -631,7 +646,7 @@ function renderRites(){
        <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
        <div class="nm">${esc(c.name)}</div>
        <div class="sub">${c.kind==='ritual'?'Ritual':'Fusion'}${isReady?' · ready':''}</div>
-       <div class="nums"><span>${c.kind==='ritual'?c.starCost+'★':'materials'}</span><span class="faint">${c.kind==='ritual'?(c.theme||'any'):''}</span></div>
+       <div class="pair"><span>${c.kind==='ritual'?c.starCost+'★':'materials'}</span><span class="faint">${c.kind==='ritual'?(c.theme||'any'):''}</span></div>
        ${c.count>1?`<div class="cnt">×${c.count}</div>`:''}</div>`;}).join('')}</div>`;
   $('ritespane').querySelectorAll('[data-rid]').forEach(el2=>el2.onclick=()=>openRite(side.find(x=>x.id===el2.dataset.rid)));
 }
@@ -684,7 +699,7 @@ function renderWrits(){
        <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
        <div class="nm">${esc(c.targetName)}</div>
        <div class="sub">${esc(c.title)}${c.taken?' · in hand':''}</div>
-       <div class="nums"><span>${c.copies} card${c.copies===1?'':'s'}</span><span class="faint">hold ${c.owned}</span></div>
+       <div class="pair"><span>${c.copies} card${c.copies===1?'':'s'}</span><span class="faint">hold ${c.owned}</span></div>
      </div>`;}).join('')}</div>
    <div class="hd" style="margin-top:16px">What this muster is still short of</div>
    ${gaps.length? `<div class="req">${gaps.slice(0,8).map(g=>`<div class="line"><span class="dim">${esc(g.name)} <em class="faint">${g.stars}★</em></span><b>hold ${g.owned}, deck asks ${g.owned+g.need}</b></div>`).join('')}</div>`
