@@ -161,13 +161,13 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
 }
 
 /** The unit's fighting band: its platoon, or itself plus the allies beside it when it has none. */
-function bandOf(b: Battle, user: UnitState, p?: PlatoonState): UnitState[] {
+export function bandOf(b: Battle, user: UnitState, p?: PlatoonState): UnitState[] {
   if (p) return platoonMembers(p).map((uid) => b.units.get(uid)).filter((m): m is UnitState => !!m && !m.defeated);
   return [user, ...b.adjacentAllies(user).filter((a) => !a.isClone)];
 }
 
 /** Live enemies within `radius` hexes of the user. */
-function enemiesWithin(b: Battle, user: UnitState, radius: number): UnitState[] {
+export function enemiesWithin(b: Battle, user: UnitState, radius: number): UnitState[] {
   if (!user.pos) return [];
   return [...b.activeUnits()].filter((t) => t.side !== user.side && t.pos && hexDistance(user.pos!, t.pos) <= radius);
 }

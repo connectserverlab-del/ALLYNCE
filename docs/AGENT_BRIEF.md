@@ -21,7 +21,13 @@ You are working in the ALLYNCE repository, an original tactical army strategy ga
 3. Implement data-first: numbers in `data/`, rules in `core/src`, tests in `core/tests`. Keep the modifier breakdown
    honest: every new bonus records its source.
 4. Run `npm test` and `npm run typecheck`. Do not push red.
-5. Commit with a clear message. Never include AI tool names or attribution in commits, code, docs or PR text.
+5. Commit with a clear message. Keep AI tool names and attribution out of the repository itself — code,
+   data, docs, art, PR prose. The owner asked for that and it holds.
+
+   The one exception is not ours to make: some environments require a `Co-Authored-By` trailer and a session
+   link on commits and PR descriptions, and refuse the commit without them. Where that applies, comply with
+   the environment and keep everything *inside* the repository clean, which is what the rule is actually
+   protecting. Do not edit this line to make the conflict go away; a later pass needs to know it exists.
 6. Push to a new branch named `agent/<yyyy-mm-dd>-<topic>` and open a draft pull request that explains what changed,
    why it follows the owner's intent, and what decision (if any) the owner should make next.
 7. Move the finished item from the Queue to Done in `docs/CHECKLIST.md`, in the same pull request. Add at least one dated line to the brainstorm log:

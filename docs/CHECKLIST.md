@@ -18,6 +18,23 @@ Passes run in fresh sessions and cannot see each other, so claiming happens thro
 If every item is claimed or blocked, do not invent work: improve tests, tighten docs, or sharpen the AI, and say
 so in the PR.
 
+## Running two passes at once
+
+Two passes can share a branch safely if, and only if, they are given **disjoint file sets** rather than
+disjoint topics — topics overlap, file lists do not. Name the files each pass may touch and say that
+everything else is off limits for any reason.
+
+Three things bite:
+
+- **`docs/samples/ashfall-hold.html` is generated and about 8 MB.** Any two passes that both run
+  `node scripts/build-sample.mjs` conflict on it and the conflict cannot be read. Exactly one pass rebuilds
+  it, last, after the merge.
+- **Shared helpers.** A pass barred from a file will reimplement what it needs from it. That is the right
+  call under the rule, but the owner of that file should export the helper and delete the copy on merge,
+  or the two definitions drift apart in silence.
+- **`docs/CHECKLIST.md` is the one file everything wants.** Keep it with the merging pass; the other reports
+  its checklist moves in prose and the merging pass makes them.
+
 ## Blocked on an owner decision
 
 | Id | Item | Waiting on |
@@ -31,7 +48,6 @@ so in the PR.
 |---|---|---|
 | `Q-1` | Second art pass on weak cutouts: any unit whose card still reads "no art yet", plus re-cuts where the flood fill left a panel edge | Blank cards are the most visible gap in the game |
 | `Q-2` | Scenario authoring on top of generated ground: let a scenario pin objectives, rituals and portals to a generated field by role rather than by fixed coordinates | Scenarios currently hard-code hexes, which breaks on a regenerated map |
-| `Q-3` | AI: use trenches and high ground, position siege behind the line, route cavalry to flanks, surrender when the leader is dead and morale is broken | The AI ignores the terrain rules the player must respect |
 | `Q-16` | Teach the AI that splitting is a trade, not a gain: split to hold ground or bait, never against a single hard hitter, and hunt enemy copies to shrink the original | Cloning now costs the caster real weight and the AI still treats it as free presence |
 | `Q-4` | Deck editor in the sample page: move cards between main and side deck with live legality | Deck building is the core loop and is currently read-only |
 | `Q-5` | Campaign map: regions on the province map, each a scenario; a won region feeds the holding's production | Connects the battle layer to the holding layer |
@@ -43,7 +59,6 @@ so in the PR.
 | `Q-11` | Warrant board screen in the sample page: read the posted writs, take one, and see which of them close the gaps in the current deck | The board exists in the core and has no interface |
 | `Q-12` | Give the sworn companies and the seven divisions depth: each has four cards, enough to hire but not to lead | A division is a flavour of ally until it can field a line of its own |
 | `Q-13` | Escort composition for warrants: build the escort around the target's own company rather than a generic host starter deck | The escort currently reads as a borrowed army with the target bolted on |
-| `Q-14` | Teach the AI to spend the six card skills: buff before a charge, debuff before a defence, clone when outnumbered | Every 4-star card carries a skill and the AI only reaches for clones, charges and duels |
 | `Q-15` | A division's own doctrine and platoon order, so a Choir or a Swarm can lead a deck instead of only joining one | Seven divisions is a lot of flavour with no army identity behind it |
 
 ## Done
@@ -71,3 +86,4 @@ so in the PR.
 | `D-19` | A usable skill on every card at four stars and above: six kinds, all data-defined, enforced by a registry-wide test |
 | `D-20` | Card face: name across the top band, ATK and DEF in dark ink on the paper, copy badge moved to the foot |
 | `D-21` | Cloning splits attack and defence across the original and its copies instead of duplicating them, and the original reclaims each share as a copy falls |
+| `D-22` | AI spends the six card skills on their own terms, fights the ground it stands on (terrain, elevation, siege screening, cavalry flanking) and yields a lost field |

@@ -6,7 +6,8 @@ import type { Hex } from "./hex.js";
 import { hexDistance, hexNeighbors, attackArc } from "./hex.js";
 import { computeStat } from "./modifiers.js";
 import { cohesionConnections } from "./cohesion.js";
-import { moraleBand, platoonMembers } from "./morale.js";
+import { bandOf, enemiesWithin } from "./effects.js";
+import { moraleBand } from "./morale.js";
 import type { RitualCircle } from "./rituals.js";
 
 /**
@@ -131,7 +132,7 @@ function actOnce(ctrl: BattleController, u: UnitState, profile: AiProfile): bool
       if (gap > allowance && gap <= allowance + (a.effect as any).mov) { try { ctrl.useAbility(u, id); return true; } catch { /* skip */ } }
     }
     if (a.effect.kind === "BandAtk" && bandAboutToSwing(ctrl, u) >= BAND_SWING_MIN) { try { ctrl.useAbility(u, id); return true; } catch { /* skip */ } }
-    if ((a.effect.kind === "EnemyAtkDebuff" || a.effect.kind === "EnemySlow") && enemiesWithin(ctrl, u, a.range ?? 1) >= AREA_SKILL_MIN_TARGETS) { try { ctrl.useAbility(u, id); return true; } catch { /* skip */ } }
+    if ((a.effect.kind === "EnemyAtkDebuff" || a.effect.kind === "EnemySlow") && enemiesWithin(b, u, a.range ?? 1).length >= AREA_SKILL_MIN_TARGETS) { try { ctrl.useAbility(u, id); return true; } catch { /* skip */ } }
   }
   // A warrant target that is already broken is worth more alive than dead: take it now
   const warrants = b.wanted.get(u.side);
@@ -310,20 +311,15 @@ function isSiege(d: UnitDef): boolean { return !!d.siege || d.roles.includes("Si
 /** Between the minimum range a piece cannot shoot inside of and the range it cannot shoot past. */
 function inFiringBand(d: UnitDef, distance: number): boolean { return distance <= d.range && distance >= (d.minRange ?? 0); }
 
-/** How many of a unit's band already have something in reach: a team buff is only worth an action when the band is swinging. */
+/**
+ * How many of a unit's band already have something in reach: a team buff is only worth an action when
+ * the band is about to swing. The band itself is `bandOf` from the effects layer rather than a second
+ * definition here, so what the AI thinks it is buffing is what the ability actually buffs.
+ */
 function bandAboutToSwing(ctrl: BattleController, u: UnitState): number {
   const b = ctrl.b;
-  const band = u.platoonId
-    ? platoonMembers(b.platoon(u.platoonId)).map((uid) => b.units.get(uid)).filter((m): m is UnitState => !!m)
-    : [u, ...b.adjacentAllies(u)];
-  return band.filter((m) => !m.defeated && m.pos && [...b.activeUnits()].some((t) => t.side !== m.side && t.pos && hexDistance(m.pos!, t.pos) <= b.def(m).range)).length;
-}
-
-/** Live enemies inside a radius of the unit, which is what an area skill is priced against. */
-function enemiesWithin(ctrl: BattleController, u: UnitState, radius: number): number {
-  const b = ctrl.b;
-  if (!u.pos) return 0;
-  return [...b.activeUnits()].filter((t) => t.side !== u.side && t.pos && hexDistance(u.pos!, t.pos) <= radius).length;
+  const band = bandOf(b, u, u.platoonId ? b.platoon(u.platoonId) : undefined);
+  return band.filter((m) => m.pos && [...b.activeUnits()].some((t) => t.side !== m.side && t.pos && hexDistance(m.pos!, t.pos) <= b.def(m).range)).length;
 }
 
 /**
