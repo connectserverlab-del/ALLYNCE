@@ -100,6 +100,7 @@ const out = {
     accepted: k.wanted.accepted,
   },
   rules: { ...reg.deckRules },
+  factions: Object.fromEntries([...reg.factions.values()].map((f) => [f.id, { name: f.name, identity: f.identity, palette: f.palette }])),
   kingdom: {
     state: k, effects: kEff, storage: storageCap(reg, k),
     buildings: BUILDING_IDS.map((id) => ({ id, ...reg.kingdom.buildings[id], level: k.levels[id], nextCost: upgradeCost(reg, k, id), nextSeconds: upgradeSeconds(reg, k, id), building: k.buildQueue.find((j) => j.building === id) ?? null, tier: buildingTier(reg, k.levels[id]), art: buildingArt(reg, id, k.levels[id]), nextTierAt: nextTierAt(reg, k.levels[id]) })),

@@ -26,7 +26,7 @@ That is why it is tens of megabytes and why the packer downscales as hard as it 
 | Screen | What it shows |
 |---|---|
 | **Field** | The generated battlefield, painted ground clipped to the irregular shape, pan and zoom with a minimap. Round and phase, both sides' morale bands, cohesion links, the selected unit's reach and the summon zone, and a command bar carrying the engine's own ATK and DEF breakdowns term by term. |
-| **Deck** | All hundred cards on paper stock, filterable by faction and sortable by star, copies or name. Each card face shows its star row, its tribute cost and its copy count; the detail panel adds how many copies the hold physically owns, because the copy limit is a ceiling and not a grant. |
+| **Deck** | All hundred cards on paper stock, filterable by faction and sortable by star, copies or name. The name runs across the top band of the paper, ATK and DEF sit under the art in dark ink, and the star row and wax seal close the foot. The detail panel adds how many copies the hold physically owns, because the copy limit is a ceiling and not a grant. |
 | **Rites** | The twenty-card side deck. Rituals name a star total to sacrifice; fusions name exact adjacent materials. Cards playable on the current field are lit; the rest are dimmed with their requirements spelled out. |
 | **Writs** | The wanted board: five warrants posted, what each pays in cards and bounty, the escort standing in the way, and how the target is taken alive. Below it, every card the current deck asks for that the hold cannot cover. |
 | **Hold** | The stronghold seen from above with a pin per building, each at its real level and tier art, plus the research tree and the recruitment banners. |
@@ -36,7 +36,13 @@ That is why it is tens of megabytes and why the packer downscales as hard as it 
 
 - Ground soot black-blue `#12141a`; panels iron `#23272e` to `#2c3139`; parchment `#cfc3a6` for tooltips.
 - Faction accents: Samurai ember `#c9562c`, Shinobi moon `#9aa7b3`, Knight dull gold `#b8923f`, Dragon pale cyan
-  `#7fb6c2`, Ritual marsh `#7c9a5a`. The five sworn companies borrow the nearest of these rather than adding new
+  `#7fb6c2`, Ritual marsh `#7c9a5a`. The sworn companies and the seven divisions borrow the nearest of these rather than adding new
   hues, so a mixed deck stays readable.
 - Type: Alegreya SC for labels, Alegreya Sans for body, JetBrains Mono for numbers.
 - One card stock for everything: the sealed mulberry paper. Rank is carried by the star row, never by the frame.
+- Card face layout is measured against the frame painting itself: a light paper band runs 6-17% and again
+  66-87% of the height, with the dark art window between them. The name takes the top band and the numbers the
+  lower one, so no type ever lands on the scorched foot where it cannot be read.
+- Faction names come from `data/factions/factions.json` through the export rather than a map in the template, so
+  a division added tomorrow shows its real name instead of "undefined". Only the four host armies keep a short
+  label, and new factions borrow the nearest existing accent hue rather than adding one.

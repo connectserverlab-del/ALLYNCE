@@ -20,6 +20,28 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses |
 | §18 Architecture | all | Simulation is separate from presentation; every action logs a serializable event |
 
+## Card skills
+
+Every card at four stars and above carries one ability it can spend an action on. Six kinds cover the roster,
+all of them ordinary temporary modifiers so they appear in the stat breakdown by name instead of as a hidden
+number, and all of them defined in `data/abilities/abilities.json` rather than in code.
+
+| Kind | What it does | Example |
+|---|---|---|
+| `SelfSacrificeBuff` | Spend a share of maximum health for attack this round. Never lethal: a unit that cannot pay the price cannot use it at all. | Blood Offering — 15% health for +450 ATK |
+| `SelfHaste` | Movement for one round, for this unit or, with `bandWide`, for its whole band. | Second Wind — +3 MOV; Ridge Pace — +3 MOV band-wide |
+| `BandAtk` | A team attack buff across the band. | Choir of Edges — +220 ATK |
+| `EnemyAtkDebuff` | Every enemy inside the ability's range loses attack for the round. | Judgement's Weight — -300 ATK within 2 |
+| `EnemySlow` | Every enemy inside range loses movement, optionally with a status. | Deep Frost — -3 MOV and Suppressed within 3 |
+| `SpawnClones` | Copies of the caster at a share of its attack, one hit each. | Swarm Split — three copies at two fifths force |
+
+**The band** is the platoon where a unit has one, and the unit plus the allies standing beside it where it does
+not. The creature divisions mostly deploy loose rather than in platoons, so without that fallback a team buff
+would do nothing for half the roster.
+
+A test in `core/tests/skills.test.ts` walks the whole registry and fails if any card at four stars or above is
+carrying no ability it can activate, so the rule cannot quietly rot as the roster grows.
+
 ## Worked example (from the brief §7)
 
 Foot soldier 1,500 base ATK, two matching neighbours (+100), full Doctrine (+100), commander order (+150) = 1,850.

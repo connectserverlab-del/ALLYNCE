@@ -746,7 +746,9 @@
       "arrival": "RevealHidden"
     },
     "passives": [],
-    "actives": [],
+    "actives": [
+      "ABL_SOVEREIGN_DECREE"
+    ],
     "slots": [],
     "unique": true,
     "summonOnly": true,
@@ -782,7 +784,9 @@
       "arrival": "FearPulse"
     },
     "passives": [],
-    "actives": [],
+    "actives": [
+      "ABL_SOVEREIGN_DECREE"
+    ],
     "slots": [],
     "unique": true,
     "summonOnly": true,
@@ -818,7 +822,9 @@
       "arrival": "ReturnFallen"
     },
     "passives": [],
-    "actives": [],
+    "actives": [
+      "ABL_SOVEREIGN_DECREE"
+    ],
     "slots": [],
     "unique": true,
     "summonOnly": true,
@@ -979,7 +985,9 @@
     "passives": [
       "ABL_HIT_AND_FADE"
     ],
-    "actives": [],
+    "actives": [
+      "ABL_COURIER_DASH"
+    ],
     "slots": [
       "Specialist"
     ],
@@ -1179,7 +1187,9 @@
       "arrival": "Convergence"
     },
     "passives": [],
-    "actives": [],
+    "actives": [
+      "ABL_CALAMITY_SURGE"
+    ],
     "slots": [],
     "unique": true,
     "summonOnly": true,
@@ -2317,5 +2327,1066 @@
       "cutout": "art/samples/DUN_COMMANDER_DUNEWAKE-ARBITER_CUTOUT_V01.png"
     },
     "stars": 8
+  },
+  {
+    "id": "ANG_FOOT_LAMPBEARER-CHORISTER",
+    "name": "Lampbearer Chorister",
+    "faction": "ANG",
+    "themes": [
+      "Celestial"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 1050,
+    "atk": 1300,
+    "def": 1200,
+    "mov": 5,
+    "range": 1,
+    "initiative": 7,
+    "morale": 70,
+    "commandRadius": 0,
+    "capacityCost": 4,
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "formation_hold",
+    "art": {
+      "concept": "art/samples/ANG_FOOT_LAMPBEARER-CHORISTER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ANG_FOOT_LAMPBEARER-CHORISTER_CUTOUT_V01.png"
+    },
+    "stars": 3,
+    "flying": true
+  },
+  {
+    "id": "ANG_SECOND_WARDING-SERAPH",
+    "name": "Warding Seraph",
+    "faction": "ANG",
+    "themes": [
+      "Celestial"
+    ],
+    "roles": [
+      "Second",
+      "Support"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1400,
+    "atk": 1450,
+    "def": 1750,
+    "mov": 5,
+    "range": 1,
+    "initiative": 7,
+    "morale": 80,
+    "commandRadius": 2,
+    "capacityCost": 7,
+    "passives": [],
+    "actives": [
+      "ABL_CHOIR_OF_EDGES"
+    ],
+    "slots": [
+      "Second",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "art": {
+      "concept": "art/samples/ANG_SECOND_WARDING-SERAPH_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ANG_SECOND_WARDING-SERAPH_CUTOUT_V01.png"
+    },
+    "stars": 5,
+    "flying": true
+  },
+  {
+    "id": "ANG_ELITE_SWORD-OF-THE-SEVENTH-GATE",
+    "name": "Sword of the Seventh Gate",
+    "faction": "ANG",
+    "themes": [
+      "Celestial"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1500,
+    "atk": 2000,
+    "def": 1500,
+    "mov": 5,
+    "range": 1,
+    "initiative": 9,
+    "morale": 75,
+    "commandRadius": 0,
+    "capacityCost": 10,
+    "passives": [],
+    "actives": [
+      "ABL_JUDGEMENT_WEIGHT"
+    ],
+    "slots": [
+      "Elite",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "art": {
+      "concept": "art/samples/ANG_ELITE_SWORD-OF-THE-SEVENTH-GATE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ANG_ELITE_SWORD-OF-THE-SEVENTH-GATE_CUTOUT_V01.png"
+    },
+    "stars": 7,
+    "flying": true
+  },
+  {
+    "id": "ANG_COMMANDER_THRONE-ARCHON",
+    "name": "Throne Archon",
+    "faction": "ANG",
+    "themes": [
+      "Celestial"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Large",
+    "hp": 1800,
+    "atk": 1900,
+    "def": 1800,
+    "mov": 5,
+    "range": 2,
+    "initiative": 8,
+    "morale": 90,
+    "commandRadius": 4,
+    "capacityCost": 12,
+    "passives": [],
+    "actives": [
+      "ABL_CHOIR_OF_EDGES",
+      "ABL_UNMAKING_WORD"
+    ],
+    "slots": [
+      "Commander",
+      "Specialist"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "art": {
+      "concept": "art/samples/ANG_COMMANDER_THRONE-ARCHON_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ANG_COMMANDER_THRONE-ARCHON_CUTOUT_V01.png"
+    },
+    "stars": 8,
+    "flying": true
+  },
+  {
+    "id": "DEM_FOOT_CINDER-IMP",
+    "name": "Cinder Imp",
+    "faction": "DEM",
+    "themes": [
+      "Infernal"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 900,
+    "atk": 1250,
+    "def": 900,
+    "mov": 5,
+    "range": 1,
+    "initiative": 8,
+    "morale": 55,
+    "commandRadius": 0,
+    "capacityCost": 3,
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider",
+    "art": {
+      "concept": "art/samples/DEM_FOOT_CINDER-IMP_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DEM_FOOT_CINDER-IMP_CUTOUT_V01.png"
+    },
+    "stars": 3
+  },
+  {
+    "id": "DEM_SECOND_FLENSING-TORMENTOR",
+    "name": "Flensing Tormentor",
+    "faction": "DEM",
+    "themes": [
+      "Infernal"
+    ],
+    "roles": [
+      "Second"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1300,
+    "atk": 1600,
+    "def": 1300,
+    "mov": 5,
+    "range": 1,
+    "initiative": 9,
+    "morale": 70,
+    "commandRadius": 2,
+    "capacityCost": 7,
+    "passives": [],
+    "actives": [
+      "ABL_BLOOD_OFFERING"
+    ],
+    "slots": [
+      "Second",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "leader_flank",
+    "art": {
+      "concept": "art/samples/DEM_SECOND_FLENSING-TORMENTOR_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DEM_SECOND_FLENSING-TORMENTOR_CUTOUT_V01.png"
+    },
+    "stars": 5
+  },
+  {
+    "id": "DEM_ELITE_PIT-COLONEL",
+    "name": "Pit Colonel",
+    "faction": "DEM",
+    "themes": [
+      "Infernal"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1650,
+    "atk": 1950,
+    "def": 1600,
+    "mov": 4,
+    "range": 1,
+    "initiative": 7,
+    "morale": 80,
+    "commandRadius": 0,
+    "capacityCost": 10,
+    "passives": [],
+    "actives": [
+      "ABL_TAR_THE_GROUND"
+    ],
+    "slots": [
+      "Elite",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "art": {
+      "concept": "art/samples/DEM_ELITE_PIT-COLONEL_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DEM_ELITE_PIT-COLONEL_CUTOUT_V01.png"
+    },
+    "stars": 7
+  },
+  {
+    "id": "DEM_COMMANDER_ASHPIT-ARCHDEMON",
+    "name": "Ashpit Archdemon",
+    "faction": "DEM",
+    "themes": [
+      "Infernal"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Large",
+    "hp": 2000,
+    "atk": 2100,
+    "def": 1750,
+    "mov": 5,
+    "range": 1,
+    "initiative": 8,
+    "morale": 90,
+    "commandRadius": 4,
+    "capacityCost": 13,
+    "passives": [],
+    "actives": [
+      "ABL_FEED_THE_PIT",
+      "ABL_TAR_THE_GROUND"
+    ],
+    "slots": [
+      "Commander",
+      "Specialist"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "art": {
+      "concept": "art/samples/DEM_COMMANDER_ASHPIT-ARCHDEMON_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DEM_COMMANDER_ASHPIT-ARCHDEMON_CUTOUT_V01.png"
+    },
+    "stars": 8,
+    "flying": true
+  },
+  {
+    "id": "CHR_FOOT_BROKEN-BANNER-OUTRIDER",
+    "name": "Broken-Banner Outrider",
+    "faction": "CHR",
+    "themes": [
+      "Chaos"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 950,
+    "atk": 1300,
+    "def": 950,
+    "mov": 6,
+    "range": 1,
+    "initiative": 9,
+    "morale": 55,
+    "commandRadius": 0,
+    "capacityCost": 3,
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider",
+    "art": {
+      "concept": "art/samples/CHR_FOOT_BROKEN-BANNER-OUTRIDER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/CHR_FOOT_BROKEN-BANNER-OUTRIDER_CUTOUT_V01.png"
+    },
+    "stars": 3
+  },
+  {
+    "id": "CHR_CAVALRY_SPIRAL-MARKED-LANCER",
+    "name": "Spiral-Marked Lancer",
+    "faction": "CHR",
+    "themes": [
+      "Chaos"
+    ],
+    "roles": [
+      "Cavalry"
+    ],
+    "rank": "Cavalry",
+    "size": "Standard",
+    "hp": 1250,
+    "atk": 1600,
+    "def": 1150,
+    "mov": 8,
+    "range": 1,
+    "initiative": 10,
+    "morale": 65,
+    "commandRadius": 0,
+    "capacityCost": 6,
+    "passives": [
+      "ABL_LANCE_CHARGE"
+    ],
+    "actives": [
+      "ABL_SPIRAL_GALLOP"
+    ],
+    "slots": [
+      "FootSoldier",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "cavalry_raid",
+    "art": {
+      "concept": "art/samples/CHR_CAVALRY_SPIRAL-MARKED-LANCER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/CHR_CAVALRY_SPIRAL-MARKED-LANCER_CUTOUT_V01.png"
+    },
+    "stars": 4
+  },
+  {
+    "id": "CHR_ELITE_WARP-HERALD",
+    "name": "Warp Herald",
+    "faction": "CHR",
+    "themes": [
+      "Chaos"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1300,
+    "atk": 1750,
+    "def": 1250,
+    "mov": 6,
+    "range": 2,
+    "initiative": 10,
+    "morale": 70,
+    "commandRadius": 0,
+    "capacityCost": 9,
+    "passives": [],
+    "actives": [
+      "ABL_SPLIT_THE_SELF"
+    ],
+    "slots": [
+      "Elite",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "assassin",
+    "art": {
+      "concept": "art/samples/CHR_ELITE_WARP-HERALD_CONCEPT_V01.jpg",
+      "cutout": "art/samples/CHR_ELITE_WARP-HERALD_CUTOUT_V01.png"
+    },
+    "stars": 6
+  },
+  {
+    "id": "CHR_COMMANDER_CHAOS-WARLORD",
+    "name": "Chaos Warlord",
+    "faction": "CHR",
+    "themes": [
+      "Chaos"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1850,
+    "atk": 2050,
+    "def": 1700,
+    "mov": 6,
+    "range": 1,
+    "initiative": 9,
+    "morale": 85,
+    "commandRadius": 3,
+    "capacityCost": 12,
+    "passives": [],
+    "actives": [
+      "ABL_BLOOD_OFFERING",
+      "ABL_SPIRAL_GALLOP"
+    ],
+    "slots": [
+      "Commander",
+      "Specialist"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_flank",
+    "art": {
+      "concept": "art/samples/CHR_COMMANDER_CHAOS-WARLORD_CONCEPT_V01.jpg",
+      "cutout": "art/samples/CHR_COMMANDER_CHAOS-WARLORD_CUTOUT_V01.png"
+    },
+    "stars": 8
+  },
+  {
+    "id": "DMG_FOOT_GODTOUCHED-SCION",
+    "name": "Godtouched Scion",
+    "faction": "DMG",
+    "themes": [
+      "Demigod"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 1250,
+    "atk": 1500,
+    "def": 1300,
+    "mov": 6,
+    "range": 1,
+    "initiative": 9,
+    "morale": 75,
+    "commandRadius": 0,
+    "capacityCost": 6,
+    "passives": [],
+    "actives": [
+      "ABL_SECOND_WIND"
+    ],
+    "slots": [
+      "FootSoldier",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "art": {
+      "concept": "art/samples/DMG_FOOT_GODTOUCHED-SCION_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DMG_FOOT_GODTOUCHED-SCION_CUTOUT_V01.png"
+    },
+    "stars": 4
+  },
+  {
+    "id": "DMG_SECOND_OATHKEEPER-OF-THE-HALF-BORN",
+    "name": "Oathkeeper of the Half-Born",
+    "faction": "DMG",
+    "themes": [
+      "Demigod"
+    ],
+    "roles": [
+      "Second",
+      "Support"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1500,
+    "atk": 1700,
+    "def": 1650,
+    "mov": 5,
+    "range": 1,
+    "initiative": 8,
+    "morale": 85,
+    "commandRadius": 3,
+    "capacityCost": 8,
+    "passives": [],
+    "actives": [
+      "ABL_OATH_SHARED"
+    ],
+    "slots": [
+      "Second",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "art": {
+      "concept": "art/samples/DMG_SECOND_OATHKEEPER-OF-THE-HALF-BORN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DMG_SECOND_OATHKEEPER-OF-THE-HALF-BORN_CUTOUT_V01.png"
+    },
+    "stars": 5
+  },
+  {
+    "id": "DMG_ELITE_STORM-SIRED-CHAMPION",
+    "name": "Storm-Sired Champion",
+    "faction": "DMG",
+    "themes": [
+      "Demigod"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Large",
+    "hp": 1900,
+    "atk": 2200,
+    "def": 1700,
+    "mov": 5,
+    "range": 1,
+    "initiative": 9,
+    "morale": 85,
+    "commandRadius": 0,
+    "capacityCost": 11,
+    "passives": [],
+    "actives": [
+      "ABL_UNMAKING_WORD"
+    ],
+    "slots": [
+      "Elite",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "art": {
+      "concept": "art/samples/DMG_ELITE_STORM-SIRED-CHAMPION_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DMG_ELITE_STORM-SIRED-CHAMPION_CUTOUT_V01.png"
+    },
+    "stars": 7
+  },
+  {
+    "id": "DMG_COMMANDER_DEMIGOD-SOVEREIGN",
+    "name": "Demigod Sovereign",
+    "faction": "DMG",
+    "themes": [
+      "Demigod"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Large",
+    "hp": 2200,
+    "atk": 2300,
+    "def": 2000,
+    "mov": 5,
+    "range": 2,
+    "initiative": 10,
+    "morale": 95,
+    "commandRadius": 4,
+    "capacityCost": 14,
+    "passives": [],
+    "actives": [
+      "ABL_OATH_SHARED",
+      "ABL_JUDGEMENT_WEIGHT"
+    ],
+    "slots": [
+      "Commander",
+      "Specialist"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "art": {
+      "concept": "art/samples/DMG_COMMANDER_DEMIGOD-SOVEREIGN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DMG_COMMANDER_DEMIGOD-SOVEREIGN_CUTOUT_V01.png"
+    },
+    "stars": 9
+  },
+  {
+    "id": "WEN_FOOT_STARVELING",
+    "name": "Starveling",
+    "faction": "WEN",
+    "themes": [
+      "Famine"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 850,
+    "atk": 1400,
+    "def": 800,
+    "mov": 6,
+    "range": 1,
+    "initiative": 9,
+    "morale": 50,
+    "commandRadius": 0,
+    "capacityCost": 3,
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider",
+    "art": {
+      "concept": "art/samples/WEN_FOOT_STARVELING_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WEN_FOOT_STARVELING_CUTOUT_V01.png"
+    },
+    "stars": 3
+  },
+  {
+    "id": "WEN_ELITE_ANTLER-WRAITH",
+    "name": "Antler Wraith",
+    "faction": "WEN",
+    "themes": [
+      "Famine"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1200,
+    "atk": 1800,
+    "def": 1150,
+    "mov": 6,
+    "range": 1,
+    "initiative": 10,
+    "morale": 65,
+    "commandRadius": 0,
+    "capacityCost": 8,
+    "passives": [],
+    "actives": [
+      "ABL_DEEP_FROST"
+    ],
+    "slots": [
+      "Elite",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "assassin",
+    "art": {
+      "concept": "art/samples/WEN_ELITE_ANTLER-WRAITH_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WEN_ELITE_ANTLER-WRAITH_CUTOUT_V01.png"
+    },
+    "stars": 6
+  },
+  {
+    "id": "WEN_ELITE_HOLLOW-HUNGER",
+    "name": "Hollow Hunger",
+    "faction": "WEN",
+    "themes": [
+      "Famine"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Large",
+    "hp": 1600,
+    "atk": 2100,
+    "def": 1300,
+    "mov": 5,
+    "range": 1,
+    "initiative": 8,
+    "morale": 70,
+    "commandRadius": 0,
+    "capacityCost": 10,
+    "passives": [],
+    "actives": [
+      "ABL_EAT_THE_COLD"
+    ],
+    "slots": [
+      "Elite",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "art": {
+      "concept": "art/samples/WEN_ELITE_HOLLOW-HUNGER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WEN_ELITE_HOLLOW-HUNGER_CUTOUT_V01.png"
+    },
+    "stars": 7
+  },
+  {
+    "id": "WEN_COMMANDER_WINTER-MAW",
+    "name": "Winter Maw",
+    "faction": "WEN",
+    "themes": [
+      "Famine"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Large",
+    "hp": 1900,
+    "atk": 2150,
+    "def": 1550,
+    "mov": 6,
+    "range": 1,
+    "initiative": 9,
+    "morale": 85,
+    "commandRadius": 3,
+    "capacityCost": 12,
+    "passives": [],
+    "actives": [
+      "ABL_LONG_WINTER",
+      "ABL_DEEP_FROST"
+    ],
+    "slots": [
+      "Commander",
+      "Specialist"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "art": {
+      "concept": "art/samples/WEN_COMMANDER_WINTER-MAW_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WEN_COMMANDER_WINTER-MAW_CUTOUT_V01.png"
+    },
+    "stars": 8
+  },
+  {
+    "id": "SAS_FOOT_PINE-SHADOW",
+    "name": "Pine Shadow",
+    "faction": "SAS",
+    "themes": [
+      "Ridge"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 1300,
+    "atk": 1350,
+    "def": 1250,
+    "mov": 6,
+    "range": 1,
+    "initiative": 7,
+    "morale": 70,
+    "commandRadius": 0,
+    "capacityCost": 4,
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider",
+    "art": {
+      "concept": "art/samples/SAS_FOOT_PINE-SHADOW_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAS_FOOT_PINE-SHADOW_CUTOUT_V01.png"
+    },
+    "stars": 3
+  },
+  {
+    "id": "SAS_SECOND_RIDGE-WALKER",
+    "name": "Ridge Walker",
+    "faction": "SAS",
+    "themes": [
+      "Ridge"
+    ],
+    "roles": [
+      "Second",
+      "Support"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1450,
+    "atk": 1500,
+    "def": 1400,
+    "mov": 8,
+    "range": 1,
+    "initiative": 9,
+    "morale": 75,
+    "commandRadius": 2,
+    "capacityCost": 7,
+    "passives": [],
+    "actives": [
+      "ABL_RIDGE_PACE"
+    ],
+    "slots": [
+      "Second",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "art": {
+      "concept": "art/samples/SAS_SECOND_RIDGE-WALKER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAS_SECOND_RIDGE-WALKER_CUTOUT_V01.png"
+    },
+    "stars": 5
+  },
+  {
+    "id": "SAS_ELITE_STONEFIST-ELDER",
+    "name": "Stonefist Elder",
+    "faction": "SAS",
+    "themes": [
+      "Ridge"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Large",
+    "hp": 2000,
+    "atk": 2050,
+    "def": 1800,
+    "mov": 5,
+    "range": 1,
+    "initiative": 6,
+    "morale": 80,
+    "commandRadius": 0,
+    "capacityCost": 11,
+    "passives": [],
+    "actives": [
+      "ABL_STONE_CHORUS"
+    ],
+    "slots": [
+      "Elite",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "art": {
+      "concept": "art/samples/SAS_ELITE_STONEFIST-ELDER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAS_ELITE_STONEFIST-ELDER_CUTOUT_V01.png"
+    },
+    "stars": 7
+  },
+  {
+    "id": "SAS_COMMANDER_OLD-MAN-OF-THE-PEAKS",
+    "name": "Old Man of the Peaks",
+    "faction": "SAS",
+    "themes": [
+      "Ridge"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Large",
+    "hp": 2100,
+    "atk": 1950,
+    "def": 1900,
+    "mov": 6,
+    "range": 1,
+    "initiative": 7,
+    "morale": 90,
+    "commandRadius": 4,
+    "capacityCost": 12,
+    "passives": [],
+    "actives": [
+      "ABL_MOUNTAIN_STARE",
+      "ABL_STONE_CHORUS"
+    ],
+    "slots": [
+      "Commander",
+      "Specialist"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "art": {
+      "concept": "art/samples/SAS_COMMANDER_OLD-MAN-OF-THE-PEAKS_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAS_COMMANDER_OLD-MAN-OF-THE-PEAKS_CUTOUT_V01.png"
+    },
+    "stars": 8
+  },
+  {
+    "id": "FMC_LEVY_WORKER-DRONE",
+    "name": "Worker Drone",
+    "faction": "FMC",
+    "themes": [
+      "Swarm"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Levy",
+    "size": "Standard",
+    "hp": 700,
+    "atk": 850,
+    "def": 900,
+    "mov": 5,
+    "range": 1,
+    "initiative": 5,
+    "morale": 45,
+    "commandRadius": 0,
+    "capacityCost": 2,
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "formation_hold",
+    "art": {
+      "concept": "art/samples/FMC_LEVY_WORKER-DRONE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/FMC_LEVY_WORKER-DRONE_CUTOUT_V01.png"
+    },
+    "stars": 2
+  },
+  {
+    "id": "FMC_FOOT_SOLDIER-DRONE",
+    "name": "Soldier Drone",
+    "faction": "FMC",
+    "themes": [
+      "Swarm"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 1050,
+    "atk": 1400,
+    "def": 1150,
+    "mov": 5,
+    "range": 1,
+    "initiative": 7,
+    "morale": 55,
+    "commandRadius": 0,
+    "capacityCost": 4,
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "formation_hold",
+    "art": {
+      "concept": "art/samples/FMC_FOOT_SOLDIER-DRONE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/FMC_FOOT_SOLDIER-DRONE_CUTOUT_V01.png"
+    },
+    "stars": 3
+  },
+  {
+    "id": "FMC_ELITE_MYRMIDON-VANGUARD",
+    "name": "Myrmidon Vanguard",
+    "faction": "FMC",
+    "themes": [
+      "Swarm"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1450,
+    "atk": 1850,
+    "def": 1500,
+    "mov": 5,
+    "range": 1,
+    "initiative": 9,
+    "morale": 70,
+    "commandRadius": 0,
+    "capacityCost": 9,
+    "passives": [],
+    "actives": [
+      "ABL_SWARM_SPLIT"
+    ],
+    "slots": [
+      "Elite",
+      "Second",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "art": {
+      "concept": "art/samples/FMC_ELITE_MYRMIDON-VANGUARD_CONCEPT_V01.jpg",
+      "cutout": "art/samples/FMC_ELITE_MYRMIDON-VANGUARD_CUTOUT_V01.png"
+    },
+    "stars": 6
+  },
+  {
+    "id": "FMC_COMMANDER_HIVE-EMPRESS",
+    "name": "Hive Empress",
+    "faction": "FMC",
+    "themes": [
+      "Swarm"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Large",
+    "hp": 2000,
+    "atk": 2000,
+    "def": 1900,
+    "mov": 4,
+    "range": 2,
+    "initiative": 8,
+    "morale": 95,
+    "commandRadius": 5,
+    "capacityCost": 13,
+    "passives": [],
+    "actives": [
+      "ABL_HIVE_ACCORD",
+      "ABL_TAR_THE_GROUND"
+    ],
+    "slots": [
+      "Commander",
+      "Specialist"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "art": {
+      "concept": "art/samples/FMC_COMMANDER_HIVE-EMPRESS_CONCEPT_V01.jpg",
+      "cutout": "art/samples/FMC_COMMANDER_HIVE-EMPRESS_CUTOUT_V01.png"
+    },
+    "stars": 9
   }
 ]

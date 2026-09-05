@@ -65,6 +65,60 @@ a host, and each is a different culture of soldier so a hundred-card deck stops 
 - **Sandglass Duellist (Elite):** Bared scarred arms over gilded scale and pale wraps, a long curved blade in each hand, a sandglass at the belt.
 - **Dunewake Arbiter (Commander, unique):** Deep hood and veil over pale layered robes and light scale, a shield and staff of office, pale turquoise stones. Low amber rim light, scorched umber.
 
+## Divisions
+
+Seven themed divisions beyond the sworn companies. Four cards each: a rank-and-file body, a second or a
+specialist, an elite, and a commander.
+
+### Choir Militant (angels)
+Grey, half-moulted, and clearly under orders. Dirty broken feathers, no halos and no glow anywhere.
+- **Lampbearer Chorister (Foot):** Brass lamp on a pole, plain grey-white robes over dented mail, a blank riveted face-mask, two small tight-folded wings.
+- **Warding Seraph (Second):** Scorched pale plate, a scratched kite shield, sword reversed point-down, a veiled eyeless helm, four ragged wings in mismatched pairs.
+- **Sword of the Seventh Gate (Elite):** Blackened plate, a huge two-hander held low, a closed featureless war-mask, one wing taken off at the root and scarred over.
+- **Throne Archon (Commander, unique):** Scorched gold-and-grey plate hung with censers and sealed scrolls, a staff-sceptre, a crowned helm with nothing behind the slit, six vast tattered wings.
+
+### Ashpit Legion (demons)
+Cracked black hide with ember-red splits, soot, sulphur. Grim rather than gory: no viscera, no blood spray.
+- **Cinder Imp (Foot):** Man-sized, hunched, charcoal hide glowing faintly in the cracks, a scavenged breastplate too big for it, a notched cleaver.
+- **Flensing Tormentor (Second):** Gaunt, its own hide opened and pinned back with iron hooks it wears deliberately, a flensing knife in each hand.
+- **Pit Colonel (Elite):** Broad, scorched black plate over red hide, four backswept horns, one blind eye, a long-hafted axe and a chain of rank-tokens.
+- **Ashpit Archdemon (Commander, unique):** Enormous, obsidian hide, a crown of uneven horns, a mantle of chain and burnt hide, a massive notched blade, two tattered wings.
+
+### Spiral Warband (chaos riders)
+Looted and fused armour, spiral brands, torn banner scraps. Rust and oxidised copper under a sickly light.
+- **Broken-Banner Outrider (Foot):** Mismatched looted plate over filthy furs, a cracked spiked helm, a shortened lance carried as a spear.
+- **Spiral-Marked Lancer (Cavalry):** One warped rider on one armoured horse whose barding has fused into its hide, lance couched, brands burned into both.
+- **Warp Herald (Elite):** Layered filthy vestments, arms too long, a staff of welded scrap, a metal mask with too many slits, the outline faintly doubled.
+- **Chaos Warlord (Commander, unique):** Fused plate grown into the body, one arm a mass of welded blades, a horned helm beaten shut, a cloak of pelts and banner scraps.
+
+### Half-Born Host (demigods)
+Weathered bronze and grey wool. Branching pale scars, never a glow.
+- **Godtouched Scion (Foot):** Plain bronze cuirass over a travel-worn tunic, spear and small round shield, one colourless eye.
+- **Oathkeeper of the Half-Born (Second):** Battered bronze-and-iron harness, crested helm carried under the arm, an oath-cord of knotted bronze wire on the sword arm.
+- **Storm-Sired Champion (Elite):** Heavy bronze pitted with lightning-scarring, a two-handed war-club bound in iron, hair whipped stiff, skin cracked with pale fissures.
+- **Demigod Sovereign (Commander, unique):** Layered bronze and dark iron regalia, a sceptre-spear, a blackened laurel beaten into the brow, a face too symmetrical to be quite human.
+
+### Winter Famine (wendigo-themed)
+Original famine-spirits — see the note in `STYLE_GUIDE.md`. Starved frames, broken antlers, frostbitten grey-blue hide.
+- **Starveling (Foot):** Emaciated, ribs showing, limbs far too long, stunted antler stubs, a few frozen rags.
+- **Antler Wraith (Elite):** Spindly, a great rack of cracked antlers, hollow sockets, arms past the knees, frost-stiff hide wrappings.
+- **Hollow Hunger (Elite):** Huge and distended, hide drawn over an enormous hollow ribcage, jaw hanging far too wide.
+- **Winter Maw (Commander, unique):** Colossal, a vast crown of antlers, a mantle of frozen stitched pelts, frost rimed along every edge.
+
+### Ridge Kin (sasquatch)
+Matted fur, mud and pine needles, cracked leathery palms. Wet bark and moss.
+- **Pine Shadow (Foot):** Heavy-set, dark matted coat, long arms, a bark rope across the chest with a stone-headed club.
+- **Ridge Walker (Second):** Lean and long-legged, built for ground, a sinew strap hung with river stones, one ear notched.
+- **Stonefist Elder (Elite):** Massive, both forearms wrapped in bound river stone and rawhide, a grey-muzzled scarred face.
+- **Old Man of the Peaks (Commander, unique):** Towering silverback, a cloak of stitched hides pinned with antler and stone, a tall pine staff, one clouded eye.
+
+### Formic Swarm (ant creatures)
+Oxidised brown-black chitin, repairs sealed with dark resin. Two of the four stand upright as humanoids.
+- **Worker Drone (Levy):** Dog-sized, six legs, a load-bearing carapace with worn rope harness, bent antennae.
+- **Soldier Drone (Foot):** Larger, six legs, an armoured head with oversized serrated mandibles, a spiny thorax, old gouges.
+- **Myrmidon Vanguard (Elite, humanoid):** Upright on two legs like a man, chitin instead of armour, four arms — the lower pair with shield and serrated blade — a segmented abdomen behind, clawed digitigrade feet.
+- **Hive Empress (Commander, unique, humanoid):** Tall and upright, black and deep-amber chitin, a crown of grown spines, four arms with a resin-and-bone sceptre, thin torn wings folded, a mantle of stitched membrane.
+
 ## Structures
 - **Reinforcement Portal:** Low circular frame of ivory stone and dark-blue metal, four compact stabilizer pylons, geometric light contained inside the ring, fits one hex. Field infrastructure, not a monument. States: closed, opening, active.
 - **Ritual Circle:** Three concentric rings of dark metal segments, chalk-like mineral lines, small anchor stones, three participant positions and one leader position, decorative invented symbols. States: inactive, channeling, completed-held, collapsed. Top-down.

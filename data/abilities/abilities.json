@@ -606,5 +606,310 @@
       "kind": "PreventRouted"
     },
     "text": "The Compact's word holds: allies within command radius shed Routed and cannot rout this round."
+  },
+  {
+    "id": "ABL_BLOOD_OFFERING",
+    "name": "Blood Offering",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 2,
+    "effect": {
+      "kind": "SelfSacrificeBuff",
+      "hpCostShare": 0.15,
+      "atk": 450,
+      "duration": "round"
+    },
+    "text": "Open a vein on the blade: lose 15% of maximum health and gain +450 ATK for the round. It will not be used at a price you cannot pay."
+  },
+  {
+    "id": "ABL_FEED_THE_PIT",
+    "name": "Feed the Pit",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 2,
+    "effect": {
+      "kind": "SelfSacrificeBuff",
+      "hpCostShare": 0.2,
+      "atk": 600,
+      "def": -100,
+      "duration": "round"
+    },
+    "text": "Burn your own substance for the strike: lose 20% of maximum health for +600 ATK and -100 DEF this round."
+  },
+  {
+    "id": "ABL_EAT_THE_COLD",
+    "name": "Eat the Cold",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 2,
+    "effect": {
+      "kind": "SelfSacrificeBuff",
+      "hpCostShare": 0.18,
+      "atk": 520,
+      "duration": "round"
+    },
+    "text": "The hunger turns inward and comes back out as reach: lose 18% of maximum health, gain +520 ATK for the round."
+  },
+  {
+    "id": "ABL_SECOND_WIND",
+    "name": "Second Wind",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 2,
+    "effect": {
+      "kind": "SelfHaste",
+      "mov": 3,
+      "duration": 1
+    },
+    "text": "+3 Movement for one round."
+  },
+  {
+    "id": "ABL_RIDGE_PACE",
+    "name": "Ridge Pace",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 2,
+    "effect": {
+      "kind": "SelfHaste",
+      "mov": 3,
+      "bandWide": true,
+      "duration": 1
+    },
+    "text": "Set the pace for the whole band: this unit and the allies beside it gain +3 Movement for one round."
+  },
+  {
+    "id": "ABL_SPIRAL_GALLOP",
+    "name": "Spiral Gallop",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 2,
+    "effect": {
+      "kind": "SelfHaste",
+      "mov": 4,
+      "duration": 1
+    },
+    "text": "+4 Movement for one round. The line it rides never quite goes where you expected."
+  },
+  {
+    "id": "ABL_CHOIR_OF_EDGES",
+    "name": "Choir of Edges",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 2,
+    "effect": {
+      "kind": "BandAtk",
+      "atk": 220,
+      "duration": "round"
+    },
+    "text": "The band strikes on one note: +220 ATK to this unit and its platoon, or to the allies beside it if it stands alone."
+  },
+  {
+    "id": "ABL_OATH_SHARED",
+    "name": "Oath Shared",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 2,
+    "effect": {
+      "kind": "BandAtk",
+      "atk": 250,
+      "duration": "round"
+    },
+    "text": "Swear the whole band to the same cut: +250 ATK for the round."
+  },
+  {
+    "id": "ABL_STONE_CHORUS",
+    "name": "Stone Chorus",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 2,
+    "effect": {
+      "kind": "BandAtk",
+      "atk": 200,
+      "duration": "round"
+    },
+    "text": "A low call the ridge answers: +200 ATK to the band for the round."
+  },
+  {
+    "id": "ABL_HIVE_ACCORD",
+    "name": "Hive Accord",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 2,
+    "effect": {
+      "kind": "BandAtk",
+      "atk": 280,
+      "duration": "round"
+    },
+    "text": "One will moves every body at once: +280 ATK to the band for the round."
+  },
+  {
+    "id": "ABL_UNMAKING_WORD",
+    "name": "Unmaking Word",
+    "category": "Active",
+    "apCost": 1,
+    "range": 3,
+    "cooldown": 2,
+    "effect": {
+      "kind": "EnemyAtkDebuff",
+      "atk": 250,
+      "duration": "round"
+    },
+    "text": "Every enemy within 3 hexes loses 250 ATK for the round."
+  },
+  {
+    "id": "ABL_JUDGEMENT_WEIGHT",
+    "name": "Judgement's Weight",
+    "category": "Active",
+    "apCost": 1,
+    "range": 2,
+    "cooldown": 2,
+    "effect": {
+      "kind": "EnemyAtkDebuff",
+      "atk": 300,
+      "duration": "round"
+    },
+    "text": "Every enemy within 2 hexes loses 300 ATK for the round."
+  },
+  {
+    "id": "ABL_LONG_WINTER",
+    "name": "Long Winter",
+    "category": "Active",
+    "apCost": 1,
+    "range": 3,
+    "cooldown": 2,
+    "effect": {
+      "kind": "EnemyAtkDebuff",
+      "atk": 220,
+      "duration": "round"
+    },
+    "text": "The cold gets into the arms: every enemy within 3 hexes loses 220 ATK for the round."
+  },
+  {
+    "id": "ABL_MOUNTAIN_STARE",
+    "name": "Mountain Stare",
+    "category": "Active",
+    "apCost": 1,
+    "range": 2,
+    "cooldown": 2,
+    "effect": {
+      "kind": "EnemyAtkDebuff",
+      "atk": 260,
+      "duration": "round"
+    },
+    "text": "Every enemy within 2 hexes loses 260 ATK for the round."
+  },
+  {
+    "id": "ABL_TAR_THE_GROUND",
+    "name": "Tar the Ground",
+    "category": "Active",
+    "apCost": 1,
+    "range": 2,
+    "cooldown": 2,
+    "effect": {
+      "kind": "EnemySlow",
+      "mov": 3,
+      "duration": 1
+    },
+    "text": "Every enemy within 2 hexes loses 3 Movement for one round."
+  },
+  {
+    "id": "ABL_DEEP_FROST",
+    "name": "Deep Frost",
+    "category": "Active",
+    "apCost": 1,
+    "range": 3,
+    "cooldown": 2,
+    "effect": {
+      "kind": "EnemySlow",
+      "mov": 3,
+      "status": "Suppressed",
+      "duration": 1
+    },
+    "text": "Every enemy within 3 hexes loses 3 Movement for one round and is Suppressed."
+  },
+  {
+    "id": "ABL_SPLIT_THE_SELF",
+    "name": "Split the Self",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 3,
+    "effect": {
+      "kind": "SpawnClones",
+      "count": 2,
+      "duration": 2,
+      "atkPercent": 50,
+      "hp": 1
+    },
+    "text": "Two copies step out of the same body, each striking at half force. They last two rounds and fall to a single hit."
+  },
+  {
+    "id": "ABL_SWARM_SPLIT",
+    "name": "Swarm Split",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 3,
+    "effect": {
+      "kind": "SpawnClones",
+      "count": 3,
+      "duration": 2,
+      "atkPercent": 40,
+      "hp": 1
+    },
+    "text": "The body divides into three, each at two fifths force, for two rounds. A single hit ends any of them."
+  },
+  {
+    "id": "ABL_SOVEREIGN_DECREE",
+    "name": "Sovereign Decree",
+    "category": "Active",
+    "apCost": 1,
+    "range": 4,
+    "cooldown": 2,
+    "effect": {
+      "kind": "EnemyAtkDebuff",
+      "atk": 400,
+      "duration": "round"
+    },
+    "text": "A Sovereign speaks and the field loses its nerve: every enemy within 4 hexes loses 400 ATK for the round."
+  },
+  {
+    "id": "ABL_CALAMITY_SURGE",
+    "name": "Calamity Surge",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 3,
+    "effect": {
+      "kind": "SelfSacrificeBuff",
+      "hpCostShare": 0.1,
+      "atk": 700,
+      "duration": "round"
+    },
+    "text": "The form tears at itself to reach further: lose 10% of maximum health, gain +700 ATK for the round."
+  },
+  {
+    "id": "ABL_COURIER_DASH",
+    "name": "Courier Dash",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 2,
+    "effect": {
+      "kind": "SelfHaste",
+      "mov": 3,
+      "duration": 1
+    },
+    "text": "+3 Movement for one round. The message gets through or nothing does."
   }
 ]

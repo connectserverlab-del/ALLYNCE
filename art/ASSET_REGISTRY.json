@@ -1,12 +1,12 @@
 {
   "generated": "npm run assets",
   "total": {
-    "present": 157,
+    "present": 213,
     "missing": 25
   },
   "summary": {
     "Units": {
-      "present": 120,
+      "present": 176,
       "missing": 0,
       "derived": 0
     },
@@ -1111,6 +1111,510 @@
       "path": "art/samples/DUN_COMMANDER_DUNEWAKE-ARBITER_CUTOUT_V01.png",
       "status": "present",
       "note": "8★ DUN"
+    },
+    {
+      "group": "Units",
+      "id": "ANG_FOOT_LAMPBEARER-CHORISTER",
+      "label": "Lampbearer Chorister",
+      "kind": "concept",
+      "path": "art/samples/ANG_FOOT_LAMPBEARER-CHORISTER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "3★ ANG"
+    },
+    {
+      "group": "Units",
+      "id": "ANG_FOOT_LAMPBEARER-CHORISTER",
+      "label": "Lampbearer Chorister",
+      "kind": "cutout",
+      "path": "art/samples/ANG_FOOT_LAMPBEARER-CHORISTER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "3★ ANG"
+    },
+    {
+      "group": "Units",
+      "id": "ANG_SECOND_WARDING-SERAPH",
+      "label": "Warding Seraph",
+      "kind": "concept",
+      "path": "art/samples/ANG_SECOND_WARDING-SERAPH_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "5★ ANG"
+    },
+    {
+      "group": "Units",
+      "id": "ANG_SECOND_WARDING-SERAPH",
+      "label": "Warding Seraph",
+      "kind": "cutout",
+      "path": "art/samples/ANG_SECOND_WARDING-SERAPH_CUTOUT_V01.png",
+      "status": "present",
+      "note": "5★ ANG"
+    },
+    {
+      "group": "Units",
+      "id": "ANG_ELITE_SWORD-OF-THE-SEVENTH-GATE",
+      "label": "Sword of the Seventh Gate",
+      "kind": "concept",
+      "path": "art/samples/ANG_ELITE_SWORD-OF-THE-SEVENTH-GATE_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "7★ ANG"
+    },
+    {
+      "group": "Units",
+      "id": "ANG_ELITE_SWORD-OF-THE-SEVENTH-GATE",
+      "label": "Sword of the Seventh Gate",
+      "kind": "cutout",
+      "path": "art/samples/ANG_ELITE_SWORD-OF-THE-SEVENTH-GATE_CUTOUT_V01.png",
+      "status": "present",
+      "note": "7★ ANG"
+    },
+    {
+      "group": "Units",
+      "id": "ANG_COMMANDER_THRONE-ARCHON",
+      "label": "Throne Archon",
+      "kind": "concept",
+      "path": "art/samples/ANG_COMMANDER_THRONE-ARCHON_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "8★ ANG"
+    },
+    {
+      "group": "Units",
+      "id": "ANG_COMMANDER_THRONE-ARCHON",
+      "label": "Throne Archon",
+      "kind": "cutout",
+      "path": "art/samples/ANG_COMMANDER_THRONE-ARCHON_CUTOUT_V01.png",
+      "status": "present",
+      "note": "8★ ANG"
+    },
+    {
+      "group": "Units",
+      "id": "DEM_FOOT_CINDER-IMP",
+      "label": "Cinder Imp",
+      "kind": "concept",
+      "path": "art/samples/DEM_FOOT_CINDER-IMP_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "3★ DEM"
+    },
+    {
+      "group": "Units",
+      "id": "DEM_FOOT_CINDER-IMP",
+      "label": "Cinder Imp",
+      "kind": "cutout",
+      "path": "art/samples/DEM_FOOT_CINDER-IMP_CUTOUT_V01.png",
+      "status": "present",
+      "note": "3★ DEM"
+    },
+    {
+      "group": "Units",
+      "id": "DEM_SECOND_FLENSING-TORMENTOR",
+      "label": "Flensing Tormentor",
+      "kind": "concept",
+      "path": "art/samples/DEM_SECOND_FLENSING-TORMENTOR_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "5★ DEM"
+    },
+    {
+      "group": "Units",
+      "id": "DEM_SECOND_FLENSING-TORMENTOR",
+      "label": "Flensing Tormentor",
+      "kind": "cutout",
+      "path": "art/samples/DEM_SECOND_FLENSING-TORMENTOR_CUTOUT_V01.png",
+      "status": "present",
+      "note": "5★ DEM"
+    },
+    {
+      "group": "Units",
+      "id": "DEM_ELITE_PIT-COLONEL",
+      "label": "Pit Colonel",
+      "kind": "concept",
+      "path": "art/samples/DEM_ELITE_PIT-COLONEL_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "7★ DEM"
+    },
+    {
+      "group": "Units",
+      "id": "DEM_ELITE_PIT-COLONEL",
+      "label": "Pit Colonel",
+      "kind": "cutout",
+      "path": "art/samples/DEM_ELITE_PIT-COLONEL_CUTOUT_V01.png",
+      "status": "present",
+      "note": "7★ DEM"
+    },
+    {
+      "group": "Units",
+      "id": "DEM_COMMANDER_ASHPIT-ARCHDEMON",
+      "label": "Ashpit Archdemon",
+      "kind": "concept",
+      "path": "art/samples/DEM_COMMANDER_ASHPIT-ARCHDEMON_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "8★ DEM"
+    },
+    {
+      "group": "Units",
+      "id": "DEM_COMMANDER_ASHPIT-ARCHDEMON",
+      "label": "Ashpit Archdemon",
+      "kind": "cutout",
+      "path": "art/samples/DEM_COMMANDER_ASHPIT-ARCHDEMON_CUTOUT_V01.png",
+      "status": "present",
+      "note": "8★ DEM"
+    },
+    {
+      "group": "Units",
+      "id": "CHR_FOOT_BROKEN-BANNER-OUTRIDER",
+      "label": "Broken-Banner Outrider",
+      "kind": "concept",
+      "path": "art/samples/CHR_FOOT_BROKEN-BANNER-OUTRIDER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "3★ CHR"
+    },
+    {
+      "group": "Units",
+      "id": "CHR_FOOT_BROKEN-BANNER-OUTRIDER",
+      "label": "Broken-Banner Outrider",
+      "kind": "cutout",
+      "path": "art/samples/CHR_FOOT_BROKEN-BANNER-OUTRIDER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "3★ CHR"
+    },
+    {
+      "group": "Units",
+      "id": "CHR_CAVALRY_SPIRAL-MARKED-LANCER",
+      "label": "Spiral-Marked Lancer",
+      "kind": "concept",
+      "path": "art/samples/CHR_CAVALRY_SPIRAL-MARKED-LANCER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "4★ CHR"
+    },
+    {
+      "group": "Units",
+      "id": "CHR_CAVALRY_SPIRAL-MARKED-LANCER",
+      "label": "Spiral-Marked Lancer",
+      "kind": "cutout",
+      "path": "art/samples/CHR_CAVALRY_SPIRAL-MARKED-LANCER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "4★ CHR"
+    },
+    {
+      "group": "Units",
+      "id": "CHR_ELITE_WARP-HERALD",
+      "label": "Warp Herald",
+      "kind": "concept",
+      "path": "art/samples/CHR_ELITE_WARP-HERALD_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "6★ CHR"
+    },
+    {
+      "group": "Units",
+      "id": "CHR_ELITE_WARP-HERALD",
+      "label": "Warp Herald",
+      "kind": "cutout",
+      "path": "art/samples/CHR_ELITE_WARP-HERALD_CUTOUT_V01.png",
+      "status": "present",
+      "note": "6★ CHR"
+    },
+    {
+      "group": "Units",
+      "id": "CHR_COMMANDER_CHAOS-WARLORD",
+      "label": "Chaos Warlord",
+      "kind": "concept",
+      "path": "art/samples/CHR_COMMANDER_CHAOS-WARLORD_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "8★ CHR"
+    },
+    {
+      "group": "Units",
+      "id": "CHR_COMMANDER_CHAOS-WARLORD",
+      "label": "Chaos Warlord",
+      "kind": "cutout",
+      "path": "art/samples/CHR_COMMANDER_CHAOS-WARLORD_CUTOUT_V01.png",
+      "status": "present",
+      "note": "8★ CHR"
+    },
+    {
+      "group": "Units",
+      "id": "DMG_FOOT_GODTOUCHED-SCION",
+      "label": "Godtouched Scion",
+      "kind": "concept",
+      "path": "art/samples/DMG_FOOT_GODTOUCHED-SCION_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "4★ DMG"
+    },
+    {
+      "group": "Units",
+      "id": "DMG_FOOT_GODTOUCHED-SCION",
+      "label": "Godtouched Scion",
+      "kind": "cutout",
+      "path": "art/samples/DMG_FOOT_GODTOUCHED-SCION_CUTOUT_V01.png",
+      "status": "present",
+      "note": "4★ DMG"
+    },
+    {
+      "group": "Units",
+      "id": "DMG_SECOND_OATHKEEPER-OF-THE-HALF-BORN",
+      "label": "Oathkeeper of the Half-Born",
+      "kind": "concept",
+      "path": "art/samples/DMG_SECOND_OATHKEEPER-OF-THE-HALF-BORN_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "5★ DMG"
+    },
+    {
+      "group": "Units",
+      "id": "DMG_SECOND_OATHKEEPER-OF-THE-HALF-BORN",
+      "label": "Oathkeeper of the Half-Born",
+      "kind": "cutout",
+      "path": "art/samples/DMG_SECOND_OATHKEEPER-OF-THE-HALF-BORN_CUTOUT_V01.png",
+      "status": "present",
+      "note": "5★ DMG"
+    },
+    {
+      "group": "Units",
+      "id": "DMG_ELITE_STORM-SIRED-CHAMPION",
+      "label": "Storm-Sired Champion",
+      "kind": "concept",
+      "path": "art/samples/DMG_ELITE_STORM-SIRED-CHAMPION_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "7★ DMG"
+    },
+    {
+      "group": "Units",
+      "id": "DMG_ELITE_STORM-SIRED-CHAMPION",
+      "label": "Storm-Sired Champion",
+      "kind": "cutout",
+      "path": "art/samples/DMG_ELITE_STORM-SIRED-CHAMPION_CUTOUT_V01.png",
+      "status": "present",
+      "note": "7★ DMG"
+    },
+    {
+      "group": "Units",
+      "id": "DMG_COMMANDER_DEMIGOD-SOVEREIGN",
+      "label": "Demigod Sovereign",
+      "kind": "concept",
+      "path": "art/samples/DMG_COMMANDER_DEMIGOD-SOVEREIGN_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "9★ DMG"
+    },
+    {
+      "group": "Units",
+      "id": "DMG_COMMANDER_DEMIGOD-SOVEREIGN",
+      "label": "Demigod Sovereign",
+      "kind": "cutout",
+      "path": "art/samples/DMG_COMMANDER_DEMIGOD-SOVEREIGN_CUTOUT_V01.png",
+      "status": "present",
+      "note": "9★ DMG"
+    },
+    {
+      "group": "Units",
+      "id": "WEN_FOOT_STARVELING",
+      "label": "Starveling",
+      "kind": "concept",
+      "path": "art/samples/WEN_FOOT_STARVELING_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "3★ WEN"
+    },
+    {
+      "group": "Units",
+      "id": "WEN_FOOT_STARVELING",
+      "label": "Starveling",
+      "kind": "cutout",
+      "path": "art/samples/WEN_FOOT_STARVELING_CUTOUT_V01.png",
+      "status": "present",
+      "note": "3★ WEN"
+    },
+    {
+      "group": "Units",
+      "id": "WEN_ELITE_ANTLER-WRAITH",
+      "label": "Antler Wraith",
+      "kind": "concept",
+      "path": "art/samples/WEN_ELITE_ANTLER-WRAITH_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "6★ WEN"
+    },
+    {
+      "group": "Units",
+      "id": "WEN_ELITE_ANTLER-WRAITH",
+      "label": "Antler Wraith",
+      "kind": "cutout",
+      "path": "art/samples/WEN_ELITE_ANTLER-WRAITH_CUTOUT_V01.png",
+      "status": "present",
+      "note": "6★ WEN"
+    },
+    {
+      "group": "Units",
+      "id": "WEN_ELITE_HOLLOW-HUNGER",
+      "label": "Hollow Hunger",
+      "kind": "concept",
+      "path": "art/samples/WEN_ELITE_HOLLOW-HUNGER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "7★ WEN"
+    },
+    {
+      "group": "Units",
+      "id": "WEN_ELITE_HOLLOW-HUNGER",
+      "label": "Hollow Hunger",
+      "kind": "cutout",
+      "path": "art/samples/WEN_ELITE_HOLLOW-HUNGER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "7★ WEN"
+    },
+    {
+      "group": "Units",
+      "id": "WEN_COMMANDER_WINTER-MAW",
+      "label": "Winter Maw",
+      "kind": "concept",
+      "path": "art/samples/WEN_COMMANDER_WINTER-MAW_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "8★ WEN"
+    },
+    {
+      "group": "Units",
+      "id": "WEN_COMMANDER_WINTER-MAW",
+      "label": "Winter Maw",
+      "kind": "cutout",
+      "path": "art/samples/WEN_COMMANDER_WINTER-MAW_CUTOUT_V01.png",
+      "status": "present",
+      "note": "8★ WEN"
+    },
+    {
+      "group": "Units",
+      "id": "SAS_FOOT_PINE-SHADOW",
+      "label": "Pine Shadow",
+      "kind": "concept",
+      "path": "art/samples/SAS_FOOT_PINE-SHADOW_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "3★ SAS"
+    },
+    {
+      "group": "Units",
+      "id": "SAS_FOOT_PINE-SHADOW",
+      "label": "Pine Shadow",
+      "kind": "cutout",
+      "path": "art/samples/SAS_FOOT_PINE-SHADOW_CUTOUT_V01.png",
+      "status": "present",
+      "note": "3★ SAS"
+    },
+    {
+      "group": "Units",
+      "id": "SAS_SECOND_RIDGE-WALKER",
+      "label": "Ridge Walker",
+      "kind": "concept",
+      "path": "art/samples/SAS_SECOND_RIDGE-WALKER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "5★ SAS"
+    },
+    {
+      "group": "Units",
+      "id": "SAS_SECOND_RIDGE-WALKER",
+      "label": "Ridge Walker",
+      "kind": "cutout",
+      "path": "art/samples/SAS_SECOND_RIDGE-WALKER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "5★ SAS"
+    },
+    {
+      "group": "Units",
+      "id": "SAS_ELITE_STONEFIST-ELDER",
+      "label": "Stonefist Elder",
+      "kind": "concept",
+      "path": "art/samples/SAS_ELITE_STONEFIST-ELDER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "7★ SAS"
+    },
+    {
+      "group": "Units",
+      "id": "SAS_ELITE_STONEFIST-ELDER",
+      "label": "Stonefist Elder",
+      "kind": "cutout",
+      "path": "art/samples/SAS_ELITE_STONEFIST-ELDER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "7★ SAS"
+    },
+    {
+      "group": "Units",
+      "id": "SAS_COMMANDER_OLD-MAN-OF-THE-PEAKS",
+      "label": "Old Man of the Peaks",
+      "kind": "concept",
+      "path": "art/samples/SAS_COMMANDER_OLD-MAN-OF-THE-PEAKS_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "8★ SAS"
+    },
+    {
+      "group": "Units",
+      "id": "SAS_COMMANDER_OLD-MAN-OF-THE-PEAKS",
+      "label": "Old Man of the Peaks",
+      "kind": "cutout",
+      "path": "art/samples/SAS_COMMANDER_OLD-MAN-OF-THE-PEAKS_CUTOUT_V01.png",
+      "status": "present",
+      "note": "8★ SAS"
+    },
+    {
+      "group": "Units",
+      "id": "FMC_LEVY_WORKER-DRONE",
+      "label": "Worker Drone",
+      "kind": "concept",
+      "path": "art/samples/FMC_LEVY_WORKER-DRONE_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "2★ FMC"
+    },
+    {
+      "group": "Units",
+      "id": "FMC_LEVY_WORKER-DRONE",
+      "label": "Worker Drone",
+      "kind": "cutout",
+      "path": "art/samples/FMC_LEVY_WORKER-DRONE_CUTOUT_V01.png",
+      "status": "present",
+      "note": "2★ FMC"
+    },
+    {
+      "group": "Units",
+      "id": "FMC_FOOT_SOLDIER-DRONE",
+      "label": "Soldier Drone",
+      "kind": "concept",
+      "path": "art/samples/FMC_FOOT_SOLDIER-DRONE_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "3★ FMC"
+    },
+    {
+      "group": "Units",
+      "id": "FMC_FOOT_SOLDIER-DRONE",
+      "label": "Soldier Drone",
+      "kind": "cutout",
+      "path": "art/samples/FMC_FOOT_SOLDIER-DRONE_CUTOUT_V01.png",
+      "status": "present",
+      "note": "3★ FMC"
+    },
+    {
+      "group": "Units",
+      "id": "FMC_ELITE_MYRMIDON-VANGUARD",
+      "label": "Myrmidon Vanguard",
+      "kind": "concept",
+      "path": "art/samples/FMC_ELITE_MYRMIDON-VANGUARD_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "6★ FMC"
+    },
+    {
+      "group": "Units",
+      "id": "FMC_ELITE_MYRMIDON-VANGUARD",
+      "label": "Myrmidon Vanguard",
+      "kind": "cutout",
+      "path": "art/samples/FMC_ELITE_MYRMIDON-VANGUARD_CUTOUT_V01.png",
+      "status": "present",
+      "note": "6★ FMC"
+    },
+    {
+      "group": "Units",
+      "id": "FMC_COMMANDER_HIVE-EMPRESS",
+      "label": "Hive Empress",
+      "kind": "concept",
+      "path": "art/samples/FMC_COMMANDER_HIVE-EMPRESS_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "9★ FMC"
+    },
+    {
+      "group": "Units",
+      "id": "FMC_COMMANDER_HIVE-EMPRESS",
+      "label": "Hive Empress",
+      "kind": "cutout",
+      "path": "art/samples/FMC_COMMANDER_HIVE-EMPRESS_CUTOUT_V01.png",
+      "status": "present",
+      "note": "9★ FMC"
     },
     {
       "group": "Buildings",

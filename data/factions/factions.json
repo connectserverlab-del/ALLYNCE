@@ -138,5 +138,103 @@
     "platoonOrder": null,
     "passiveDoctrine": null,
     "weakness": "Sworn company, not an army: light armour and no answer to massed cavalry."
+  },
+  "ANG": {
+    "id": "ANG",
+    "name": "Choir Militant",
+    "identity": "Winged executors of a judgement nobody remembers issuing",
+    "palette": [
+      "ash grey",
+      "bone white",
+      "tarnished gold"
+    ],
+    "primaryTheme": "Celestial",
+    "platoonOrder": null,
+    "passiveDoctrine": null,
+    "weakness": "Bound to its orders: slow to change target once committed, and its wings are easy meat for massed shot."
+  },
+  "DEM": {
+    "id": "DEM",
+    "name": "Ashpit Legion",
+    "identity": "Demons who pay for every blow in their own substance",
+    "palette": [
+      "charcoal black",
+      "ember red",
+      "sulphur yellow"
+    ],
+    "primaryTheme": "Infernal",
+    "platoonOrder": null,
+    "passiveDoctrine": null,
+    "weakness": "Burns itself to strike hard: a legion that fights long enough loses to its own price."
+  },
+  "CHR": {
+    "id": "CHR",
+    "name": "Spiral Warband",
+    "identity": "Chaos riders under a broken banner, fast and unpredictable",
+    "palette": [
+      "rust brown",
+      "sickly violet",
+      "oxidised copper"
+    ],
+    "primaryTheme": "Chaos",
+    "platoonOrder": null,
+    "passiveDoctrine": null,
+    "weakness": "No line, no discipline, no second plan; it wins in the first three rounds or not at all."
+  },
+  "DMG": {
+    "id": "DMG",
+    "name": "Half-Born Host",
+    "identity": "Demigods: mortal frames carrying more than a mortal share",
+    "palette": [
+      "weathered bronze",
+      "storm blue",
+      "grey wool"
+    ],
+    "primaryTheme": "Demigod",
+    "platoonOrder": null,
+    "passiveDoctrine": null,
+    "weakness": "Few in number and impossible to replace; every loss is permanent to the host."
+  },
+  "WEN": {
+    "id": "WEN",
+    "name": "Winter Famine",
+    "identity": "Antlered hungers that slow a field to a crawl and eat it",
+    "palette": [
+      "grey-blue frost",
+      "bone",
+      "dull frost-white"
+    ],
+    "primaryTheme": "Famine",
+    "platoonOrder": null,
+    "passiveDoctrine": null,
+    "weakness": "Starving by nature: brittle, thin-boned, and undone by anything that closes fast and hits once."
+  },
+  "SAS": {
+    "id": "SAS",
+    "name": "Ridge Kin",
+    "identity": "Forest hominids: heavy hands, long ground, no formation at all",
+    "palette": [
+      "wet bark",
+      "moss green",
+      "dull amber"
+    ],
+    "primaryTheme": "Ridge",
+    "platoonOrder": null,
+    "passiveDoctrine": null,
+    "weakness": "Refuses open ground and cannot be made to hold a line it did not choose."
+  },
+  "FMC": {
+    "id": "FMC",
+    "name": "Formic Swarm",
+    "identity": "One will in many bodies, from drones to standing myrmidons",
+    "palette": [
+      "oxidised brown",
+      "chitin black",
+      "pale resin"
+    ],
+    "primaryTheme": "Swarm",
+    "platoonOrder": null,
+    "passiveDoctrine": null,
+    "weakness": "Everything it does runs through the Empress; cut her out and the swarm is only insects."
   }
 }
