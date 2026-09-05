@@ -82,7 +82,7 @@ function actOnce(ctrl: BattleController, u: UnitState, profile: AiProfile): bool
     const a = b.reg.ability(id);
     if (a.category !== "Active" || (u.cooldowns[id] ?? 0) > 0) continue;
     const enemy = nearestEnemy(ctrl, u);
-    if (a.effect.kind === "SpawnClones" && enemy && b.distance(u, enemy) <= 3) { try { ctrl.useAbility(u, id); return true; } catch { /* no room */ } }
+    if (a.effect.kind === "SpawnClones" && enemy && b.distance(u, enemy) <= 3 && shouldSplit(ctrl, u)) { try { ctrl.useAbility(u, id); return true; } catch { /* no room */ } }
     if (a.effect.kind === "ChargeBonus" && u.movedThisActivation >= (a.effect as any).minHexesMoved && enemy && b.distance(u, enemy) <= d.range) { try { ctrl.useAbility(u, id); } catch { /* skip */ } }
     if (a.effect.kind === "Duel" && enemy && b.distance(u, enemy) === 1 && b.def(enemy).roles.some((r) => r === "Elite" || r === "Commander")) { try { ctrl.useAbility(u, id, { target: enemy }); } catch { /* skip */ } }
   }
@@ -121,7 +121,9 @@ function targetScore(ctrl: BattleController, u: UnitState, t: UnitState, profile
   if (td.roles.includes("Commander")) s += 300;
   if (td.roles.includes("Elite") && b.hasStatus(t, "Exposed")) s += 250;
   if (b.isIsolated(t)) s += 150;
-  if (t.isClone) s -= 500; // clones are decoys
+  // A copy carries a share of the original's stats and falls in one hit; killing it hands that
+  // share back to the original, so it is worth taking rather than waved off as a decoy.
+  if (t.isClone) s += 250;
   // A warrant pays for a prisoner, so a warrant target is not something to shoot at. Leave it
   // alone while anyone of ours is close enough to lay hands on it; only once nobody can reach it
   // does killing it beat letting it walk away.
@@ -131,6 +133,18 @@ function targetScore(ctrl: BattleController, u: UnitState, t: UnitState, profile
     if (closingIn || canBeTaken(b, t, u.side) || t.hp - dmg <= threshold) s -= 4000;
   }
   return s;
+}
+
+/**
+ * Splitting halves what a unit hits and defends with, so it only pays for itself as a trade: more
+ * bodies to hold ground or draw attacks across a crowd. Against a single attacker it just buys that
+ * hard hitter an easier kill, so refuse it there and only split when outnumbered.
+ */
+function shouldSplit(ctrl: BattleController, u: UnitState): boolean {
+  const b = ctrl.b;
+  if (!u.pos) return false;
+  const nearby = [...b.activeUnits()].filter((e) => e.side !== u.side && e.pos && hexDistance(u.pos!, e.pos) <= 3);
+  return nearby.length >= 2;
 }
 
 function chooseGoal(ctrl: BattleController, u: UnitState, profile: AiProfile): Hex | null {
@@ -145,6 +159,12 @@ function chooseGoal(ctrl: BattleController, u: UnitState, profile: AiProfile): H
     candidates.push({ hex: r.center, score: (600 * urgency * profile.objectiveWeight * mobile) / (1 + dist / 4) });
   }
   for (const p of enemyPortals) { const dist = hexDistance(u.pos!, p.pos); candidates.push({ hex: p.pos, score: 300 / (1 + dist / 4) }); }
+  // An enemy copy dies in one hit and hands its stat share back to the original, so hunting it down
+  // shrinks a split body even before the original itself is caught.
+  for (const c of b.activeUnits()) {
+    if (c.side === u.side || !c.pos || !c.isClone) continue;
+    candidates.push({ hex: c.pos, score: 700 / (1 + hexDistance(u.pos!, c.pos) / 4) });
+  }
   // A warrant target is the most valuable thing on the field. Converge on it: two bodies on it and
   // its friends cleared away is a prisoner, and a prisoner is the only thing the writ pays for.
   const warrants = b.wanted.get(u.side);
