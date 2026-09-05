@@ -1,5 +1,6 @@
 import type { Battle } from "./state.js";
-import type { UnitState, AbilityDef, PlatoonState, Modifier } from "./types.js";
+import type { UnitState, AbilityDef, PlatoonState, Modifier, Terrain } from "./types.js";
+import type { Hex } from "./hex.js";
 import { hexNeighbors, hexKey } from "./hex.js";
 import { platoonMorale, platoonMembers, tempPreventRouted, changeMorale } from "./morale.js";
 import { addTempMod } from "./modifiers.js";
@@ -27,11 +28,11 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
       return true;
     case "PlatoonDef":
       if (!p) return false;
-      for (const uid of platoonMembers(p)) { const m = b.units.get(uid); if (m && !m.defeated) addTempMod(m, { source: ability.name, stat: "DEF", value: e.def }); }
+      applyPlatoonTempMod(b, p, "DEF", e.def, ability.name);
       return true;
     case "PlatoonMove":
       if (!p) return false;
-      for (const uid of platoonMembers(p)) { const m = b.units.get(uid); if (m && !m.defeated) addTempMod(m, { source: ability.name, stat: "MOV", value: e.mov }); }
+      applyPlatoonTempMod(b, p, "MOV", e.mov, ability.name);
       return true;
     case "PreventRouted": {
       const radius = commandRadiusOf(b, user);
@@ -90,9 +91,8 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
       user.setUp = true; b.log("SiegeSetup", { uid: user.uid }); return true;
     case "SpawnTerrainAt": {
       const center = ctx.targetHex ?? ctx.target?.pos; if (!center) return false;
-      const hexes = [center, ...hexNeighbors(center)].filter((h) => b.inBounds(h) && b.terrainAt(h) !== "Water" && b.terrainAt(h) !== "Mountain");
-      for (const h of hexes) { if (!b.terrain.has(hexKey(h)) || b.terrainAt(h) === "Open") { b.terrain.set(hexKey(h), e.terrain); timedTerrain.push({ key: hexKey(h), rounds: e.duration }); } }
-      b.log("TerrainSpawned", { terrain: e.terrain, count: hexes.length, uid: user.uid, center });
+      const count = spawnTerrainArea(b, center, e.terrain, e.duration);
+      b.log("TerrainSpawned", { terrain: e.terrain, count, uid: user.uid, center });
       return true;
     }
     case "AreaShock": {
@@ -130,6 +130,19 @@ function spawnClones(b: Battle, user: UnitState, ability: AbilityDef, e: Record<
   }
   b.log("ClonesSpawned", { uid: user.uid, clones: made, atk, duration: e.duration });
   return true;
+}
+
+/** Apply the same temporary modifier to every living member of a platoon. Cleared at the next Command Phase. */
+export function applyPlatoonTempMod(b: Battle, p: PlatoonState, stat: "ATK" | "DEF" | "MOV", value: number, source: string): void {
+  for (const uid of platoonMembers(p)) { const m = b.units.get(uid); if (m && !m.defeated) addTempMod(m, { source, stat, value }); }
+}
+
+/** Turn a hex and its neighbors into the named terrain for a number of rounds, skipping Water and Mountain. */
+export function spawnTerrainArea(b: Battle, center: Hex, terrain: Terrain, duration: number): number {
+  const hexes = [center, ...hexNeighbors(center)].filter((h) => b.inBounds(h) && b.terrainAt(h) !== "Water" && b.terrainAt(h) !== "Mountain");
+  let n = 0;
+  for (const h of hexes) { if (!b.terrain.has(hexKey(h)) || b.terrainAt(h) === "Open") { b.terrain.set(hexKey(h), terrain); timedTerrain.push({ key: hexKey(h), rounds: duration }); n++; } }
+  return n;
 }
 
 export const hideAfterAttack = new Set<string>();

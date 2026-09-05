@@ -1,10 +1,12 @@
 import type { Battle } from "./state.js";
-import type { UnitState, UnitDef, Role } from "./types.js";
+import type { UnitState, UnitDef, Role, PlatoonState, Terrain } from "./types.js";
 import type { Hex } from "./hex.js";
 import { hexDistance, hexNeighbors } from "./hex.js";
 import type { Registry } from "./data.js";
 import { Rng } from "./rng.js";
 import { fuse, eligibleRecipes } from "./fusion.js";
+import { platoonMembers } from "./morale.js";
+import { applyPlatoonTempMod, spawnTerrainArea } from "./effects.js";
 
 export interface DeckRules {
   mainDeckSize: number; sideDeckSize: number; openingHand: number; drawPerRound: number; maxHandSize: number;
@@ -12,9 +14,12 @@ export interface DeckRules {
   primaryFactionMin: number;
   tributeByStar: Record<string, number | null>;
 }
+/** A stratagem's one-round battlefield effect. `target` says what it needs to be played: a platoon of your own, or a hex. */
+export interface StratagemEffect { kind: "ForcedMarch" | "Smokescreen" | "FalseRetreat"; mov?: number; atk?: number; def?: number; terrain?: Terrain; duration?: number }
 export interface SideCard {
-  id: string; name: string; kind: "ritual" | "fusion"; stars: number; text: string; copyLimit: number;
+  id: string; name: string; kind: "ritual" | "fusion" | "stratagem"; stars: number; text: string; copyLimit: number;
   result?: string; starCost?: number; theme?: string; needsRitualist?: boolean; needsRole?: Role; recipe?: string;
+  target?: "platoon" | "hex"; effect?: StratagemEffect;
 }
 /** A deck list: main is unit ids (one entry per physical card), side is side-card ids. */
 export interface DeckList { id: string; name: string; faction: string; main: string[]; side: string[] }
@@ -262,11 +267,61 @@ export function fusionSummon(b: Battle, side: string, cardId: string, materials:
   return u;
 }
 
+export interface StratagemContext { platoon?: PlatoonState; targetHex?: Hex }
+
+/** Can this stratagem card be played right now against this platoon or hex? */
+export function checkStratagem(b: Battle, side: string, card: SideCard, ctx: StratagemContext): SideCardCheck {
+  if (card.kind !== "stratagem") return { ok: false, reason: "Not a stratagem card" };
+  if (card.target === "platoon") {
+    if (!ctx.platoon) return { ok: false, reason: `${card.name} needs a target platoon` };
+    if (ctx.platoon.side !== side) return { ok: false, reason: "You may only target your own platoon" };
+    const alive = platoonMembers(ctx.platoon).some((uid) => { const u = b.units.get(uid); return !!u && !u.defeated && !!u.pos; });
+    if (!alive) return { ok: false, reason: "That platoon has no one left to command" };
+  }
+  if (card.target === "hex") {
+    if (!ctx.targetHex) return { ok: false, reason: `${card.name} needs a target hex` };
+    if (!b.inBounds(ctx.targetHex)) return { ok: false, reason: "Target hex is off the field" };
+  }
+  return { ok: true };
+}
+
+/** Play a stratagem card: apply its one-round effect and spend the card. It is never drawn, only played from the side deck. */
+export function playStratagem(b: Battle, side: string, cardId: string, ctx: StratagemContext): void {
+  const deck = b.decks.get(side);
+  if (!deck) throw new Error(`Side ${side} has no deck`);
+  if (!deck.side.includes(cardId)) throw new Error(`${cardId} is not in the side deck`);
+  const card = b.reg.sideCards.get(cardId);
+  if (!card || card.kind !== "stratagem") throw new Error(`${cardId} is not a stratagem card`);
+  const check = checkStratagem(b, side, card, ctx);
+  if (!check.ok) throw new Error(check.reason);
+  applyStratagemEffect(b, card, ctx);
+  deck.spendSide(cardId);
+  b.log("StratagemPlayed", { side, card: cardId, platoon: ctx.platoon?.id ?? null, hex: ctx.targetHex ?? null });
+}
+
+function applyStratagemEffect(b: Battle, card: SideCard, ctx: StratagemContext): void {
+  const e = card.effect;
+  if (!e) throw new Error(`${card.name} has no stratagem effect`);
+  switch (e.kind) {
+    case "ForcedMarch":
+      applyPlatoonTempMod(b, ctx.platoon!, "MOV", e.mov ?? 0, card.name);
+      break;
+    case "FalseRetreat":
+      if (e.mov) applyPlatoonTempMod(b, ctx.platoon!, "MOV", e.mov, card.name);
+      if (e.atk) applyPlatoonTempMod(b, ctx.platoon!, "ATK", e.atk, card.name);
+      if (e.def) applyPlatoonTempMod(b, ctx.platoon!, "DEF", e.def, card.name);
+      break;
+    case "Smokescreen":
+      spawnTerrainArea(b, ctx.targetHex!, e.terrain ?? "Smoke", e.duration ?? 2);
+      break;
+  }
+}
+
 /** Every side card that could legally be played this instant, with the materials that would satisfy it. */
-export function playableSideCards(b: Battle, side: string): Array<{ card: SideCard; materials: UnitState[] }> {
+export function playableSideCards(b: Battle, side: string): Array<{ card: SideCard; materials: UnitState[]; platoon?: PlatoonState; targetHex?: Hex }> {
   const deck = b.decks.get(side);
   if (!deck) return [];
-  const out: Array<{ card: SideCard; materials: UnitState[] }> = [];
+  const out: Array<{ card: SideCard; materials: UnitState[]; platoon?: PlatoonState; targetHex?: Hex }> = [];
   const mine = [...b.activeUnits(side)].filter((u) => !u.isClone && u.uid !== b.sides.get(side)!.leaderUid);
   for (const id of new Set(deck.side)) {
     const card = b.reg.sideCards.get(id)!;
@@ -276,11 +331,21 @@ export function playableSideCards(b: Battle, side: string): Array<{ card: SideCa
       let stars = 0;
       for (const u of pool) { if (stars >= (card.starCost ?? 0) && (!card.needsRole || picked.some((p) => b.def(p).roles.includes(card.needsRole!)))) break; picked.push(u); stars += starOf(b.reg, u.defId); }
       if (checkRitual(b, side, card, picked).ok) out.push({ card, materials: picked });
-    } else {
+    } else if (card.kind === "fusion") {
       const recipe = b.reg.fusions.get(card.recipe!);
       if (!recipe) continue;
       const combo = findFusionMaterials(b, mine, recipe.inputs.length, card.recipe!);
       if (combo) out.push({ card, materials: combo });
+    } else if (card.target === "platoon") {
+      const ids = [...new Set(mine.filter((u) => u.platoonId).map((u) => u.platoonId!))];
+      const platoons = ids.map((pid) => b.platoon(pid));
+      const inContact = platoons.find((pl) => platoonMembers(pl).some((uid) => { const u = b.units.get(uid); return !!u && !u.defeated && b.adjacentEnemies(u).length > 0; }));
+      const chosen = inContact ?? platoons[0];
+      if (chosen && checkStratagem(b, side, card, { platoon: chosen }).ok) out.push({ card, materials: [], platoon: chosen });
+    } else if (card.target === "hex") {
+      const endangered = [...mine].filter((u) => u.pos).sort((a, c) => b.adjacentEnemies(c).length - b.adjacentEnemies(a).length)[0];
+      const hex = endangered?.pos;
+      if (hex && checkStratagem(b, side, card, { targetHex: hex }).ok) out.push({ card, materials: [], targetHex: hex });
     }
   }
   return out;

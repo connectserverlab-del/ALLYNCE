@@ -118,5 +118,35 @@
     "recipe": "FUS_CALAMITY",
     "copyLimit": 1,
     "text": "Only when Memory, Torment and Reincarnation stand together does the convergence become possible. It does not last."
+  },
+  {
+    "id": "SIDE_STRAT_FORCED-MARCH",
+    "name": "Forced March",
+    "kind": "stratagem",
+    "stars": 2,
+    "target": "platoon",
+    "effect": { "kind": "ForcedMarch", "mov": 3 },
+    "copyLimit": 3,
+    "text": "Target one of your platoons. It drives at forced pace for the rest of the round: +3 MOV to every member."
+  },
+  {
+    "id": "SIDE_STRAT_SMOKESCREEN",
+    "name": "Smokescreen",
+    "kind": "stratagem",
+    "stars": 3,
+    "target": "hex",
+    "effect": { "kind": "Smokescreen", "terrain": "Smoke", "duration": 2 },
+    "copyLimit": 2,
+    "text": "Target a hex. Smoke rolls across it and every hex around it for two rounds, breaking sightlines and giving anyone inside cover."
+  },
+  {
+    "id": "SIDE_STRAT_FALSE-RETREAT",
+    "name": "False Retreat",
+    "kind": "stratagem",
+    "stars": 4,
+    "target": "platoon",
+    "effect": { "kind": "FalseRetreat", "mov": 3, "atk": 100, "def": -50 },
+    "copyLimit": 2,
+    "text": "Target one of your platoons. It breaks and runs, then turns on whoever gave chase: +3 MOV and +100 ATK for the rest of the round, at -50 DEF while the ruse holds."
   }
 ]

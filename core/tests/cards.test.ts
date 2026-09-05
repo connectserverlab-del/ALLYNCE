@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { newBattle, deploy, KNI, SAM, blob, reg } from "./helpers.js";
-import { validateDeck, buildStarterDeck, DeckState, tributeCost, copyLimit, summonFromHand, ritualSummon, fusionSummon, checkRitual, playableSideCards, summonZone, starOf } from "../src/cards.js";
+import { validateDeck, buildStarterDeck, DeckState, tributeCost, copyLimit, summonFromHand, ritualSummon, fusionSummon, checkRitual, checkStratagem, playStratagem, playableSideCards, summonZone, starOf } from "../src/cards.js";
+import { computeStat } from "../src/modifiers.js";
+import { hexNeighbors } from "../src/hex.js";
 import { Rng } from "../src/rng.js";
 
 const deckState = (list = buildStarterDeck(reg, "KNI"), seed = 3) => new DeckState(list, new Rng(seed), reg.deckRules);
@@ -156,5 +158,80 @@ describe("side deck: ritual and fusion cards", () => {
     expect(playable).toContain("SIDE_RIT_IRON-TIDE");
     expect(playable).not.toContain("SIDE_RIT_SOVEREIGN-MEMORY"); // no ritualist on the field
     void p;
+  });
+});
+
+/** A deck holding exactly the given side cards, for tests that don't want the starter build's own picks in the way. */
+const deckWithSide = (side: string[]) => deckState({ ...buildStarterDeck(reg, "KNI"), side });
+
+describe("side deck: stratagem cards", () => {
+  it("Forced March grants the target platoon +3 MOV for the round only", () => {
+    const { b, ctrl } = newBattle();
+    const p = deploy(b, "K", "A", KNI, blob(5, 5));
+    const deck = deckWithSide(["SIDE_STRAT_FORCED-MARCH"]);
+    b.decks.set("A", deck);
+    const foot = b.unit(p.footUids[0]!);
+    const before = ctrl.movementAllowance(foot);
+    expect(checkStratagem(b, "A", reg.sideCards.get("SIDE_STRAT_FORCED-MARCH")!, { platoon: p }).ok).toBe(true);
+    playStratagem(b, "A", "SIDE_STRAT_FORCED-MARCH", { platoon: p });
+    expect(ctrl.movementAllowance(foot)).toBe(before + 3);
+    expect(deck.side).not.toContain("SIDE_STRAT_FORCED-MARCH");
+    expect(deck.usedSide).toContain("SIDE_STRAT_FORCED-MARCH");
+    ctrl.commandPhase();
+    expect(ctrl.movementAllowance(foot)).toBe(before);
+  });
+  it("refuses a stratagem aimed at another side's platoon, or a platoon with nobody left standing", () => {
+    const { b } = newBattle();
+    const pa = deploy(b, "K", "A", KNI, blob(5, 5));
+    const pb = deploy(b, "S", "B", SAM, blob(15, 5));
+    const card = reg.sideCards.get("SIDE_STRAT_FORCED-MARCH")!;
+    expect(checkStratagem(b, "A", card, { platoon: pb }).reason).toMatch(/your own platoon/);
+    for (const uid of [pa.commanderUid, pa.secondUid, pa.eliteUid, ...pa.footUids]) { const u = b.units.get(uid!); if (u) { u.defeated = true; u.pos = null; } }
+    expect(checkStratagem(b, "A", card, { platoon: pa }).reason).toMatch(/no one left to command/);
+  });
+  it("Smokescreen turns a hex and its neighbors to Smoke for two rounds, then it lifts", () => {
+    const { b, ctrl } = newBattle();
+    const deck = deckWithSide(["SIDE_STRAT_SMOKESCREEN"]);
+    b.decks.set("A", deck);
+    const target = { q: 8, r: 8 };
+    playStratagem(b, "A", "SIDE_STRAT_SMOKESCREEN", { targetHex: target });
+    expect(b.terrainAt(target)).toBe("Smoke");
+    ctrl.commandPhase(); ctrl.endPhase();
+    expect(b.terrainAt(target)).toBe("Smoke");
+    ctrl.commandPhase(); ctrl.endPhase();
+    expect(b.terrainAt(target)).toBe("Open");
+  });
+  it("False Retreat trades DEF for ATK and MOV on the targeted platoon", () => {
+    const { b } = newBattle();
+    const p = deploy(b, "K", "A", KNI, blob(5, 5));
+    const deck = deckWithSide(["SIDE_STRAT_FALSE-RETREAT"]);
+    b.decks.set("A", deck);
+    const foot = b.unit(p.footUids[0]!);
+    const atkBefore = computeStat(b, foot, "ATK").final, defBefore = computeStat(b, foot, "DEF").final;
+    playStratagem(b, "A", "SIDE_STRAT_FALSE-RETREAT", { platoon: p });
+    expect(computeStat(b, foot, "ATK").final).toBe(atkBefore + 100);
+    expect(computeStat(b, foot, "DEF").final).toBe(Math.max(0, defBefore - 50));
+  });
+  it("throws for an unknown card, a card not in the side deck, or a check that fails", () => {
+    const { b } = newBattle();
+    const p = deploy(b, "K", "A", KNI, blob(5, 5));
+    const deck = deckWithSide([]);
+    b.decks.set("A", deck);
+    expect(() => playStratagem(b, "A", "SIDE_STRAT_FORCED-MARCH", { platoon: p })).toThrow(/not in the side deck/);
+    deck.side.push("SIDE_RIT_IRON-TIDE");
+    expect(() => playStratagem(b, "A", "SIDE_RIT_IRON-TIDE", { platoon: p })).toThrow(/not a stratagem card/);
+    deck.side.push("SIDE_STRAT_FORCED-MARCH");
+    expect(() => playStratagem(b, "A", "SIDE_STRAT_FORCED-MARCH", {})).toThrow(/needs a target platoon/);
+  });
+  it("lists a stratagem among the playable side cards, aimed at a platoon in contact with the enemy", () => {
+    const { b, ctrl } = newBattle();
+    const p = deploy(b, "K", "A", KNI, blob(5, 5));
+    const foot = b.unit(p.footUids[0]!);
+    b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "B", hexNeighbors(foot.pos!).find((h) => b.isFree(h))!);
+    const deck = deckWithSide(["SIDE_STRAT_FORCED-MARCH"]);
+    b.decks.set("A", deck);
+    ctrl.commandPhase();
+    const play = playableSideCards(b, "A").find((x) => x.card.id === "SIDE_STRAT_FORCED-MARCH");
+    expect(play?.platoon?.id).toBe(p.id);
   });
 });

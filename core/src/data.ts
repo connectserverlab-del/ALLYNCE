@@ -76,6 +76,7 @@ export class Registry {
     for (const c of this.sideCards.values()) {
       if (c.kind === "ritual" && (!c.result || !this.units.has(c.result))) throw new Error(`Side card ${c.id} names a missing unit ${c.result}`);
       if (c.kind === "fusion" && (!c.recipe || !this.fusions.has(c.recipe))) throw new Error(`Side card ${c.id} names a missing recipe ${c.recipe}`);
+      if (c.kind === "stratagem" && (!c.target || !c.effect)) throw new Error(`Side card ${c.id} is missing a stratagem target or effect`);
     }
     for (const r of this.research.values()) for (const q of r.requires) if (!this.research.has(q)) throw new Error(`Research ${r.id} requires a missing study ${q}`);
     for (const f of this.factions.values()) {

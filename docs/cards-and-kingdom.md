@@ -84,8 +84,8 @@ filling the warrant: kill the target and you go home with spoils and no card.
 
 ## The side deck: 20 cards
 
-Twenty ritual and fusion cards that never enter the draw pile. They are played straight from the side deck when
-the field already holds what they demand, and they carry stars of their own.
+Twenty ritual, fusion and stratagem cards that never enter the draw pile. They are played straight from the side
+deck when the field already holds what they demand, and they carry stars of their own.
 
 **Ritual cards** name a star total. Sacrifice your own deployed units until their stars meet it. Some rituals
 restrict the sacrifices to one theme, some demand a commander among them, and the Sovereign invocations demand a
@@ -94,6 +94,23 @@ ritualist left alive to channel. The result appears where the first sacrifice st
 **Fusion cards** name exact materials that must be standing adjacent to one another, and additionally spend a
 Fusion charge. Paired Line locks two foot soldiers into one body; the Calamity Form needs all three Sovereigns
 together and dissolves after three rounds.
+
+**Stratagem cards** are the third kind: a one-round battlefield effect that costs no sacrifice and no material,
+only the card itself. Each names a target — one of your own platoons, or a hex — and a single effect that lands
+immediately and clears at the next Command Phase, the same way an order's temporary modifiers do.
+
+| Card | Target | Effect |
+|---|---|---|
+| Forced March | Platoon | +3 MOV to every member this round |
+| Smokescreen | Hex | The hex and its six neighbours become Smoke for two rounds, breaking sightlines and giving cover |
+| False Retreat | Platoon | +3 MOV and +100 ATK this round, at -50 DEF while the ruse holds |
+
+`checkStratagem(b, side, card, ctx)` validates the target before anything happens — a platoon must be your own
+and have someone left to command, a hex must be on the field — and `playStratagem` applies the effect, logs
+`StratagemPlayed`, and spends the card from the side deck exactly as `ritualSummon` and `fusionSummon` do for
+their own kinds. Every stratagem's numbers live in `data/cards/side_cards.json`; the effect itself is a named,
+source-tracked modifier (`addTempMod`/`applyPlatoonTempMod`) or a timed terrain change, so nothing it grants is
+untraceable in the attack breakdown.
 
 ## The holding
 

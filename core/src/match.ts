@@ -3,7 +3,7 @@ import { BattleController } from "./battle.js";
 import type { Registry } from "./data.js";
 import { generateMap, applyMap, type MapSpec, type GeneratedMap } from "./mapgen.js";
 import { deployPlatoon } from "./deploy.js";
-import { DeckState, type DeckList, summonFromHand, summonZone, tributeCost, starOf, playableSideCards, ritualSummon, fusionSummon } from "./cards.js";
+import { DeckState, type DeckList, summonFromHand, summonZone, tributeCost, starOf, playableSideCards, ritualSummon, fusionSummon, playStratagem } from "./cards.js";
 import { runAiActivation, holdForSyncPolicy, DIFFICULTY, type AiProfile } from "./ai.js";
 import { applyKingdom, type KingdomState, type ResourceId } from "./kingdom.js";
 import { markWanted, resolveContract, type Contract, type ContractOutcome } from "./wanted.js";
@@ -94,7 +94,8 @@ export function aiPlayCards(ctrl: BattleController, side: string, profile: AiPro
     if (play.card.stars >= 9 && !contact && profile.objectiveWeight < 1.3) continue;
     try {
       if (play.card.kind === "ritual") ritualSummon(b, side, play.card.id, play.materials);
-      else fusionSummon(b, side, play.card.id, play.materials);
+      else if (play.card.kind === "fusion") fusionSummon(b, side, play.card.id, play.materials);
+      else playStratagem(b, side, play.card.id, { platoon: play.platoon, targetHex: play.targetHex });
       break;
     } catch { /* requirements moved */ }
   }
