@@ -102,6 +102,18 @@ where they conflict.**
 - A held region pays its owner resources per hour as a named, source-tracked income line — `"Region: Ashfall
   Keep Lands"` — folded into the holding capped by the same storage an ordinary building respects.
 
+### Done in the weather pass
+
+- Weather (`Clear`/`Rain`/`Fog`) and time of day (`Day`/`Night`) are round modifiers rolled once per battle from
+  the match seed (`data/rules/weather.json`), so a replay reproduces the same conditions.
+- Rain floods the Open ground beside Water and Fords into Mud for the rest of the battle, the same terrain a
+  river's own low ground already produces during map generation, just triggered by weather instead of geography.
+- Fog cuts every ranged unit's effective attack range by one hex, floored at one so melee reach never shrinks.
+  `attack`, Overwatch, portal attacks, and every AI targeting and siege-standoff check read the same effective
+  range, so the AI never tries a shot the fog will actually refuse.
+- Night is a named, source-tracked `"Time of Day: Night"` −25 ATK on ranged attacks, folded into `computeStat`
+  alongside terrain and command bonuses.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -157,3 +169,9 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   again if the region changes hands. This would give long-held ground a defender's edge that reads as the
   region's own biome and faction rather than a flat number, and would put the campaign map's regions and the
   faction's themed siege and cavalry pieces to work together instead of each sitting in its own system.
+- 2026-09-05: Proposal — now that weather is a per-battle roll (`data/rules/weather.json`), a campaign region's
+  own biome bias (`data/campaign/*.json`) could weight that roll instead of leaving Rain and Fog equally likely
+  everywhere on the map: a river region like Reed Shallows would roll Rain far more often than a dry rise like
+  Cinderpeak Heights. A held region's fights would start to read as that region's own ground and climate instead
+  of a flat, region-blind die roll shared by the whole engine — the same idea already at work in the named-biome
+  scenario proposal above, one layer further out.

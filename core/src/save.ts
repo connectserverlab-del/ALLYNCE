@@ -7,12 +7,14 @@ import { DeckState } from "./cards.js";
 import { Rng } from "./rng.js";
 import type { RitualCircle } from "./rituals.js";
 import type { Portal } from "./portals.js";
+import type { WeatherId, TimeOfDayId } from "./weather.js";
 
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 
 export interface BattleSave {
   version: number; seed: number; round: number; phase: string;
   width: number; height: number; mask: string[] | null;
+  weather: WeatherId; timeOfDay: TimeOfDayId;
   terrain: Array<[string, Terrain]>; elevation: Array<[string, number]>;
   units: UnitState[]; platoons: PlatoonState[];
   sides: Array<{ id: string; reservePoints: number; armyCapacity: number; morale: number; leaderUid?: string | null; surrendered?: boolean; fusionCharges?: number }>;
@@ -30,6 +32,7 @@ export function saveBattle(b: Battle): BattleSave {
   return {
     version: SAVE_VERSION, seed: b.seed, round: b.round, phase: b.phase,
     width: b.width, height: b.height, mask: b.mask ? [...b.mask] : null,
+    weather: b.weather, timeOfDay: b.timeOfDay,
     terrain: [...b.terrain.entries()], elevation: [...b.elevation.entries()],
     units: [...b.units.values()].map((u) => ({ ...u, statuses: u.statuses.map((s) => ({ ...s })), cooldowns: { ...u.cooldowns } })),
     platoons: [...b.platoons.values()].map((p) => ({ ...p, footUids: [...p.footUids] })),
@@ -44,7 +47,7 @@ export function saveBattle(b: Battle): BattleSave {
 
 export function loadBattle(reg: Registry, save: BattleSave): Battle {
   if (save.version !== SAVE_VERSION) throw new Error(`Save version ${save.version} cannot be read by this build (expects ${SAVE_VERSION})`);
-  const b = new Battle(reg, { seed: save.seed, width: save.width, height: save.height, sides: save.sides.map((s) => ({ ...s })) });
+  const b = new Battle(reg, { seed: save.seed, width: save.width, height: save.height, sides: save.sides.map((s) => ({ ...s })), weather: save.weather, timeOfDay: save.timeOfDay });
   b.round = save.round; b.phase = save.phase as Battle["phase"];
   b.mask = save.mask ? new Set(save.mask) : null;
   for (const [k, t] of save.terrain) b.terrain.set(k, t);

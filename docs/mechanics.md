@@ -21,6 +21,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §18 Architecture | all | Simulation is separate from presentation; every action logs a serializable event |
 | Scenario authoring | `scenario.ts` | `buildScenario` loads a scenario file onto either a hand-authored fixed map or a generated one; positions can be pinned by role instead of fixed coordinates (see below) |
 | Campaign map | `campaign.ts`, `data/campaign/` | Regions on a province map, each with its own biome bias for `setUpMatch`; a held region's production is a named, source-tracked income line into the holding (see below) |
+| Weather and time of day | `weather.ts`, `data/rules/weather.json` | Round modifiers rolled once per battle from the match seed; Rain reshapes terrain at setup, Fog and Night are named, source-tracked combat modifiers (see below) |
 
 ## Worked example (from the brief §7)
 
@@ -113,6 +114,30 @@ keep-lands down to the Iron Vale, with a mountain pass and a coast contested in 
   `applyCampaignProduction` folds that into a holding's resources over `seconds`, capped by the same
   `storageCap` an ordinary `tick` respects, so a campaign never lets a side's stores run past what its Keep
   can actually hold.
+
+## Weather and time of day
+
+`data/rules/weather.json` names every weather condition (`Clear`, `Rain`, `Fog`) and time-of-day condition
+(`Day`, `Night`) with a roll weight and its effect. `setUpMatch` rolls one of each from a seed derived from the
+match seed (so a replay reproduces it), right after the field generates and before either side deploys; a
+`MatchSpec.weather` / `timeOfDay` override skips the roll for a scenario or a test that wants a fixed condition.
+
+- **Rain** (`applyWeatherTerrain`): every Open hex within `mudRadius` of a Water or Ford hex turns to Mud for the
+  rest of the battle — the same terrain a river's own low, wet ground already produces in `mapgen.ts`, just
+  triggered by weather instead of geography. It never overwrites a hex that is already something other than
+  Open, and it runs once, at setup, not every round.
+- **Fog** (`effectiveRange`): every ranged unit's attack range drops by `rangedRangeMod` (one hex), floored at
+  one so a unit is never argued out of its own melee reach. `battle.ts` (`attack`, the Overwatch check in
+  `move`), `portals.ts` (`attackPortal`'s range gate) and `ai.ts` (targeting, siege stand-off distance, the
+  charge-bonus range check) all read this instead of the unit's raw `range`, so the AI's decisions stay
+  consistent with what `attack()` will actually allow.
+- **Night** (`weatherRangedAtkMod`): a named `"Time of Day: Night"` entry in the modifier pipeline, `rangedAtkMod`
+  ATK on any ranged attack — folded into `computeStat` alongside terrain and command bonuses, so the breakdown
+  stays as honest as every other source.
+
+Both conditions are independent (a battle can be foggy at night) and both are rolled the same way, so adding a
+third weather or time-of-day condition is a data change: a new entry in `weather.json` plus, if it needs a new
+kind of effect, one more field read where the existing ones are read.
 
 ## Unity port guidance
 

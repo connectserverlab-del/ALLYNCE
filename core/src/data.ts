@@ -6,6 +6,7 @@ import type { RankLadder } from "./ranks.js";
 import type { FusionRecipe } from "./fusion.js";
 import type { DeckRules, SideCard } from "./cards.js";
 import type { KingdomData, ResearchDef, BannerDef } from "./kingdom.js";
+import type { WeatherRules } from "./weather.js";
 import { existsSync } from "node:fs";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -37,9 +38,11 @@ export class Registry {
   readonly kingdom: KingdomData;
   readonly research = new Map<string, ResearchDef>();
   readonly banners = new Map<string, BannerDef>();
+  readonly weather: WeatherRules;
 
-  constructor(units: UnitDef[], abilities: AbilityDef[], factions: Record<string, FactionDef>, rules: CompositionRules, ladders: RankLadder[] = [], fusions: FusionRecipe[] = [], deckRules?: DeckRules, sideCards: SideCard[] = [], kingdom?: KingdomData, research: ResearchDef[] = [], banners: BannerDef[] = []) {
+  constructor(units: UnitDef[], abilities: AbilityDef[], factions: Record<string, FactionDef>, rules: CompositionRules, ladders: RankLadder[] = [], fusions: FusionRecipe[] = [], deckRules?: DeckRules, sideCards: SideCard[] = [], kingdom?: KingdomData, research: ResearchDef[] = [], banners: BannerDef[] = [], weather?: WeatherRules) {
     this.kingdom = kingdom!;
+    this.weather = weather!;
     for (const r of research) this.research.set(r.id, r);
     for (const bn of banners) this.banners.set(bn.id, bn);
     this.deckRules = deckRules!;
@@ -99,6 +102,7 @@ export function loadRegistry(): Registry {
     readJson<KingdomData>("kingdom/buildings.json"),
     readJson<ResearchDef[]>("kingdom/research.json"),
     readJson<BannerDef[]>("kingdom/banners.json"),
+    readJson<WeatherRules>("rules/weather.json"),
   );
 }
 

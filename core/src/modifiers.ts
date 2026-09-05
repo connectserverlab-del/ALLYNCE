@@ -8,6 +8,7 @@ import { moraleBand } from "./morale.js";
 import { attackArc, type AttackArc } from "./hex.js";
 import { privileges, commandRadiusOf } from "./ranks.js";
 import { kingdomMods } from "./kingdom.js";
+import { weatherRangedAtkMod } from "./weather.js";
 
 export interface CombatContext { attacker?: UnitState; defender?: UnitState; arc?: AttackArc; ranged?: boolean; reaction?: boolean }
 
@@ -57,6 +58,12 @@ export function computeStat(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: C
     if (stat === "ATK" && ctx.ranged && rule.ranged.atk) mods.push({ source: `Terrain: ${t}`, stat, value: rule.ranged.atk });
   }
   if (stat === "ATK" && ctx.attacker === u && ctx.defender?.pos && u.pos && !d.flying && b.elevationAt(u.pos) > b.elevationAt(ctx.defender.pos)) mods.push({ source: "Elevation advantage", stat, value: 50 });
+
+  // 6b. Time of day (round modifier): a ranged attack fired at Night goes wide more often.
+  if (stat === "ATK" && ctx.ranged) {
+    const nightPenalty = weatherRangedAtkMod(b);
+    if (nightPenalty) mods.push({ source: `Time of Day: ${b.timeOfDay}`, stat, value: nightPenalty });
+  }
 
   // 7. Ability conditionals and platoon orders (data-driven)
   if (!u.isClone) mods.push(...abilityModifiers(b, u, stat, ctx));

@@ -7,6 +7,7 @@ import type { RitualCircle } from "./rituals.js";
 import type { Portal } from "./portals.js";
 import type { DeckState } from "./cards.js";
 import type { KingdomEffects } from "./kingdom.js";
+import type { WeatherId, TimeOfDayId } from "./weather.js";
 
 export type Phase = "Command" | "Activation" | "Objective" | "End" | "Ended";
 
@@ -35,13 +36,18 @@ export class Battle {
   activatedGroupsThisRound = new Set<string>();
   winner: string | null = null;
   winReason: string | null = null;
+  /** Round modifiers, rolled once per battle at setup (see `weather.ts`). */
+  weather: WeatherId = "Clear";
+  timeOfDay: TimeOfDayId = "Day";
   private uidCounter = 0;
   readonly seed: number;
 
-  constructor(public readonly reg: Registry, opts: { seed: number; width?: number; height?: number; sides?: SideState[] }) {
+  constructor(public readonly reg: Registry, opts: { seed: number; width?: number; height?: number; sides?: SideState[]; weather?: WeatherId; timeOfDay?: TimeOfDayId }) {
     this.rng = new Rng(opts.seed);
     this.seed = opts.seed;
     this.width = opts.width ?? 24; this.height = opts.height ?? 18;
+    if (opts.weather) this.weather = opts.weather;
+    if (opts.timeOfDay) this.timeOfDay = opts.timeOfDay;
     for (const s of opts.sides ?? [{ id: "A", reservePoints: 0, armyCapacity: 100, morale: 100 }, { id: "B", reservePoints: 0, armyCapacity: 100, morale: 100 }]) this.sides.set(s.id, s);
   }
 
