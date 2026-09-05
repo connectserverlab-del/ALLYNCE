@@ -40,7 +40,8 @@ Three things bite:
 | Id | Item | Waiting on |
 |---|---|---|
 | `OWN-1` | Scale the remaining building tier art (25 paintings) | Confirmation that building portraits stay at a low angle rather than strictly top-down |
-| `OWN-2` | Raise the deck faction minimum from 40 toward 60 | Needs 15-20 distinct cards per faction. The roster is now 88 cards across 18 factions, but the four host armies still hold only 8-9 each, so the minimum stays at 40 |
+| `OWN-2` | Raise the deck faction minimum from 40 toward 60 | Needs 15-20 distinct cards per faction. The roster is now 91 cards across 18 factions, but the four host armies still hold only 8-9 each, so the minimum stays at 40 |
+| `OWN-3` | Let the five sworn companies (Cobalt Conclave, Thorn Coven, Cutpurse Court, Windmarch Host, Dunewake Compact) field a full platoon of their own, the way three divisions now can (see D-26) | Each company's `weakness` text in `data/factions/factions.json` names this directly as the point ("Sworn company, not an army: cannot lead a host of its own" and similar). Giving them the cards to do it anyway is a lore change, not a data fix, and needs a call on whether that weakness still stands. Chaos Warband (`CHR`) is a second case: its own text puns on the gap ("no line, no discipline, no second plan" — it has no card that can fill the Second slot at all) and reads as deliberate rather than missing |
 
 ## Queue
 
@@ -56,8 +57,6 @@ Three things bite:
 | `Q-8` | Stratagem cards as a third side-deck kind, one-round battlefield effects | Fills out the side deck beyond ritual and fusion |
 | `Q-9` | Unity port scaffolding: ScriptableObject importer for `data/`, and the C# module skeleton in `docs/mechanics.md` | The engine target the brief names |
 | `Q-10` | Replay viewer: step through a saved event log | The event log already exists and is unused |
-| `Q-11` | Warrant board screen in the sample page: read the posted writs, take one, and see which of them close the gaps in the current deck | The board exists in the core and has no interface |
-| `Q-12` | Give the sworn companies and the seven divisions depth: each has four cards, enough to hire but not to lead | A division is a flavour of ally until it can field a line of its own |
 | `Q-13` | Escort composition for warrants: build the escort around the target's own company rather than a generic host starter deck | The escort currently reads as a borrowed army with the target bolted on |
 | `Q-15` | A division's own doctrine and platoon order, so a Choir or a Swarm can lead a deck instead of only joining one | Seven divisions is a lot of flavour with no army identity behind it |
 
@@ -90,3 +89,5 @@ Three things bite:
 | `D-23` | Marching: continuous movement in seconds, squads with formation slots, a 45-second cap scaled by distance, and hex routing round anything a straight line cannot cross |
 | `D-24` | March screen: click the ground to send a squad, drag a name onto a squad to have that unit walk over and fall in, with the real engine bundled into the page rather than a recording of it |
 | `D-25` | `scripts/audit-cutouts.py` fails a cutout that kept its background or lost its figure, so a card cannot ship as a pale slab again |
+| `D-26` | Q-11, found already done: the Wanted Board screen (`Writs` in the sample page rail, `renderWrits`/`openWrit` in `web/sample/template.html`) shipped in the same pass as the wanted-board core (D-17) but was never moved off the queue. Verified against the current data pipeline and left as-is; this entry just corrects the bookkeeping |
+| `D-27` | Q-12, the achievable slice: Choir Militant, Ashpit Legion and Winter Famine each gained a second, distinct FootSoldier card sharing its sibling's theme, so a deck built around one can field a real five-foot line instead of one body five times. Winter Famine also had no card able to fill the Second slot at all (two Elites, no Second) and gets one, `WEN_SECOND_RIME-ANTLER-WARDEN`. `core/tests/companies.test.ts` proves each of the three now validates a legal, varied platoon on its own. The other four divisions and all five sworn companies are unchanged — see `OWN-3` |
