@@ -105,3 +105,7 @@ export function loadRegistry(): Registry {
 export function loadScenario<T = unknown>(name: string): T {
   return readJson<T>(`scenarios/${name}.json`);
 }
+
+export function loadCampaign<T = unknown>(name: string): T {
+  return readJson<T>(`campaign/${name}.json`);
+}

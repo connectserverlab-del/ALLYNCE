@@ -20,6 +20,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §16 AI | `ai.ts` | Utility scoring, release policy, surrender policy, difficulty without stat bonuses |
 | §18 Architecture | all | Simulation is separate from presentation; every action logs a serializable event |
 | Scenario authoring | `scenario.ts` | `buildScenario` loads a scenario file onto either a hand-authored fixed map or a generated one; positions can be pinned by role instead of fixed coordinates (see below) |
+| Campaign map | `campaign.ts`, `data/campaign/` | Regions on a province map, each with its own biome bias for `setUpMatch`; a held region's production is a named, source-tracked income line into the holding (see below) |
 
 ## Worked example (from the brief §7)
 
@@ -90,6 +91,28 @@ reference example: the same file plays out on a different, still-legal battlefie
   ("Doctrine stays active through the next Command Phase while succession occurs") never actually gets a chance
   to save the match from an instant loss, and the new surrender policy is shadowed by it in every current
   scenario. See `OWN-3` in `docs/CHECKLIST.md`.
+
+## Campaign map
+
+`data/campaign/*.json` describes a province as a graph of regions: each region names its neighbors, a starting
+owner (`"A"`, `"B"`, or `null` for neutral ground), a biome bias, and how many resources per hour it pays its
+owner. `data/campaign/samurai_province.json` is the reference province — six regions in a ring, from the Ashfall
+keep-lands down to the Iron Vale, with a mountain pass and a coast contested in between.
+
+- **Adjacency, not teleporting**: `contestableRegions` only offers ground bordering a region the side already
+  holds, so the front stays one contiguous line instead of a side reaching across the map for an easy region.
+- **Every region is still a generated battle**: `battleMapSpec(region, seed)` is the region's own `map` bias
+  (`size`, `forest`, `rugged`, `river`, `trenches`, `ruins`) with a seed attached — a `MapSpec` ready for
+  `setUpMatch`/`runMatch`, exactly as if it had been typed by hand for that fight. A region has no fixed
+  battlefield of its own; it regenerates a fresh, still-legal field every time it is fought over, the same way
+  `ashfall_crossing` regenerates a scenario field per seed (see above).
+- **Ownership only moves on a decisive result**: `resolveRegionBattle(state, regionId, winnerSide)` takes the
+  region on a win and leaves it alone on a draw or an unresolved siege (`winnerSide` null).
+- **Production is a named, source-tracked income line**: `regionProduction` lists each held region as
+  `{ source: "Region: <name>", resource, perHour }`, the same shape as a building's `produces` entry.
+  `applyCampaignProduction` folds that into a holding's resources over `seconds`, capped by the same
+  `storageCap` an ordinary `tick` respects, so a campaign never lets a side's stores run past what its Keep
+  can actually hold.
 
 ## Unity port guidance
 
