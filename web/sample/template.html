@@ -151,22 +151,23 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 /* align-items:start keeps each card box exactly as tall as its frame image; stretched rows would
    drop the bottom stat line off the paper and onto the page behind it */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(152px,1fr));gap:14px;align-items:start}
-.card{position:relative;cursor:pointer;filter:drop-shadow(0 5px 9px rgba(0,0,0,.55));transition:transform .13s}
+.card{--nm-top:5.5%;--nm-h:11%;--art-top:18.5%;--art-h:46.5%;--nums-top:68%;--pips-top:79.5%;--pad-right:22%;
+  position:relative;cursor:pointer;filter:drop-shadow(0 5px 9px rgba(0,0,0,.55));transition:transform .13s}
 .card:hover{transform:translateY(-4px)}
 .card img.fr{width:100%;display:block}
 
 /* Card face layout, measured against the paper frame itself: a light band runs 6-17% and again
    66-87%, with the dark art window between. The name takes the top band, the numbers the lower one. */
-.card .art{position:absolute;left:11.5%;top:18.5%;width:77%;height:46.5%;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
+.card .art{position:absolute;left:11.5%;top:var(--art-top);width:77%;height:var(--art-h);overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
 .card .art img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
 
 .card .art .none{align-self:center;font-size:10px;color:#5a5750;font-family:"Alegreya SC";letter-spacing:.08em}
-.card .pips{position:absolute;left:7%;top:79.5%;width:70%;display:flex;justify-content:center;gap:1%;align-items:center;flex-wrap:wrap}
+.card .pips{position:absolute;left:11%;top:var(--pips-top);width:68%;display:flex;justify-content:center;gap:1%;align-items:center;flex-wrap:wrap}
 .card .pips img{width:7.6%;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
 .card .pips img.off{opacity:.42}
 
 
-.card .nm{position:absolute;left:7%;top:5.5%;width:86%;height:11%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:"Alegreya SC";font-weight:700;font-size:10.5px;line-height:1.04;color:#241d13;text-shadow:0 1px 0 rgba(220,206,180,.55);overflow:hidden}
+.card .nm{position:absolute;left:7%;top:var(--nm-top);width:86%;height:var(--nm-h);display:flex;align-items:center;justify-content:center;text-align:center;font-family:"Alegreya SC";font-weight:700;font-size:10.5px;line-height:1.04;color:#241d13;text-shadow:0 1px 0 rgba(220,206,180,.55);overflow:hidden}
 /* the small face carries name, art, three stats and stars; role and rank live in the detail panel */
 .card .sub{display:none}
 /* The paper foot is scorched almost black and the space between the name and the star row is
@@ -175,13 +176,17 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 /* ATK and DEF sit on the paper under the art in dark ink, the darkest type on the card. */
 /* Three stats on the paper under the art, in dark ink. A grid rather than space-between: equal
    columns cannot push a four-digit number under the frame's inner bevel the way justified ends did. */
-.card .nums{position:absolute;left:12%;right:12%;top:68%;height:10%;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;
+.card .nums{position:absolute;left:12%;right:var(--pad-right);top:var(--nums-top);height:10%;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;
   font-family:"JetBrains Mono";color:#1b150c;overflow:hidden}
 .card .nums b{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5px;font-weight:700;font-size:9.5px;line-height:1}
-.card .nums i{font-style:normal;font-family:"Alegreya SC";font-weight:700;font-size:7px;letter-spacing:.04em;color:#3f3a2d;text-shadow:0 1px 0 rgba(226,214,190,.7)}
+.card .nums img{height:13px;width:auto;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
+.card .nums em{font-style:normal;font-size:7.5px;letter-spacing:-.02em}
 .card .nums .faint,.detail .big .nums .faint{color:#6a604e;font-weight:400}
+/* the green and violet stocks are dark paper: their ink inverts, or it disappears into the panel */
+.card .nums.pale,.card .pair.pale,.detail .big .nums.pale{color:#e2dac6;text-shadow:0 1px 2px rgba(0,0,0,.75)}
+.card .pair.pale .faint,.card .nums.pale .faint{color:#a79f8b}
 /* rite and warrant faces carry a pair of labels rather than unit stats, so they keep a two-up line */
-.card .pair{position:absolute;left:12%;right:12%;top:69%;height:8%;display:flex;align-items:center;justify-content:space-between;
+.card .pair{position:absolute;left:12%;right:var(--pad-right);top:var(--nums-top);height:8%;display:flex;align-items:center;justify-content:space-between;
   font-family:"JetBrains Mono";font-weight:700;font-size:8.5px;color:#1b150c;overflow:hidden}
 .card .pair .faint{color:#6a604e;font-weight:400}
 
@@ -195,18 +200,18 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 .detail .big{position:relative}
 .detail .big img.fr{width:100%;display:block}
 
-.detail .big .art{position:absolute;left:11.5%;top:18.5%;width:77%;height:46.5%;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.detail .big .art{position:absolute;left:11.5%;top:var(--art-top);width:77%;height:var(--art-h);display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
 .detail .big .art img{max-width:100%;max-height:100%;object-fit:contain}
-.detail .big .pips{position:absolute;left:7%;top:79.5%;width:72%;display:flex;justify-content:center;gap:1%;align-items:center}
+.detail .big .pips{position:absolute;left:11%;top:var(--pips-top);width:68%;display:flex;justify-content:center;gap:1%;align-items:center}
 .detail .big .pips img{width:7.4%;display:block}
 .detail .big .pips img.off{opacity:.42}
 
-.detail .big .nm{position:absolute;left:7%;top:5.5%;width:86%;height:11%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:"Alegreya SC";font-weight:700;font-size:16px;line-height:1.04;color:#241d13}
+.detail .big .nm{position:absolute;left:7%;top:var(--nm-top);width:86%;height:var(--nm-h);display:flex;align-items:center;justify-content:center;text-align:center;font-family:"Alegreya SC";font-weight:700;font-size:16px;line-height:1.04;color:#241d13}
 .detail .big .sub{position:absolute;left:7%;top:76.5%;width:72%;text-align:center;font-size:12px;color:#5c5344}
-.detail .big .nums{position:absolute;left:12%;right:12%;top:68%;height:10%;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;
+.detail .big .nums{position:absolute;left:12%;right:var(--pad-right);top:var(--nums-top);height:10%;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;
   font-family:"JetBrains Mono";color:#1b150c;overflow:hidden}
 .detail .big .nums b{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:700;font-size:13px;line-height:1}
-.detail .big .nums i{font-style:normal;font-family:"Alegreya SC";font-weight:700;font-size:9px;letter-spacing:.09em;color:#3f3a2d;text-shadow:0 1px 0 rgba(226,214,190,.7)}
+.detail .big .nums img{height:20px;width:auto;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))}
 .detail h3{font-size:20px}
 .detail .close{position:absolute;right:14px;top:10px;font-size:22px;color:var(--dim);line-height:1}
 .abil{border-left:2px solid var(--edge-2);padding:2px 0 2px 10px;margin:9px 0}
@@ -319,8 +324,23 @@ const FAC = {SAM:'--ember',SHI:'--moon',KNI:'--gold',DRG:'--cyan',RIT:'--marsh',
 // a faction added tomorrow shows its real name instead of "undefined".
 const SHORTNAME = {SAM:'Samurai',SHI:'Shinobi',KNI:'Knight',DRG:'Dragon Host',DIV:'Divine'};
 const FACNAME = new Proxy({}, { get: (_, id) => SHORTNAME[id] || D.factions?.[id]?.name || String(id) });
-// One card stock for the whole game: the sealed mulberry paper. Rank is carried by the stars, not the frame.
-const FRAME = ()=> A.frames.SEALED;
+/**
+ * Card stocks. Soldiers are sealed mulberry paper; the two side-deck kinds get their own colour so a
+ * rite is never mistaken for a unit at a glance — green for a ritual, violet for a fusion.
+ *
+ * Each painting puts its picture window and lower panel somewhere different, so a frame carries its own
+ * layout rather than one set of percentages pretending to fit all three. The numbers are measured off
+ * the paintings: `art` is the window, `nums` the panel band under it, `pips` the star row below that.
+ */
+const FRAMES = {
+  SEALED: { img:()=>A.frames.SEALED, nm:[5.5,11],  art:[18.5,46.5], nums:68, pips:79.5, padRight:22 },
+  RITE:   { img:()=>A.frames.RITE,   nm:[9,11],    art:[24,46],     nums:73.5, pips:84,   padRight:16 },
+  FUSION: { img:()=>A.frames.FUSION, nm:[7,11],    art:[22,36.5],   nums:62.5, pips:74,   padRight:16 },
+};
+const FRAME = (c)=> (FRAMES[c?.stock] ?? FRAMES.SEALED);
+/** The layout of a stock, as inline custom properties for the card element. */
+const frameVars = (c)=>{ const f = FRAME(c);
+  return `--nm-top:${f.nm[0]}%;--nm-h:${f.nm[1]}%;--art-top:${f.art[0]}%;--art-h:${f.art[1]}%;--nums-top:${f.nums}%;--pips-top:${f.pips}%;--pad-right:${f.padRight}%`; };
 const TL = {Open:'Open ground',Road:'Road',Valley:'Valley floor',Mud:'Mud',Forest:'Forest',HighGround:'High ground',Mountain:'Mountain',Trench:'Trench',Ruins:'Ruins',Fortification:'Fortification',Water:'River',Ford:'Ford',Smoke:'Smoke',AntiAir:'Anti-air'};
 const tok = (c)=> A.tokens[c.id] || A.tokens[c.defId] || null;
 const starRow=(n,all=false)=>Array.from({length:all?10:n},(_,i)=>`<img src="${i<n?A.star.on:A.star.off}" class="${i<n?'':'off'}" alt="">`).join('');
@@ -543,7 +563,7 @@ function renderCmd(){
 }
 function miniCard(c){
   const t=A.tokens[c.id];
-  return `<div class="mini" data-id="${c.id}" title="${esc(c.name)}"><img class="fr" src="${FRAME(c)}" alt="">
+  return `<div class="mini" data-id="${c.id}" title="${esc(c.name)}"><img class="fr" src="${FRAME(c).img()}" alt="">
    <div class="mstars">${Array.from({length:Math.min(c.stars,10)},()=>`<img src="${A.star.on}" alt="">`).join('')}</div>
    <div class="mart">${t?`<img src="${t}" alt="">`:''}</div>
    <div class="mname">${esc(c.name)}</div><div class="mcost">${c.tribute===null?'R':c.tribute}</div></div>`;
@@ -585,8 +605,8 @@ function renderDeck(){
 }
 function cardHTML(c){
   const t=A.tokens[c.id];
-  return `<div class="card" data-id="${c.id}">
-    <img class="fr" src="${FRAME(c)}" alt="">
+  return `<div class="card" data-id="${c.id}" style="${frameVars(c)}">
+    <img class="fr" src="${FRAME(c).img()}" alt="">
     <div class="pips">${starRow(c.stars)}</div>
     <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
     <div class="nm">${esc(c.name)}</div>
@@ -594,8 +614,17 @@ function cardHTML(c){
     ${c.count>1?`<div class="cnt">×${c.count}</div>`:''}
   </div>`;
 }
-/** The three numbers every card carries: what it can take, what it deals, what it turns aside. */
-const statRow = (c)=>`<b><i>LIFE</i>${c.hp}</b><b><i>ATK</i>${c.atk}</b><b><i>DEF</i>${c.def}</b>`;
+/**
+ * The three numbers every card carries: what it can take, what it deals, what it turns aside. A heart,
+ * a sword and a shield rather than words — at nine pixels a label is a smudge, and the shapes and their
+ * colours still separate three numbers that would otherwise be an unexplained row of digits.
+ */
+const STAT_ICON = { hp: ['STAT-LIFE','Life'], atk: ['STAT-ATK','Attack'], def: ['STAT-DEF','Defence'] };
+const statRow = (c)=> Object.entries(STAT_ICON).map(([k,[icon,label]])=>
+  `<b title="${label}"><img src="${A.icons[icon]}" alt="${label}">${c[k]}</b>`).join('');
+/** A fusion that derives its body from its materials shows the rule, not a number it does not have. */
+const formulaRow = (f)=> Object.entries(STAT_ICON).map(([k,[icon,label]])=>
+  `<b title="${label} is derived from the materials"><img src="${A.icons[icon]}" alt="${label}"><em>${esc(f[k])}</em></b>`).join('');
 /** Summon cost, shown beside the role rather than between the stats where it read as one of them. */
 const tributeMark = (c)=> c.tribute===null ? ' · rite only' : c.tribute ? ` · tribute ${c.tribute}` : '';
 
@@ -604,7 +633,7 @@ const ownedOf = (id)=> (D.deck.owned||{})[id] ?? 0;
 function openCard(c){
   if(!c)return;
   const t=A.tokens[c.id];
-  $('detailbox').innerHTML=`<div class="big"><img class="fr" src="${FRAME(c)}" alt="">
+  $('detailbox').innerHTML=`<div class="big" style="${frameVars(c)}"><img class="fr" src="${FRAME(c).img()}" alt="">
       <div class="pips">${starRow(c.stars,true)}</div>
       <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
       <div class="nm">${esc(c.name)}</div><div class="sub">${esc(c.roles.join(' · '))}${tributeMark(c)}</div>
@@ -639,21 +668,24 @@ function renderRites(){
      <div style="text-align:right"><div class="mono" style="font-size:22px">${total}<span class="faint" style="font-size:14px"> / ${D.rules.sideDeckSize}</span></div>
      <div class="faint" style="font-size:12px">${side.length} distinct · ${ready.size} playable right now</div></div></div>
    <div class="grid">${side.map(c=>{
-     const rc=c.resultCard, t=rc?A.tokens[rc.id]:null, isReady=ready.has(c.id);
-     return `<div class="card ${isReady?'':'locked'}" data-rid="${c.id}">
-       <img class="fr" src="${A.frames.SEALED}" alt="">
+     const fc=c.faceCard, t=fc?A.tokens[fc.id]:null, isReady=ready.has(c.id);
+     const stock={ ...c, stock: c.kind==='ritual'?'RITE':'FUSION' };
+     return `<div class="card ${isReady?'':'locked'}" data-rid="${c.id}" style="${frameVars(stock)}">
+       <img class="fr" src="${FRAME(stock).img()}" alt="">
        <div class="pips">${starRow(c.stars)}</div>
-       <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
+       <div class="art">${t?`<img src="${t}" alt="">`:`<span class="none">${c.kind==='fusion'?'made from the field':'no art yet'}</span>`}</div>
        <div class="nm">${esc(c.name)}</div>
-       <div class="sub">${c.kind==='ritual'?'Ritual':'Fusion'}${isReady?' · ready':''}</div>
-       <div class="pair"><span>${c.kind==='ritual'?c.starCost+'★':'materials'}</span><span class="faint">${c.kind==='ritual'?(c.theme||'any'):''}</span></div>
+       ${c.faceStats?`<div class="nums pale">${statRow(c.faceStats)}</div>`
+        : c.resultFormula?`<div class="nums pale">${formulaRow(c.resultFormula)}</div>`
+        :`<div class="pair pale"><span>${c.kind==='ritual'?c.starCost+'★':'materials'}</span><span class="faint">${c.kind==='ritual'?(c.theme||'any'):''}</span></div>`}
        ${c.count>1?`<div class="cnt">×${c.count}</div>`:''}</div>`;}).join('')}</div>`;
   $('ritespane').querySelectorAll('[data-rid]').forEach(el2=>el2.onclick=()=>openRite(side.find(x=>x.id===el2.dataset.rid)));
 }
 function openRite(c){
   const rc=c.resultCard, t=rc?A.tokens[rc.id]:null;
   const ready=D.battle.playableSide.find(p=>p.id===c.id);
-  $('detailbox').innerHTML=`<div class="big"><img class="fr" src="${A.frames.SEALED}" alt="">
+  const stock={ ...c, stock: c.kind==='ritual'?'RITE':'FUSION' };
+  $('detailbox').innerHTML=`<div class="big" style="${frameVars(stock)}"><img class="fr" src="${FRAME(stock).img()}" alt="">
       <div class="pips">${starRow(c.stars,true)}</div>
       <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
       <div class="nm">${esc(c.name)}</div><div class="sub">${c.kind==='ritual'?'Ritual':'Fusion'}</div></div>

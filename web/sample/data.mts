@@ -70,7 +70,26 @@ const unitCard = (id: string) => {
     art: d.art ?? null, themes: d.themes };
 };
 const group = (ids: string[]) => { const m = new Map<string, number>(); for (const i of ids) m.set(i, (m.get(i) ?? 0) + 1); return [...m].map(([id, n]) => ({ ...unitCard(id), count: n })).sort((a, c) => a.stars - c.stars || a.name.localeCompare(c.name)); };
-const sideGroup = (ids: string[]) => { const m = new Map<string, number>(); for (const i of ids) m.set(i, (m.get(i) ?? 0) + 1); return [...m].map(([id, n]) => { const c = reg.sideCards.get(id)!; const recipe = c.recipe ? reg.fusions.get(c.recipe) : null; return { ...c, count: n, resultCard: c.result ? unitCard(c.result) : null, materials: recipe ? recipe.inputs.map((i: any) => i.defId ? reg.unit(i.defId).name : (i.roles ?? []).join("+")) : null, recipeText: recipe?.text ?? null }; }).sort((a, c) => c.stars - a.stars); };
+/**
+ * What a side card should put on its face. A ritual names the unit it brings out, so that unit's
+ * portrait and stats are the answer. A fusion mostly does not: three of the four recipes derive the
+ * new body from whatever fed them, so there is no painting of the result and there never will be.
+ * Those show the first named material instead — the thing it is made of — and the formula rather
+ * than invented numbers.
+ */
+const sideFace = (c: any, recipe: any) => {
+  if (c.result) return { face: unitCard(c.result), stats: unitCard(c.result), formula: null };
+  if (!recipe) return { face: null, stats: null, formula: null };
+  if (recipe.result?.defId) { const u = unitCard(recipe.result.defId); return { face: u, stats: u, formula: null }; }
+  const named = recipe.inputs.find((i: any) => i.defId);
+  const r = recipe.result ?? {};
+  return {
+    face: named ? unitCard(named.defId) : null,
+    stats: null,
+    formula: { hp: String(r.hp ?? "—"), atk: String(r.atk ?? "—"), def: String(r.def ?? "—") },
+  };
+};
+const sideGroup = (ids: string[]) => { const m = new Map<string, number>(); for (const i of ids) m.set(i, (m.get(i) ?? 0) + 1); return [...m].map(([id, n]) => { const c = reg.sideCards.get(id)!; const recipe = c.recipe ? reg.fusions.get(c.recipe) : null; const f = sideFace(c, recipe); return { ...c, count: n, resultCard: c.result ? unitCard(c.result) : null, faceCard: f.face, faceStats: f.stats, resultFormula: f.formula, materials: recipe ? recipe.inputs.map((i: any) => i.defId ? reg.unit(i.defId).name : (i.roles ?? []).join("+")) : null, recipeText: recipe?.text ?? null }; }).sort((a, c) => c.stars - a.stars); };
 
 const board = rollBoard(reg, k, deckList);
 acceptContract(reg, k, board.find((c) => c.stars >= 5)?.id ?? board[0]!.id, deckList);

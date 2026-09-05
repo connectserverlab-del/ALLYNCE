@@ -43,7 +43,8 @@ def uri(rel, kind):
 
 UI = "art/ui"
 ICONS = ["BLD-BARRACKS", "BLD-BUILD", "BLD-FORGE", "BLD-KEEP", "BLD-RECRUIT", "BLD-RESEARCH",
-         "RES-IRON", "RES-KOKU", "RES-SILVER", "RES-TIMBER", "UI-BANNER", "UI-DRAW"]
+         "RES-IRON", "RES-KOKU", "RES-SILVER", "RES-TIMBER", "UI-BANNER", "UI-DRAW",
+         "STAT-LIFE", "STAT-ATK", "STAT-DEF"]
 
 
 def main(out_path):
@@ -55,6 +56,8 @@ def main(out_path):
             "PLAIN": uri(f"{UI}/CARD-PAPER-PLAIN_V01.png", "frame"),
             "INKED": uri(f"{UI}/CARD-PAPER-INKED_V01.png", "frame"),
             "SEALED": uri(f"{UI}/CARD-PAPER-SEALED_V01.png", "frame"),
+            "RITE": uri(f"{UI}/CARD-PAPER-RITE_V01.png", "frame"),
+            "FUSION": uri(f"{UI}/CARD-PAPER-FUSION_V01.png", "frame"),
         },
         "star": {"on": uri(f"{UI}/STAR_FILLED_V01.png", "star"),
                  "off": uri(f"{UI}/STAR_EMPTY_V01.png", "star")},

@@ -45,8 +45,18 @@ That is why it is tens of megabytes and why the packer downscales as hard as it 
   the top band (6-17%), the three stats sit between the rules at 68-78%, and the star row closes at 79.5%, so
   no type ever lands on a rule or on the scorched foot where it cannot be read.
 - The three stats are a three-column grid, not two values pushed to the ends. Equal columns cannot shove a
-  four-digit number under the frame's inner bevel the way justified ends did. The small face carries name, art,
-  stats and stars and nothing else; role, rank and summon cost live in the detail panel, which has room.
+  four-digit number under the frame's inner bevel the way justified ends did. Each carries a painted icon — a
+  heart, a sword, a shield — because at nine pixels a word label is a smudge, and shape plus colour still tells
+  three numbers apart. The small face carries name, art, stats and stars and nothing else; role, rank and
+  summon cost live in the detail panel, which has room.
+- **Three card stocks, not one.** Soldiers keep the sealed mulberry paper; a ritual is green, a fusion violet,
+  so a rite is never mistaken for a unit at a glance. Each painting puts its picture window and lower panel
+  somewhere different, so a stock carries its own layout as custom properties rather than one set of
+  percentages pretending to fit all three, and every stock is cropped to the same card proportions — a grid of
+  cards in three shapes reads as a mistake. A fourth stock is one more row in that table.
+- A ritual card shows the monster it brings out. Three of the four fusions have no such monster: they derive
+  the new body from whatever fed them, so the card shows the first named material and the *formula* — sum,
+  max+0.20 — rather than numbers it does not have.
 - Faction names come from `data/factions/factions.json` through the export rather than a map in the template, so
   a division added tomorrow shows its real name instead of "undefined". Only the four host armies keep a short
   label, and new factions borrow the nearest existing accent hue rather than adding one.
