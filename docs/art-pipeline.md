@@ -23,6 +23,9 @@
    1024 px cutout and a 1024 px JPEG of the untouched concept. Higgsfield's own `remove_background` is the
    fallback when a frame defeats it; a frame with visible brush texture in its background is not worth
    rescuing — regenerate it with *absolutely no visible brush strokes or paint texture in the background*.
+   Then run `python3 scripts/audit-cutouts.py`, which fails any cutout still opaque across the whole frame
+   (nothing was lifted) or opaque almost nowhere (the figure went with the ground). It exits non-zero, so it
+   can gate a build; the eye cannot be trusted here, because a pale slab at thumbnail size reads as a costume.
 5. Only after approval: attach the approved image as the reference and generate the construction sheet, then the action-pose sheet (suffix prompts in the engineering brief §20).
 6. Hand the cutout to the Unity prototype. `data/units/units.json` carries an `art.cutout` path per unit.
 

@@ -97,6 +97,13 @@ background-coloured pockets the border fill could not reach — the inside of a 
 arm — are cleared separately. A frame with visible brush texture in the background is not worth rescuing;
 regenerate it with *absolutely no visible brush strokes or paint texture in the background* added to the prompt.
 
+Check the result with arithmetic rather than with the eye. `python3 scripts/audit-cutouts.py` reports the
+share of each cutout that is still opaque and fails anything at or above 0.95 (the fill cleared nothing, so
+the card draws a pale slab) or at or below 0.12 (the fill ate the figure along with the ground). One asset
+shipped fully opaque and sat on the deck screen for several passes: the registry counts a file as present
+because it exists, and at thumbnail size on a contact sheet a background-coloured rectangle reads as a light
+costume. Run the audit after every cutting round, before the contact sheet.
+
 ## Wendigo-themed creatures
 
 The Winter Famine division is drawn as **original famine-spirits**, not as a depiction of the figure from
