@@ -11,6 +11,7 @@ export interface DeckRules {
   copyLimitByStar: Record<string, number>;
   primaryFactionMin: number;
   tributeByStar: Record<string, number | null>;
+  reforgeCostByStar: Record<string, number>;
 }
 export interface SideCard {
   id: string; name: string; kind: "ritual" | "fusion"; stars: number; text: string; copyLimit: number;

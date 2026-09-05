@@ -64,6 +64,8 @@ where they conflict.**
   research tree, three recruitment banners with pity, and carry-over into battle as named modifiers.
 - New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
 - Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
+- Duplicate-card reforge: spend several copies of a card for one copy of a same-faction card one star above it,
+  so a duplicate a deck can no longer use still has somewhere to go.
 
 ## Next, in priority order
 
@@ -102,3 +104,6 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-05: Proposal — gate which reforge targets show up by how far the holding's own faction has climbed its
+  rank ladder (a holding that has never fielded a Marshal could not reforge toward one), so the rank ladders and
+  the card collection reinforce each other instead of running as separate systems.

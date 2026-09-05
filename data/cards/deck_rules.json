@@ -40,13 +40,26 @@
     "9": 3,
     "10": null
   },
+  "reforgeCostByStar": {
+    "1": 5,
+    "2": 4,
+    "3": 4,
+    "4": 3,
+    "5": 3,
+    "6": 3,
+    "7": 2,
+    "8": 2,
+    "9": 2,
+    "10": 0
+  },
   "notes": {
     "tribute": "Tributes are your own deployed units sacrificed to summon the card. A null tribute cost means the unit cannot be summoned from the main deck at all: it arrives only through a ritual or fusion card in the side deck.",
     "copyLimit": "A zero copy limit means the card may not sit in the main deck. Named unique units are always limited to one regardless of star.",
     "sideDeck": "The side deck holds only ritual and fusion cards. They are never drawn; they are played from the side deck when their requirements are met on the field.",
     "primaryFaction": "A deck is led by one faction: at least 40 of its 100 cards must belong to it. The rest may be sworn allies, so a Samurai host can field borrowed Knight guns and hired Cobalt Conclave magi without becoming their deck. Raise this toward 60 once each host army has fifteen or more distinct cards.",
     "cardPool": "Copy limits are generous at the low stars because a hundred-card deck is mostly line soldiers. As the card pool grows these limits should tighten.",
-    "ownership": "A copy limit is a ceiling, not a grant. When a deck is validated against a holding's collection, every card is also capped at the copies that holding actually owns; owning one copy never entitles a deck to several. Copies arrive from recruitment draws and from wanted warrants."
+    "ownership": "A copy limit is a ceiling, not a grant. When a deck is validated against a holding's collection, every card is also capped at the copies that holding actually owns; owning one copy never entitles a deck to several. Copies arrive from recruitment draws and from wanted warrants.",
+    "reforge": "Reforging spends copies of one card in the collection to gain one copy of a same-faction card exactly one star higher. The cost is by the source card's star, not the target's. Ten-star cards are never a valid reforge source or target: they arrive only by ritual or fusion."
   },
   "primaryFactionMin": 40
 }
