@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { newBattle, deploy, KNI, SAM, blob, reg } from "./helpers.js";
-import { validateDeck, buildStarterDeck, DeckState, tributeCost, copyLimit, summonFromHand, ritualSummon, fusionSummon, checkRitual, playableSideCards, summonZone, starOf } from "../src/cards.js";
+import { validateDeck, buildStarterDeck, DeckState, tributeCost, copyLimit, summonFromHand, ritualSummon, fusionSummon, checkRitual, playableSideCards, summonZone, starOf, moveCard } from "../src/cards.js";
 import { Rng } from "../src/rng.js";
 
 const deckState = (list = buildStarterDeck(reg, "KNI"), seed = 3) => new DeckState(list, new Rng(seed), reg.deckRules);
@@ -57,6 +57,45 @@ describe("deck construction", () => {
     a.draw(10);
     expect(a.hand).toHaveLength(7);
     expect(a.graveyard.length).toBeGreaterThan(0);
+  });
+});
+
+describe("editing a deck list card by card", () => {
+  it("adds and removes one copy at a time, capped by the star limit", () => {
+    const base = buildStarterDeck(reg, "KNI");
+    const trimmed = { ...base, main: base.main.filter((id) => id !== "KNI_LEVY_BASTION-SQUIRE") };
+    const before = trimmed.main.filter((id) => id === "KNI_LEVY_BASTION-SQUIRE").length;
+    const added = moveCard(reg, trimmed, "main", "KNI_LEVY_BASTION-SQUIRE", 1);
+    expect(added.main.filter((id) => id === "KNI_LEVY_BASTION-SQUIRE").length).toBe(before + 1);
+    const removed = moveCard(reg, added, "main", "KNI_LEVY_BASTION-SQUIRE", -1);
+    expect(removed.main).toEqual(trimmed.main);
+    // KNI_LEVY_BASTION-SQUIRE is a 1-star card, limited to 20 copies; an empty deck has room to prove it
+    const empty = { ...base, main: [] as string[] };
+    let flooded = empty;
+    for (let i = 0; i < 25; i++) flooded = moveCard(reg, flooded, "main", "KNI_LEVY_BASTION-SQUIRE", 1);
+    expect(flooded.main).toHaveLength(20);
+  });
+  it("never adds past a full main or side deck, and never removes a card that is not there", () => {
+    const base = buildStarterDeck(reg, "KNI");
+    expect(moveCard(reg, base, "main", "KNI_FOOT_BASTION-MAN-AT-ARMS", 1).main).toHaveLength(100);
+    expect(moveCard(reg, base, "side", "SIDE_FUS_PAIRED-LINE", 1).side).toHaveLength(20);
+    expect(moveCard(reg, base, "main", "SAM_LORD_ASHFALL-DAIMYO", -1)).toBe(base);
+  });
+  it("never adds more copies than the collection holds", () => {
+    const base = buildStarterDeck(reg, "KNI");
+    const trimmed = { ...base, main: base.main.filter((id) => id !== "KNI_LEVY_BASTION-SQUIRE") };
+    const collection = { "KNI_LEVY_BASTION-SQUIRE": 1 };
+    const added = moveCard(reg, trimmed, "main", "KNI_LEVY_BASTION-SQUIRE", 1, { collection });
+    expect(added.main.filter((id) => id === "KNI_LEVY_BASTION-SQUIRE").length).toBe(1);
+    expect(moveCard(reg, added, "main", "KNI_LEVY_BASTION-SQUIRE", 1, { collection })).toBe(added);
+  });
+  it("respects the side card's own copy limit", () => {
+    const base = buildStarterDeck(reg, "SAM");
+    const trimmed = { ...base, side: base.side.filter((id) => id !== "SIDE_RIT_IRON-TIDE") };
+    const limit = reg.sideCards.get("SIDE_RIT_IRON-TIDE")!.copyLimit;
+    let flooded = trimmed;
+    for (let i = 0; i < limit + 5; i++) flooded = moveCard(reg, flooded, "side", "SIDE_RIT_IRON-TIDE", 1);
+    expect(flooded.side.filter((id) => id === "SIDE_RIT_IRON-TIDE").length).toBe(limit);
   });
 });
 

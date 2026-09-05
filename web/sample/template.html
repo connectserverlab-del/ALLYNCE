@@ -177,6 +177,13 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 
 .card .cnt{position:absolute;right:5%;top:4%;background:#12141a;border:1px solid var(--edge-2);color:var(--parch);font-family:"JetBrains Mono";font-size:10px;padding:1px 5px;box-shadow:0 2px 5px rgba(0,0,0,.6)}
 .card.locked{opacity:.55}
+.card .own{position:absolute;left:5%;top:4%;background:#12141a;border:1px solid var(--edge-2);color:var(--dim);font-family:"JetBrains Mono";font-size:9.5px;padding:1px 5px;box-shadow:0 2px 5px rgba(0,0,0,.6)}
+.card .stepper{position:absolute;right:5%;top:4%;display:flex;align-items:center;gap:2px;background:#12141a;border:1px solid var(--edge-2);padding:1px 3px;box-shadow:0 2px 5px rgba(0,0,0,.6)}
+.card .stepper button{width:15px;height:15px;line-height:13px;text-align:center;font-family:"JetBrains Mono";font-size:11px;color:var(--parch);border:1px solid var(--edge-2);background:#1c2027}
+.card .stepper button:disabled{opacity:.32;cursor:default}
+.card .stepper b{font-family:"JetBrains Mono";font-size:10px;color:var(--parch);min-width:12px;text-align:center}
+.errbox{border-color:var(--bad)!important}
+.errbox .line{color:var(--bad)}
 .detail{position:fixed;inset:0;background:rgba(6,7,9,.78);display:none;align-items:center;justify-content:center;z-index:40;padding:24px}
 .detail.on{display:flex}
 .detail .box{max-width:760px;width:100%;display:grid;grid-template-columns:260px 1fr;gap:0}
@@ -309,6 +316,52 @@ const tok = (c)=> A.tokens[c.id] || A.tokens[c.defId] || null;
 const starRow=(n,all=false)=>Array.from({length:all?10:n},(_,i)=>`<img src="${i<n?A.star.on:A.star.off}" class="${i<n?'':'off'}" alt="">`).join('');
 const esc = (s)=>String(s).replace(/[&<>"]/g,(m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 const secs = (s)=> s>=3600? Math.round(s/360)/10+' h' : s>=60? Math.round(s/60)+' min' : Math.round(s)+' s';
+
+/* ---------------- deck editor state ----------------
+   The main and side decks the player is building, edited card by card in memory. Every card that
+   could ever go in either one lives in CATALOG / SIDECAT regardless of whether it is sleeved right
+   now, so the editor can browse the whole collection rather than only what shipped in the starter deck. */
+const CATALOG = new Map(D.deck.catalog.map(c=>[c.id,c]));
+const SIDECAT = new Map(D.deck.sideCatalog.map(c=>[c.id,c]));
+const COLLECTION = D.deck.collection || {};
+let mainIds = [...D.deck.main];
+let sideIds = [...D.deck.side];
+const ownedOf = (id)=> COLLECTION[id] ?? 0;
+const countMap = (ids)=>{ const m=new Map(); for(const id of ids) m.set(id,(m.get(id)||0)+1); return m; };
+const effectiveMainLimit = (c)=> Math.min(c.limit, ownedOf(c.id));
+function roomForMain(c){ if(mainIds.length>=D.rules.mainDeckSize) return 0; return Math.max(0, effectiveMainLimit(c)-(countMap(mainIds).get(c.id)||0)); }
+function roomForSide(c){ if(sideIds.length>=D.rules.sideDeckSize) return 0; return Math.max(0, c.copyLimit-(countMap(sideIds).get(c.id)||0)); }
+function addMain(id){ const c=CATALOG.get(id); if(!c||roomForMain(c)<=0) return; mainIds.push(id); renderDeck(); }
+function removeMain(id){ const i=mainIds.indexOf(id); if(i<0) return; mainIds.splice(i,1); renderDeck(); }
+function addSide(id){ const c=SIDECAT.get(id); if(!c||roomForSide(c)<=0) return; sideIds.push(id); renderRites(); }
+function removeSide(id){ const i=sideIds.indexOf(id); if(i<0) return; sideIds.splice(i,1); renderRites(); }
+function resetMain(){ mainIds=[...D.deck.main]; renderDeck(); }
+function resetSide(){ sideIds=[...D.deck.side]; renderRites(); }
+/** Mirrors validateDeck's main-deck rules in core/src/cards.ts. The page has no build step to import
+    the engine at runtime, so this is the same arithmetic kept in step by hand: deck size, the leading
+    faction's minimum, each card's star-based copy limit, and the collection cap on top of it. */
+function validateMain(){
+  const R=D.rules, errors=[], starCurve={}, missing={}, counts=countMap(mainIds);
+  for(const id of mainIds){ const c=CATALOG.get(id); if(c) starCurve[c.stars]=(starCurve[c.stars]||0)+1; }
+  if(mainIds.length!==R.mainDeckSize) errors.push(`Main deck holds ${mainIds.length} cards; it must hold exactly ${R.mainDeckSize}`);
+  const primary=mainIds.filter(id=>CATALOG.get(id)?.faction===D.deck.faction).length;
+  if(primary<R.primaryFactionMin) errors.push(`Only ${primary} cards belong to ${FACNAME[D.deck.faction]}; a deck led by that faction needs at least ${R.primaryFactionMin}`);
+  for(const [id,n] of counts){
+    const c=CATALOG.get(id); if(!c) continue;
+    if(c.limit===0) errors.push(`${c.name} cannot sit in the main deck (${c.summonOnly?'summon-only':c.stars+'-star'}); it belongs to a ritual or fusion card`);
+    else if(n>c.limit) errors.push(`${c.name} appears ${n} times; a ${c.stars}-star card is limited to ${c.limit}`);
+    const owned=ownedOf(id);
+    if(n>owned){ missing[id]=n-owned; errors.push(owned===0?`You hold no copies of ${c.name}; capture one before sleeving it`:`${c.name} appears ${n} times but you hold only ${owned} cop${owned===1?'y':'ies'}`); }
+  }
+  return {ok:errors.length===0, errors, mainCount:mainIds.length, starCurve, missing};
+}
+/** Mirrors validateDeck's side-deck rules: exact size, and each card's own copy limit. */
+function validateSide(){
+  const R=D.rules, errors=[], counts=countMap(sideIds);
+  if(sideIds.length!==R.sideDeckSize) errors.push(`Side deck holds ${sideIds.length} cards; it must hold exactly ${R.sideDeckSize}`);
+  for(const [id,n] of counts){ const c=SIDECAT.get(id); if(c && n>c.copyLimit) errors.push(`${c.name} appears ${n} times; it is limited to ${c.copyLimit}`); }
+  return {ok:errors.length===0, errors, sideCount:sideIds.length};
+}
 
 /* ---------------- rail ---------------- */
 const SCREENS = [['field','Field','UI-BANNER'],['deck','Deck','UI-DRAW'],['rites','Rites','BLD-RESEARCH'],['writs','Writs','BLD-RECRUIT'],['hold','Hold','BLD-KEEP'],['lands','Lands','BLD-BUILD']];
@@ -483,7 +536,7 @@ function renderField(){
 }
 function renderCmd(){
   const B=D.battle, u=B.units.find(x=>x.uid===selUid)||B.units[0], isSel=u.uid===B.selected.uid, S=B.selected;
-  const card=isSel?S:(D.deck.cards.find(c=>c.id===u.defId)||{stars:u.stars,roles:u.roles,atk:0,def:0,mov:0,range:0,abilities:[],tribute:0,capacityCost:0});
+  const card=isSel?S:(CATALOG.get(u.defId)||{stars:u.stars,roles:u.roles,atk:0,def:0,mov:0,range:0,abilities:[],tribute:0,capacityCost:0});
   const col=cssv(FAC[u.faction]);
   const stars=(n)=>starRow(n);
   const bd=isSel?S.atk:null;
@@ -522,7 +575,7 @@ function renderCmd(){
      <div class="hd" style="margin-top:9px">Rites ready</div>
      ${B.playableSide.length?B.playableSide.map(p=>`<div style="font-size:12.5px;margin-top:3px"><b class="sc" style="color:var(--star)">${esc(p.name)}</b> <span class="faint">— ${esc(p.materials.join(', '))}</span></div>`).join(''):'<div class="faint" style="font-size:12.5px">None playable this turn.</div>'}
    </div>`;
-  $('cmd').querySelectorAll('.mini').forEach(m=>m.onclick=()=>openCard(D.deck.cards.find(c=>c.id===m.dataset.id)||B.hand.find(c=>c.id===m.dataset.id)));
+  $('cmd').querySelectorAll('.mini').forEach(m=>m.onclick=()=>openCard(CATALOG.get(m.dataset.id)));
 }
 function miniCard(c){
   const t=A.tokens[c.id];
@@ -535,51 +588,58 @@ function miniCard(c){
 /* ---------------- deck ---------------- */
 let deckFilter='all', deckSort='stars';
 function renderDeck(){
-  const V=D.deck.validation, R=D.rules;
-  const cards=D.deck.cards.filter(c=> deckFilter==='all' || (deckFilter==='own'? c.faction===D.deck.faction : deckFilter===String(c.faction)))
-    .sort((a,b)=> deckSort==='stars'? a.stars-b.stars||a.name.localeCompare(b.name) : deckSort==='count'? b.count-a.count : a.name.localeCompare(b.name));
+  const V=validateMain(), R=D.rules, counts=countMap(mainIds);
+  const cards=[...CATALOG.values()].filter(c=> deckFilter==='all' || (deckFilter==='own'? c.faction===D.deck.faction : deckFilter===String(c.faction)))
+    .sort((a,b)=> deckSort==='stars'? a.stars-b.stars||a.name.localeCompare(b.name) : deckSort==='count'? (counts.get(b.id)||0)-(counts.get(a.id)||0) : a.name.localeCompare(b.name));
   const curve=Object.entries(V.starCurve).sort((a,b)=>+a[0]-+b[0]);
-  const maxC=Math.max(...curve.map(c=>c[1]));
-  const factions=[...new Set(D.deck.cards.map(c=>c.faction))];
+  const maxC=Math.max(1,...curve.map(c=>c[1]));
+  const factions=[...new Set([...CATALOG.values()].map(c=>c.faction))];
+  const primary=mainIds.filter(id=>CATALOG.get(id)?.faction===D.deck.faction).length;
   $('deckpane').innerHTML=`
    <div class="head">
      <div><h2 class="sc">${esc(D.deck.name)}</h2>
        <p>One hundred cards, led by the ${FACNAME[D.deck.faction]}. Stars set what a card costs to bring out: up to three summon free, four to six take one tribute from the field, seven and eight take two, nine takes three, and ten never comes from this deck at all.</p>
-       <p class="faint" style="font-size:13px">Every copy sleeved here is a card the hold physically owns. The copy limit is a ceiling, not a grant: hold one and you may run one. More copies come from the recruitment bell, or off the field on a warrant.</p></div>
+       <p class="faint" style="font-size:13px">Every copy sleeved here is a card the hold physically owns. Use − and + on a card to unsleeve or sleeve a copy; the copy limit is a ceiling, not a grant, so + stops working once you have run out of either the star limit or your own copies. More copies come from the recruitment bell, or off the field on a warrant.</p></div>
      <div style="text-align:right">
        <div class="mono" style="font-size:22px">${V.mainCount}<span class="faint" style="font-size:14px"> / ${R.mainDeckSize}</span></div>
-       <div class="faint" style="font-size:12px">${V.ok?'Legal for play':'Illegal'} · ${D.deck.cards.length} distinct · ${D.deck.main.filter(id=>true).length&&''}${(D.deck.cards.filter(c=>c.faction===D.deck.faction).reduce((s,c)=>s+c.count,0))} ${FACNAME[D.deck.faction]}</div>
+       <div class="faint" style="font-size:12px">${V.ok?'Legal for play':'Illegal — see below'} · ${counts.size} distinct · ${primary} ${FACNAME[D.deck.faction]}</div>
+       <button class="chip" id="deckReset" style="margin-top:6px">Reset to starter</button>
      </div>
    </div>
+   ${V.errors.length?`<div class="req errbox" style="margin-bottom:14px">${V.errors.slice(0,6).map(e=>`<div class="line"><span>${esc(e)}</span></div>`).join('')}${V.errors.length>6?`<div class="line faint" style="color:var(--dim)">and ${V.errors.length-6} more…</div>`:''}</div>`:''}
    <div style="display:flex;gap:22px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px">
      <div><div class="hd" style="margin-bottom:16px">Star curve</div>
        <div class="curve">${curve.map(([s,n])=>`<div style="height:${Math.max(4,n/maxC*44)}px"><b>${n}</b><em>${s}★</em></div>`).join('')}</div></div>
      <div><div class="hd" style="margin-bottom:5px">Show</div><div class="chips">
        <button class="chip ${deckFilter==='all'?'on':''}" data-f="all">All</button>
        <button class="chip ${deckFilter==='own'?'on':''}" data-f="own">${FACNAME[D.deck.faction]} only</button>
-       ${factions.filter(f=>f!==D.deck.faction).map(f=>`<button class="chip ${deckFilter===f?'on':''}" data-f="${f}">${FACNAME[f]}</button>`).join('')}</div></div>
+       ${factions.filter(f=>f!==D.deck.faction).map(f=>`<button class="chip ${deckFilter===f?'on':''}" data-f="${f}">${FACNAME[f]||f}</button>`).join('')}</div></div>
      <div><div class="hd" style="margin-bottom:5px">Sort</div><div class="chips">
        ${[['stars','Stars'],['count','Copies'],['name','Name']].map(([k,l])=>`<button class="chip ${deckSort===k?'on':''}" data-s="${k}">${l}</button>`).join('')}</div></div>
    </div>
-   <div class="grid">${cards.map(cardHTML).join('')}</div>`;
+   <div class="grid">${cards.map(c=>cardHTML(c, counts.get(c.id)||0)).join('')}</div>`;
   $('deckpane').querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{deckFilter=b.dataset.f;renderDeck();});
   $('deckpane').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{deckSort=b.dataset.s;renderDeck();});
-  $('deckpane').querySelectorAll('.card').forEach(c=>c.onclick=()=>openCard(D.deck.cards.find(x=>x.id===c.dataset.id)));
+  $('deckpane').querySelector('#deckReset').onclick=resetMain;
+  $('deckpane').querySelectorAll('.card').forEach(elm=>{
+    elm.onclick=(e)=>{ if(e.target.closest('.stepper')) return; openCard(CATALOG.get(elm.dataset.id)); };
+    elm.querySelector('[data-act="-"]').onclick=(e)=>{e.stopPropagation();removeMain(elm.dataset.id);};
+    elm.querySelector('[data-act="+"]').onclick=(e)=>{e.stopPropagation();addMain(elm.dataset.id);};
+  });
 }
-function cardHTML(c){
-  const t=A.tokens[c.id];
-  return `<div class="card" data-id="${c.id}">
+function cardHTML(c, count){
+  const t=A.tokens[c.id], owned=ownedOf(c.id), room=roomForMain(c);
+  return `<div class="card ${count===0&&owned===0?'locked':''}" data-id="${c.id}">
     <img class="fr" src="${FRAME(c)}" alt="">
     <div class="pips">${starRow(c.stars)}</div>
     <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
     <div class="nm">${esc(c.name)}</div>
     <div class="sub">${esc(c.roles[0])}${c.factionRank?' · '+esc(c.factionRank.replace(/_/g,' ').toLowerCase()):''}</div>
     <div class="nums"><span>${c.atk}</span><span class="faint">${c.tribute===null?'RITE':c.tribute?('T'+c.tribute):'—'}</span><span>${c.def}</span></div>
-    ${c.count>1?`<div class="cnt">×${c.count}</div>`:''}
+    <div class="own">own ${owned}</div>
+    <div class="stepper" data-stepper="${c.id}"><button data-act="-" ${count<=0?'disabled':''}>−</button><b>${count}</b><button data-act="+" ${room<=0?'disabled':''}>+</button></div>
   </div>`;
 }
-/** How many of this card the hold owns, so the deck screen never shows copies out of thin air. */
-const ownedOf = (id)=> (D.deck.owned||{})[id] ?? 0;
 function openCard(c){
   if(!c)return;
   const t=A.tokens[c.id];
@@ -609,25 +669,44 @@ $('detail').onclick=(e)=>{if(e.target===$('detail'))$('detail').classList.remove
 addEventListener('keydown',e=>{if(e.key==='Escape')$('detail').classList.remove('on');});
 
 /* ---------------- rites (side deck) ---------------- */
+let sideFilter='all';
 function renderRites(){
-  const side=D.deck.side, total=side.reduce((s,c)=>s+c.count,0);
+  const V=validateSide(), R=D.rules, counts=countMap(sideIds);
   const ready=new Set(D.battle.playableSide.map(p=>p.id));
+  const cards=[...SIDECAT.values()].filter(c=> sideFilter==='all' || c.kind===sideFilter);
   $('ritespane').innerHTML=`
    <div class="head"><div><h2 class="sc">Rites and Convergences</h2>
-     <p>Twenty cards that never enter the draw pile. They are played straight from the side deck when the field already holds what they demand: a ritual burns your own units for their star total, a fusion locks named units together into one body. Nothing here is drawn, and nothing here is free.</p></div>
-     <div style="text-align:right"><div class="mono" style="font-size:22px">${total}<span class="faint" style="font-size:14px"> / ${D.rules.sideDeckSize}</span></div>
-     <div class="faint" style="font-size:12px">${side.length} distinct · ${ready.size} playable right now</div></div></div>
-   <div class="grid">${side.map(c=>{
-     const rc=c.resultCard, t=rc?A.tokens[rc.id]:null, isReady=ready.has(c.id);
-     return `<div class="card ${isReady?'':'locked'}" data-rid="${c.id}">
-       <img class="fr" src="${A.frames.SEALED}" alt="">
-       <div class="pips">${starRow(c.stars)}</div>
-       <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
-       <div class="nm">${esc(c.name)}</div>
-       <div class="sub">${c.kind==='ritual'?'Ritual':'Fusion'}${isReady?' · ready':''}</div>
-       <div class="nums"><span>${c.kind==='ritual'?c.starCost+'★':'materials'}</span><span class="faint">${c.kind==='ritual'?(c.theme||'any'):''}</span></div>
-       ${c.count>1?`<div class="cnt">×${c.count}</div>`:''}</div>`;}).join('')}</div>`;
-  $('ritespane').querySelectorAll('[data-rid]').forEach(el2=>el2.onclick=()=>openRite(side.find(x=>x.id===el2.dataset.rid)));
+     <p>Twenty cards that never enter the draw pile. They are played straight from the side deck when the field already holds what they demand: a ritual burns your own units for their star total, a fusion locks named units together into one body. Nothing here is drawn, and nothing here is free.</p>
+     <p class="faint" style="font-size:13px">Use − and + to trim or deepen the side deck; unlike the main deck, a rite costs nothing to sleeve beyond its own copy limit.</p></div>
+     <div style="text-align:right"><div class="mono" style="font-size:22px">${V.sideCount}<span class="faint" style="font-size:14px"> / ${R.sideDeckSize}</span></div>
+     <div class="faint" style="font-size:12px">${V.ok?'Legal':'Illegal — see below'} · ${ready.size} playable right now</div>
+     <button class="chip" id="sideReset" style="margin-top:6px">Reset to starter</button></div></div>
+   ${V.errors.length?`<div class="req errbox" style="margin-bottom:14px">${V.errors.map(e=>`<div class="line"><span>${esc(e)}</span></div>`).join('')}</div>`:''}
+   <div class="chips" style="margin-bottom:14px">
+     <button class="chip ${sideFilter==='all'?'on':''}" data-sf="all">All</button>
+     <button class="chip ${sideFilter==='ritual'?'on':''}" data-sf="ritual">Ritual</button>
+     <button class="chip ${sideFilter==='fusion'?'on':''}" data-sf="fusion">Fusion</button>
+   </div>
+   <div class="grid">${cards.map(c=>sideCardHTML(c, counts.get(c.id)||0, ready.has(c.id))).join('')}</div>`;
+  $('ritespane').querySelectorAll('[data-sf]').forEach(b=>b.onclick=()=>{sideFilter=b.dataset.sf;renderRites();});
+  $('ritespane').querySelector('#sideReset').onclick=resetSide;
+  $('ritespane').querySelectorAll('.card').forEach(elm=>{
+    elm.onclick=(e)=>{ if(e.target.closest('.stepper')) return; openRite(SIDECAT.get(elm.dataset.rid)); };
+    elm.querySelector('[data-act="-"]').onclick=(e)=>{e.stopPropagation();removeSide(elm.dataset.rid);};
+    elm.querySelector('[data-act="+"]').onclick=(e)=>{e.stopPropagation();addSide(elm.dataset.rid);};
+  });
+}
+function sideCardHTML(c, count, isReady){
+  const rc=c.resultCard, t=rc?A.tokens[rc.id]:null, room=roomForSide(c);
+  return `<div class="card ${count===0?'locked':''}" data-rid="${c.id}">
+    <img class="fr" src="${A.frames.SEALED}" alt="">
+    <div class="pips">${starRow(c.stars)}</div>
+    <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
+    <div class="nm">${esc(c.name)}</div>
+    <div class="sub">${c.kind==='ritual'?'Ritual':'Fusion'}${isReady?' · ready':''}</div>
+    <div class="nums"><span>${c.kind==='ritual'?c.starCost+'★':'materials'}</span><span class="faint">${c.kind==='ritual'?(c.theme||'any'):''}</span></div>
+    <div class="stepper" data-stepper="${c.id}"><button data-act="-" ${count<=0?'disabled':''}>−</button><b>${count}</b><button data-act="+" ${room<=0?'disabled':''}>+</button></div>
+  </div>`;
 }
 function openRite(c){
   const rc=c.resultCard, t=rc?A.tokens[rc.id]:null;
@@ -638,7 +717,7 @@ function openRite(c){
       <div class="nm">${esc(c.name)}</div><div class="sub">${c.kind==='ritual'?'Ritual':'Fusion'}</div></div>
     <div style="position:relative"><button class="close">×</button>
       <h3 class="sc">${esc(c.name)}</h3>
-      <div class="faint" style="font-size:13px;margin-bottom:8px">${c.stars}★ ${c.kind} card · ${c.count} in the side deck</div>
+      <div class="faint" style="font-size:13px;margin-bottom:8px">${c.stars}★ ${c.kind} card · ${countMap(sideIds).get(c.id)||0} in the side deck</div>
       <p style="font-size:14px;color:var(--dim);margin:0 0 8px">${esc(c.text)}</p>
       <div class="req">
         ${c.kind==='ritual'?`
