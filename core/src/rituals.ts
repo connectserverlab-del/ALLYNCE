@@ -16,7 +16,7 @@ export interface RitualCircle {
   damagedThisRound: Set<string>; disruption: number; assistBonus: number;
   lastCalc?: RitualCalc;
 }
-export interface RitualCalc { channeling: number; leaderKnowledge: number; leaderLanguage: number; teamAffinity: number; assist: number; disruption: number; total: number; participants: string[] }
+export interface RitualCalc { channeling: number; leaderKnowledge: number; leaderLanguage: number; teamAffinity: number; assist: number; holding: number; disruption: number; total: number; participants: string[] }
 
 export function createRitual(b: Battle, r: Omit<RitualCircle, "progress" | "state" | "heldRounds" | "unstableStacks" | "damagedThisRound" | "disruption" | "assistBonus" | "participantUids">): RitualCircle {
   const circle: RitualCircle = { ...r, progress: 0, state: "Inactive", heldRounds: 0, unstableStacks: 0, damagedThisRound: new Set(), disruption: 0, assistBonus: 0, participantUids: [] };
@@ -42,7 +42,7 @@ export function onRitualistDamaged(b: Battle, u: UnitState): void {
   for (const r of b.rituals.values()) if (r.side === u.side) r.damagedThisRound.add(u.uid);
 }
 
-/** Progress = Sum(Channeling) + LeaderKnowledge + LeaderLanguage + TeamAffinity + AssistBonuses - Disruption */
+/** Progress = Sum(Channeling) + LeaderKnowledge + LeaderLanguage + TeamAffinity + AssistBonuses + Holding - Disruption */
 export function computeRitualProgress(b: Battle, r: RitualCircle): RitualCalc {
   const parts = ritualParticipants(b, r);
   const leader = parts.find((p) => p.uid === r.leaderUid) ?? parts.slice().sort((a, c) => (b.def(c).ritual!.knowledge + b.def(c).ritual!.language) - (b.def(a).ritual!.knowledge + b.def(a).ritual!.language))[0];
@@ -56,9 +56,11 @@ export function computeRitualProgress(b: Battle, r: RitualCircle): RitualCalc {
   teamAffinity = parts.length ? Math.floor(teamAffinity / parts.length) : 0;
   const leaderKnowledge = leader ? b.def(leader).ritual!.knowledge : 0;
   const leaderLanguage = leader ? b.def(leader).ritual!.language : 0;
+  // the holding's completed research (RitualProgress effect) speeds channeling, same as any other named contribution
+  const holding = parts.length ? (b.kingdomEffects.get(r.side)?.ritualProgress ?? 0) : 0;
   const disruption = r.disruption + r.unstableStacks; // instability raises the effect of enemy disruption
-  const total = parts.length ? Math.max(0, channeling + leaderKnowledge + leaderLanguage + teamAffinity + r.assistBonus - disruption) : 0;
-  return { channeling, leaderKnowledge, leaderLanguage, teamAffinity, assist: r.assistBonus, disruption, total, participants: parts.map((p) => p.uid) };
+  const total = parts.length ? Math.max(0, channeling + leaderKnowledge + leaderLanguage + teamAffinity + r.assistBonus + holding - disruption) : 0;
+  return { channeling, leaderKnowledge, leaderLanguage, teamAffinity, assist: r.assistBonus, holding, disruption, total, participants: parts.map((p) => p.uid) };
 }
 
 /** Objective Phase tick for one ritual. */

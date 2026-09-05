@@ -1,8 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { newBattle } from "./helpers.js";
+import { newBattle, kingdomWithResearch } from "./helpers.js";
 import { createRitual, computeRitualProgress, tickRitual, releaseRitual, disruptRitual, collapse } from "../src/rituals.js";
 import { resolveAttack } from "../src/combat.js";
 import { hexDistance } from "../src/hex.js";
+import { applyKingdom } from "../src/kingdom.js";
 
 function setupCircles() {
   const { b, ctrl } = newBattle();
@@ -25,6 +26,17 @@ describe("rituals", () => {
     expect(f).toMatchObject({ channeling: 7, leaderKnowledge: 3, leaderLanguage: 3, teamAffinity: 1, total: 14 });
     expect(s).toMatchObject({ channeling: 6, leaderKnowledge: 3, leaderLanguage: 1, teamAffinity: 1, total: 11 });
     expect(f.total).toBeGreaterThan(s.total);
+  });
+
+  it("Prepared Ground research adds its named bonus to every circle's progress on that side", () => {
+    const { b, fast, slow } = setupCircles();
+    const before = computeRitualProgress(b, fast);
+    const k = kingdomWithResearch("SAM", ["RES_DRILL_YARD", "RES_BANNER_DISCIPLINE", "RES_PREPARED_GROUND"]);
+    applyKingdom(b, "A", k);
+    const after = computeRitualProgress(b, fast);
+    expect(after.holding).toBe(2);
+    expect(after.total).toBe(before.total + 2);
+    expect(computeRitualProgress(b, slow).holding).toBe(2);
   });
 
   it("completed rituals are Held, accumulate Unstable damage each round, and only sync when all release together", () => {

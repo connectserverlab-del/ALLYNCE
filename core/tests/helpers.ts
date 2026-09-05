@@ -4,6 +4,7 @@ import { loadRegistry } from "../src/data.js";
 import { deployPlatoon } from "../src/deploy.js";
 import type { PlatoonBlueprint } from "../src/composition.js";
 import type { Hex } from "../src/hex.js";
+import { newKingdom, startUpgrade, tick, startResearch, type KingdomState } from "../src/kingdom.js";
 
 export const reg = loadRegistry();
 
@@ -33,4 +34,14 @@ export function blob(q: number, r: number): Hex[] {
 
 export function deploy(b: Battle, id: string, side: string, bp: Omit<PlatoonBlueprint, "id" | "side">, hexes: Hex[], facing: 0 | 1 | 2 | 3 | 4 | 5 = 0) {
   return deployPlatoon(b, { id, side, ...bp }, hexes, facing);
+}
+
+/** A holding with unlimited resources, Keep and Research Hall raised to tier 3, and `ids` studied in order. */
+export function kingdomWithResearch(faction: string, ids: string[]): KingdomState {
+  const k = newKingdom(reg, faction);
+  k.resources = { koku: 999999, iron: 999999, timber: 999999, silver: 999999 };
+  for (let i = 0; i < 4; i++) { startUpgrade(reg, k, "KEEP"); tick(reg, k, 100000); }
+  for (let i = 0; i < 5; i++) { startUpgrade(reg, k, "RESEARCH_HALL"); tick(reg, k, 100000); }
+  for (const id of ids) { startResearch(reg, k, id); tick(reg, k, 100000); }
+  return k;
 }
