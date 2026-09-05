@@ -36,9 +36,11 @@ export class Battle {
   winner: string | null = null;
   winReason: string | null = null;
   private uidCounter = 0;
+  readonly seed: number;
 
   constructor(public readonly reg: Registry, opts: { seed: number; width?: number; height?: number; sides?: SideState[] }) {
     this.rng = new Rng(opts.seed);
+    this.seed = opts.seed;
     this.width = opts.width ?? 24; this.height = opts.height ?? 18;
     for (const s of opts.sides ?? [{ id: "A", reservePoints: 0, armyCapacity: 100, morale: 100 }, { id: "B", reservePoints: 0, armyCapacity: 100, morale: 100 }]) this.sides.set(s.id, s);
   }
@@ -48,6 +50,8 @@ export class Battle {
   }
 
   newUid(prefix = "u"): string { return `${prefix}${++this.uidCounter}`; }
+  /** Restoring a save must not hand out a uid that already exists. */
+  setUidCounter(n: number): void { this.uidCounter = Math.max(this.uidCounter, n); }
 
   inBounds(h: Hex): boolean { if (this.mask) return this.mask.has(hexKey(h)); return h.q >= 0 && h.q < this.width && h.r >= 0 && h.r < this.height; }
   elevationAt(h: Hex): number { return this.elevation.get(hexKey(h)) ?? 0; }

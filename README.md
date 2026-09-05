@@ -16,9 +16,10 @@ This repository currently holds three things:
 
 ```bash
 npm install
-npm test            # 72 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
+npm test            # 85 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
+npm run assets      # rebuilds the asset registry from the data and from disk
 ```
 
 ## What is implemented
@@ -38,6 +39,8 @@ npm run typecheck
 - **Turn machine**: Command → alternating Activation (2 AP per unit) → Objective → End, seeded RNG, serializable event log for save, replay and tests.
 - **AI**: goal-oriented utility scoring (objective urgency, kill potential, formation gain or loss, isolation risk, commander caution), a release policy that holds for synchronization until instability forces a decision, and difficulty profiles that change risk and planning depth only.
 - **Scenario**: `Threefold Invocation` fully data-defined and playable start to finish.
+- **A full match**: `runMatch` takes two decks, generates a field, deploys legal armies, plays every round with a card-playing AI and pays spoils into the holdings. Deterministic per seed. See `core/src/match.ts`.
+- **Save and load**: `core/src/save.ts` round-trips a battle mid-match and a holding, with a version gate.
 - **Cards and decks**: a 100-card main deck and a 20-card ritual/fusion side deck, with a 1-to-10 star scale that sets tribute cost, copy limits and ritual requirements. See `docs/cards-and-kingdom.md`.
 - **The holding**: a permanent base with eleven buildings, a twelve-node research tree and three recruitment banners with pity. Everything it grants reaches the battlefield as a named, source-tracked modifier.
 - **Irregular battlefields**: seeded generator (`core/src/mapgen.ts`) carves an odd-shaped playable mask from a canvas, layers elevation into mountain ranges, high ground, open ground and valley floors, runs a river downhill with fords, digs trenches in front of each army, lays a road, gathers mud in low wet ground, and places ruins and fortifications. Fourteen terrain types with a data table for movement cost by foot, cavalry and flying, defence, concealment, sight and charge-breaking.

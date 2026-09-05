@@ -24,8 +24,8 @@ they arrive only through a ritual or fusion card.
 
 ## Card faces
 
-Cards are printed on paper, not stamped from metal. Three stocks carry rank: plain linen paper for 1 to 6 stars,
-inked and cloth-taped card for 7 to 9, sealed mulberry paper for 10-star cards and every rite in the side deck.
+Every card in the game is printed on the same stock: sealed mulberry paper with a bronze-ink border, browned
+along one edge, with a wax seal at the lower corner. Rank is carried entirely by the stars, not by the frame.
 Stars are a separate painted asset composited onto the card, so a unit's star count can change without repainting
 its frame. Nothing in the interface carries punched holes, rivets or rows of dots.
 
@@ -88,3 +88,21 @@ nearest lower tier that has been painted, so a missing asset never leaves a hole
 Painted so far: the Keep at all three tiers, the Curtain Wall at all three, the Barracks at tiers one and three.
 `npm run assets` regenerates `docs/asset-registry.md`, which lists every asset the game expects and what is still
 to paint.
+
+
+## The loop
+
+`runMatch` closes the circle between the two layers:
+
+1. A holding pays for buildings, research and recruitment draws.
+2. Its cards build a hundred-card deck and a twenty-card side deck.
+3. `setUpMatch` generates a field, fields a legal opening force from the deck alone, deals an opening hand and
+   applies each side's holding as named modifiers.
+4. Rounds run: the AI draws, summons what it can pay for, plays any rite whose requirements are met, then
+   manoeuvres. It never tributes more star value than the card it summons is worth, and never spends its leader.
+5. The battle ends on one of the three universal conditions or the round limit.
+6. `spoils` pays both sides, more for winning and more for the enemy stars broken, and the winner takes a card.
+   `collectReward` banks it into the holding, and the loop begins again.
+
+`saveBattle` and `loadBattle` round-trip a match in progress, including decks, hands and the uid counter, so a
+restored battle keeps issuing fresh unit ids instead of colliding with saved ones.
