@@ -41,7 +41,6 @@ so in the PR.
 | `Q-10` | Replay viewer: step through a saved event log | The event log already exists and is unused |
 | `Q-11` | Warrant board screen in the sample page: read the posted writs, take one, and see which of them close the gaps in the current deck | The board exists in the core and has no interface |
 | `Q-12` | Give the five sworn companies depth: each has four cards, enough to hire but not to lead | A company is a flavour of ally until it can field a line of its own |
-| `Q-13` | Escort composition for warrants: build the escort around the target's own company rather than a generic host starter deck | The escort currently reads as a borrowed army with the target bolted on |
 
 ## Done
 
@@ -64,3 +63,4 @@ so in the PR.
 | `D-15` | Five sworn companies: Cobalt Conclave mages, Thorn Coven hexers, Cutpurse Court rogues, Windmarch Host steppe archers, Dunewake Compact caravaneers — 20 cards, painted |
 | `D-16` | Card ownership: a deck may only run the copies the holding actually owns, with a starter box that opens a legal hundred |
 | `D-17` | Wanted board: rotating warrants up to 7 stars, subdue-not-kill capture, copies paid into the collection |
+| `D-18` | Escort composition for warrants: a sworn company's target is escorted by its own company, not a borrowed host starter deck |

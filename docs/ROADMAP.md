@@ -102,3 +102,12 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-05: Proposal — once Q-12 deepens the five sworn companies, give each one themed cavalry or siege
+  piece of its own (a Windmarch horse-archer already implies cavalry; Cutpurse Court could field a garrote-line
+  skirmish rider, Dunewake Compact a caravan-hauled siege sled), so "every faction gets cannons and cavalry that
+  fit its theme" reaches the companies too, not only the four host armies.
+- 2026-09-05: Proposal — a warrant escort's opening platoon now draws its commander, second, elite and foot
+  soldiers from the target's own company, but the handful of "extra" specialist slots still draw from the whole
+  escort deck and can surface a stray host-army unit standing beside a sworn company's line. Constraining those
+  extras to the escort's own faction (or an explicit small ally list per company) would close the last place a
+  warrant still reads as partly borrowed.

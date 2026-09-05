@@ -308,4 +308,40 @@ describe("running a warrant", () => {
     };
     expect(run()).toEqual(run());
   });
+
+  it("escorts a sworn company's target with its own people, not a borrowed host army", () => {
+    const tier = reg.wanted.tiers.find((t) => t.stars === 3)!;
+    const contract = {
+      id: "WNT-test-ARC", targetId: "ARC_FOOT_COBALT-LINE-MAGE", targetName: "Cobalt Line Mage", targetFaction: "ARC",
+      stars: 3, title: tier.title, text: tier.text, copies: tier.copies, bounty: { ...tier.bounty }, escortStars: tier.escortStars, cycle: 0,
+    };
+    const k = newKingdom(reg, "KNI", { seed: 12 });
+    grantStarterCollection(reg, k);
+    const deck = buildStarterDeck(reg, "KNI", "KNI starter", { collection: k.collection });
+    const { result } = runWantedMission({ reg, seed: 12, kingdom: k, deck, contract, roundLimit: 6 });
+    const b = result.battle;
+    const escort = [...b.units.values()].filter((u) => u.side === "B" && u.defId !== contract.targetId);
+    expect(escort.length).toBeGreaterThan(0);
+    // the platoon's leadership and the topped-up reinforcements are guaranteed to be the company's
+    // own people; only a handful of specialist "extras" may be drawn from the wider deck
+    const own = escort.filter((u) => b.def(u).faction === "ARC");
+    expect(own.length).toBeGreaterThan(escort.length / 2);
+    const leader = b.unit(b.sides.get("B")!.leaderUid!);
+    expect(leader.defId).toBe("ARC_COMMANDER_AZURE-SEAL-MAGISTER");
+  });
+
+  it("falls back to a host army for a target with no line of its own", () => {
+    const tier = reg.wanted.tiers.find((t) => t.stars === 3)!;
+    const contract = {
+      id: "WNT-test-RIT", targetId: "RIT_FOOT_FOREIGN-RITUALIST", targetName: "Foreign Ritualist", targetFaction: "RIT",
+      stars: 3, title: tier.title, text: tier.text, copies: tier.copies, bounty: { ...tier.bounty }, escortStars: tier.escortStars, cycle: 0,
+    };
+    const k = newKingdom(reg, "KNI", { seed: 12 });
+    grantStarterCollection(reg, k);
+    const deck = buildStarterDeck(reg, "KNI", "KNI starter", { collection: k.collection });
+    const { result } = runWantedMission({ reg, seed: 12, kingdom: k, deck, contract, roundLimit: 6 });
+    const b = result.battle;
+    const leader = b.unit(b.sides.get("B")!.leaderUid!);
+    expect(["SAM", "SHI", "KNI", "DRG"]).toContain(b.def(leader).faction);
+  });
 });

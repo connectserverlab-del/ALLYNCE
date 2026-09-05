@@ -77,7 +77,11 @@ grinding a two-star target down to a quarter of its health is not a plan anyone 
 Surrounding it is. The army leader, clones, fused bodies and Divine Entities can never be taken alive.
 
 `runWantedMission` puts the named target on a close hunting ground with an escort sized by the writ, tells your
-side whose name is on it, and plays the match out. Your units then decline to shoot the target while anyone can
+side whose name is on it, and plays the match out. The escort is built around the target's own people: a host
+army's target is escorted by that army, and a sworn company's target is escorted by its own company (each now
+fields a full commander, second, elite and foot soldier, so it can lead its own platoon) rather than a borrowed
+host line with the target bolted on. Only a Ritual Cult target, which has no line of its own to call on, falls
+back to a random host army standing in as backup. Your units then decline to shoot the target while anyone can
 still reach it, converge on it instead, and take it the moment it is cornered; the escort, for its part, will
 not spend the one unit somebody holds a warrant for as a summoning tribute. Winning the fight is not the same as
 filling the warrant: kill the target and you go home with spoils and no card.

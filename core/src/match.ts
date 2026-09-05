@@ -163,8 +163,17 @@ export type { Hex, UnitState };
 
 // ---------------------------------------------------------------- wanted missions
 
-/** Armies that can actually field a host of their own. The sworn companies fight under one of these. */
+/** Armies that can field a host on their own steam. */
 const HOST_FACTIONS = ["SAM", "SHI", "KNI", "DRG"];
+/** Sworn companies: hired muscle, not an army, but each now holds one of every core slot. */
+const COMPANY_FACTIONS = ["ARC", "WIT", "ROG", "STP", "DUN"];
+
+/** Whether a faction's own roster covers every slot an opening platoon needs. */
+function canFieldOwnPlatoon(reg: Registry, faction: string): boolean {
+  const own = [...reg.units.values()].filter((d) => d.faction === faction && !d.summonOnly);
+  const has = (slot: string) => own.some((d) => d.slots.includes(slot as never));
+  return has("Commander") && has("Second") && has("Elite") && has("FootSoldier");
+}
 
 export interface WantedMissionSpec {
   reg: Registry; seed: number;
@@ -185,8 +194,13 @@ export function runWantedMission(spec: WantedMissionSpec): WantedMissionResult {
   const { reg, contract } = spec;
   const target = reg.unit(contract.targetId);
   const rng = new Rng(spec.seed ^ 0x5eed);
-  const host = HOST_FACTIONS.includes(target.faction) ? target.faction : HOST_FACTIONS[rng.int(HOST_FACTIONS.length)]!;
-  const escortDeck = buildStarterDeck(reg, host, `${contract.title}: ${contract.targetName}'s escort`);
+  // A target from a host army, or a sworn company that can field its own platoon, is escorted by
+  // its own faction: the fight should read as that company's people, not a borrowed line with the
+  // target bolted on. Anything else (Ritual Cult specialists, who have no line of their own) falls
+  // back to a random host army standing in as backup.
+  const canLeadOwn = HOST_FACTIONS.includes(target.faction) || (COMPANY_FACTIONS.includes(target.faction) && canFieldOwnPlatoon(reg, target.faction));
+  const escortFaction = canLeadOwn ? target.faction : HOST_FACTIONS[rng.int(HOST_FACTIONS.length)]!;
+  const escortDeck = buildStarterDeck(reg, escortFaction, `${contract.title}: ${contract.targetName}'s escort`);
 
   // A warrant is a snatch, not a pitched battle: a close hunting ground where the escort can
   // actually be reached inside the round limit, with cover to close under.
@@ -208,7 +222,7 @@ export function runWantedMission(spec: WantedMissionSpec): WantedMissionResult {
     if (h) b.spawn(contract.targetId, "B", h);
   }
   const escortPool = [...reg.units.values()]
-    .filter((d) => d.faction === host && !d.summonOnly && !d.unique && (d.stars ?? 1) <= 5)
+    .filter((d) => d.faction === escortFaction && !d.summonOnly && !d.unique && (d.stars ?? 1) <= 5)
     .sort((x, y) => (y.stars ?? 1) - (x.stars ?? 1));
   let guard = 0;
   while (escortPool.length && guard++ < 40) {
