@@ -65,6 +65,16 @@ where they conflict.**
 - New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
 - Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
 
+### Done in the scenario-authoring pass
+
+- Position roles (`anchor`, `deployZone`, `lerp`, `near`, `ritualCenter`) so a scenario's platoons, specialists,
+  portals, ritual circles and hex-bearing objectives can pin to a **generated** field instead of only fixed
+  coordinates. A scenario's `"map"` may now be `{ "generate": ... }` in place of the hand-authored `{ width, height,
+  terrain }` form.
+- `data/scenarios/ashfall_crossing.json`: a Dragon Host river-crossing scenario authored entirely by role, so the
+  same file plays a different, still-legal battlefield every seed. Exercises all three of objectives, a ritual and
+  a portal on generated ground.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -102,3 +112,11 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-05: Proposal — now that a scenario can pin positions to a generated field by role, a named biome
+  (`data/scenarios/*.json` → `map.generate`) could carry its own bias (a Mountain Pass scenario with `rugged`
+  pushed high and a forced single road anchor, a Drowned Marsh with `river` widened and mud dominant) so each of
+  the concept-art regions gets a matching, still-regenerating scenario rather than one fixed painting standing in
+  for the whole biome.
+- 2026-09-05: Proposal — the same role vocabulary (`anchor`, `lerp`, `near`) could place a campaign map's per-region
+  scenario objectives, so a won region's fortification always sits sensibly relative to that region's own generated
+  anchors instead of needing hand-tuned coordinates for every region added to the campaign map from Q-5.

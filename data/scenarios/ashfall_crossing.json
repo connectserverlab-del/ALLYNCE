@@ -1,0 +1,55 @@
+{
+  "id": "ashfall_crossing",
+  "title": "Ashfall Crossing",
+  "seed": 20260905,
+  "map": { "generate": { "size": 620, "forest": 0.16, "rugged": 0.32, "river": true, "trenches": true, "ruins": true, "name": "Ashfall Crossing" } },
+  "roundLimit": 14,
+  "roundLimitWinner": "B",
+  "sides": {
+    "A": { "name": "Riftwing Vanguard (attacker)", "reservePoints": 0, "armyCapacity": 120,
+      "platoons": [
+        { "id": "DRG-1", "faction": "DRG", "commander": "DRG_COMMANDER_RIFTWING-DOMINANT", "second": "DRG_SECOND_STORMCLAW-WINGSECOND", "elite": "DRG_ELITE_OBSIDIAN-MAW",
+          "foot": ["DRG_FOOT_SLATEWING-DRAKE","DRG_FOOT_SLATEWING-DRAKE","DRG_FOOT_SLATEWING-DRAKE","DRG_FOOT_SLATEWING-DRAKE","DRG_FOOT_SLATEWING-DRAKE"],
+          "deploy": { "role": "deployZone", "side": "A" }, "facing": 0 }
+      ],
+      "specialists": [
+        { "def": "DRG_CAVALRY_RIDGEBACK-RUNNER", "at": { "role": "near", "from": { "role": "anchor", "side": "A" }, "ring": 2, "index": 0 } },
+        { "def": "DRG_SIEGE_CINDERTHROAT-SIEGEWYRM", "at": { "role": "near", "from": { "role": "anchor", "side": "A" }, "ring": 2, "index": 2 } },
+        { "def": "RIT_LEADER_AFFILIATED-SUMMONER", "at": { "role": "near", "from": { "role": "ritualCenter", "id": "circle-ashfall-vanguard" }, "ring": 1, "index": 0 } },
+        { "def": "RIT_FOOT_FOREIGN-RITUALIST", "at": { "role": "near", "from": { "role": "ritualCenter", "id": "circle-ashfall-vanguard" }, "ring": 1, "index": 1 } },
+        { "def": "RIT_FOOT_FOREIGN-RITUALIST", "at": { "role": "near", "from": { "role": "ritualCenter", "id": "circle-ashfall-vanguard" }, "ring": 1, "index": 2 } }
+      ],
+      "objectives": [
+        { "type": "CaptureHold", "side": "A", "hexSpec": { "role": "lerp", "from": { "role": "anchor", "side": "A" }, "to": { "role": "anchor", "side": "B" }, "frac": 0.55 }, "rounds": 3 },
+        { "type": "CompleteRituals", "side": "A", "ritualIds": ["circle-ashfall-vanguard"] }
+      ]
+    },
+    "B": { "name": "Bastion Riverguard (defender)", "reservePoints": 20, "armyCapacity": 120,
+      "platoons": [
+        { "id": "KNI-1", "faction": "KNI", "commander": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL", "second": "KNI_SECOND_OATHBOUND-CASTELLAN", "elite": "KNI_ELITE_SKY-LANCE-DRAGOON",
+          "foot": ["KNI_FOOT_BASTION-MAN-AT-ARMS","KNI_FOOT_BASTION-MAN-AT-ARMS","KNI_FOOT_BASTION-MAN-AT-ARMS","KNI_FOOT_BASTION-MAN-AT-ARMS","KNI_FOOT_BASTION-MAN-AT-ARMS"],
+          "deploy": { "role": "deployZone", "side": "B" }, "facing": 3 }
+      ],
+      "specialists": [
+        { "def": "KNI_SUPPORT_PORTAL-KEEPER", "at": { "role": "near", "from": { "role": "anchor", "side": "B" }, "ring": 3, "index": 0 } },
+        { "def": "KNI_SIEGE_BASTION-BOMBARD", "at": { "role": "near", "from": { "role": "anchor", "side": "B" }, "ring": 2, "index": 0 } }
+      ],
+      "portals": [
+        { "id": "portal-riverguard", "at": { "role": "near", "from": { "role": "anchor", "side": "B" }, "ring": 4, "index": 0 }, "capacity": 1, "cooldown": 2 }
+      ],
+      "reinforcementQueue": [
+        { "portal": "portal-riverguard", "def": "KNI_FOOT_BASTION-MAN-AT-ARMS", "platoon": "KNI-1" }
+      ],
+      "objectives": [
+        { "type": "CollapseRituals", "side": "B", "count": 1 },
+        { "type": "SurviveRounds", "side": "B", "rounds": 14 }
+      ]
+    }
+  },
+  "rituals": [
+    { "id": "circle-ashfall-vanguard", "side": "A",
+      "center": { "role": "lerp", "from": { "role": "anchor", "side": "A" }, "to": { "role": "anchor", "side": "B" }, "frac": 0.22, "lateral": 0 },
+      "radius": 3, "required": 60, "leader": "RIT_LEADER_AFFILIATED-SUMMONER", "summon": "DIV_BOSS_SOVEREIGN-OF-TORMENT", "linkGroup": null }
+  ],
+  "briefing": "The Riftwing Vanguard forces a river crossing to break the Bastion Riverguard's line. A borrowed Ritual Cult circle rides with the dragons, working to call down the Sovereign of Torment behind the advance. The defenders hold a single reinforcement portal and a bombard sited to cover the ford. Attackers win by holding the far bank for three rounds or completing the ritual; defenders win by collapsing the circle or holding the line for the full fourteen rounds. Every position on this field is authored by role against the generated ground, not by fixed coordinates, so it plays out differently on every seed."
+}

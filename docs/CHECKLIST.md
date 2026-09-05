@@ -30,7 +30,6 @@ so in the PR.
 | Id | Item | Why it matters |
 |---|---|---|
 | `Q-1` | Second art pass on weak cutouts: any unit whose card still reads "no art yet", plus re-cuts where the flood fill left a panel edge | Blank cards are the most visible gap in the game |
-| `Q-2` | Scenario authoring on top of generated ground: let a scenario pin objectives, rituals and portals to a generated field by role rather than by fixed coordinates | Scenarios currently hard-code hexes, which breaks on a regenerated map |
 | `Q-3` | AI: use trenches and high ground, position siege behind the line, route cavalry to flanks, surrender when the leader is dead and morale is broken | The AI ignores the terrain rules the player must respect |
 | `Q-4` | Deck editor in the sample page: move cards between main and side deck with live legality | Deck building is the core loop and is currently read-only |
 | `Q-5` | Campaign map: regions on the province map, each a scenario; a won region feeds the holding's production | Connects the battle layer to the holding layer |
@@ -58,3 +57,4 @@ so in the PR.
 | `D-12` | Paper card stock and the painted star asset |
 | `D-13` | Full match runner, card-playing AI, spoils paid into the holding, save and load |
 | `D-14` | Unit art for all 40 cards |
+| `D-15` | Scenario authoring on generated ground: position roles (anchor, deployZone, lerp, near, ritualCenter) so a scenario's objectives, rituals and portals pin to a generated field instead of fixed coordinates; `data/scenarios/ashfall_crossing.json` as the reference scenario |

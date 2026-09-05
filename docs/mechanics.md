@@ -19,6 +19,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §15 Objectives | `objectives.ts` | Eleven composable types |
 | §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses |
 | §18 Architecture | all | Simulation is separate from presentation; every action logs a serializable event |
+| Scenario authoring | `scenario.ts` | `buildScenario` loads a scenario file onto either a hand-authored fixed map or a generated one; positions can be pinned by role instead of fixed coordinates (see below) |
 
 ## Worked example (from the brief §7)
 
@@ -36,6 +37,32 @@ breakdown contains each named source.
 4. The attacker AI releases only when every live circle is Held (synchronized) or when instability reaches three
    stacks. A synchronized release manifests all three Sovereigns at full Anchors; anything else weakens the summon.
 5. Defenders win by collapsing two circles or surviving twelve rounds.
+
+## Scenario authoring on a generated field
+
+A scenario's `"map"` is either the original fixed form (`{ width, height, terrain }`, exact coordinates, as
+Threefold Invocation uses) or `{ "generate": { ...MapSpec minus seed } }`, which runs the same irregular-battlefield
+generator `runMatch` uses. A generated map has no fixed coordinates to author against, so every position that would
+otherwise be a `[q, r]` pair (platoon `deploy`, specialist and portal `at`, ritual `center`, and the hex-bearing
+objectives `CaptureHold`/`Escort`) instead accepts a **role**, resolved against the concrete field once it is
+generated:
+
+- `{ "role": "anchor", "side": "A" | "B" }` — that side's deployment anchor.
+- `{ "role": "deployZone", "side", "index" }` — the `index`-th hex of that side's zone (wraps); a platoon's whole
+  `deploy` list can also be `{ "role": "deployZone", "side", "offset"?, "count"? }` to slice `count` hexes straight
+  out of the zone instead of listing eight individually.
+- `{ "role": "lerp", "from", "to", "frac", "lateral"? }` — a point on the line between two other positions (which
+  may themselves be roles), stepped sideways by `lateral` hexes, snapped to the nearest standable, unclaimed hex.
+- `{ "role": "near", "from", "ring", "index" }` — the `index`-th standable, unclaimed hex on the ring `ring` hexes
+  from `from` (wraps; falls back to an expanding search if the ring is fully claimed).
+- `{ "role": "ritualCenter", "id" }` — the already-resolved center of the named ritual. Ritual centers resolve
+  before anything else is placed specifically so ritualists can be pinned relative to the fixed point instead of
+  each re-deriving (and drifting from) the same raw anchor math.
+
+Every resolved position is reserved so later ones cannot land on top of it, and a role on a fixed (non-generated)
+map raises a clear error rather than silently doing nothing. `data/scenarios/ashfall_crossing.json` is the
+reference example: the same file plays out on a different, still-legal battlefield every seed. See
+`core/tests/scenario_roles.test.ts` for the resolution rules exercised directly.
 
 ## Unity port guidance
 
