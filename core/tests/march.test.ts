@@ -14,6 +14,7 @@ const REF = "SAM_LORD_ASHFALL-DAIMYO";            // MOV 5, the reference pace
 const SLOW = "KNI_FOOT_BASTION-MAN-AT-ARMS";      // MOV 3
 const HEAVY = "KNI_SIEGE_BASTION-BOMBARD";        // MOV 2, the thing a squad waits for
 const FLIER = "ANG_FOOT_LAMPBEARER-CHORISTER";    // MOV 5, wings
+const CAV = "SAM_CAVALRY_CRIMSON-UMAMAWARI-LANCER"; // MOV 7, and no way into a trench
 
 const W = 30, H = 20;
 
@@ -29,6 +30,9 @@ function testField(paint?: (q: number, r: number) => Terrain | undefined): March
 }
 
 const band = (from: number, to: number, t: Terrain) => (_q: number, r: number) => (r >= from && r <= to ? t : undefined);
+/** A band with a way round it: rows `from`..`to` are painted only west of the `openFrom` column. */
+const wall = (from: number, to: number, t: Terrain, openFrom: number) =>
+  (q: number, r: number) => (r >= from && r <= to && q + Math.floor(r / 2) < openFrom ? t : undefined);
 const corner = (f: MarchField): [Vec2, Vec2] => [{ x: f.bounds.minX, y: f.bounds.minY }, { x: f.bounds.maxX, y: f.bounds.maxY }];
 /** Walk the field with a fixed timestep, up to `seconds`, stopping as soon as `until` is true. */
 function run(f: MarchField, seconds: number, dt = 0.1, until?: () => boolean): number {
@@ -156,6 +160,73 @@ describe("marching", () => {
     expect(gap).toBeLessThan(f.rules.formationSpacing * 2);
   });
 
+
+  it("walks a follower around ground its own kind cannot cross", () => {
+    // a trench is two movement points to a foot soldier and no way at all to a rider
+    const f = testField(wall(8, 10, "Trench", 24));
+    const lead = enlist(f, REF, { x: 8, y: 21 });
+    const sq = formSquad(f, { leaderId: lead.id });
+    const rider = enlist(f, CAV, { x: 8, y: 3 });
+    const straight = Math.hypot(lead.pos.x - rider.pos.x, lead.pos.y - rider.pos.y);
+
+    const o = followSquad(f, rider.id, sq.id)!;
+    expect(o.routed).toBe(true);
+    expect(o.blocked).toBe(false);
+    expect(o.legs.length).toBeGreaterThan(1);
+    expect(o.span).toBeGreaterThan(straight * 2);          // the long way round is genuinely long
+    expect(o.seconds).toBeLessThanOrEqual(f.rules.travelCapSeconds);
+
+    let trenched = 0;
+    for (let i = 0; i < 3000 && !rider.squadId; i++) { step(f, 0.05); if (terrainAt(f, rider.pos) === "Trench") trenched++; }
+    expect(rider.squadId).toBe(sq.id);
+    expect(trenched).toBe(0);                              // it went around, it did not wade through
+    expect(f.events.some((e) => e.type === "Joined" && e.data.unit === rider.id)).toBe(true);
+  });
+
+  it("routes a squad around a water band and still lands inside the cap", () => {
+    const f = testField(wall(8, 10, "Water", 24));
+    const lead = enlist(f, REF, { x: 8, y: 3 });
+    const mate = enlist(f, REF, { x: 10, y: 3 });
+    const sq = formSquad(f, { leaderId: lead.id, memberIds: [mate.id] });
+    const to = { x: 8, y: 24 };
+    const straight = Math.hypot(to.x - lead.pos.x, to.y - lead.pos.y);
+
+    // the number a UI shows before the player commits is the routed one, and it obeys the cap
+    const predicted = travelSeconds(f, lead.pos, to, lead);
+    expect(predicted).toBeCloseTo(f.rules.travelCapSeconds, 6);
+    expect(squadTravelSeconds(f, sq.id, to)).toBeCloseTo(f.rules.travelCapSeconds, 6);
+
+    orderSquad(f, sq.id, to);
+    expect(lead.order!.routed).toBe(true);
+    expect(lead.order!.span).toBeGreaterThan(straight * 2);
+    expect(lead.order!.haste).toBeGreaterThan(1);          // the long way round would have run past the cap
+    expect(lead.order!.seconds).toBeCloseTo(f.rules.travelCapSeconds, 6);
+
+    let wet = 0;
+    const took = run(f, 3 * f.rules.travelCapSeconds, 0.05, () => !lead.order && !mate.order);
+    for (const m of [lead, mate]) if (terrainAt(f, m.pos) === "Water") wet++;
+    expect(wet).toBe(0);
+    expect(took).toBeLessThanOrEqual(f.rules.travelCapSeconds + 0.2);
+    expect(took).toBeCloseTo(predicted, 0);                // what the UI promised is what the walk cost
+    expect(Math.hypot(lead.pos.x - to.x, lead.pos.y - to.y)).toBeLessThan(f.rules.arriveRadius);
+  });
+
+  it("gives up on a squad nothing can reach, and says so", () => {
+    const f = testField(band(9, 11, "Water"));                 // no way round: the water spans the whole field
+    const lead = enlist(f, REF, { x: 10, y: 25 });
+    const sq = formSquad(f, { leaderId: lead.id });
+    const loose = enlist(f, REF, { x: 10, y: 2 });
+    const o = followSquad(f, loose.id, sq.id)!;
+    expect(o.routed).toBe(false);
+    expect(o.blocked).toBe(true);
+
+    run(f, 90, 0.05, () => !loose.order);
+    expect(loose.order).toBeNull();
+    expect(loose.squadId).toBeNull();
+    expect(loose.pos.y).toBeLessThan(1.5 * 9);
+    expect(f.events.some((e) => e.type === "FollowFailed" && e.data.unit === loose.id)).toBe(true);
+  });
+
   it("replaces an order cleanly in the middle of a walk", () => {
     const f = testField();
     const u = enlist(f, REF, { x: 5, y: 5 });
@@ -176,7 +247,7 @@ describe("marching", () => {
 
   it("steps deterministically", () => {
     const play = (): string => {
-      const f = testField(band(8, 12, "Mud"));
+      const f = testField((q, r) => band(8, 12, "Mud")(q, r) ?? wall(14, 15, "Water", 22)(q, r));
       const lead = enlist(f, REF, { x: 4, y: 4 });
       const gun = enlist(f, HEAVY, { x: 6, y: 4 });
       const scout = enlist(f, SLOW, { x: 28, y: 22 });
