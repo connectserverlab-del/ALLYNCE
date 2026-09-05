@@ -1,6 +1,6 @@
 import type { BattleController } from "./battle.js";
 import { isBroken, canBeTaken, canBeSubdued, CAPTURE_THRESHOLD } from "./battle.js";
-import type { UnitState } from "./types.js";
+import type { UnitState, AbilityDef } from "./types.js";
 import type { Hex } from "./hex.js";
 import { hexDistance } from "./hex.js";
 import { computeStat } from "./modifiers.js";
@@ -82,9 +82,20 @@ function actOnce(ctrl: BattleController, u: UnitState, profile: AiProfile): bool
     const a = b.reg.ability(id);
     if (a.category !== "Active" || (u.cooldowns[id] ?? 0) > 0) continue;
     const enemy = nearestEnemy(ctrl, u);
-    if (a.effect.kind === "SpawnClones" && enemy && b.distance(u, enemy) <= 3) { try { ctrl.useAbility(u, id); return true; } catch { /* no room */ } }
-    if (a.effect.kind === "ChargeBonus" && u.movedThisActivation >= (a.effect as any).minHexesMoved && enemy && b.distance(u, enemy) <= d.range) { try { ctrl.useAbility(u, id); } catch { /* skip */ } }
-    if (a.effect.kind === "Duel" && enemy && b.distance(u, enemy) === 1 && b.def(enemy).roles.some((r) => r === "Elite" || r === "Commander")) { try { ctrl.useAbility(u, id, { target: enemy }); } catch { /* skip */ } }
+    const kind = a.effect.kind;
+    if (kind === "SpawnClones" && enemy && b.distance(u, enemy) <= 3) { try { ctrl.useAbility(u, id); return true; } catch { /* no room */ } }
+    if (kind === "ChargeBonus" && u.movedThisActivation >= (a.effect as any).minHexesMoved && enemy && b.distance(u, enemy) <= d.range) { try { ctrl.useAbility(u, id); } catch { /* skip */ } }
+    if (kind === "Duel" && enemy && b.distance(u, enemy) === 1 && b.def(enemy).roles.some((r) => r === "Elite" || r === "Commander")) { try { ctrl.useAbility(u, id, { target: enemy }); } catch { /* skip */ } }
+    // Buff before a charge: spend the round's attack bonus only where a target is already in reach
+    // this activation, so it lands on a swing instead of an empty round.
+    if (kind === "SelfSacrificeBuff" && enemy && b.distance(u, enemy) <= d.range && canAffordSacrifice(u, d.hp, a, profile)) { try { ctrl.useAbility(u, id); } catch { /* skip */ } }
+    if (kind === "BandAtk" && enemy && b.distance(u, enemy) <= d.range) { try { ctrl.useAbility(u, id); } catch { /* skip */ } }
+    // Spend a round of haste closing ground it could not otherwise cover this activation, rather
+    // than standing still with it.
+    if (kind === "SelfHaste" && u.movedThisActivation === 0 && needsMoreReach(ctrl, u, profile)) { try { ctrl.useAbility(u, id); } catch { /* skip */ } }
+    // Debuff before a defence: soften whoever is already close enough to hit back next, whether or
+    // not this unit lands a blow of its own first.
+    if ((kind === "EnemyAtkDebuff" || kind === "EnemySlow") && enemiesInRange(ctrl, u, a.range ?? 1).length > 0) { try { ctrl.useAbility(u, id); } catch { /* skip */ } }
   }
   // A warrant target that is already broken is worth more alive than dead: take it now
   const warrants = b.wanted.get(u.side);
@@ -207,4 +218,31 @@ export function nearestEnemy(ctrl: BattleController, u: UnitState): UnitState | 
     if (dd < bd) { bd = dd; best = e; }
   }
   return best;
+}
+
+/** Live enemies within `radius` hexes of the unit, the same reach an area ability like a debuff or a slow works over. */
+function enemiesInRange(ctrl: BattleController, u: UnitState, radius: number): UnitState[] {
+  const b = ctrl.b;
+  if (!u.pos) return [];
+  return [...b.activeUnits()].filter((e) => e.side !== u.side && e.pos && hexDistance(u.pos!, e.pos) <= radius);
+}
+
+/**
+ * A self-sacrifice buff pays health for attack, and a unit that pays too freely just dies to the
+ * next hit it takes instead of the one it dealt. Keep a cushion that shrinks as the profile's risk
+ * tolerance rises, on top of the effect's own refusal to be paid with a unit's last hitpoint.
+ */
+function canAffordSacrifice(u: UnitState, maxHp: number, ability: AbilityDef, profile: AiProfile): boolean {
+  const cost = Math.max(1, Math.floor(maxHp * (ability.effect as any).hpCostShare));
+  if (u.hp <= cost) return false;
+  const remainingShare = (u.hp - cost) / maxHp;
+  return remainingShare >= 0.35 - profile.risk * 0.2;
+}
+
+/** Whether this activation's movement allowance falls short of the unit's own chosen goal. */
+function needsMoreReach(ctrl: BattleController, u: UnitState, profile: AiProfile): boolean {
+  if (!u.pos) return false;
+  const goal = chooseGoal(ctrl, u, profile);
+  if (!goal) return false;
+  return hexDistance(u.pos, goal) > ctrl.movementAllowance(u);
 }

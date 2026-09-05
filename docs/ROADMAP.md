@@ -64,6 +64,9 @@ where they conflict.**
   research tree, three recruitment banners with pity, and carry-over into battle as named modifiers.
 - New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
 - Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
+- The AI now spends all six card skills instead of leaning on clones, charges and duels alone: a self or band
+  attack buff before it swings, haste when its own goal sits farther off than its base movement reaches, and
+  an area debuff on whoever is already close enough to hit back, win or lose the exchange this round.
 
 ## Next, in priority order
 
@@ -102,3 +105,6 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-05: Proposal — give a high Samurai or Knight rank a privilege that halves a self-sacrifice skill's
+  health cost for anyone it commands within its radius. The rank ladders are meant to carry mechanical weight
+  beyond morale and succession, and the six card skills are a lever nothing in a rank ladder reaches yet.

@@ -56,6 +56,24 @@ activation instead of an annoyance to be ignored. A body that has already split 
 A test in `core/tests/skills.test.ts` walks the whole registry and fails if any card at four stars or above is
 carrying no ability it can activate, so the rule cannot quietly rot as the roster grows.
 
+### The AI spends all six kinds
+
+`ai.ts`'s ability loop reaches for every one of the six kinds, not only `SpawnClones`, `ChargeBonus` and `Duel`:
+
+- `SelfSacrificeBuff` and `BandAtk` fire only once a target is already inside attack range this activation, so
+  the buff lands on a swing instead of an empty round. The self-sacrifice price is also weighed against the
+  unit's own health: it keeps a cushion above the effect's own no-suicide floor, sized by the profile's risk
+  tolerance, so an easy-difficulty unit stops bleeding itself sooner than a hard one.
+- `SelfHaste` fires only when the unit's own chosen goal this activation sits farther away than its base
+  movement allowance already reaches, so it is spent closing ground rather than standing still with it.
+- `EnemyAtkDebuff` and `EnemySlow` fire on any enemy already within the ability's radius, whether or not this
+  unit can land a blow of its own this activation — softening an attacker before it gets to swing back is the
+  point of a debuff spent on defence, not only on offence.
+
+`core/tests/ai.test.ts` drives `runAiActivation` directly against fixed positions for one card of each kind and
+checks the resulting stat breakdown and cooldowns, so a change to the utility loop that stops using a skill
+shows up as a failing test rather than a quieter AI nobody notices.
+
 ## Worked example (from the brief §7)
 
 Foot soldier 1,500 base ATK, two matching neighbours (+100), full Doctrine (+100), commander order (+150) = 1,850.
