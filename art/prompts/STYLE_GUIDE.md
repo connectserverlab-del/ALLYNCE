@@ -13,6 +13,7 @@ desaturated smoky palette with one or two saturated accents per faction.
 | 2 | `art/rejected/round2-3d-render-look` | Sculpted gritty miniature render | Reads as generic AI 3D render |
 | 3 | `art/rejected/round3-clean-painterly` | Hand-painted splash-art quality, clean | Right medium, too polished |
 | **4** | **`art/samples`** | **Grimdark hand-painted, heavy grunge** | **Approved** |
+| 5 | `art/rejected/round5-angels-too-human`, `art/rejected/round5-same-silhouette` | Same look, but every card the same standing pose, and angels drawn as men with wings | Style kept; 16 cards repainted for silhouette and anatomy |
 
 ## Global Style Block (append to every unit prompt)
 
@@ -104,6 +105,63 @@ for what they do (Starveling, Antler Wraith, Hollow Hunger, Winter Maw) rather t
 and the faction is called the Winter Famine. Keep it that way in any future round: the silhouette language —
 starved frame, long limbs, broken antlers, frostbitten grey-blue hide — carries the idea without taking
 somebody's sacred figure and putting it on a trading card.
+
+## Getting silhouette variety out of this model (V01 art pass 5)
+
+A contact sheet of the first 88 cards showed the owner was right: almost every card was a standing
+three-quarter human of the same height and mass, weight even on both feet, arms down, weapon vertical. The
+model's default figure is that pose, and nothing in the costume description pulls it off. What does:
+
+- **Name the stance and say which foot carries the weight.** "Braced hard side-on, weight sunk onto the back
+  leg", "all weight on the front foot and the back heel lifted clear", "down on one knee with the rear boot
+  turned so its sole shows". Adjectives like *dynamic* or *aggressive* do nothing; a named body mechanic works
+  almost every time.
+- **Say what the weapon does to the outline, not just what it is.** A weapon named alone is drawn vertical in
+  the right hand. "Slung across his back on a strap in a long diagonal", "laid horizontally across the back of
+  his shoulders in the crook of both elbows", "extended forward and low, well ahead of the leading foot" all
+  landed first try. Ration the vertical shaft to one card per faction.
+- **Give mass as a comparison to another unit, never as an adjective.** "Half again the height and twice the
+  width of a common soldier" and "barely shoulder-high to a grown man" both read at card size; *large* and
+  *small* do not move the figure at all.
+- **"Nothing hangs off the body" is a silhouette instruction and it works.** Spelling out *no coat, no cloak,
+  no pouches, nothing that could swing or rattle* produces a genuinely closed narrow outline, which is the
+  strongest possible contrast to a cluttered one. Put one of each in every faction of four.
+- **Check the faction as a group, not card by card.** Each card can be fine on its own and the four still
+  collide. Build a four-up sheet per faction and make sure no two share an answer on height, stance, weapon
+  break, head or hangings.
+- **A small or young figure drags the rendering toward anime.** The first Alley Runner came back cel-shaded
+  with glossy manga eyes. Countered by saying the head is small and lost in shadow under a low brow and lank
+  hair, plus *no large glossy eyes, no clean lineart, no cel shading, no anime, no manga, no comic-book style;
+  the face and hair are painted with the same rough dry-brush grime as the rest of the figure.*
+
+## Non-human anatomy (the Choir Militant lesson)
+
+The angels first came back as men in armour with a symmetrical pair of wings on the back, because that is what
+"angel" means to the model and every hint short of an instruction is read as flavour. What actually works:
+
+- **Say what it is not, in those words:** *NOT a human being and NOT a man with wings glued on*. Repeat it.
+- **Drop "no extra limbs" from the Global Style Block for these units** — it fights the design — and replace it
+  with an explicit inventory: *exactly the limbs described: three arms, two legs, one wing.* Without a count
+  the model quietly normalises back to two and two.
+- **Say where the head is not.** "No head" alone still yields a helmeted head. What works is describing the
+  thing that occupies the gap: a sealed brass collar with nothing above it, an open riveted collar standing
+  between the shoulders like the mouth of a chimney that you can see down into, a wing folded permanently over
+  the front of the shoulders. Add *no face, no eyes, no chin, no human head anywhere in the picture.*
+- **Put the wings in named sockets.** "Six wings" gives three tidy pairs on the back. "Two from the small of
+  the back hanging limp straight down, two from the middle shoulders held out low and sideways, two folded flat
+  against the front of the chest like a second breastplate" gives a shape no human silhouette can make.
+- **Make the wrongness specific.** *An extra elbow in each arm*, *digitigrade legs bending backward onto long
+  hooved feet*, *the torso half again too long and the waist absurdly high*, *stubby squat legs under a
+  towering stacked column*. Vague words — *unnatural*, *eldritch*, *inhuman* — change nothing.
+- **Never write "crown" or "circlet" in an angel prompt.** Asking for "a beaten circlet hammered flat around
+  the rim" painted a free-floating iron ring above the figure, i.e. a halo, which the faction forbids. Say
+  *no ring, no circle, no disc, no crown, no halo above or behind the figure* instead.
+- **Assembled, not born.** *Riveted seams and welded patches everywhere*, *bolted one above the other*,
+  *assembled to a purpose rather than born* is the phrasing that reliably kills the heroic reading.
+- **Ask for the dark value structure separately and loudly.** Headless armoured constructs come back bright
+  silver and evenly lit unless told otherwise. A block headed *CRITICAL VALUE STRUCTURE* naming blackened
+  soot-grey iron, three quarters of the figure in deep shadow, and only a few hard-edged highlights on named
+  edges brought two of these cards back into the roster's range.
 
 ## Ground planes
 
