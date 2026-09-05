@@ -175,17 +175,23 @@ function enemiesWithin(b: Battle, user: UnitState, radius: number): UnitState[] 
 /** Reference implementation of the clone rules (Twin Echo). */
 function spawnClones(b: Battle, user: UnitState, ability: AbilityDef, e: Record<string, any>): boolean {
   if (!user.pos) return false;
+  if (user.isClone || (user.splitBodies ?? 1) > 1) return false;   // a copy cannot copy itself again
   const free = hexNeighbors(user.pos).filter((h) => b.isFree(h));
   if (free.length < e.count) return false;
-  const atk = Math.floor(computeStat(b, user, "ATK").final * (e.atkPercent / 100));
+
+  // The body divides. Attack and defence are shared evenly across the original and its copies, so
+  // splitting buys you presence on more hexes and costs you weight on each of them. Kill the copies
+  // and the original walks its share back up, which makes hunting them worth an activation.
+  const bodies = e.count + 1;
   const made: string[] = [];
   for (let i = 0; i < e.count; i++) {
     const c = b.spawn(user.defId, user.side, null, { platoonId: null, facing: user.facing, uidPrefix: "clone" });
-    c.isClone = true; c.cloneOf = user.uid; c.cloneRoundsLeft = e.duration; c.cloneAtk = atk; c.hp = e.hp; c.morale = 0;
+    c.isClone = true; c.cloneOf = user.uid; c.cloneRoundsLeft = e.duration; c.splitBodies = bodies; c.hp = e.hp; c.morale = 0;
     b.place(c, free[i]!);
     made.push(c.uid);
   }
-  b.log("ClonesSpawned", { uid: user.uid, clones: made, atk, duration: e.duration });
+  user.splitBodies = bodies;
+  b.log("ClonesSpawned", { uid: user.uid, clones: made, bodies, share: `1/${bodies}`, duration: e.duration });
   return true;
 }
 

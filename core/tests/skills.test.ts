@@ -93,22 +93,36 @@ describe("the six skills", () => {
     expect(ctrl.movementAllowance(ally)).toBe(a0);
   });
 
-  it("clone jutsu puts copies on the board at a share of the original's attack", () => {
+  it("clone jutsu divides the body's attack and defence across every copy", () => {
     const { b, ctrl, mine } = facingOff("CHR_ELITE_WARP-HERALD");
-    const real = computeStat(b, mine, "ATK").final;
+    const d = b.def(mine);
+    const wholeAtk = computeStat(b, mine, "ATK").final;
     ctrl.useAbility(mine, "ABL_SPLIT_THE_SELF");
+
     const clones = [...b.activeUnits("A")].filter((u) => u.isClone);
     expect(clones).toHaveLength(2);
+    // three bodies now, so the original is a third of what it was rather than unchanged
+    expect(computeStat(b, mine, "ATK").final).toBeLessThan(wholeAtk);
+    expect(computeStat(b, mine, "ATK").base).toBe(Math.floor(d.atk / 3));
+    expect(computeStat(b, mine, "DEF").base).toBe(Math.floor(d.def / 3));
     for (const c of clones) {
       expect(c.cloneOf).toBe(mine.uid);
       expect(c.hp).toBe(1);
-      expect(computeStat(b, c, "ATK").final).toBe(Math.floor(real * 0.5));
+      expect(computeStat(b, c, "ATK").final).toBe(Math.floor(d.atk / 3));
+      expect(computeStat(b, c, "DEF").final).toBe(Math.floor(d.def / 3));
     }
+    // splitting never conjures strength: the bodies together are worth the one they came from
+    const total = [mine, ...clones].reduce((t, u) => t + computeStat(b, u, "ATK").base, 0);
+    expect(total).toBeLessThanOrEqual(d.atk);
   });
 
-  it("the swarm splits three ways at two fifths force", () => {
+  it("the swarm splits four ways, each at a quarter", () => {
     const { b, ctrl, mine } = facingOff("FMC_ELITE_MYRMIDON-VANGUARD");
+    const d = b.def(mine);
     ctrl.useAbility(mine, "ABL_SWARM_SPLIT");
-    expect([...b.activeUnits("A")].filter((u) => u.isClone)).toHaveLength(3);
+    const clones = [...b.activeUnits("A")].filter((u) => u.isClone);
+    expect(clones).toHaveLength(3);
+    expect(mine.splitBodies).toBe(4);
+    for (const c of clones) expect(computeStat(b, c, "DEF").final).toBe(Math.floor(d.def / 4));
   });
 });

@@ -57,7 +57,20 @@ export function defeat(b: Battle, u: UnitState, source: string): void {
   u.hp = 0; u.defeated = true;
   b.remove(u);
   b.log("Defeated", { uid: u.uid, def: u.defId, by: source, clone: u.isClone });
+  if (u.isClone && u.cloneOf) reclaimSplitShare(b, u.cloneOf);
   onUnitDefeated(b, u);
+}
+
+/**
+ * A copy has left the field, so the share it was holding goes back. The original's stats are
+ * divided across whatever is still standing, and once the last copy is gone it is whole again.
+ */
+function reclaimSplitShare(b: Battle, originalUid: string): void {
+  const original = b.units.get(originalUid);
+  if (!original || (original.splitBodies ?? 1) <= 1) return;
+  const living = [...b.units.values()].filter((c) => c.isClone && !c.defeated && c.cloneOf === originalUid).length;
+  original.splitBodies = living + 1;
+  b.log("SplitShareReclaimed", { uid: originalUid, bodies: original.splitBodies });
 }
 
 /** Destroy one Anchor of a Divine Entity: reduces stats/abilities; at zero anchors and 0 HP it is banished. */

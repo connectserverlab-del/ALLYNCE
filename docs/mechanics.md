@@ -33,11 +33,25 @@ number, and all of them defined in `data/abilities/abilities.json` rather than i
 | `BandAtk` | A team attack buff across the band. | Choir of Edges — +220 ATK |
 | `EnemyAtkDebuff` | Every enemy inside the ability's range loses attack for the round. | Judgement's Weight — -300 ATK within 2 |
 | `EnemySlow` | Every enemy inside range loses movement, optionally with a status. | Deep Frost — -3 MOV and Suppressed within 3 |
-| `SpawnClones` | Copies of the caster at a share of its attack, one hit each. | Swarm Split — three copies at two fifths force |
+| `SpawnClones` | The body divides: attack and defence are shared evenly across the original and every copy. | Swarm Split — four bodies at a quarter each |
 
 **The band** is the platoon where a unit has one, and the unit plus the allies standing beside it where it does
 not. The creature divisions mostly deploy loose rather than in platoons, so without that fallback a team buff
 would do nothing for half the roster.
+
+### Splitting is not duplication
+
+A clone ability divides the body rather than copying it. `UnitState.splitBodies` records how many bodies the
+unit's attack and defence are currently shared across — itself plus its living copies — and `computeStat`
+divides the base by it for the original and every copy alike. Twin Echo makes three bodies at a third each;
+Swarm Split makes four at a quarter. The bodies together are never worth more than the one they came from, so
+splitting buys presence on more hexes and pays for it in weight on each.
+
+Copies still keep the rest of the clone rules: one hit kills them, they grant no cohesion, they count for
+nothing in composition, they cannot use abilities, be tributed, be sacrificed or take prisoners, and they
+expire on their timer. What is new is the way back up. When a copy leaves the field the original reclaims its
+share — two thirds with one copy left, whole once the last one falls — which makes hunting the copies worth an
+activation instead of an annoyance to be ignored. A body that has already split cannot split again.
 
 A test in `core/tests/skills.test.ts` walks the whole registry and fails if any card at four stars or above is
 carrying no ability it can activate, so the rule cannot quietly rot as the roster grows.

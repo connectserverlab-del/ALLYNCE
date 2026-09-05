@@ -19,7 +19,9 @@ export function computeStat(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: C
   const d = b.def(u);
   const mods: Modifier[] = [];
   const isDivine = !!d.divine;
-  const base = stat === "ATK" ? (u.isClone ? (u.cloneAtk ?? 0) : d.atk) : d.def;
+  // Copies are not free strength. A body that has split shares its attack and defence out across
+  // itself and every living copy, so three of a thing hit for what one of it used to.
+  const base = Math.floor((stat === "ATK" ? d.atk : d.def) / Math.max(1, u.splitBodies ?? 1));
 
   if (!u.isClone && !isDivine) {
     // 1. Theme Cohesion (capped at +100 when Disordered)

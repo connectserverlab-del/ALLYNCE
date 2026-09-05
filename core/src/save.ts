@@ -9,7 +9,7 @@ import type { RitualCircle } from "./rituals.js";
 import type { Portal } from "./portals.js";
 import type { Capture } from "./state.js";
 
-export const SAVE_VERSION = 4;
+export const SAVE_VERSION = 5;
 
 export interface BattleSave {
   version: number; seed: number; round: number; phase: string;

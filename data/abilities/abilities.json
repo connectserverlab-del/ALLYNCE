@@ -86,10 +86,9 @@
       "kind": "SpawnClones",
       "count": 2,
       "duration": 2,
-      "atkPercent": 40,
       "hp": 1
     },
-    "text": "Create two temporary clones for two rounds; clones have 40% ATK, 1 HP, and cannot grant bonuses or capture objectives."
+    "text": "Two copies step out of the same body. Attack and defence are shared evenly across all three, so each strikes and takes a hit at a third of the original's weight. They last two rounds and fall to a single hit; every copy killed hands its share back."
   },
   {
     "id": "ABL_CUT_THE_THREAD",
@@ -848,10 +847,9 @@
       "kind": "SpawnClones",
       "count": 2,
       "duration": 2,
-      "atkPercent": 50,
       "hp": 1
     },
-    "text": "Two copies step out of the same body, each striking at half force. They last two rounds and fall to a single hit."
+    "text": "Two copies step out of the same body, and the body's attack and defence divide evenly across all three \u2014 a third each. They last two rounds and fall to a single hit; kill one and the original takes its share back."
   },
   {
     "id": "ABL_SWARM_SPLIT",
@@ -864,10 +862,9 @@
       "kind": "SpawnClones",
       "count": 3,
       "duration": 2,
-      "atkPercent": 40,
       "hp": 1
     },
-    "text": "The body divides into three, each at two fifths force, for two rounds. A single hit ends any of them."
+    "text": "The body divides into four, sharing its attack and defence evenly \u2014 a quarter each \u2014 for two rounds. A single hit ends any of them, and every one that falls returns its share to the original."
   },
   {
     "id": "ABL_SOVEREIGN_DECREE",

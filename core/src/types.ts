@@ -85,7 +85,12 @@ export interface UnitState {
   isClone: boolean;
   cloneOf?: string;
   cloneRoundsLeft?: number;
-  cloneAtk?: number;
+  /**
+   * How many bodies this unit's attack and defence are currently divided across: itself plus its
+   * living copies. 1 or undefined means whole. Set on the original and on every clone when they
+   * are made, and walked back down as copies leave the field.
+   */
+  splitBodies?: number;
   defeated: boolean;
   promotedFromSecond: boolean;
   movedThisActivation: number;
