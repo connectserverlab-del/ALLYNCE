@@ -1,0 +1,19 @@
+{
+  "faction": "DRG",
+  "notes": "Seven ranks, ordered low to high. Ground-form wyrm-kin (Siegewyrm, Ridgeback Runner) climb from the Wyrmkin tier on; most Dragon Host units already fly and ignore terrain cost, so climber only changes anything for the ground-bound ranks. Climber is the Dragon Host's signature movement trait, matching its mountain-and-cliff territory.",
+  "ranks": [
+    { "id": "HATCHLING", "title": "Hatchling", "tier": 0, "description": "Newly-hatched, flies but cannot yet hold a line.", "privileges": {}, "movement": {}, "canLead": [] },
+    { "id": "WINGLING", "title": "Wingling", "tier": 1, "description": "Line drake of the Dragon Host.", "privileges": {}, "movement": {}, "canLead": [] },
+    { "id": "WYRMKIN", "title": "Wyrmkin", "tier": 2, "description": "Ground-bound kin bred for the cliffs: siege wyrms and ridge runners. Scales a mountainside like level ground.", "privileges": {}, "movement": { "climber": true }, "canLead": ["Patrol"] },
+    { "id": "WING_ADEPT", "title": "Wing Adept", "tier": 3, "description": "Blooded flier, faster on the wing and steadier over rough ground.", "privileges": { "commandRadiusBonus": 1 }, "movement": { "climber": true, "bonusMov": 1 }, "canLead": ["Patrol", "Platoon"] },
+    { "id": "WINGSECOND", "title": "Wingsecond", "tier": 4, "description": "Second of the flight, ready to take the Dominant's place.", "privileges": { "commandRadiusBonus": 1 }, "movement": { "climber": true, "bonusMov": 1 }, "canLead": ["Patrol", "Platoon"] },
+    { "id": "WING_DOMINANT", "title": "Wing Dominant", "tier": 5, "description": "Leader of the flight and its territory.", "privileges": { "commandRadiusBonus": 2 }, "movement": { "climber": true, "bonusMov": 1 }, "canLead": ["Platoon", "Company", "Battalion"] },
+    { "id": "ELDER", "title": "Elder", "tier": 6, "description": "Eldest of the Hollow Crown, territorial dominance made flesh.", "privileges": { "commandRadiusBonus": 3, "supreme": true }, "movement": { "climber": true, "bonusMov": 2 }, "canLead": ["Battalion", "Army"] }
+  ],
+  "privilegeRules": {
+    "climber": "Mountain costs 3 Movement instead of 5 for Foot or 6 for Cavalry; no change for flying (already 2).",
+    "bonusMov": "Added to base Movement.",
+    "commandRadiusBonus": "Added to the unit's command radius for auras and morale recovery, including Predatory Airspace.",
+    "supreme": "Reserved for campaign scale; not used in the vertical slice."
+  }
+}

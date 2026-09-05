@@ -16,7 +16,7 @@ This repository currently holds three things:
 
 ```bash
 npm install
-npm test            # 85 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
+npm test            # 119 tests: combat math, cohesion, composition, succession, clones, rituals, portals, rank ladders, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -48,7 +48,7 @@ npm run assets      # rebuilds the asset registry from the data and from disk
 - **Shinobi ranks**: Apprentice, Genin, Chunin, Jounin, Anbu, Kage, each with a movement trait (canopy movement through forest, hide on stopping in forest, ignore zones of control, pass allies, bonus movement, Shadow Step).
 - **Fusion**: recipe-driven merging of adjacent units into one (Paired Line, Gate Wardens, Twinwing Drake, and the Calamity Form from the three Sovereigns), paid with Fusion charges.
 - **Siege and cavalry**: cannons per faction with set-up, minimum range and breaching shots (plus smoke shells and the Siegewyrm's concussive blast); cavalry per faction with lance charges that break in rough ground, and hit-and-fade riders.
-- **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. See `docs/samurai-ranks.md`.
+- **Faction rank ladders**: every host faction has one now. Samurai (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale and castle defense; Shinobi (six) escalates movement traits up to Shadow Step; Knight (eight) adds surefoot, mud-proof marching; Dragon Host (seven) adds climber for its ground-bound wyrm-kin; Ritual Cult (four) adds waterwalk. All drive who may lead a platoon, company or army. See `docs/rank-ladders.md`.
 
 ## Engine note
 
