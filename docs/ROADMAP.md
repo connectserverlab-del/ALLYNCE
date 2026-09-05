@@ -102,3 +102,6 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-05: Proposal — closing a warrant alive could leave a one-time, named study on the board immediately
+  ("Captured Discipline: +1 Continuity Round" or the like), so a warrant's outcome shows up on the holding the
+  same way a building or a study does: as a permanent, source-tracked line rather than a resource payout only.
