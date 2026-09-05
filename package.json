@@ -8,7 +8,9 @@
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json",
-    "sim:demo": "npx tsx core/src/demo.ts"
+    "sim:demo": "npx tsx core/src/demo.ts",
+    "assets": "node scripts/asset-registry.mjs",
+    "unity:scaffold": "npx tsx scripts/generate-unity-scaffold.ts"
   },
   "repository": {
     "type": "git",

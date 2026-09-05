@@ -1,25 +1,260 @@
 {
   "version": "V01",
   "style": "grimdark hand-painted (round 4)",
-  "generator": { "tool": "Higgsfield", "model": "nano_banana_pro", "resolution": "2k", "aspect": "1:1", "references": "none" },
+  "generator": {
+    "tool": "Higgsfield",
+    "model": "nano_banana_pro",
+    "resolution": "2k",
+    "aspect": "1:1",
+    "references": "none"
+  },
   "namingConvention": "[FACTION]_[ROLE]_[UNIT-NAME]_[ASSET-TYPE]_[VERSION]",
   "assets": [
-    { "unitId": "SAM_COMMANDER_EMBER-BANNER-DAIMYO", "concept": "art/samples/SAM_COMMANDER_EMBER-BANNER-DAIMYO_CONCEPT_V01.jpg", "cutout": "art/samples/SAM_COMMANDER_EMBER-BANNER-DAIMYO_CUTOUT_V01.png", "jobId": "e162ebb2-8782-4b12-bfcb-c6e9a20794bb", "approved": true, "neverChange": ["torn ember banner behind shoulder", "command baton", "closed gauntlets"] },
-    { "unitId": "SAM_FOOT_EMBERLINE-ASHIGARU", "concept": "art/samples/SAM_FOOT_EMBERLINE-ASHIGARU_CONCEPT_V01.jpg", "cutout": "art/samples/SAM_FOOT_EMBERLINE-ASHIGARU_CUTOUT_V01.png", "jobId": "41263e48-26a9-42d5-8278-0098e5814edf", "approved": true, "neverChange": ["single red sash", "conical helmet", "yari"] },
-    { "unitId": "SHI_COMMANDER_VEILED-MOON-JONIN", "concept": "art/samples/SHI_COMMANDER_VEILED-MOON-JONIN_CONCEPT_V01.jpg", "cutout": "art/samples/SHI_COMMANDER_VEILED-MOON-JONIN_CUTOUT_V01.png", "jobId": "4c922c43-9641-4e65-8f94-10f377857f8a", "approved": true, "neverChange": ["silver half-mask", "asymmetrical mantle", "signal tags"] },
-    { "unitId": "SHI_ELITE_MIRROR-SHADE-ADEPT", "concept": "art/samples/SHI_ELITE_MIRROR-SHADE-ADEPT_CONCEPT_V01.jpg", "cutout": "art/samples/SHI_ELITE_MIRROR-SHADE-ADEPT_CUTOUT_V01.png", "jobId": "179cbf1c-24f6-400e-aa86-58ed221bd4b6", "approved": true, "neverChange": ["smoked-mirror plates", "smooth asymmetrical mask", "reversed twin blades"] },
-    { "unitId": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL", "concept": "art/samples/KNI_COMMANDER_SOLAR-BASTION-MARSHAL_CONCEPT_V01.jpg", "cutout": "art/samples/KNI_COMMANDER_SOLAR-BASTION-MARSHAL_CUTOUT_V01.png", "jobId": "175d40fa-6db2-40ef-9671-650a706ed420", "approved": true, "neverChange": ["tower shoulders", "sun-fortress shield mark", "helmet under arm"] },
-    { "unitId": "KNI_ELITE_SKY-LANCE-DRAGOON", "concept": "art/samples/KNI_ELITE_SKY-LANCE-DRAGOON_CONCEPT_V01.jpg", "cutout": "art/samples/KNI_ELITE_SKY-LANCE-DRAGOON_CUTOUT_V01.png", "jobId": "993757a5-c71c-4bca-b3bf-b7e591ed01f4", "approved": true, "neverChange": ["one rider one drake", "long lance forward", "pale armored neck plates on drake"] },
-    { "unitId": "KNI_FOOT_BASTION-MAN-AT-ARMS", "concept": "art/samples/KNI_FOOT_BASTION-MAN-AT-ARMS_CONCEPT_V01.jpg", "cutout": "art/samples/KNI_FOOT_BASTION-MAN-AT-ARMS_CUTOUT_V01.png", "jobId": "931d17ca-f111-42c2-9619-01c7f5fb7e00", "approved": true, "neverChange": ["rectangular shield with fortress mark", "enclosed helmet", "short spear"] },
-    { "unitId": "DRG_COMMANDER_RIFTWING-DOMINANT", "concept": "art/samples/DRG_COMMANDER_RIFTWING-DOMINANT_CONCEPT_V01.jpg", "cutout": "art/samples/DRG_COMMANDER_RIFTWING-DOMINANT_CUTOUT_V01.png", "jobId": "a3557ef7-4812-435d-aea2-ab2b176e1778", "approved": true, "neverChange": ["skull-grown crown horns", "pale mineral chest ridges", "worn wing openings"] },
-    { "unitId": "DRG_FOOT_SLATEWING-DRAKE", "concept": "art/samples/DRG_FOOT_SLATEWING-DRAKE_CONCEPT_V01.jpg", "cutout": "art/samples/DRG_FOOT_SLATEWING-DRAKE_CUTOUT_V01.png", "jobId": "5a00cb2e-4980-41d1-9044-54cd72538e14", "approved": true, "neverChange": ["hornless narrow head", "broad torn slate wings", "quadrupedal brace"] }
+    {
+      "unitId": "SAM_COMMANDER_EMBER-BANNER-DAIMYO",
+      "concept": "art/samples/SAM_COMMANDER_EMBER-BANNER-DAIMYO_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_COMMANDER_EMBER-BANNER-DAIMYO_CUTOUT_V01.png",
+      "jobId": "e162ebb2-8782-4b12-bfcb-c6e9a20794bb",
+      "approved": true,
+      "neverChange": [
+        "torn ember banner behind shoulder",
+        "command baton",
+        "closed gauntlets"
+      ]
+    },
+    {
+      "unitId": "SAM_FOOT_EMBERLINE-ASHIGARU",
+      "concept": "art/samples/SAM_FOOT_EMBERLINE-ASHIGARU_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_FOOT_EMBERLINE-ASHIGARU_CUTOUT_V01.png",
+      "jobId": "41263e48-26a9-42d5-8278-0098e5814edf",
+      "approved": true,
+      "neverChange": [
+        "single red sash",
+        "conical helmet",
+        "yari"
+      ]
+    },
+    {
+      "unitId": "SHI_COMMANDER_VEILED-MOON-JONIN",
+      "concept": "art/samples/SHI_COMMANDER_VEILED-MOON-JONIN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_COMMANDER_VEILED-MOON-JONIN_CUTOUT_V01.png",
+      "jobId": "4c922c43-9641-4e65-8f94-10f377857f8a",
+      "approved": true,
+      "neverChange": [
+        "silver half-mask",
+        "asymmetrical mantle",
+        "signal tags"
+      ]
+    },
+    {
+      "unitId": "SHI_ELITE_MIRROR-SHADE-ADEPT",
+      "concept": "art/samples/SHI_ELITE_MIRROR-SHADE-ADEPT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_ELITE_MIRROR-SHADE-ADEPT_CUTOUT_V01.png",
+      "jobId": "179cbf1c-24f6-400e-aa86-58ed221bd4b6",
+      "approved": true,
+      "neverChange": [
+        "smoked-mirror plates",
+        "smooth asymmetrical mask",
+        "reversed twin blades"
+      ]
+    },
+    {
+      "unitId": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL",
+      "concept": "art/samples/KNI_COMMANDER_SOLAR-BASTION-MARSHAL_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_COMMANDER_SOLAR-BASTION-MARSHAL_CUTOUT_V01.png",
+      "jobId": "175d40fa-6db2-40ef-9671-650a706ed420",
+      "approved": true,
+      "neverChange": [
+        "tower shoulders",
+        "sun-fortress shield mark",
+        "helmet under arm"
+      ]
+    },
+    {
+      "unitId": "KNI_ELITE_SKY-LANCE-DRAGOON",
+      "concept": "art/samples/KNI_ELITE_SKY-LANCE-DRAGOON_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_ELITE_SKY-LANCE-DRAGOON_CUTOUT_V01.png",
+      "jobId": "993757a5-c71c-4bca-b3bf-b7e591ed01f4",
+      "approved": true,
+      "neverChange": [
+        "one rider one drake",
+        "long lance forward",
+        "pale armored neck plates on drake"
+      ]
+    },
+    {
+      "unitId": "KNI_FOOT_BASTION-MAN-AT-ARMS",
+      "concept": "art/samples/KNI_FOOT_BASTION-MAN-AT-ARMS_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_FOOT_BASTION-MAN-AT-ARMS_CUTOUT_V01.png",
+      "jobId": "931d17ca-f111-42c2-9619-01c7f5fb7e00",
+      "approved": true,
+      "neverChange": [
+        "rectangular shield with fortress mark",
+        "enclosed helmet",
+        "short spear"
+      ]
+    },
+    {
+      "unitId": "DRG_COMMANDER_RIFTWING-DOMINANT",
+      "concept": "art/samples/DRG_COMMANDER_RIFTWING-DOMINANT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_COMMANDER_RIFTWING-DOMINANT_CUTOUT_V01.png",
+      "jobId": "a3557ef7-4812-435d-aea2-ab2b176e1778",
+      "approved": true,
+      "neverChange": [
+        "skull-grown crown horns",
+        "pale mineral chest ridges",
+        "worn wing openings"
+      ]
+    },
+    {
+      "unitId": "DRG_FOOT_SLATEWING-DRAKE",
+      "concept": "art/samples/DRG_FOOT_SLATEWING-DRAKE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_FOOT_SLATEWING-DRAKE_CUTOUT_V01.png",
+      "jobId": "5a00cb2e-4980-41d1-9044-54cd72538e14",
+      "approved": true,
+      "neverChange": [
+        "hornless narrow head",
+        "broad torn slate wings",
+        "quadrupedal brace"
+      ]
+    },
+    {
+      "unitId": "SAM_SIEGE_EMBER-OZUTSU-BATTERY",
+      "concept": "art/samples/SAM_SIEGE_EMBER-OZUTSU-BATTERY_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_SIEGE_EMBER-OZUTSU-BATTERY_CUTOUT_V01.png",
+      "jobId": "c96ac904-f81c-4d1b-89d2-a960d5cc8815",
+      "approved": false,
+      "note": "sample awaiting owner approval",
+      "neverChange": [
+        "bronze hand-cannon on low carriage",
+        "two crew",
+        "red rope bindings"
+      ]
+    },
+    {
+      "unitId": "SAM_CAVALRY_CRIMSON-UMAMAWARI-LANCER",
+      "concept": "art/samples/SAM_CAVALRY_CRIMSON-UMAMAWARI-LANCER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_CAVALRY_CRIMSON-UMAMAWARI-LANCER_CUTOUT_V01.png",
+      "jobId": "5fe84f4f-cb5a-4e65-afea-54354dd09563",
+      "approved": false,
+      "note": "sample awaiting owner approval",
+      "neverChange": [
+        "yari lance upright",
+        "tattered back-banner",
+        "two swords"
+      ]
+    },
+    {
+      "unitId": "SHI_SIEGE_REED-SMOKE-MORTAR",
+      "concept": "art/samples/SHI_SIEGE_REED-SMOKE-MORTAR_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_SIEGE_REED-SMOKE-MORTAR_CUTOUT_V01.png",
+      "jobId": "54dbc464-ae57-4c63-9fe6-c279fdf0bdf9",
+      "approved": false,
+      "note": "sample awaiting owner approval",
+      "neverChange": [
+        "squat bamboo-bound mortar on tripod",
+        "two hooded crew",
+        "clay smoke shells"
+      ]
+    },
+    {
+      "unitId": "SHI_CAVALRY_NIGHT-COURIER-RIDER",
+      "concept": "art/samples/SHI_CAVALRY_NIGHT-COURIER-RIDER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_CAVALRY_NIGHT-COURIER-RIDER_CUTOUT_V01.png",
+      "jobId": "6eec4b57-90b3-46be-a39c-d24ad4e0fe5c",
+      "approved": false,
+      "note": "sample awaiting owner approval",
+      "neverChange": [
+        "unarmored black horse",
+        "message tubes",
+        "rain-darkened cloak"
+      ]
+    },
+    {
+      "unitId": "KNI_SIEGE_BASTION-BOMBARD",
+      "concept": "art/samples/KNI_SIEGE_BASTION-BOMBARD_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_SIEGE_BASTION-BOMBARD_CUTOUT_V01.png",
+      "jobId": "94781bca-f393-4b75-8a29-cb2e5dd96644",
+      "approved": false,
+      "note": "sample awaiting owner approval",
+      "neverChange": [
+        "hooped iron bombard",
+        "chipped blue oak carriage",
+        "fortress mark panel"
+      ]
+    },
+    {
+      "unitId": "KNI_CAVALRY_DAWN-LANCER",
+      "concept": "art/samples/KNI_CAVALRY_DAWN-LANCER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_CAVALRY_DAWN-LANCER_CUTOUT_V01.png",
+      "jobId": "695561b8-52af-47c9-8b41-d85621a22971",
+      "approved": false,
+      "note": "sample awaiting owner approval",
+      "neverChange": [
+        "barded horse with torn caparison",
+        "couched heavy lance",
+        "kite shield"
+      ]
+    },
+    {
+      "unitId": "DRG_SIEGE_CINDERTHROAT-SIEGEWYRM",
+      "concept": "art/samples/DRG_SIEGE_CINDERTHROAT-SIEGEWYRM_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_SIEGE_CINDERTHROAT-SIEGEWYRM_CUTOUT_V01.png",
+      "jobId": "c02e86d1-9d10-4a35-9966-00655859d330",
+      "approved": false,
+      "note": "sample awaiting owner approval",
+      "neverChange": [
+        "wingless six-legged wyrm",
+        "pale mineral throat sac",
+        "wedge skull"
+      ]
+    },
+    {
+      "unitId": "DRG_CAVALRY_RIDGEBACK-RUNNER",
+      "concept": "art/samples/DRG_CAVALRY_RIDGEBACK-RUNNER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_CAVALRY_RIDGEBACK-RUNNER_CUTOUT_V01.png",
+      "jobId": "0a90bc9b-92cc-4a64-8720-73d4b70e4796",
+      "approved": false,
+      "note": "sample awaiting owner approval",
+      "neverChange": [
+        "wingless coursing drake",
+        "serrated ridge crest",
+        "mid-stride"
+      ]
+    }
   ],
   "pending": [
-    "SAM_SECOND_WHITE-CRANE-RETAINER", "SAM_ELITE_ONI-GATE-CHAMPION",
-    "SHI_SECOND_REED-SIGNAL-LIEUTENANT", "SHI_FOOT_NIGHT-THREAD-OPERATIVE",
-    "KNI_SECOND_OATHBOUND-CASTELLAN", "KNI_SUPPORT_PORTAL-KEEPER",
-    "DRG_SECOND_STORMCLAW-WINGSECOND", "DRG_ELITE_OBSIDIAN-MAW",
-    "RIT_LEADER_AFFILIATED-SUMMONER", "RIT_FOOT_FOREIGN-RITUALIST",
-    "STRUCTURE_REINFORCEMENT-PORTAL", "STRUCTURE_RITUAL-CIRCLE"
+    "SAM_SECOND_WHITE-CRANE-RETAINER",
+    "SAM_ELITE_ONI-GATE-CHAMPION",
+    "SHI_SECOND_REED-SIGNAL-LIEUTENANT",
+    "SHI_FOOT_NIGHT-THREAD-OPERATIVE",
+    "KNI_SECOND_OATHBOUND-CASTELLAN",
+    "KNI_SUPPORT_PORTAL-KEEPER",
+    "DRG_SECOND_STORMCLAW-WINGSECOND",
+    "DRG_ELITE_OBSIDIAN-MAW",
+    "RIT_LEADER_AFFILIATED-SUMMONER",
+    "RIT_FOOT_FOREIGN-RITUALIST",
+    "STRUCTURE_REINFORCEMENT-PORTAL",
+    "STRUCTURE_RITUAL-CIRCLE"
+  ],
+  "concepts": [
+    {
+      "id": "MAP_MOUNTAIN-PASS",
+      "file": "art/concepts/MAP_MOUNTAIN-PASS_CONCEPT_V01.jpg",
+      "jobId": "931efefa-9aef-441f-aebf-aaa51bdb1ebb",
+      "approved": false
+    },
+    {
+      "id": "MAP_DROWNED-MARSH",
+      "file": "art/concepts/MAP_DROWNED-MARSH_CONCEPT_V01.jpg",
+      "jobId": "90a64d00-a53d-420a-918c-68ab1c1bd794",
+      "approved": false
+    },
+    {
+      "id": "UI_HUD-MATERIALS",
+      "file": "art/concepts/UI_HUD-MATERIALS_CONCEPT_V01.jpg",
+      "jobId": "62044cef-bde3-46d1-8ed6-599bc71159a1",
+      "approved": false
+    }
   ]
 }

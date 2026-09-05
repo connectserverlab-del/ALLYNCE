@@ -13,11 +13,48 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §9 Faction doctrines | `data/abilities/abilities.json`, `effects.ts` | Orders and passives as data; interpreter in `applyEffect` |
 | §11 Ritual system | `rituals.ts` | Ratings, formula, states, hold and instability, sync release |
 | §12 Reinforcement portals | `portals.ts` | Lifecycle, queue, capture, destroy refund |
+| Mountains and the labored climb | `types.ts` (TERRAIN_RULES), `battle.ts` (`reachable`, `move`) | Rock costs foot 5, cavalry 6, wings 2. A unit that cannot afford a hex may still take one adjacent hex by spending its whole activation, so a range is slow rather than sealed |
 | §13 Cavalry and flying | `battle.ts` (`reachable`), `effects.ts` (`ChargeBonus`) | Anti-air, forest costs, Predatory Airspace, Diving Charge, Exposed |
 | §14 Abilities and clones | `effects.ts` | Twin Echo reference implementation |
 | §15 Objectives | `objectives.ts` | Eleven composable types |
 | §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses |
 | §18 Architecture | all | Simulation is separate from presentation; every action logs a serializable event |
+
+## Card skills
+
+Every card at four stars and above carries one ability it can spend an action on. Six kinds cover the roster,
+all of them ordinary temporary modifiers so they appear in the stat breakdown by name instead of as a hidden
+number, and all of them defined in `data/abilities/abilities.json` rather than in code.
+
+| Kind | What it does | Example |
+|---|---|---|
+| `SelfSacrificeBuff` | Spend a share of maximum health for attack this round. Never lethal: a unit that cannot pay the price cannot use it at all. | Blood Offering — 15% health for +450 ATK |
+| `SelfHaste` | Movement for one round, for this unit or, with `bandWide`, for its whole band. | Second Wind — +3 MOV; Ridge Pace — +3 MOV band-wide |
+| `BandAtk` | A team attack buff across the band. | Choir of Edges — +220 ATK |
+| `EnemyAtkDebuff` | Every enemy inside the ability's range loses attack for the round. | Judgement's Weight — -300 ATK within 2 |
+| `EnemySlow` | Every enemy inside range loses movement, optionally with a status. | Deep Frost — -3 MOV and Suppressed within 3 |
+| `SpawnClones` | The body divides: attack and defence are shared evenly across the original and every copy. | Swarm Split — four bodies at a quarter each |
+
+**The band** is the platoon where a unit has one, and the unit plus the allies standing beside it where it does
+not. The creature divisions mostly deploy loose rather than in platoons, so without that fallback a team buff
+would do nothing for half the roster.
+
+### Splitting is not duplication
+
+A clone ability divides the body rather than copying it. `UnitState.splitBodies` records how many bodies the
+unit's attack and defence are currently shared across — itself plus its living copies — and `computeStat`
+divides the base by it for the original and every copy alike. Twin Echo makes three bodies at a third each;
+Swarm Split makes four at a quarter. The bodies together are never worth more than the one they came from, so
+splitting buys presence on more hexes and pays for it in weight on each.
+
+Copies still keep the rest of the clone rules: one hit kills them, they grant no cohesion, they count for
+nothing in composition, they cannot use abilities, be tributed, be sacrificed or take prisoners, and they
+expire on their timer. What is new is the way back up. When a copy leaves the field the original reclaims its
+share — two thirds with one copy left, whole once the last one falls — which makes hunting the copies worth an
+activation instead of an annoyance to be ignored. A body that has already split cannot split again.
+
+A test in `core/tests/skills.test.ts` walks the whole registry and fails if any card at four stars or above is
+carrying no ability it can activate, so the rule cannot quietly rot as the roster grows.
 
 ## Worked example (from the brief §7)
 
@@ -43,3 +80,22 @@ breakdown contains each named source.
 - `computeStat` → `ModifierPipeline.Compute(unit, stat, ctx)` returning the same `StatBreakdown` for tooltips.
 - `applyEffect` → `IEffectHandler` per `effect.kind`, registered in a dictionary.
 - `events` → `List<GameEvent>` serialized with the save; replay by re-applying actions with the same seed.
+
+### Scaffold status
+
+A structural scaffold following the mapping above lives under `unity/` — see `unity/README.md` for what
+is stubbed versus real. It is not a working Unity project (no `.unity` scene, no package manifest, nothing
+compiled), just the C# shapes and an editor importer sketch to build the real port against.
+
+`unity/Generated/` is regenerated from this repository's own source of truth rather than hand-written:
+
+- `EffectKinds.g.cs` mirrors `EFFECT_KINDS` in `core/src/effects.ts` — every `effect.kind` the interpreter
+  (and the passive systems it defers to) understands.
+- `TerrainRules.g.cs` mirrors `TERRAIN_RULES` in `core/src/types.ts`, field for field.
+- `DataManifest.g.json` is a count-and-id summary of the loaded registry, for the importer to sanity-check
+  against once it runs inside a real Unity project.
+
+Run `npm run unity:scaffold` and commit the result after changing any of those three sources, the same way
+`npm run assets` is re-run after an art or building-tier change. `core/tests/unityExport.test.ts` and
+`core/tests/effect_kinds.test.ts` fail if the generated output or the ability data drift from the reference
+TypeScript, so a forgotten regeneration shows up as a red test rather than a silent gap on the Unity side.

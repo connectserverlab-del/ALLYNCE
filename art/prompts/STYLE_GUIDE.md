@@ -37,6 +37,18 @@ For creatures replace the material list with: *scarred weathered hide, chipped h
 | Knight | dull gold | stained ivory, cold blue steel |
 | Dragon Host | cold pale cyan | slate blue, charcoal membranes |
 | Ritual Cult | pale teal | marsh green, weathered teal |
+| Cobalt Conclave | cold blue-white | cobalt blue, tarnished pewter |
+| Thorn Coven | sickly green-grey | bruised violet, moss green, bone |
+| Cutpurse Court | dull lamp amber | soot black, dirty brass, oxblood |
+| Windmarch Host | bleached bone-white | dust ochre, felt brown, weathered horn |
+| Dunewake Compact | low amber | sun-bleached linen, pale turquoise, scorched umber |
+| Choir Militant | cold bone-white | ash grey, tarnished gold, dirty broken feathers |
+| Ashpit Legion | low ember-red | charcoal hide with ember splits, sulphur yellow |
+| Spiral Warband | sickly green-violet | rust brown, oxidised copper, looted mismatched plate |
+| Half-Born Host | pale storm-blue | weathered bronze, grey wool, branching pale scars |
+| Winter Famine | cold pale | grey-blue frostbitten hide, bone, dull frost-white |
+| Ridge Kin | cool grey-green | wet bark, moss, matted fur, dull amber |
+| Formic Swarm | low amber | oxidised brown chitin, black, pale resin repairs |
 
 ## Rules that never change per unit
 
@@ -51,3 +63,50 @@ For creatures replace the material list with: *scarred weathered hide, chipped h
 1. Generate the remaining 10 vertical-slice units (seconds, elites, foot soldiers not yet covered, ritualists, portal keeper) with the Global Style Block and the subject blocks in `UNIT_PROMPTS.md`.
 2. Approve one canonical image per unit, then attach it as the reference for the construction sheet and the action-pose sheet (suffixes in the engineering brief §20).
 3. Record model, settings and job id in `art/ASSET_MANIFEST.json` for every approved asset.
+
+## Cards are paper, not metal (V02)
+
+The first card frames were hammered iron with rows of punched sockets. Rejected: too metal, and the repeating
+holes were unpleasant to look at. The rule now:
+
+- Card stock is **aged paper**: linen paper, grey-buff card, dark mulberry paper. Foxing, tea stains, frayed and
+  dog-eared edges, cloth tape at the corners, a wax seal on the highest tier.
+- **Never** put holes, punched circles, perforations, rivets, eyelets or rows of dots on any card or interface piece.
+  Add "no holes, no punched circles, no perforations, no rivets, no eyelets, no rows of dots" to every card prompt.
+- Stars are a **separate painted asset**, not part of the frame: gold leaf rubbed thin over a paper chip for an
+  earned star, a broken brush-ink outline for an unearned one. They are composited onto the card at render time,
+  so a unit's star count can change without repainting the frame.
+
+Three stocks map to rank: plain linen for 1 to 6 stars, inked and taped for 7 to 9, sealed mulberry for 10-star
+cards and for every rite in the side deck.
+
+## Two views of a building
+
+The stronghold overview is painted **straight down**. Individual building portraits are painted at a **low angle**
+so their walls, roofs and towers read. Both are correct; use the overview for the map and the portrait for the
+upgrade panels.
+
+## Background removal on toned grounds
+
+The model sometimes returns a cream or lightly brushed ground instead of pure white, and the border flood fill
+then lifts nothing. The cutter seeds its fill from the median of the four corner pixels rather than from pure
+white, and escalates its tolerance (30, 40, 52, 66, 82) until at least 28% of the frame is cleared. Two passes
+follow: isolated specks smaller than 0.4% of the frame are dropped so the crop box hugs the figure, and
+background-coloured pockets the border fill could not reach — the inside of a drawn bow, a gap under a raised
+arm — are cleared separately. A frame with visible brush texture in the background is not worth rescuing;
+regenerate it with *absolutely no visible brush strokes or paint texture in the background* added to the prompt.
+
+## Wendigo-themed creatures
+
+The Winter Famine division is drawn as **original famine-spirits**, not as a depiction of the figure from
+Algonquian belief that the name is usually attached to. Every prompt says so explicitly, the units are named
+for what they do (Starveling, Antler Wraith, Hollow Hunger, Winter Maw) rather than borrowing a sacred name,
+and the faction is called the Winter Famine. Keep it that way in any future round: the silhouette language —
+starved frame, long limbs, broken antlers, frostbitten grey-blue hide — carries the idea without taking
+somebody's sacred figure and putting it on a trading card.
+
+## Ground planes
+
+Prompts occasionally come back with a rock or ledge painted under the feet, which the cutter keeps because it
+touches the figure. There is no fixing that in post; regenerate with *ABSOLUTELY NO GROUND, no rock, no ledge,
+no cliff, no dirt, no shadow cast on any surface, nothing at all beneath the feet* added to the prompt.
