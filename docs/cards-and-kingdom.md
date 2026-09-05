@@ -106,3 +106,22 @@ to paint.
 
 `saveBattle` and `loadBattle` round-trip a match in progress, including decks, hands and the uid counter, so a
 restored battle keeps issuing fresh unit ids instead of colliding with saved ones.
+
+## Campaign map
+
+A third layer sits above the match loop: a province made of regions, each one a battle. `core/src/campaign.ts`
+and `data/campaign/samurai_province.json` are the reference implementation, six regions run from the Ashfall
+keep-lands to the Iron Vale.
+
+- Each region names its neighbors, a starting owner (or none, for contested ground), and its own biome bias —
+  the same `size`/`forest`/`rugged`/`river`/`trenches`/`ruins` fields a hand-authored `MapSpec` takes.
+- `contestableRegions` only offers ground bordering territory a side already holds, so a campaign advances as
+  one front rather than a side reaching across the map.
+- Fighting for a region is an ordinary match: `battleMapSpec(region, seed)` hands that region's bias straight
+  to `setUpMatch`/`runMatch`, so the same region plays a different, still-legal field every time it is contested
+  instead of standing in for one fixed painting.
+- `resolveRegionBattle` only moves ownership on a decisive win; a draw or an unresolved siege leaves the region
+  as it was.
+- A held region pays its owner resources per hour, same as a building. `regionProduction` lists each one as a
+  named line — `"Region: Ashfall Keep Lands"` — and `applyCampaignProduction` folds that into the holding,
+  capped by the same storage a building's own production respects.

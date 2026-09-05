@@ -90,6 +90,18 @@ where they conflict.**
   per round for both sides. In today's matches this rarely fires in practice — see `OWN-3` in
   `docs/CHECKLIST.md` for why.
 
+### Done in the campaign map pass
+
+- A province is a graph of regions (`data/campaign/samurai_province.json`, six regions from the Ashfall
+  keep-lands to the Iron Vale), each with neighbors, a starting owner and its own biome bias.
+- A side may only contest a region bordering territory it already holds, so a campaign advances as one
+  contiguous front instead of a side reaching across the map.
+- Fighting for a region is an ordinary generated-field match: its biome bias hands straight to
+  `setUpMatch`/`runMatch`, so the same region plays a different, still-legal field every time, the same way
+  `ashfall_crossing` already regenerates per seed.
+- A held region pays its owner resources per hour as a named, source-tracked income line — `"Region: Ashfall
+  Keep Lands"` — folded into the holding capped by the same storage an ordinary building respects.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -139,3 +151,9 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   than the very first Commander's death alone deciding it outright as it does today (see `OWN-3`). This would give
   the Samurai banner privilege and every faction's rank ladder a piece of real mechanical weight to protect, and
   would let all three win conditions carry closer to equal odds of deciding a given match instead of one dominating.
+- 2026-09-05: Proposal — a region held for several campaign ticks in a row could raise a temporary Garrison at
+  its battle anchor for the next fight there: a themed siege emplacement or cavalry picket drawn from the
+  holding side's own faction (a cannon at the Stonebridge bridgehead, a cavalry picket in the Iron Vale), gone
+  again if the region changes hands. This would give long-held ground a defender's edge that reads as the
+  region's own biome and faction rather than a flat number, and would put the campaign map's regions and the
+  faction's themed siege and cavalry pieces to work together instead of each sitting in its own system.

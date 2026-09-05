@@ -16,7 +16,7 @@ This repository currently holds three things:
 
 ```bash
 npm install
-npm test            # 98 tests: combat math, cohesion, composition, succession, clones, rituals, portals, scenarios
+npm test            # 110 tests: combat math, cohesion, composition, succession, clones, rituals, portals, scenarios, campaign
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -46,6 +46,7 @@ npm run assets      # rebuilds the asset registry from the data and from disk
 - **Save and load**: `core/src/save.ts` round-trips a battle mid-match and a holding, with a version gate.
 - **Cards and decks**: a 100-card main deck and a 20-card ritual/fusion side deck, with a 1-to-10 star scale that sets tribute cost, copy limits and ritual requirements. See `docs/cards-and-kingdom.md`.
 - **The holding**: a permanent base with eleven buildings, a twelve-node research tree and three recruitment banners with pity. Everything it grants reaches the battlefield as a named, source-tracked modifier.
+- **Campaign map**: a province of regions (`data/campaign/`), each with its own biome bias and neighbors. A side can only contest ground bordering territory it already holds, fighting for a region is an ordinary generated-field match, and a held region pays its owner named, source-tracked resources per hour into the holding. See `docs/cards-and-kingdom.md`.
 - **Irregular battlefields**: seeded generator (`core/src/mapgen.ts`) carves an odd-shaped playable mask from a canvas, layers elevation into mountain ranges, high ground, open ground and valley floors, runs a river downhill with fords, digs trenches in front of each army, lays a road, gathers mud in low wet ground, and places ruins and fortifications. Fourteen terrain types with a data table for movement cost by foot, cavalry and flying, defence, concealment, sight and charge-breaking.
 - **Universal win conditions**: wipe out the opponent, kill their army leader, or force a surrender. Scenario objectives layer on top.
 - **Shinobi ranks**: Apprentice, Genin, Chunin, Jounin, Anbu, Kage, each with a movement trait (canopy movement through forest, hide on stopping in forest, ignore zones of control, pass allies, bonus movement, Shadow Step).
