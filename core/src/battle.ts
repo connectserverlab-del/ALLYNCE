@@ -95,9 +95,9 @@ export class BattleController {
   }
 
   /** BFS pathfinding with terrain costs, zone of control and flying rules. Returns reachable hexes with cost. */
-  reachable(u: UnitState): Map<string, { hex: Hex; cost: number }> {
+  reachable(u: UnitState): Map<string, { hex: Hex; cost: number; labored?: boolean }> {
     const b = this.b; const d = b.def(u);
-    const out = new Map<string, { hex: Hex; cost: number }>();
+    const out = new Map<string, { hex: Hex; cost: number; labored?: boolean }>();
     if (!u.pos) return out;
     const budget = this.movementAllowance(u);
     const flag = orderFlags.get(u.uid);
@@ -131,6 +131,17 @@ export class BattleController {
         if (!ignoreZoc && this.adjacentEnemyAt(u, n)) { /* still allowed; reaction attack is triggered on leaving */ }
       }
     }
+    // The labored climb: ground that costs more than a unit has left is not closed to it, only slow.
+    // A unit that has not yet moved may enter one adjacent hex it cannot afford by spending the whole activation.
+    if (u.movedThisActivation === 0) {
+      for (const n of hexNeighbors(u.pos)) {
+        if (!b.inBounds(n) || out.has(hexKey(n))) continue;
+        if (b.unitAt(n)) continue;
+        const step = terrainCostFor(b, u, b.terrainAt(n));
+        if (step === null) continue;
+        out.set(hexKey(n), { hex: n, cost: step, labored: true });
+      }
+    }
     return out;
   }
 
@@ -154,7 +165,12 @@ export class BattleController {
     const zocEnemies = b.adjacentEnemies(u).filter((e) => !b.hasStatus(e, "Routed"));
     const traits = movementTraits(b, u);
     const ignoreZoc = orderFlags.get(u.uid) === "PhaseMove" || !!traits.ignoreZoc || u.freeMoveHexes > 0;
+    if (r.labored && u.freeMoveHexes <= 0) {
+      if (u.movedThisActivation > 0) throw new Error("A labored climb needs a fresh activation");
+      if (u.ap < 2) throw new Error("A labored climb costs the whole activation");
+    }
     if (u.freeMoveHexes > 0) { if (r.cost > u.freeMoveHexes) throw new Error("Beyond free move"); u.freeMoveHexes = 0; }
+    else if (r.labored) { u.ap = 0; }
     else { if (opts.disengage) this.spend(u, 1); this.spend(u, 1); }
     u.setUp = false; // a siege piece that moves must set up again
     const from = u.pos;
@@ -174,6 +190,7 @@ export class BattleController {
     u.movedThisActivation += r.cost;
     // charge momentum: broken by rough ground, otherwise accumulates
     u.chargeMoved = TERRAIN_RULES[b.terrainAt(to)].chargeBreaks ? 0 : u.chargeMoved + r.cost;
+    if (r.labored) b.log("LaboredClimb", { uid: u.uid, to, terrain: b.terrainAt(to), cost: r.cost });
     if (b.hasStatus(u, "Hidden") && b.terrainAt(to) !== "Forest" && b.terrainAt(to) !== "Smoke" && b.adjacentEnemies(u).length) b.addStatus(u, "Revealed", 0, "Moved into contact");
     if (traits.hideOnForestStop && b.terrainAt(to) === "Forest") b.addStatus(u, "Hidden", 2, "Canopy");
     b.log("Move", { uid: u.uid, from, to, cost: r.cost });

@@ -1,45 +1,283 @@
 {
   "resources": {
-    "koku":   { "name": "Koku",   "text": "Rice measured for a year of service. Feeds every soldier you keep." },
-    "iron":   { "name": "Iron",   "text": "Bar stock for blades, plate and cannon." },
-    "timber": { "name": "Timber", "text": "Beams, carriages, siege frames and palisades." },
-    "silver": { "name": "Silver", "text": "Coin for oaths, contracts and recruiters." }
+    "koku": {
+      "name": "Koku",
+      "text": "Rice measured for a year of service. Feeds every soldier you keep."
+    },
+    "iron": {
+      "name": "Iron",
+      "text": "Bar stock for blades, plate and cannon."
+    },
+    "timber": {
+      "name": "Timber",
+      "text": "Beams, carriages, siege frames and palisades."
+    },
+    "silver": {
+      "name": "Silver",
+      "text": "Coin for oaths, contracts and recruiters."
+    }
   },
   "buildings": {
-    "KEEP":        { "name": "Keep", "maxLevel": 10, "text": "Your seat. No other building may exceed the Keep's level.",
-      "cost": { "koku": 400, "iron": 200, "timber": 500, "silver": 300 }, "costGrowth": 1.65, "buildSeconds": 900, "timeGrowth": 1.8,
-      "produces": { "silver": 40 } },
-    "GRANARY":     { "name": "Granary", "maxLevel": 10, "text": "Rice terraces and silos.",
-      "cost": { "koku": 120, "timber": 260 }, "costGrowth": 1.55, "buildSeconds": 420, "timeGrowth": 1.7,
-      "produces": { "koku": 120 } },
-    "MINE":        { "name": "Iron Mine", "maxLevel": 10, "text": "Cut into the ridge. Ore for the forge.",
-      "cost": { "koku": 100, "timber": 300 }, "costGrowth": 1.55, "buildSeconds": 480, "timeGrowth": 1.7,
-      "produces": { "iron": 80 } },
-    "SAWPIT":      { "name": "Sawpit", "maxLevel": 10, "text": "Timber for carriages, frames and walls.",
-      "cost": { "koku": 100, "iron": 60 }, "costGrowth": 1.5, "buildSeconds": 400, "timeGrowth": 1.7,
-      "produces": { "timber": 100 } },
-    "BARRACKS":    { "name": "Barracks", "maxLevel": 10, "text": "Every level raises the Army Capacity you may field.",
-      "cost": { "koku": 260, "iron": 180, "timber": 220 }, "costGrowth": 1.6, "buildSeconds": 600, "timeGrowth": 1.75,
-      "effect": { "armyCapacity": 12 } },
-    "RESEARCH_HALL": { "name": "Research Hall", "maxLevel": 10, "text": "Unlocks and speeds research. Its level gates the research tiers you may attempt.",
-      "cost": { "koku": 200, "iron": 140, "timber": 300, "silver": 120 }, "costGrowth": 1.65, "buildSeconds": 780, "timeGrowth": 1.8,
-      "effect": { "researchSpeed": 0.06, "researchTier": 1 } },
-    "RECRUITMENT_HALL": { "name": "Recruitment Hall", "maxLevel": 10, "text": "Draws for new cards. Higher levels lift the floor of every draw.",
-      "cost": { "koku": 180, "iron": 100, "timber": 200, "silver": 260 }, "costGrowth": 1.6, "buildSeconds": 660, "timeGrowth": 1.75,
-      "effect": { "drawFloor": 0.2 } },
-    "FORGE":       { "name": "Forge", "maxLevel": 10, "text": "Every level adds attack to units that carry forged steel.",
-      "cost": { "koku": 160, "iron": 320, "timber": 160 }, "costGrowth": 1.62, "buildSeconds": 700, "timeGrowth": 1.75,
-      "effect": { "atk": 10 } },
-    "STABLE":      { "name": "Stable", "maxLevel": 10, "text": "Horses, drakes and their handlers. Raises cavalry weight.",
-      "cost": { "koku": 220, "iron": 120, "timber": 260 }, "costGrowth": 1.58, "buildSeconds": 620, "timeGrowth": 1.75,
-      "effect": { "cavalryAtk": 15 } },
-    "WALL":        { "name": "Curtain Wall", "maxLevel": 10, "text": "Raises the defence of every unit you field.",
-      "cost": { "koku": 140, "iron": 260, "timber": 340 }, "costGrowth": 1.6, "buildSeconds": 720, "timeGrowth": 1.78,
-      "effect": { "def": 10 } },
-    "SHRINE":      { "name": "Ritual Shrine", "maxLevel": 10, "text": "Prepared ground. Raises the Fusion charges you carry into battle and speeds rituals.",
-      "cost": { "koku": 300, "iron": 100, "timber": 200, "silver": 400 }, "costGrowth": 1.7, "buildSeconds": 900, "timeGrowth": 1.85,
-      "effect": { "fusionChargesPer": 4, "ritualProgress": 1 } }
+    "KEEP": {
+      "name": "Keep",
+      "maxLevel": 10,
+      "text": "Your seat. No other building may exceed the Keep's level.",
+      "cost": {
+        "koku": 400,
+        "iron": 200,
+        "timber": 500,
+        "silver": 300
+      },
+      "costGrowth": 1.65,
+      "buildSeconds": 900,
+      "timeGrowth": 1.8,
+      "produces": {
+        "silver": 40
+      },
+      "art": [
+        "art/buildings/BLD_KEEP_T1_V01.jpg",
+        "art/buildings/BLD_KEEP_T2_V01.jpg",
+        "art/buildings/BLD_KEEP_T3_V01.jpg"
+      ]
+    },
+    "GRANARY": {
+      "name": "Granary",
+      "maxLevel": 10,
+      "text": "Rice terraces and silos.",
+      "cost": {
+        "koku": 120,
+        "timber": 260
+      },
+      "costGrowth": 1.55,
+      "buildSeconds": 420,
+      "timeGrowth": 1.7,
+      "produces": {
+        "koku": 120
+      },
+      "art": [
+        null,
+        null,
+        null
+      ]
+    },
+    "MINE": {
+      "name": "Iron Mine",
+      "maxLevel": 10,
+      "text": "Cut into the ridge. Ore for the forge.",
+      "cost": {
+        "koku": 100,
+        "timber": 300
+      },
+      "costGrowth": 1.55,
+      "buildSeconds": 480,
+      "timeGrowth": 1.7,
+      "produces": {
+        "iron": 80
+      },
+      "art": [
+        null,
+        null,
+        null
+      ]
+    },
+    "SAWPIT": {
+      "name": "Sawpit",
+      "maxLevel": 10,
+      "text": "Timber for carriages, frames and walls.",
+      "cost": {
+        "koku": 100,
+        "iron": 60
+      },
+      "costGrowth": 1.5,
+      "buildSeconds": 400,
+      "timeGrowth": 1.7,
+      "produces": {
+        "timber": 100
+      },
+      "art": [
+        null,
+        null,
+        null
+      ]
+    },
+    "BARRACKS": {
+      "name": "Barracks",
+      "maxLevel": 10,
+      "text": "Every level raises the Army Capacity you may field.",
+      "cost": {
+        "koku": 260,
+        "iron": 180,
+        "timber": 220
+      },
+      "costGrowth": 1.6,
+      "buildSeconds": 600,
+      "timeGrowth": 1.75,
+      "effect": {
+        "armyCapacity": 12
+      },
+      "art": [
+        "art/buildings/BLD_BARRACKS_T1_V01.jpg",
+        null,
+        "art/buildings/BLD_BARRACKS_T3_V01.jpg"
+      ]
+    },
+    "RESEARCH_HALL": {
+      "name": "Research Hall",
+      "maxLevel": 10,
+      "text": "Unlocks and speeds research. Its level gates the research tiers you may attempt.",
+      "cost": {
+        "koku": 200,
+        "iron": 140,
+        "timber": 300,
+        "silver": 120
+      },
+      "costGrowth": 1.65,
+      "buildSeconds": 780,
+      "timeGrowth": 1.8,
+      "effect": {
+        "researchSpeed": 0.06,
+        "researchTier": 1
+      },
+      "art": [
+        null,
+        null,
+        null
+      ]
+    },
+    "RECRUITMENT_HALL": {
+      "name": "Recruitment Hall",
+      "maxLevel": 10,
+      "text": "Draws for new cards. Higher levels lift the floor of every draw.",
+      "cost": {
+        "koku": 180,
+        "iron": 100,
+        "timber": 200,
+        "silver": 260
+      },
+      "costGrowth": 1.6,
+      "buildSeconds": 660,
+      "timeGrowth": 1.75,
+      "effect": {
+        "drawFloor": 0.2
+      },
+      "art": [
+        null,
+        null,
+        null
+      ]
+    },
+    "FORGE": {
+      "name": "Forge",
+      "maxLevel": 10,
+      "text": "Every level adds attack to units that carry forged steel.",
+      "cost": {
+        "koku": 160,
+        "iron": 320,
+        "timber": 160
+      },
+      "costGrowth": 1.62,
+      "buildSeconds": 700,
+      "timeGrowth": 1.75,
+      "effect": {
+        "atk": 10
+      },
+      "art": [
+        null,
+        null,
+        null
+      ]
+    },
+    "STABLE": {
+      "name": "Stable",
+      "maxLevel": 10,
+      "text": "Horses, drakes and their handlers. Raises cavalry weight.",
+      "cost": {
+        "koku": 220,
+        "iron": 120,
+        "timber": 260
+      },
+      "costGrowth": 1.58,
+      "buildSeconds": 620,
+      "timeGrowth": 1.75,
+      "effect": {
+        "cavalryAtk": 15
+      },
+      "art": [
+        null,
+        null,
+        null
+      ]
+    },
+    "WALL": {
+      "name": "Curtain Wall",
+      "maxLevel": 10,
+      "text": "Raises the defence of every unit you field.",
+      "cost": {
+        "koku": 140,
+        "iron": 260,
+        "timber": 340
+      },
+      "costGrowth": 1.6,
+      "buildSeconds": 720,
+      "timeGrowth": 1.78,
+      "effect": {
+        "def": 10
+      },
+      "art": [
+        "art/buildings/BLD_WALL_T1_V01.jpg",
+        "art/buildings/BLD_WALL_T2_V01.jpg",
+        "art/buildings/BLD_WALL_T3_V01.jpg"
+      ]
+    },
+    "SHRINE": {
+      "name": "Ritual Shrine",
+      "maxLevel": 10,
+      "text": "Prepared ground. Raises the Fusion charges you carry into battle and speeds rituals.",
+      "cost": {
+        "koku": 300,
+        "iron": 100,
+        "timber": 200,
+        "silver": 400
+      },
+      "costGrowth": 1.7,
+      "buildSeconds": 900,
+      "timeGrowth": 1.85,
+      "effect": {
+        "fusionChargesPer": 4,
+        "ritualProgress": 1
+      },
+      "art": [
+        null,
+        null,
+        null
+      ]
+    }
   },
-  "startingResources": { "koku": 800, "iron": 500, "timber": 800, "silver": 600 },
-  "storagePerKeepLevel": 4000
+  "startingResources": {
+    "koku": 800,
+    "iron": 500,
+    "timber": 800,
+    "silver": 600
+  },
+  "storagePerKeepLevel": 4000,
+  "tierBands": [
+    {
+      "tier": 1,
+      "fromLevel": 1,
+      "toLevel": 3,
+      "text": "Thrown up in timber and thatch."
+    },
+    {
+      "tier": 2,
+      "fromLevel": 4,
+      "toLevel": 7,
+      "text": "Rebuilt in mortared stone."
+    },
+    {
+      "tier": 3,
+      "fromLevel": 8,
+      "toLevel": 10,
+      "text": "Enlarged, towered and fortified."
+    }
+  ]
 }

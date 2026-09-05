@@ -22,6 +22,13 @@ A tribute is one of your own deployed units, removed from the field to pay for t
 never be tributed. Ten-star cards have no tribute cost because they cannot be summoned from the main deck at all:
 they arrive only through a ritual or fusion card.
 
+## Card faces
+
+Cards are printed on paper, not stamped from metal. Three stocks carry rank: plain linen paper for 1 to 6 stars,
+inked and cloth-taped card for 7 to 9, sealed mulberry paper for 10-star cards and every rite in the side deck.
+Stars are a separate painted asset composited onto the card, so a unit's star count can change without repainting
+its frame. Nothing in the interface carries punched holes, rivets or rows of dots.
+
 ## The main deck: 100 cards
 
 - Exactly 100 cards, no more, no less.
@@ -70,3 +77,14 @@ traced back to something you built.
 | Ritual Shrine | +1 Fusion charge per 4 levels, faster rituals |
 | Research Hall | unlocks study tiers and speeds all building work |
 | Recruitment Hall | lifts the star floor of every draw |
+
+
+## Buildings change their look as they rise
+
+Each building bands its ten levels into three visual tiers: levels 1 to 3 are thrown up in timber and thatch,
+4 to 7 are rebuilt in mortared stone, 8 to 10 are enlarged, towered and fortified. `buildingArt` falls back to the
+nearest lower tier that has been painted, so a missing asset never leaves a hole in the stronghold.
+
+Painted so far: the Keep at all three tiers, the Curtain Wall at all three, the Barracks at tiers one and three.
+`npm run assets` regenerates `docs/asset-registry.md`, which lists every asset the game expects and what is still
+to paint.

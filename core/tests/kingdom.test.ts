@@ -100,3 +100,27 @@ describe("the holding", () => {
     expect(computeStat(b, lancer, "ATK").modifiers.map((m) => m.source)).toContain("Stable 1");
   });
 });
+
+describe("building tiers", () => {
+  it("bands levels into three looks and falls back to the nearest painted tier", async () => {
+    const { buildingTier, buildingArt, nextTierAt, newKingdom, startUpgrade, tick } = await import("../src/kingdom.js");
+    expect(buildingTier(reg, 1).tier).toBe(1);
+    expect(buildingTier(reg, 3).tier).toBe(1);
+    expect(buildingTier(reg, 4).tier).toBe(2);
+    expect(buildingTier(reg, 7).tier).toBe(2);
+    expect(buildingTier(reg, 10).tier).toBe(3);
+    expect(nextTierAt(reg, 2)).toBe(4);
+    expect(nextTierAt(reg, 9)).toBeNull();
+    expect(buildingArt(reg, "KEEP", 0)).toBeNull();
+    expect(buildingArt(reg, "KEEP", 2)).toMatch(/KEEP_T1/);
+    expect(buildingArt(reg, "WALL", 9)).toMatch(/WALL_T3/);
+    // the Barracks has no tier-two painting yet, so level 5 keeps showing tier one rather than blanking
+    expect(buildingArt(reg, "BARRACKS", 5)).toMatch(/BARRACKS_T1/);
+    expect(buildingArt(reg, "BARRACKS", 9)).toMatch(/BARRACKS_T3/);
+    // a building with no art at all stays null without throwing
+    expect(buildingArt(reg, "SHRINE", 5)).toBeNull();
+    const k = newKingdom(reg, "KNI");
+    expect(buildingArt(reg, "GRANARY", k.levels.GRANARY)).toBeNull();
+    void startUpgrade; void tick;
+  });
+});

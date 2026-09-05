@@ -56,7 +56,7 @@ export const TERRAIN_RULES: Record<Terrain, TerrainRule> = {
   Road:          { costFoot: 1, costCavalry: 1, costFlying: 1, def: -50, concealment: false, blocksSight: false, chargeBreaks: false, ranged: { atk: 0, range: 0 } },
   Forest:        { costFoot: 2, costCavalry: 3, costFlying: 2, def: 50,  concealment: true,  blocksSight: true,  chargeBreaks: true,  ranged: { atk: 0, range: 0 } },
   HighGround:    { costFoot: 2, costCavalry: 2, costFlying: 1, def: 50,  concealment: false, blocksSight: false, chargeBreaks: false, ranged: { atk: 100, range: 1 } },
-  Mountain:      { costFoot: null, costCavalry: null, costFlying: 2, def: 0, concealment: false, blocksSight: true, chargeBreaks: true, ranged: { atk: 0, range: 0 } },
+  Mountain:      { costFoot: 5, costCavalry: 6, costFlying: 2, def: 0, concealment: false, blocksSight: true, chargeBreaks: true, ranged: { atk: 0, range: 0 } },
   Valley:        { costFoot: 1, costCavalry: 1, costFlying: 1, def: -50, concealment: false, blocksSight: false, chargeBreaks: false, ranged: { atk: 0, range: 0 } },
   Trench:        { costFoot: 2, costCavalry: null, costFlying: 1, def: 150, concealment: true, blocksSight: false, chargeBreaks: true, ranged: { atk: 0, range: 0 } },
   Mud:           { costFoot: 2, costCavalry: 3, costFlying: 1, def: -50, concealment: false, blocksSight: false, chargeBreaks: true, ranged: { atk: 0, range: 0 } },

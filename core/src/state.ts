@@ -53,7 +53,7 @@ export class Battle {
   elevationAt(h: Hex): number { return this.elevation.get(hexKey(h)) ?? 0; }
   terrainAt(h: Hex): Terrain { return this.terrain.get(hexKey(h)) ?? "Open"; }
   unitAt(h: Hex): UnitState | undefined { const uid = this.occupancy.get(hexKey(h)); return uid ? this.units.get(uid) : undefined; }
-  isFree(h: Hex): boolean { return this.inBounds(h) && !this.occupancy.has(hexKey(h)) && this.terrainAt(h) !== "Water" && this.terrainAt(h) !== "Mountain"; }
+  isFree(h: Hex): boolean { return this.inBounds(h) && !this.occupancy.has(hexKey(h)) && this.terrainAt(h) !== "Water"; }
 
   def(u: UnitState): UnitDef { return this.reg.unit(u.defId); }
   unit(uid: string): UnitState { const u = this.units.get(uid); if (!u) throw new Error(`No unit ${uid}`); return u; }

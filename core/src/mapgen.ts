@@ -1,5 +1,5 @@
 import type { Hex } from "./hex.js";
-import { hexKey, hexNeighbors, hexDistance } from "./hex.js";
+import { hexKey, hexNeighbors, hexDistance, hexesWithin } from "./hex.js";
 import type { Terrain } from "./types.js";
 import { TERRAIN_RULES } from "./types.js";
 import { Rng } from "./rng.js";
@@ -52,8 +52,8 @@ class Noise {
 
 export function generateMap(spec: MapSpec): GeneratedMap {
   const rng = new Rng(spec.seed);
-  const W = spec.width ?? 30, H = spec.height ?? 22;
-  const target = spec.size ?? 300;
+  const W = spec.width ?? 52, H = spec.height ?? 38;
+  const target = spec.size ?? 950;
   const shapeN = new Noise(rng), elevN = new Noise(rng), ridgeN = new Noise(rng), forestN = new Noise(rng), wetN = new Noise(rng);
   const shapeOff = { x: rng.next() * 50, y: rng.next() * 50 }, elevOff = { x: rng.next() * 50, y: rng.next() * 50 };
   const ridgeOff = { x: rng.next() * 50, y: rng.next() * 50 }, forestOff = { x: rng.next() * 50, y: rng.next() * 50 };
@@ -93,7 +93,7 @@ export function generateMap(spec: MapSpec): GeneratedMap {
   }
   const sorted = [...elev.values()].sort((a, b) => a - b);
   const pct = (f: number) => sorted[Math.min(sorted.length - 1, Math.floor(f * sorted.length))]!;
-  const mountainCut = pct(1 - 0.10 * (rugged / 0.35)), highCut = pct(0.78), valleyCut = pct(0.22);
+  const mountainCut = pct(1 - 0.13 * (rugged / 0.35)), highCut = pct(0.78), valleyCut = pct(0.22);
   const terrain = new Map<string, Terrain>();
   const tier = new Map<string, number>();
   for (const h of hexes) {
@@ -106,14 +106,25 @@ export function generateMap(spec: MapSpec): GeneratedMap {
   for (const h of hexes) if (terrain.get(hexKey(h)) === "Mountain" && !hexNeighbors(h).some((n) => terrain.get(hexKey(n)) === "Mountain")) { terrain.set(hexKey(h), "HighGround"); tier.set(hexKey(h), 2); }
 
   const features: string[] = [];
-  const passable = (h: Hex) => inMask(h) && TERRAIN_RULES[terrain.get(hexKey(h))!].costFoot !== null;
+  const passable = (h: Hex) => { const t = terrain.get(hexKey(h))!; return inMask(h) && TERRAIN_RULES[t].costFoot !== null && t !== "Mountain" && t !== "Water"; };
 
   // --- 3. Deployment anchors: two far-apart passable hexes, then zones around them ---
   const passHexes = hexes.filter(passable);
+  // An army needs somewhere to form up, so an anchor is not just the farthest hex: it must have open room
+  // around it. Narrow peninsulas and forest pockets are exactly where a deployed line walls itself in.
+  const roomAround = (h: Hex) => hexesWithin(h, 3).filter((n: Hex) => passable(n) && standRankRaw(n) <= 2).length;
+  const standRankRaw = (h: Hex) => { const t = terrain.get(hexKey(h)); return !t ? 9 : t === "Open" || t === "Road" ? 0 : t === "Valley" ? 1 : t === "HighGround" ? 2 : t === "Mud" ? 3 : 4; };
   let A = passHexes[0]!, B = passHexes[0]!, best = -1;
-  const sample = passHexes.filter((_, i) => i % 3 === 0);
+  const roomy = passHexes.filter((h) => roomAround(h) >= 18);
+  const sample = (roomy.length > 20 ? roomy : passHexes).filter((_, i) => i % 3 === 0);
   for (const a of sample) for (const b of sample) { const d = hexDistance(a, b); if (d > best) { best = d; A = a; B = b; } }
-  const zone = (anchor: Hex, other: Hex) => passHexes.filter((h) => hexDistance(h, anchor) <= 4 && hexDistance(h, other) > hexDistance(anchor, other) - 3).sort((x, y) => hexDistance(x, anchor) - hexDistance(y, anchor)).slice(0, 14);
+  // A deployment zone should be ground an army can actually form up on: open first, woods last, and wide enough
+  // that the units in the middle of it are not walled in by their own line.
+  const standRank = standRankRaw;
+  const zone = (anchor: Hex, other: Hex) => passHexes
+    .filter((h) => hexDistance(h, anchor) <= 7 && hexDistance(h, other) > hexDistance(anchor, other) - 5)
+    .sort((x, y) => standRank(x) - standRank(y) || hexDistance(x, anchor) - hexDistance(y, anchor))
+    .slice(0, 30);
   const deployZones = { A: zone(A, B), B: zone(B, A) };
 
   // --- 4. River: from the highest passable source, greedy descent with a little wander; stops at the edge once long enough ---
@@ -168,10 +179,10 @@ export function generateMap(spec: MapSpec): GeneratedMap {
   // --- 7. Trenches dug in front of each deployment zone, facing the enemy ---
   if (spec.trenches !== false) {
     for (const [mine, theirs] of [[A, B], [B, A]] as Array<[Hex, Hex]>) {
-      const front = passHexes.filter((h) => hexDistance(h, mine) >= 5 && hexDistance(h, mine) <= 6 && hexDistance(h, theirs) < hexDistance(mine, theirs) && ["Open", "Valley", "Mud"].includes(terrain.get(hexKey(h))!));
+      const front = passHexes.filter((h) => hexDistance(h, mine) >= 7 && hexDistance(h, mine) <= 9 && hexDistance(h, theirs) < hexDistance(mine, theirs) && ["Open", "Valley", "Mud"].includes(terrain.get(hexKey(h))!));
       front.sort((x, y) => hexDistance(x, theirs) - hexDistance(y, theirs));
       let n = 0;
-      for (const h of front) { if (n >= 4) break; if (!road.some((rd) => hexKey(rd) === hexKey(h))) { terrain.set(hexKey(h), "Trench"); n++; } }
+      for (const h of front) { if (n >= 7) break; if (!road.some((rd) => hexKey(rd) === hexKey(h))) { terrain.set(hexKey(h), "Trench"); n++; } }
       if (n) features.push(`${n} trench hexes near ${hexKey(mine)}`);
     }
   }

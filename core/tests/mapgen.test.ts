@@ -44,12 +44,15 @@ describe("irregular battlefield generator", () => {
     b.terrain.set("13,12", "Trench"); b.terrain.set("12,13", "Mud");
     ctrl.commandPhase(); ctrl.beginActivation("ind:A");
     const rf = ctrl.reachable(foot);
-    expect(rf.has("6,5")).toBe(false);
+    // mountains are not walls: a foot soldier may still climb one hex, but it costs the whole activation
+    expect(rf.get("6,5")?.cost).toBe(5);
+    expect(rf.get("6,5")?.labored).toBe(true);
     expect(rf.get("5,6")?.cost).toBe(2);
+    expect(rf.get("5,6")?.labored).toBeUndefined();
     expect(rf.get("4,5")?.cost).toBe(2);
     expect(rf.get("5,4")?.cost).toBe(1);
     const rc = ctrl.reachable(cav);
-    expect(rc.has("13,12")).toBe(false);
+    expect(rc.has("13,12")).toBe(false);           // a trench is closed to horses outright, not merely slow
     expect(rc.get("12,13")?.cost).toBe(3);
   });
 
@@ -70,5 +73,47 @@ describe("irregular battlefield generator", () => {
     const atk = computeStat(b, lancer, "ATK", { attacker: lancer, defender: enemy });
     expect(atk.modifiers.map((m) => m.source)).toContain("Lance Charge");
     expect(atk.modifiers.map((m) => m.source)).toContain("Elevation advantage");
+  });
+});
+
+describe("mountains", () => {
+  it("cost five times open ground for foot, six for cavalry, and only two on the wing", async () => {
+    const { TERRAIN_RULES } = await import("../src/types.js");
+    expect(TERRAIN_RULES.Mountain.costFoot).toBe(5);
+    expect(TERRAIN_RULES.Mountain.costCavalry).toBe(6);
+    expect(TERRAIN_RULES.Mountain.costFlying).toBe(2);
+    expect(TERRAIN_RULES.Open.costFoot).toBe(1);
+  });
+
+  it("a climb takes a whole activation for foot, while a flier crosses the range in stride", () => {
+    const { b, ctrl } = newBattle();
+    const foot = b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 5, r: 5 });
+    const drake = b.spawn("DRG_FOOT_SLATEWING-DRAKE", "A", { q: 5, r: 10 });
+    for (const q of [6, 7, 8]) { b.terrain.set(`${q},5`, "Mountain"); b.terrain.set(`${q},10`, "Mountain"); }
+    ctrl.commandPhase(); ctrl.beginActivation("ind:A");
+    // the flier crosses the range in stride: two points a hex, no labour
+    const rd = ctrl.reachable(drake);
+    expect(rd.get("6,10")?.cost).toBe(2);
+    expect(rd.get("6,10")?.labored).toBeUndefined();
+    expect(rd.get("8,10")?.labored).toBeUndefined();
+    // the foot soldier can only take the first hex, and it ends the activation
+    const r = ctrl.reachable(foot);
+    expect(r.get("6,5")?.labored).toBe(true);
+    expect(r.has("7,5")).toBe(false);
+    ctrl.move(foot, { q: 6, r: 5 });
+    expect(foot.ap).toBe(0);
+    expect(foot.pos).toEqual({ q: 6, r: 5 });
+    expect(b.events.some((e) => e.type === "LaboredClimb")).toBe(true);
+    // and a second climb in the same activation is refused
+    expect(() => ctrl.move(foot, { q: 7, r: 5 })).toThrow();
+  });
+
+  it("a charge cannot be built up across a mountain", () => {
+    const { b, ctrl } = newBattle();
+    const lancer = b.spawn("KNI_CAVALRY_DAWN-LANCER", "A", { q: 4, r: 4 });
+    b.terrain.set("5,4", "Mountain");
+    ctrl.commandPhase(); ctrl.beginActivation("ind:A");
+    ctrl.move(lancer, { q: 5, r: 4 });
+    expect(lancer.chargeMoved).toBe(0);
   });
 });

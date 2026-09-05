@@ -13,9 +13,12 @@ export interface BuildingDef {
   name: string; maxLevel: number; text: string;
   cost: Resources; costGrowth: number; buildSeconds: number; timeGrowth: number;
   produces?: Resources;
+  art?: Array<string | null>;
   effect?: { armyCapacity?: number; researchSpeed?: number; researchTier?: number; drawFloor?: number; atk?: number; cavalryAtk?: number; def?: number; fusionChargesPer?: number; ritualProgress?: number };
 }
+export interface TierBand { tier: number; fromLevel: number; toLevel: number; text: string }
 export interface KingdomData {
+  tierBands: TierBand[];
   resources: Record<ResourceId, { name: string; text: string }>;
   buildings: Record<BuildingId, BuildingDef>;
   startingResources: Required<Resources>;
@@ -251,4 +254,24 @@ export function kingdomMods(b: Battle, side: string, roles: Role[], stat: "ATK" 
   const e = b.kingdomEffects.get(side);
   if (!e) return [];
   return e.statMods.filter((m) => m.stat === stat && (!m.role || roles.includes(m.role))).map((m) => ({ source: m.source, stat, value: m.value }));
+}
+
+/** Which visual tier a building shows at its current level, and the art for it. */
+export function buildingTier(reg: Registry, level: number): TierBand {
+  const bands = reg.kingdom.tierBands;
+  return bands.find((t) => level >= t.fromLevel && level <= t.toLevel) ?? bands[0]!;
+}
+export function buildingArt(reg: Registry, building: BuildingId, level: number): string | null {
+  if (level < 1) return null;
+  const art = reg.kingdom.buildings[building].art;
+  if (!art) return null;
+  const t = buildingTier(reg, level).tier;
+  // fall back to the nearest lower tier that has art, so a missing asset never blanks the map
+  for (let i = t - 1; i >= 0; i--) if (art[i]) return art[i]!;
+  return null;
+}
+/** The level at which a building next changes its look, if any. */
+export function nextTierAt(reg: Registry, level: number): number | null {
+  const next = reg.kingdom.tierBands.find((t) => t.fromLevel > level);
+  return next ? next.fromLevel : null;
 }

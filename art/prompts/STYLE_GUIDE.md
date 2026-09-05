@@ -51,3 +51,25 @@ For creatures replace the material list with: *scarred weathered hide, chipped h
 1. Generate the remaining 10 vertical-slice units (seconds, elites, foot soldiers not yet covered, ritualists, portal keeper) with the Global Style Block and the subject blocks in `UNIT_PROMPTS.md`.
 2. Approve one canonical image per unit, then attach it as the reference for the construction sheet and the action-pose sheet (suffixes in the engineering brief §20).
 3. Record model, settings and job id in `art/ASSET_MANIFEST.json` for every approved asset.
+
+## Cards are paper, not metal (V02)
+
+The first card frames were hammered iron with rows of punched sockets. Rejected: too metal, and the repeating
+holes were unpleasant to look at. The rule now:
+
+- Card stock is **aged paper**: linen paper, grey-buff card, dark mulberry paper. Foxing, tea stains, frayed and
+  dog-eared edges, cloth tape at the corners, a wax seal on the highest tier.
+- **Never** put holes, punched circles, perforations, rivets, eyelets or rows of dots on any card or interface piece.
+  Add "no holes, no punched circles, no perforations, no rivets, no eyelets, no rows of dots" to every card prompt.
+- Stars are a **separate painted asset**, not part of the frame: gold leaf rubbed thin over a paper chip for an
+  earned star, a broken brush-ink outline for an unearned one. They are composited onto the card at render time,
+  so a unit's star count can change without repainting the frame.
+
+Three stocks map to rank: plain linen for 1 to 6 stars, inked and taped for 7 to 9, sealed mulberry for 10-star
+cards and for every rite in the side deck.
+
+## Two views of a building
+
+The stronghold overview is painted **straight down**. Individual building portraits are painted at a **low angle**
+so their walls, roofs and towers read. Both are correct; use the overview for the map and the portrait for the
+upgrade panels.

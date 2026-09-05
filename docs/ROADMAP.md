@@ -26,6 +26,11 @@ where they conflict.**
 - Beyond match-to-match battles there is a **permanent holding**: base building, research that upgrades units,
   and recruitment draws.
 - Every asset must sit beside the existing characters without breaking immersion. Interface and icons included.
+- Battlefields must be large enough that units sit comfortably and the camera zooms in; a unit must never scale a
+  mountain instantly. Mountains slow ground movement fivefold; only fliers ignore them.
+- Cards are **paper**, never metal, and nothing in the interface may carry punched holes or rows of dots.
+- The stronghold's buildings and walls are upgradable and change their look as they rise, which means a growing
+  asset list that has to be tracked.
 
 ## Done
 
@@ -38,6 +43,17 @@ where they conflict.**
   shot, smoke shell, concussive blast). Cavalry (lance charge, hit and fade).
 - 17 unit concepts with cutouts, 2 battlefield paintings, 1 HUD material sheet.
 - Interactive map + HUD sample (see `docs/ui-sample.md`).
+
+### Done in the scale and tier pass
+
+- Battlefields raised from ~300 to ~950 hexes, with anchors and deployment zones chosen for open room so a
+  deployed line no longer walls itself in.
+- Camera with four zoom levels, drag panning, wheel zoom, viewport culling and a clickable minimap.
+- Mountains crossable at five times the cost (six for cavalry, two on the wing) plus the labored climb: a unit
+  that cannot afford a hex may still take one, at the price of its whole activation.
+- Building tier bands with art per tier and a fallback to the nearest painted tier.
+- `npm run assets` regenerates a full asset registry from the data tables and from what is on disk.
+- Cards reprinted on paper stock with a separate painted star asset; the metal frames are retired.
 
 ### Done in the card and holding pass
 
