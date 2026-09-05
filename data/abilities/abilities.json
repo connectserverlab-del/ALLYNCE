@@ -908,5 +908,177 @@
       "duration": 1
     },
     "text": "+3 Movement for one round. The message gets through or nothing does."
+  },
+  {
+    "id": "ORD_JUDGEMENT_HYMN",
+    "name": "Judgement Hymn",
+    "category": "Order",
+    "faction": "ANG",
+    "effect": {
+      "kind": "RallyPlatoon",
+      "morale": 30
+    },
+    "text": "The choir sings the sentence again. Every living member of the platoon recovers 30 morale."
+  },
+  {
+    "id": "DOC_ANGELIC_WARD",
+    "name": "Angelic Ward",
+    "category": "Passive",
+    "faction": "ANG",
+    "effect": {
+      "kind": "ConditionalDef",
+      "def": 45,
+      "requiresAdjacentTheme": "Celestial",
+      "requiresAdjacentCount": 1
+    },
+    "text": "A ward holds better sung by two throats than one: +45 DEF standing beside another Choir member."
+  },
+  {
+    "id": "ORD_ASHEN_WARCRY",
+    "name": "Ashen Warcry",
+    "category": "Order",
+    "faction": "DEM",
+    "effect": {
+      "kind": "MoraleShock",
+      "morale": -40,
+      "scope": "adjacentEnemies"
+    },
+    "text": "The legion howls together; every enemy adjacent to the caller loses 40 morale."
+  },
+  {
+    "id": "DOC_ASHEN_TOLL",
+    "name": "Ashen Toll",
+    "category": "Passive",
+    "faction": "DEM",
+    "effect": {
+      "kind": "ConditionalAtk",
+      "atk": 90,
+      "vsRoles": ["Commander", "Second", "Elite"]
+    },
+    "text": "Every strike against something worth killing is already paid for: +90 ATK against enemy leaders and elites."
+  },
+  {
+    "id": "ORD_BROKEN_CHARGE",
+    "name": "Broken Charge",
+    "category": "Order",
+    "faction": "CHR",
+    "effect": {
+      "kind": "PlatoonMove",
+      "mov": 2,
+      "duration": 1
+    },
+    "text": "The warband breaks formation and surges forward: the platoon gains +2 Movement this round."
+  },
+  {
+    "id": "DOC_NO_SECOND_PLAN",
+    "name": "No Second Plan",
+    "category": "Passive",
+    "faction": "CHR",
+    "effect": {
+      "kind": "ConditionalAtk",
+      "atk": 70
+    },
+    "text": "It wins in the first three rounds or not at all: +70 ATK, always, on the attack."
+  },
+  {
+    "id": "ORD_ASCENDANT_PUSH",
+    "name": "Ascendant Push",
+    "category": "Order",
+    "faction": "DMG",
+    "effect": {
+      "kind": "FormationStep",
+      "hexes": 1,
+      "atkNextMelee": 90
+    },
+    "text": "The platoon may move one hex while holding formation, then gains +90 ATK on its next melee attack this round."
+  },
+  {
+    "id": "DOC_MORTAL_WEIGHT",
+    "name": "Mortal Weight",
+    "category": "Passive",
+    "faction": "DMG",
+    "effect": {
+      "kind": "ConditionalDef",
+      "def": 50
+    },
+    "text": "A mortal frame carrying more than a mortal share: +50 DEF, always."
+  },
+  {
+    "id": "ORD_CRAWLING_COLD",
+    "name": "Crawling Cold",
+    "category": "Order",
+    "faction": "WEN",
+    "range": 3,
+    "target": "enemy",
+    "effect": {
+      "kind": "EnemySlow",
+      "mov": 2,
+      "duration": 1
+    },
+    "text": "The famine does not hurry: every enemy within 3 hexes of the caller loses 2 Movement this round."
+  },
+  {
+    "id": "DOC_STARVELING_BITE",
+    "name": "Starveling Bite",
+    "category": "Passive",
+    "faction": "WEN",
+    "effect": {
+      "kind": "ConditionalAtk",
+      "atk": 90,
+      "vsRoles": ["FootSoldier"]
+    },
+    "text": "Hunger does not test its bite on the strong first: +90 ATK against foot soldiers and levy."
+  },
+  {
+    "id": "ORD_STONE_STAND",
+    "name": "Stone Stand",
+    "category": "Order",
+    "faction": "SAS",
+    "effect": {
+      "kind": "PlatoonDef",
+      "def": 70,
+      "duration": 1
+    },
+    "text": "Each stops where it stands and roots itself: the platoon gains +70 DEF this round."
+  },
+  {
+    "id": "DOC_LONE_HUNT",
+    "name": "Lone Hunt",
+    "category": "Passive",
+    "faction": "SAS",
+    "effect": {
+      "kind": "ConditionalAtk",
+      "atk": 80,
+      "vsIsolated": true
+    },
+    "text": "Ridge Kin pick off whatever strays from the line: +80 ATK against an isolated target."
+  },
+  {
+    "id": "ORD_SWARM_CONVERGENCE",
+    "name": "Swarm Convergence",
+    "category": "Order",
+    "faction": "FMC",
+    "apCost": 1,
+    "range": 6,
+    "target": "enemy",
+    "effect": {
+      "kind": "PlatoonAtkVsTarget",
+      "atk": 110,
+      "duration": "round"
+    },
+    "text": "One will marks one prey: the platoon gains +110 ATK against it this round."
+  },
+  {
+    "id": "DOC_ONE_WILL",
+    "name": "One Will",
+    "category": "Passive",
+    "faction": "FMC",
+    "effect": {
+      "kind": "ConditionalDef",
+      "def": 40,
+      "requiresAdjacentTheme": "Swarm",
+      "requiresAdjacentCount": 2
+    },
+    "text": "Three chitin backs are stronger than one: +40 DEF with two or more Swarm allies adjacent."
   }
 ]
