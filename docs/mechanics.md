@@ -20,6 +20,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses |
 | Marching between battles | `march.ts`, `data/movement/march.json` | Continuous movement in seconds over the same hexes the battle fights on. A straight line where one works; an A* over the grid, string-pulled to a few waypoints, where it does not. Nothing crosses a field in more than 45 seconds, and a route forced the long way round hurries rather than arriving late |
 | §18 Architecture | all | Simulation is separate from presentation; every action logs a serializable event |
+| Replay | `replay.ts` | `Replay` steps a cursor through `Battle.events` one at a time (or jumps by round/index); `describeEvent` narrates each entry by name, resolved from `Battle.units` |
 
 ## Card skills
 
@@ -81,3 +82,6 @@ breakdown contains each named source.
 - `computeStat` → `ModifierPipeline.Compute(unit, stat, ctx)` returning the same `StatBreakdown` for tooltips.
 - `applyEffect` → `IEffectHandler` per `effect.kind`, registered in a dictionary.
 - `events` → `List<GameEvent>` serialized with the save; replay by re-applying actions with the same seed.
+- `Replay` / `describeEvent` → a `ReplayController` MonoBehaviour holding the same cursor position, and a
+  `switch` on `GameEvent.type` for narration; both are presentation-adjacent but stay data-only, no `UnityEngine`
+  types needed until something actually draws the step.

@@ -16,7 +16,7 @@ This repository currently holds three things:
 
 ```bash
 npm install
-npm test            # 85 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
+npm test            # 161 tests: combat math, cohesion, composition, succession, clones, rituals, portals, replay, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -41,6 +41,9 @@ npm run assets      # rebuilds the asset registry from the data and from disk
 - **Scenario**: `Threefold Invocation` fully data-defined and playable start to finish.
 - **A full match**: `runMatch` takes two decks, generates a field, deploys legal armies, plays every round with a card-playing AI and pays spoils into the holdings. Deterministic per seed. See `core/src/match.ts`.
 - **Save and load**: `core/src/save.ts` round-trips a battle mid-match and a holding, with a version gate.
+- **Replay**: `core/src/replay.ts` steps a cursor through a battle's event log one entry at a time (or jumps
+  straight to an index or a round) and narrates each entry by unit name rather than raw id, so a saved or
+  finished match can be read back move by move.
 - **Cards and decks**: a 100-card main deck and a 20-card ritual/fusion side deck, with a 1-to-10 star scale that sets tribute cost, copy limits and ritual requirements. See `docs/cards-and-kingdom.md`.
 - **The holding**: a permanent base with eleven buildings, a twelve-node research tree and three recruitment banners with pity. Everything it grants reaches the battlefield as a named, source-tracked modifier.
 - **Irregular battlefields**: seeded generator (`core/src/mapgen.ts`) carves an odd-shaped playable mask from a canvas, layers elevation into mountain ranges, high ground, open ground and valley floors, runs a river downhill with fords, digs trenches in front of each army, lays a road, gathers mud in low wet ground, and places ruins and fortifications. Fourteen terrain types with a data table for movement cost by foot, cavalry and flying, defence, concealment, sight and charge-breaking.

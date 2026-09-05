@@ -55,7 +55,6 @@ Three things bite:
 | `Q-7` | Duplicate-card reforge: spend copies to raise a card's star by one | Duplicates now arrive from warrants as well as recruitment and need a sink beyond deck depth |
 | `Q-8` | Stratagem cards as a third side-deck kind, one-round battlefield effects | Fills out the side deck beyond ritual and fusion |
 | `Q-9` | Unity port scaffolding: ScriptableObject importer for `data/`, and the C# module skeleton in `docs/mechanics.md` | The engine target the brief names |
-| `Q-10` | Replay viewer: step through a saved event log | The event log already exists and is unused |
 | `Q-11` | Warrant board screen in the sample page: read the posted writs, take one, and see which of them close the gaps in the current deck | The board exists in the core and has no interface |
 | `Q-12` | Give the sworn companies and the seven divisions depth: each has four cards, enough to hire but not to lead | A division is a flavour of ally until it can field a line of its own |
 | `Q-13` | Escort composition for warrants: build the escort around the target's own company rather than a generic host starter deck | The escort currently reads as a borrowed army with the target bolted on |
@@ -90,3 +89,4 @@ Three things bite:
 | `D-23` | Marching: continuous movement in seconds, squads with formation slots, a 45-second cap scaled by distance, and hex routing round anything a straight line cannot cross |
 | `D-24` | March screen: click the ground to send a squad, drag a name onto a squad to have that unit walk over and fall in, with the real engine bundled into the page rather than a recording of it |
 | `D-25` | `scripts/audit-cutouts.py` fails a cutout that kept its background or lost its figure, so a card cannot ship as a pale slab again |
+| `D-26` | Replay: `core/src/replay.ts` steps a cursor through `Battle.events` by index or round and narrates every event type by unit name; `Q-10` |
