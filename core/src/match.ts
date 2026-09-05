@@ -4,7 +4,7 @@ import type { Registry } from "./data.js";
 import { generateMap, applyMap, type MapSpec, type GeneratedMap } from "./mapgen.js";
 import { deployPlatoon } from "./deploy.js";
 import { DeckState, type DeckList, summonFromHand, summonZone, tributeCost, starOf, playableSideCards, ritualSummon, fusionSummon } from "./cards.js";
-import { runAiActivation, holdForSyncPolicy, DIFFICULTY, type AiProfile } from "./ai.js";
+import { runAiActivation, holdForSyncPolicy, maybeSurrender, DIFFICULTY, type AiProfile } from "./ai.js";
 import { applyKingdom, type KingdomState, type ResourceId } from "./kingdom.js";
 import { Rng } from "./rng.js";
 import type { Hex } from "./hex.js";
@@ -114,6 +114,7 @@ export function runMatch(spec: MatchSpec): MatchResult {
       if (mine.length) runAiActivation(ctrl, mine[0]!, DIFFICULTY[spec[sides[turn] as "A" | "B"].difficulty ?? "normal"]!);
       turn = 1 - turn;
     }
+    if (!b.winner) for (const s of ["A", "B"]) if (maybeSurrender(ctrl, s)) break;
     ctrl.objectivePhase(holdForSyncPolicy(ctrl, "A"));
     ctrl.endPhase();
   }
@@ -134,10 +135,13 @@ export function spoils(b: Battle, side: string, won: boolean, enemyStarsBroken: 
   const rng = new Rng(b.seed + side.charCodeAt(0) + rounds);
   const base = won ? 260 : 90;
   const perStar = won ? 26 : 12;
-  const amount = (mult: number) => Math.round((base + enemyStarsBroken * perStar) * mult);
+  // The enemy may have summoned more star value than it lost (e.g. a match ending in an early surrender);
+  // that is never a negative amount of stars broken, just none.
+  const broken = Math.max(0, enemyStarsBroken);
+  const amount = (mult: number) => Math.round((base + broken * perStar) * mult);
   const cards: string[] = [];
   if (won) {
-    const pool = [...b.reg.units.values()].filter((d) => !d.summonOnly && d.faction !== "DIV" && (d.stars ?? 1) <= (enemyStarsBroken >= 20 ? 7 : 5));
+    const pool = [...b.reg.units.values()].filter((d) => !d.summonOnly && d.faction !== "DIV" && (d.stars ?? 1) <= (broken >= 20 ? 7 : 5));
     if (pool.length) cards.push(pool[rng.int(pool.length)]!.id);
   }
   return { koku: amount(1.1), iron: amount(0.8), timber: amount(0.9), silver: amount(1.3), cards };

@@ -24,13 +24,13 @@ so in the PR.
 |---|---|---|
 | `OWN-1` | Scale the remaining building tier art (25 paintings) | Confirmation that building portraits stay at a low angle rather than strictly top-down |
 | `OWN-2` | Raise the deck faction minimum from 40 toward 60 | Needs 15-20 distinct cards per faction, which is a content decision |
+| `OWN-3` | Let a side's designated army leader pass to a successor (update `leaderUid` in `resolveSuccession`), and delay the "army leader killed" win check until Continuity's succession attempt has actually run, instead of ending the match at the End Phase of the same round the leader fell | Changes when a match can end and how much the succession/Continuity system actually protects an army; also decides whether the new AI surrender policy (`Q-3`) ever gets a chance to fire in a standard match, since it is currently always shadowed by the instant leader-killed check |
 
 ## Queue
 
 | Id | Item | Why it matters |
 |---|---|---|
 | `Q-1` | Second art pass on weak cutouts: any unit whose card still reads "no art yet", plus re-cuts where the flood fill left a panel edge | Blank cards are the most visible gap in the game |
-| `Q-3` | AI: use trenches and high ground, position siege behind the line, route cavalry to flanks, surrender when the leader is dead and morale is broken | The AI ignores the terrain rules the player must respect |
 | `Q-4` | Deck editor in the sample page: move cards between main and side deck with live legality | Deck building is the core loop and is currently read-only |
 | `Q-5` | Campaign map: regions on the province map, each a scenario; a won region feeds the holding's production | Connects the battle layer to the holding layer |
 | `Q-6` | Weather and time of day as round modifiers (rain turns open ground to mud near rivers, fog cuts ranged range) | Deepens the terrain system already in place |
@@ -58,3 +58,4 @@ so in the PR.
 | `D-13` | Full match runner, card-playing AI, spoils paid into the holding, save and load |
 | `D-14` | Unit art for all 40 cards |
 | `D-15` | Scenario authoring on generated ground: position roles (anchor, deployZone, lerp, near, ritualCenter) so a scenario's objectives, rituals and portals pin to a generated field instead of fixed coordinates; `data/scenarios/ashfall_crossing.json` as the reference scenario |
+| `Q-3` | AI: seeks trenches and high ground when moving, keeps siege pieces out of their own minimum range and sets them up once in their firing band, routes cavalry to a flank or rear hex instead of the front arc, and surrenders once a side is both leaderless (Doctrine `"None"`) and morale-broken |

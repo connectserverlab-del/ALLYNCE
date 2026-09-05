@@ -1,9 +1,11 @@
 import type { BattleController } from "./battle.js";
 import type { UnitState } from "./types.js";
 import type { Hex } from "./hex.js";
-import { hexDistance } from "./hex.js";
+import { hexDistance, hexRing, attackArc } from "./hex.js";
 import { computeStat } from "./modifiers.js";
 import { cohesionConnections } from "./cohesion.js";
+import { organizationLevel } from "./composition.js";
+import { moraleBand } from "./morale.js";
 import type { RitualCircle } from "./rituals.js";
 
 /**
@@ -75,6 +77,21 @@ function actOnce(ctrl: BattleController, u: UnitState, profile: AiProfile): bool
     if (target) return moveToward(ctrl, u, target.center);
     return false;
   }
+  // Siege: never stand at the front. Retreat if an enemy has closed inside minimum range, close in only
+  // as far as the firing band requires, then Set Up and let the attack step below do the firing.
+  if (d.roles.includes("Siege")) {
+    const enemy = nearestEnemy(ctrl, u);
+    if (enemy && enemy.pos) {
+      const dist = b.distance(u, enemy);
+      const min = d.minRange ?? 0;
+      if (dist <= min) { if (retreatFrom(ctrl, u, enemy.pos)) return true; }
+      else if (dist > d.range) { if (moveToward(ctrl, u, enemy.pos, profile)) return true; }
+      else if (!u.setUp) {
+        const setupId = d.actives.find((id) => b.reg.ability(id).effect.kind === "SiegeSetup");
+        if (setupId) { try { ctrl.useAbility(u, setupId); return true; } catch { /* skip */ } }
+      }
+    }
+  }
   // Portal keepers: open a portal if reserve allows, else defend
   // Abilities with immediate value
   for (const id of d.actives) {
@@ -135,7 +152,9 @@ function chooseGoal(ctrl: BattleController, u: UnitState, profile: AiProfile): H
     const dist = b.distance(u, enemy);
     const myAtk = computeStat(b, u, "ATK").final, theirDef = computeStat(b, enemy, "DEF").final;
     const favorable = (myAtk - theirDef) / 400;
-    candidates.push({ hex: enemy.pos!, score: (250 + 200 * favorable * profile.risk) / (1 + dist / 6) });
+    // Cavalry routes around to a flank or rear hex instead of walking straight into the front arc.
+    const hex = d.roles.includes("Cavalry") ? flankApproach(u, enemy) : enemy.pos!;
+    candidates.push({ hex, score: (250 + 200 * favorable * profile.risk) / (1 + dist / 6) });
   }
   // Commanders hold formation rather than charge
   if (d.roles.includes("Commander") && u.platoonId) {
@@ -143,6 +162,14 @@ function chooseGoal(ctrl: BattleController, u: UnitState, profile: AiProfile): H
   }
   if (!candidates.length) return null;
   return candidates.sort((a, c) => c.score - a.score)[0]!.hex;
+}
+
+/** The nearest hex adjacent to `target` that is not in its front arc, so a charge lands on the flank or rear. */
+function flankApproach(attacker: UnitState, target: UnitState): Hex {
+  const at = target.pos!;
+  const flankHexes = hexRing(at, 1).filter((h) => attackArc(at, target.facing, h) !== "front");
+  if (!attacker.pos || !flankHexes.length) return at;
+  return flankHexes.sort((a, c) => hexDistance(attacker.pos!, a) - hexDistance(attacker.pos!, c))[0]!;
 }
 
 /** Move to the reachable hex closest to the goal that best preserves theme cohesion and avoids isolation. */
@@ -165,12 +192,31 @@ function moveToward(ctrl: BattleController, u: UnitState, goal: Hex, profile: Ai
     score += (after - before) * 60 * (1 - profile.risk);
     if (after === 0 && before > 0) score -= 120 * (1 - profile.risk);   // isolation risk
     if (enemiesAdj >= 2) score -= 80 * (1 - profile.risk);
-    if (b.terrainAt(r.hex) === "Fortification") score += 40;
+    const terrain = b.terrainAt(r.hex);
+    if (terrain === "Fortification") score += 40;
+    if (terrain === "Trench") score += 35;
+    if (terrain === "HighGround") score += 25;
     if (!best || score > best.score) best = { hex: r.hex, score };
   }
   if (!best) return false;
   const disengage = b.adjacentEnemies(u).length > 0 && u.ap >= 2;
   try { ctrl.move(u, best.hex, { disengage }); return true; } catch { return false; }
+}
+
+/** Move away from `threat`, to the reachable hex that gains the most distance. Used to keep siege pieces off the front line. */
+function retreatFrom(ctrl: BattleController, u: UnitState, threat: Hex): boolean {
+  if (u.ap <= 0 || !u.pos) return false;
+  const reach = [...ctrl.reachable(u).values()];
+  if (!reach.length) return false;
+  const currentDist = hexDistance(u.pos, threat);
+  let best: { hex: Hex; dist: number } | null = null;
+  for (const r of reach) {
+    const dist = hexDistance(r.hex, threat);
+    if (dist <= currentDist) continue;
+    if (!best || dist > best.dist) best = { hex: r.hex, dist };
+  }
+  if (!best) return false;
+  try { ctrl.move(u, best.hex); return true; } catch { return false; }
 }
 
 export function nearestEnemy(ctrl: BattleController, u: UnitState): UnitState | null {
@@ -182,4 +228,29 @@ export function nearestEnemy(ctrl: BattleController, u: UnitState): UnitState | 
     if (dd < bd) { bd = dd; best = e; }
   }
   return best;
+}
+
+/**
+ * True once a side has plainly lost: every one of its platoons has fallen out of Doctrine (no living commander
+ * and Continuity spent, so no succession is left to inherit command) and its units' average morale has collapsed
+ * into the Broken band. Distinct from the automatic "army leader killed" win condition, which only tracks the
+ * one designated leader unit; this also covers a side ground down to leaderless remnants that leader never left.
+ */
+export function shouldSurrender(ctrl: BattleController, side: string): boolean {
+  const b = ctrl.b;
+  const s = b.sides.get(side);
+  if (!s || s.surrendered) return false;
+  if (organizationLevel(b, side) !== "None") return false;
+  return moraleBand(ctrl.moraleSummary(side).average) === "Broken";
+}
+
+/** Yield the field on `side`'s behalf if the fight is lost per `shouldSurrender`. Returns whether it surrendered. */
+export function maybeSurrender(ctrl: BattleController, side: string): boolean {
+  if (!shouldSurrender(ctrl, side)) return false;
+  const b = ctrl.b;
+  const s = b.sides.get(side)!;
+  const leader = s.leaderUid ? b.units.get(s.leaderUid) : undefined;
+  const by = leader && !leader.defeated ? leader : [...b.activeUnits(side)].find((u) => b.def(u).roles.includes("Commander"));
+  ctrl.surrender(side, by);
+  return true;
 }
