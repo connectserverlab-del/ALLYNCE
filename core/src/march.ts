@@ -3,7 +3,7 @@ import type { Battle } from "./state.js";
 import type { Terrain, UnitDef } from "./types.js";
 import { TERRAIN_RULES } from "./types.js";
 import type { Hex } from "./hex.js";
-import { hexKey } from "./hex.js";
+import { hexKey, hexNeighbors, hexDistance } from "./hex.js";
 import type { GeneratedMap } from "./mapgen.js";
 import { hexToPixel } from "./mapgen.js";
 
@@ -17,8 +17,15 @@ import { hexToPixel } from "./mapgen.js";
  * reads the same generated field and the same `TERRAIN_RULES` costs, so a walk over mud is slow for exactly
  * the reason a hex step over mud is expensive, and the two never drift apart.
  *
- * Everything is deterministic: no clock, no randomness, and iteration only ever over insertion-ordered maps.
- * The same field given the same orders and the same sequence of deltas lands on the same positions.
+ * A walk is a straight line wherever a straight line works, which is most of the time and keeps travel time
+ * exactly proportional to distance. Where it does not — a river, a trench a rider cannot cross — the order is
+ * routed over the hex neighbourhood instead and reduced to a handful of waypoints, and the unit walks the
+ * straight lines between those. The grid is the obvious thing to route on because it is already there and
+ * already carries the costs.
+ *
+ * Everything is deterministic: no clock, no randomness, and iteration only ever over insertion-ordered maps
+ * and the fixed hex neighbour order. The same field given the same orders and the same sequence of deltas
+ * lands on the same positions.
  */
 
 /** A point in world space. Same units and orientation as `hexToPixel`, so one hex is about 1.73 across. */
@@ -29,9 +36,9 @@ export interface MarchRules {
   travelCapSeconds: number;
   referenceMov: number; minPace: number; maxPace: number;
   referenceTerrainCost: number; roadHaste: number; flightIgnoresGround: boolean;
-  joinRadius: number; arriveRadius: number;
+  joinRadius: number; arriveRadius: number; followReplanDistance: number;
   formationSpacing: number; formationRingSlots: number;
-  sampleStep: number;
+  sampleStep: number; routeSearchLimit: number;
   notes?: Record<string, string>;
 }
 
@@ -46,6 +53,12 @@ export interface MarchOrder {
   destination: Vec2;
   /** Where it can actually walk to: the destination, or the last point short of ground it cannot enter. */
   target: Vec2;
+  /** The corners of the walk, in order, ending at `target`. One leg unless something had to be walked around. */
+  legs: Vec2[];
+  /** Which leg is being walked now. */
+  leg: number;
+  /** True when the straight line was blocked and the walk had to be routed over the grid. */
+  routed: boolean;
   /** The squad being joined, for a Join order. */
   squadId: string | null;
   /** Distance left to cover when the order was given, so progress reads against the whole walk. */
@@ -89,6 +102,8 @@ export interface MarchField {
   /** World units per second at reference pace on open ground. */
   readonly speed: number;
   readonly terrain: Map<string, Terrain>;
+  /** Every hex the map actually has. Nothing walks anywhere else, routed or straight. */
+  readonly ground: Set<string>;
   readonly units: Map<string, MarchUnit>;
   readonly squads: Map<string, Squad>;
   readonly events: MarchEvent[];
@@ -116,14 +131,14 @@ export function hexAtPoint(p: Vec2): Hex {
 
 /**
  * Terrain under a point: the terrain of the hex containing it, exactly as `Battle.terrainAt` reads it, and
- * open ground off the edge of the generated blob. The blob's ragged outline is a hex-era artefact — a walk
- * is bounded by the field's extent instead, which is what `clampToField` is for.
+ * open ground where the map has no hex at all. Whether a unit may walk there is a separate question — off
+ * the generated blob there is nothing to walk on, and `hexFactor` is the one that knows it.
  */
 export function terrainAt(field: MarchField, p: Vec2): Terrain {
   return field.terrain.get(hexKey(hexAtPoint(p))) ?? "Open";
 }
 
-/** Keep a dragged destination on the map. */
+/** Keep a dragged destination inside the field's extent. Ground it can actually stand on is a walk's problem. */
 export function clampToField(field: MarchField, p: Vec2): Vec2 {
   const b = field.bounds;
   return { x: Math.min(b.maxX, Math.max(b.minX, p.x)), y: Math.min(b.maxY, Math.max(b.minY, p.y)) };
@@ -134,8 +149,10 @@ export function clampToField(field: MarchField, p: Vec2): Vec2 {
 /** Open a march field over a generated map. Terrain is borrowed, not copied out into a second table. */
 export function newMarchField(reg: Registry, map: GeneratedMap): MarchField {
   const terrain = new Map<string, Terrain>();
+  const ground = new Set<string>();
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   for (const h of map.hexes) {
+    ground.add(hexKey(h));
     if (h.terrain !== "Open") terrain.set(hexKey(h), h.terrain);
     const p = hexToPixel(h);
     if (p.x < minX) minX = p.x; if (p.x > maxX) maxX = p.x;
@@ -147,7 +164,7 @@ export function newMarchField(reg: Registry, map: GeneratedMap): MarchField {
   return {
     reg, rules, name: map.name, bounds, diagonal,
     speed: diagonal / rules.travelCapSeconds,
-    terrain, units: new Map(), squads: new Map(), events: [], time: 0, seq: 0,
+    terrain, ground, units: new Map(), squads: new Map(), events: [], time: 0, seq: 0,
   };
 }
 
@@ -249,36 +266,171 @@ export function terrainSpeedFactor(field: MarchField, def: UnitDef, t: Terrain):
   return f;
 }
 
-// ---------- planning ----------
+// ---------- routing ----------
 
-interface Plan { target: Vec2; span: number; seconds: number; haste: number; blocked: boolean }
+/** How fast a unit walks on a given hex, or null where that hex is closed to it or off the map entirely. */
+function hexFactor(field: MarchField, def: UnitDef, h: Hex): number | null {
+  const k = hexKey(h);
+  if (!field.ground.has(k)) return null; // the void outside the generated blob is not ground and is not walked on
+  return terrainSpeedFactor(field, def, field.terrain.get(k) ?? "Open");
+}
 
 /**
- * Work a straight walk out ahead of time: sample the ground along it, add up the seconds, and stop at the
- * first ground the unit cannot enter. A walk longer than the cap is hurried by `haste` so it still lands
- * inside it, which is what makes the cap a promise about the longest crossing rather than a hope.
+ * Walking speed at a point, where the hex the walk starts in is always walkable however bad it is. A unit
+ * that somehow stands in the river has to be able to wade out of it; what it may not do is wade in.
  */
-function planWalk(field: MarchField, def: UnitDef, pace: number, from: Vec2, to: Vec2): Plan {
+function factorAt(field: MarchField, def: UnitDef, p: Vec2, escape: string): number | null {
+  const h = hexAtPoint(p);
+  const factor = hexFactor(field, def, h);
+  if (factor !== null) return factor;
+  return hexKey(h) === escape ? field.rules.referenceTerrainCost : null;
+}
+
+/** Is the straight line between two points walkable the whole way, sampled at the planning resolution? */
+function lineClear(field: MarchField, def: UnitDef, a: Vec2, b: Vec2): boolean {
+  const dx = b.x - a.x, dy = b.y - a.y;
+  const span = Math.hypot(dx, dy);
+  if (span <= 0) return true;
+  const escape = hexKey(hexAtPoint(a));
+  const steps = Math.max(1, Math.ceil(span / field.rules.sampleStep));
+  for (let i = 0; i < steps; i++) {
+    const t = (i + 0.5) / steps;
+    if (factorAt(field, def, { x: a.x + dx * t, y: a.y + dy * t }, escape) === null) return false;
+  }
+  return true;
+}
+
+/**
+ * A* over hex neighbours, cheapest in time rather than in steps, so a detour prefers a road to a marsh for
+ * the same reason a walk over one is quicker. Only ever run when the straight line is blocked, because that
+ * is the only time the answer differs and the search is much the more expensive of the two.
+ *
+ * Deterministic throughout: the frontier is scanned in insertion order and the first strict minimum wins, and
+ * insertion order comes from the fixed neighbour order in `hex.ts`. Returns the hexes after `from` up to and
+ * including `to`, or null when nothing gets there inside the search limit.
+ */
+function routeHexes(field: MarchField, def: UnitDef, from: Hex, to: Hex): Hex[] | null {
+  const start = hexKey(from), goal = hexKey(to);
+  if (start === goal) return [];
+  if (hexFactor(field, def, to) === null) return null; // nothing to route to; the start is always left behind
+  const bestGround = Math.max(1, field.rules.roadHaste); // the quickest ground there is, so the guess never overshoots
+  const g = new Map<string, number>([[start, 0]]);
+  const f = new Map<string, number>([[start, hexDistance(from, to) / bestGround]]);
+  const prev = new Map<string, Hex>();
+  const closed = new Set<string>();
+  const open: Hex[] = [from];
+  let expanded = 0;
+  while (open.length) {
+    let at = 0;
+    for (let i = 1; i < open.length; i++) if (f.get(hexKey(open[i]!))! < f.get(hexKey(open[at]!))!) at = i;
+    const cur = open.splice(at, 1)[0]!;
+    const ck = hexKey(cur);
+    if (ck === goal) break;
+    if (closed.has(ck)) continue;
+    closed.add(ck);
+    if (++expanded > field.rules.routeSearchLimit) return null; // a hopeless search must not cost an order its frame
+    for (const n of hexNeighbors(cur)) {
+      const nk = hexKey(n);
+      if (closed.has(nk)) continue;
+      const factor = hexFactor(field, def, n);
+      if (factor === null) continue;
+      const cost = g.get(ck)! + 1 / factor;
+      if (cost >= (g.get(nk) ?? Infinity)) continue;
+      g.set(nk, cost);
+      f.set(nk, cost + hexDistance(n, to) / bestGround);
+      prev.set(nk, cur);
+      open.push(n);
+    }
+  }
+  if (!prev.has(goal)) return null;
+  const path: Hex[] = [];
+  let cur: Hex | undefined = to;
+  while (cur && hexKey(cur) !== start) { path.push(cur); cur = prev.get(hexKey(cur)); }
+  return path.reverse();
+}
+
+/**
+ * Pull the string tight: a hex route is a staircase, and walking a staircase looks like one. Each waypoint is
+ * the farthest one still in plain sight of the last, so what is left is the two or three corners a person
+ * would actually walk, and the routed distance stops being inflated by the shape of the grid.
+ */
+function pullString(field: MarchField, def: UnitDef, from: Vec2, points: Vec2[]): Vec2[] {
+  const out: Vec2[] = [];
+  let cur = from, i = 0;
+  while (i < points.length) {
+    let j = i;
+    while (j + 1 < points.length && lineClear(field, def, cur, points[j + 1]!)) j++;
+    cur = points[j]!;
+    out.push({ x: cur.x, y: cur.y });
+    i = j + 1;
+  }
+  return out;
+}
+
+// ---------- planning ----------
+
+interface Leg { end: Vec2; walked: number; seconds: number; blocked: boolean }
+interface Plan { legs: Vec2[]; target: Vec2; span: number; seconds: number; haste: number; blocked: boolean; routed: boolean }
+
+/** Walk one straight leg on paper: sample the ground along it, add up the seconds, stop at anything closed. */
+function walkLeg(field: MarchField, def: UnitDef, pace: number, from: Vec2, to: Vec2): Leg {
   const dx = to.x - from.x, dy = to.y - from.y;
   const span = Math.hypot(dx, dy);
-  if (span <= 0) return { target: { x: to.x, y: to.y }, span: 0, seconds: 0, haste: 1, blocked: false };
+  if (span <= 0) return { end: { x: to.x, y: to.y }, walked: 0, seconds: 0, blocked: false };
   const ux = dx / span, uy = dy / span;
+  const escape = hexKey(hexAtPoint(from));
   const steps = Math.max(1, Math.ceil(span / field.rules.sampleStep));
   const segment = span / steps;
   let walked = 0, seconds = 0;
   for (let i = 0; i < steps; i++) {
     const mid = walked + segment / 2;
-    const factor = terrainSpeedFactor(field, def, terrainAt(field, { x: from.x + ux * mid, y: from.y + uy * mid }));
+    const factor = factorAt(field, def, { x: from.x + ux * mid, y: from.y + uy * mid }, escape);
     if (factor === null) break;
     seconds += segment / (field.speed * pace * factor);
     walked += segment;
   }
   const blocked = walked < span - 1e-9;
+  return { end: blocked ? { x: from.x + ux * walked, y: from.y + uy * walked } : { x: to.x, y: to.y }, walked, seconds, blocked };
+}
+
+function finish(field: MarchField, legs: Vec2[], span: number, seconds: number, blocked: boolean, routed: boolean): Plan {
   const capped = Math.min(seconds, field.rules.travelCapSeconds);
-  return {
-    target: blocked ? { x: from.x + ux * walked, y: from.y + uy * walked } : { x: to.x, y: to.y },
-    span: walked, seconds: capped, haste: capped > 0 ? seconds / capped : 1, blocked,
-  };
+  return { legs, target: legs[legs.length - 1]!, span, seconds: capped, haste: capped > 0 ? seconds / capped : 1, blocked, routed };
+}
+
+/**
+ * Work a whole walk out ahead of time. The straight line first, because that is the answer nine times in ten
+ * and the only one that keeps travel time exactly proportional to distance; a route around the obstacle when
+ * it is not; and, when nothing gets there at all, as far along the straight line as the unit can go before it
+ * stands. The cap is applied to whichever of those the walk turns out to be, measured along the real route,
+ * so going the long way round costs real time and still never costs more than the cap.
+ */
+function planWalk(field: MarchField, def: UnitDef, pace: number, from: Vec2, to: Vec2): Plan {
+  const direct = walkLeg(field, def, pace, from, to);
+  if (!direct.blocked) return finish(field, [direct.end], direct.walked, direct.seconds, false, false);
+
+  const route = routeHexes(field, def, hexAtPoint(from), hexAtPoint(to));
+  if (route && route.length) {
+    const corners = pullString(field, def, from, [...route.map(pointOfHex), { x: to.x, y: to.y }]);
+    const legs: Vec2[] = [];
+    let span = 0, seconds = 0, blocked = false, cur = from;
+    for (const p of corners) {
+      const leg = walkLeg(field, def, pace, cur, p);
+      span += leg.walked; seconds += leg.seconds;
+      legs.push(leg.end);
+      if (leg.blocked) { blocked = true; break; }
+      cur = p;
+    }
+    if (legs.length) return finish(field, legs, span, seconds, blocked, true);
+  }
+  return finish(field, [direct.end], direct.walked, direct.seconds, true, false);
+}
+
+/** What is left of a walk: the rest of this leg plus every leg after it. */
+function remainingDistance(o: MarchOrder, pos: Vec2): number {
+  let d = Math.hypot(o.legs[o.leg]!.x - pos.x, o.legs[o.leg]!.y - pos.y);
+  for (let i = o.leg + 1; i < o.legs.length; i++) d += Math.hypot(o.legs[i]!.x - o.legs[i - 1]!.x, o.legs[i]!.y - o.legs[i - 1]!.y);
+  return d;
 }
 
 /** Seconds this unit needs to walk between two points, terrain and pace included, never above the cap. */
@@ -309,10 +461,10 @@ function give(field: MarchField, u: MarchUnit, kind: OrderKind, destination: Vec
     return null;
   }
   u.order = {
-    kind, destination: { x: destination.x, y: destination.y }, target: plan.target, squadId,
-    span: plan.span, seconds: plan.seconds, elapsed: 0, haste: plan.haste, blocked: plan.blocked,
+    kind, destination: { x: destination.x, y: destination.y }, target: plan.target, legs: plan.legs, leg: 0,
+    routed: plan.routed, squadId, span: plan.span, seconds: plan.seconds, elapsed: 0, haste: plan.haste, blocked: plan.blocked,
   };
-  u.facing = Math.atan2(plan.target.y - u.pos.y, plan.target.x - u.pos.x);
+  u.facing = Math.atan2(plan.legs[0]!.y - u.pos.y, plan.legs[0]!.x - u.pos.x);
   return u.order;
 }
 
@@ -322,7 +474,8 @@ function replan(field: MarchField, u: MarchUnit): void {
   if (!o) return;
   // seconds is always the prediction from the last plan, so the clock on it starts again here
   const plan = planWalk(field, field.reg.unit(u.defId), paceOf(field, u), u.pos, o.destination);
-  o.target = plan.target; o.seconds = plan.seconds; o.haste = plan.haste; o.blocked = plan.blocked;
+  o.target = plan.target; o.legs = plan.legs; o.leg = 0; o.routed = plan.routed;
+  o.seconds = plan.seconds; o.haste = plan.haste; o.blocked = plan.blocked;
   o.elapsed = 0;
 }
 
@@ -386,20 +539,38 @@ function advance(field: MarchField, u: MarchUnit, dt: number): void {
   const o = u.order;
   if (!o) return;
   if (o.kind === "Join") { chase(field, u, o); if (!u.order) return; }
-  const dx = o.target.x - u.pos.x, dy = o.target.y - u.pos.y;
-  const left = Math.hypot(dx, dy);
   o.elapsed += dt;
-  if (left <= field.rules.arriveRadius) { arrive(field, u, o); return; }
-  const factor = terrainSpeedFactor(field, field.reg.unit(u.defId), terrainAt(field, u.pos));
-  if (factor === null) { o.blocked = true; arrive(field, u, o); return; } // walked into ground it cannot cross
-  const travel = field.speed * paceOf(field, u) * factor * o.haste * dt;
-  u.facing = Math.atan2(dy, dx);
-  if (travel >= left) { u.pos = { x: o.target.x, y: o.target.y }; arrive(field, u, o); return; }
-  u.pos = { x: u.pos.x + (dx / left) * travel, y: u.pos.y + (dy / left) * travel };
+  // speed on the ground underfoot; a unit that somehow stands somewhere closed to it still walks out of it
+  const factor = factorAt(field, field.reg.unit(u.defId), u.pos, hexKey(hexAtPoint(u.pos)))!;
+  // one frame's worth of walking, spent across as many legs as it reaches, so a corner costs no distance
+  let budget = field.speed * paceOf(field, u) * factor * o.haste * dt;
+  for (;;) {
+    const wp = o.legs[o.leg]!;
+    const dx = wp.x - u.pos.x, dy = wp.y - u.pos.y;
+    const left = Math.hypot(dx, dy);
+    if (left > field.rules.arriveRadius) {
+      u.facing = Math.atan2(dy, dx);
+      if (budget < left) { u.pos = { x: u.pos.x + (dx / left) * budget, y: u.pos.y + (dy / left) * budget }; return; }
+      u.pos = { x: wp.x, y: wp.y };
+      budget -= left;
+    }
+    if (o.leg + 1 < o.legs.length) { o.leg++; continue; }
+    arrive(field, u, o);
+    return;
+  }
 }
 
 function arrive(field: MarchField, u: MarchUnit, o: MarchOrder): void {
-  if (o.kind === "Join") return; // a follower that has caught up is joined below, not stopped here
+  if (o.kind === "Join") {
+    const s = o.squadId ? field.squads.get(o.squadId) : undefined;
+    if (!o.blocked || !s) return; // caught up: whether it joins is decided in tryJoin, not here
+    const anchor = squadAnchor(field, s);
+    if (Math.hypot(anchor.x - u.pos.x, anchor.y - u.pos.y) <= field.rules.joinRadius) return;
+    // it walked as far as anything could and the squad is still out of reach, so say so rather than stand there
+    u.order = null;
+    log(field, "FollowFailed", { unit: u.id, squad: s.id, at: { x: u.pos.x, y: u.pos.y } });
+    return;
+  }
   u.order = null;
   log(field, "Arrived", { unit: u.id, at: { x: u.pos.x, y: u.pos.y }, blocked: o.blocked });
 }
@@ -409,7 +580,8 @@ function chase(field: MarchField, u: MarchUnit, o: MarchOrder): void {
   const s = o.squadId ? field.squads.get(o.squadId) : undefined;
   if (!s) { u.order = null; return; }
   const anchor = squadAnchor(field, s);
-  if (Math.hypot(anchor.x - o.destination.x, anchor.y - o.destination.y) <= field.rules.arriveRadius) return;
+  // a body walking away is chased, but only re-planned when it has really moved: routing is not frame work
+  if (Math.hypot(anchor.x - o.destination.x, anchor.y - o.destination.y) <= field.rules.followReplanDistance) return;
   o.destination = anchor;
   replan(field, u);
 }
@@ -447,7 +619,7 @@ export interface MarchPose {
 export function poseOf(field: MarchField, unitId: string): MarchPose {
   const u = unitOf(field, unitId);
   const o = u.order;
-  const left = o ? Math.hypot(o.target.x - u.pos.x, o.target.y - u.pos.y) : 0;
+  const left = o ? remainingDistance(o, u.pos) : 0;
   return {
     id: u.id, defId: u.defId, side: u.side, squadId: u.squadId,
     pos: { x: u.pos.x, y: u.pos.y }, facing: u.facing, walking: !!o,

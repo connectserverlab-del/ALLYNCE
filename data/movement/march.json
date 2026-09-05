@@ -8,9 +8,11 @@
   "flightIgnoresGround": true,
   "joinRadius": 2.5,
   "arriveRadius": 0.08,
+  "followReplanDistance": 2,
   "formationSpacing": 1.15,
   "formationRingSlots": 6,
   "sampleStep": 0.75,
+  "routeSearchLimit": 4000,
   "notes": {
     "travelCapSeconds": "The longest walk on any field. Walking speed is the map diagonal divided by this, so a shorter trip is proportionally shorter and nothing ever takes longer. Raise it and the map feels vast but a redeployment costs a coffee break; lower it and the army teleports.",
     "referenceMov": "The MOV that walks at exactly the field speed, so a unit with this MOV crosses the whole map in the cap. Set to the middle of the roster: heavier units press against the cap, riders come in well under it. Raise it and everyone slows.",
@@ -21,8 +23,10 @@
     "flightIgnoresGround": "A flier reads only whether the ground is closed to it, never how rough it is, so wings cross mud and forest at their own pace. Turn it off and fliers pay the table's flying costs, which makes woods slow for a wyvern.",
     "joinRadius": "How close a loose unit must get to a squad before it falls in. Wide and units snap into formation from across a field; narrow and a follower trails the body it is chasing without ever catching it.",
     "arriveRadius": "How close counts as arrived. Small enough to look exact, large enough that a unit never jitters across its destination on a fixed timestep.",
+    "followReplanDistance": "How far a squad has to move before a follower works its walk out again. Keep it under the join radius or a follower aims at where the body used to be and never closes; raise it and a chase is cheaper but scrappier, since re-planning a blocked walk means routing it.",
     "formationSpacing": "World distance between formation rings, in the same units as the hex layout, where one hex is roughly 1.7 across. Tight formations read as a body but overlap sprites; loose ones sprawl and arrive raggedly.",
     "formationRingSlots": "Slots added per formation ring: ring one holds six, ring two twelve. Six matches the hex neighbourhood, so a squad standing still lines up on ground the turn-based rules would also recognise.",
-    "sampleStep": "How finely a planned walk samples the ground under it, in world units. Finer means a thin ribbon of mud or a ford is not stepped over when the travel time is worked out, and costs proportionally more work per order."
+    "sampleStep": "How finely a planned walk samples the ground under it, in world units. Finer means a thin ribbon of mud or a ford is not stepped over when the travel time is worked out, and costs proportionally more work per order.",
+    "routeSearchLimit": "How many hexes a route may look at before it gives up and the unit walks as far as it can instead. A hopeless search on a big map must not cost an order its frame; raise it only if a legitimate route on a large field is being abandoned."
   }
 }
