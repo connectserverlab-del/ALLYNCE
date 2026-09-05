@@ -1,4 +1,5 @@
 import type { BattleController } from "./battle.js";
+import { isBroken, canBeTaken, canBeSubdued, CAPTURE_THRESHOLD } from "./battle.js";
 import type { UnitState } from "./types.js";
 import type { Hex } from "./hex.js";
 import { hexDistance } from "./hex.js";
@@ -85,6 +86,12 @@ function actOnce(ctrl: BattleController, u: UnitState, profile: AiProfile): bool
     if (a.effect.kind === "ChargeBonus" && u.movedThisActivation >= (a.effect as any).minHexesMoved && enemy && b.distance(u, enemy) <= d.range) { try { ctrl.useAbility(u, id); } catch { /* skip */ } }
     if (a.effect.kind === "Duel" && enemy && b.distance(u, enemy) === 1 && b.def(enemy).roles.some((r) => r === "Elite" || r === "Commander")) { try { ctrl.useAbility(u, id, { target: enemy }); } catch { /* skip */ } }
   }
+  // A warrant target that is already broken is worth more alive than dead: take it now
+  const warrants = b.wanted.get(u.side);
+  if (warrants?.size) {
+    const prisoner = b.adjacentEnemies(u).find((e) => warrants.has(e.defId) && ctrl.canSubdue(u, e));
+    if (prisoner) { try { ctrl.subdue(u, prisoner); return true; } catch { /* someone else took it */ } }
+  }
   // Attack if a target is in range: prefer ritualists / exposed elites / isolated commanders
   const targets = [...b.activeUnits()].filter((e) => e.side !== u.side && e.pos && hexDistance(u.pos!, e.pos) <= d.range && !(b.hasStatus(e, "Hidden") && hexDistance(u.pos!, e.pos) > 1));
   if (targets.length && !u.attackedThisActivation) {
@@ -115,6 +122,14 @@ function targetScore(ctrl: BattleController, u: UnitState, t: UnitState, profile
   if (td.roles.includes("Elite") && b.hasStatus(t, "Exposed")) s += 250;
   if (b.isIsolated(t)) s += 150;
   if (t.isClone) s -= 500; // clones are decoys
+  // A warrant pays for a prisoner, so a warrant target is not something to shoot at. Leave it
+  // alone while anyone of ours is close enough to lay hands on it; only once nobody can reach it
+  // does killing it beat letting it walk away.
+  if (b.wanted.get(u.side)?.has(t.defId) && canBeSubdued(b, t)) {
+    const threshold = Math.ceil(td.hp * CAPTURE_THRESHOLD);
+    const closingIn = [...b.activeUnits(u.side)].some((a) => !a.isClone && a.pos && t.pos && hexDistance(a.pos, t.pos) <= 6);
+    if (closingIn || canBeTaken(b, t, u.side) || t.hp - dmg <= threshold) s -= 4000;
+  }
   return s;
 }
 
@@ -130,6 +145,16 @@ function chooseGoal(ctrl: BattleController, u: UnitState, profile: AiProfile): H
     candidates.push({ hex: r.center, score: (600 * urgency * profile.objectiveWeight * mobile) / (1 + dist / 4) });
   }
   for (const p of enemyPortals) { const dist = hexDistance(u.pos!, p.pos); candidates.push({ hex: p.pos, score: 300 / (1 + dist / 4) }); }
+  // A warrant target is the most valuable thing on the field. Converge on it: two bodies on it and
+  // its friends cleared away is a prisoner, and a prisoner is the only thing the writ pays for.
+  const warrants = b.wanted.get(u.side);
+  if (warrants?.size) {
+    for (const e of b.activeUnits()) {
+      if (e.side === u.side || !e.pos || !warrants.has(e.defId) || !canBeSubdued(b, e)) continue;
+      const ready = canBeTaken(b, e, u.side) ? 3 : 1;
+      candidates.push({ hex: e.pos, score: (900 * ready) / (1 + hexDistance(u.pos!, e.pos) / 4) });
+    }
+  }
   const enemy = nearestEnemy(ctrl, u);
   if (enemy) {
     const dist = b.distance(u, enemy);

@@ -30,6 +30,41 @@ Combine each subject block with the Global Style Block in `STYLE_GUIDE.md`. Subj
 - **Affiliated Summoner (Ritual leader):** Composed channeler in layered marsh-green and pale-mineral robes over light traveling armor, ritual staff of dark wetland wood with pale mineral rings, calm certainty (natural affinity).
 - **Foreign Ritualist (×6):** Layered marsh-green and weathered teal robes over practical traveling armor, wax tablets with invented non-readable glyphs, pronunciation cords at the wrists, dark wetland-wood staff, focused and visibly strained posture. Scholar-channeler, not a combat wizard.
 
+## Sworn companies
+
+Five hired companies. They fight under someone else's banner: four cards each, enough to hire but never to lead
+a host, and each is a different culture of soldier so a hundred-card deck stops reading as one army twice over.
+
+### Cobalt Conclave (battle magi)
+- **Cobalt Line Mage (Foot):** Practical field mage, not a robed wizard. Dark blue coat over a mail shirt, a plain iron-shod stave, satchel of charges at the hip, ink-stained hands, mud to the knee.
+- **Ward Captain (Second):** Heavy blue-and-steel harness with a large scarred rectangular shield, warding sigils scratched rather than gilded into the plate, a hammer for a sidearm.
+- **Stormglass Wizard (Elite):** Grey-bearded, layered slate robes over a worn hauberk, a long stave capped with a clouded glass charge, glass shards strung at the belt.
+- **Azure Seal Magister (Commander, unique):** Blue-black coat and cloak over half-plate, seal-rings on a cord, a ringed stave of office, one cold blue-white rim light. Cobalt blue and tarnished pewter.
+
+### Thorn Coven (hexers)
+- **Vessel Keeper (Levy/Second):** Hooded figure in sackcloth and patched leather, stoppered clay vessels and charms roped across the body, a bent thorn-wood crook.
+- **Fen Hexer (Foot):** Marsh-stained green and grey layers over a leather jerkin, hood down, a thorn switch and a knife, bare mud-caked feet and shins.
+- **Pale-Briar Seer (Elite, ritualist):** Bloodless bald head, black bramble-veined leather and torn dark cloth, a long knife, a bird on the shoulder, briar growth worked into the armour.
+- **Thorn-Circle Elder (Commander, unique):** Deep hood over a bruised-violet and moss-green mantle, a gnarled briar stave, coin charms and a thorn circlet. Bone-grey skin, sickly green-grey rim light.
+
+### Cutpurse Court (rogues)
+- **Alley Runner (Levy):** Skinny, soot-blacked scarf over the face, a plain dark coat, a single knife and a lantern hook, worn boots. Nothing on them worth taking.
+- **Fence-Captain (Second):** Heavy-set, scarred face, a long dirty coat hung with purses, cut cords and a lantern, a sword cane and a set of manacles.
+- **Garrote Adept (Elite):** All in oiled black, hood and mask, twin knives and a wire coil at the wrist, no armour anywhere it would rattle.
+- **Court Whisperer (Commander, unique):** Long black coat over quiet leathers, a cane with a hidden blade, a rolled paper in one hand, one dull lamp-amber rim light. Oxblood lining, dirty brass.
+
+### Windmarch Host (steppe horse-archers)
+- **Windmarch Outrider (Cavalry):** Scaled lamellar over a felt coat, fur-lined cap, recurve bow of horn and sinew, a quiver at the thigh, a sabre. Dust ochre and weathered horn.
+- **Horn Serjeant (Second):** A great curved war-horn slung across the chest, orange-lacquered scale over fur, braided hair, bow held low.
+- **Hollow-Bow Master (Elite):** Heavy fur-lined felt coat over scale, iron brow-band on the cap, a hollow-limbed recurve bow, wind-burned face. Bleached bone-white rim light.
+- **Windmarch Sovereign (Commander, unique):** Plumed and pennoned helm over lamellar and heavy fur, sabre and bow both, torn banner streamers at the shoulder.
+
+### Dunewake Compact (glass-road caravaneers)
+- **Glassroad Guide (Second):** Sun-bleached head-wrap and veil, layered dust-caked linen over a light hauberk, coiled rope and water-skins, a plain walking stave and a curved knife.
+- **Dunewake Skirmisher (Foot):** Wrapped face and shoulders, scale over pale linen, a curved sword and a light spear, sand-scoured sandals and wrapped shins.
+- **Sandglass Duellist (Elite):** Bared scarred arms over gilded scale and pale wraps, a long curved blade in each hand, a sandglass at the belt.
+- **Dunewake Arbiter (Commander, unique):** Deep hood and veil over pale layered robes and light scale, a shield and staff of office, pale turquoise stones. Low amber rim light, scorched umber.
+
 ## Structures
 - **Reinforcement Portal:** Low circular frame of ivory stone and dark-blue metal, four compact stabilizer pylons, geometric light contained inside the ring, fits one hex. Field infrastructure, not a monument. States: closed, opening, active.
 - **Ritual Circle:** Three concentric rings of dark metal segments, chalk-like mineral lines, small anchor stones, three participant positions and one leader position, decorative invented symbols. States: inactive, channeling, completed-held, collapsed. Top-down.

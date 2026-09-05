@@ -11,7 +11,7 @@ export interface AttackResult { damage: number; atk: number; def: number; arc: s
 export const MIN_DAMAGE = 100;
 
 /** Damage = max(100, FinalATK - FinalDEF). Integer math, deterministic. */
-export function resolveAttack(b: Battle, attacker: UnitState, target: UnitState, opts: { ranged?: boolean } = {}): AttackResult {
+export function resolveAttack(b: Battle, attacker: UnitState, target: UnitState, opts: { ranged?: boolean; reaction?: boolean } = {}): AttackResult {
   // Formal Duel: outsiders cannot attack a dueling pair
   const dueling = duels.get(target.uid);
   if (dueling && dueling !== attacker.uid) throw new Error("Target is in a Formal Duel; other units cannot interfere");
@@ -25,7 +25,7 @@ export function resolveAttack(b: Battle, attacker: UnitState, target: UnitState,
   }
 
   const arc = arcFor(b, attacker, defender);
-  const atk = computeStat(b, attacker, "ATK", { attacker, defender, arc, ranged: opts.ranged }).final;
+  const atk = computeStat(b, attacker, "ATK", { attacker, defender, arc, ranged: opts.ranged, reaction: opts.reaction }).final;
   const def = computeStat(b, defender, "DEF", { attacker, defender, arc, ranged: opts.ranged }).final;
   const damage = Math.max(MIN_DAMAGE, atk - def);
   const result = applyDamage(b, defender, damage, attacker.uid);
