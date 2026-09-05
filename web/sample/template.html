@@ -283,6 +283,35 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 .tip b{display:block;font-family:"Alegreya SC";font-weight:700;margin-bottom:1px}
 .tip .m{font-family:"JetBrains Mono";font-size:11.5px;color:#4a4232}
 @media (max-width:1180px){.cmd{grid-template-columns:150px 1fr 250px}.cmd>div:nth-child(4){display:none}.legend,.ovl{display:none}}
+/* ---------- march ---------- */
+#march-wrap{position:absolute;inset:0;overflow:hidden;background:#0d0f14}
+#marchmap{position:absolute;inset:0;width:100%;height:100%;cursor:crosshair;touch-action:none}
+#marchmap.dragging{cursor:grabbing}
+.marchhint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);pointer-events:none;
+  font:12px/1.5 "Alegreya Sans",Georgia,serif;color:#c8cdd6;background:rgba(12,14,20,.82);border:1px solid var(--edge);
+  padding:6px 12px;letter-spacing:.02em;max-width:70%;text-align:center}
+.hud.marchtop{top:14px;left:0;right:250px;display:flex;justify-content:center}
+.hud.marchside{top:14px;right:14px;bottom:14px;width:224px}
+.marchclock{padding:8px 16px;display:flex;gap:20px;align-items:baseline;font:12px/1 "Alegreya Sans",Georgia,serif}
+.marchclock b{font:16px/1 "JetBrains Mono",ui-monospace,monospace;color:#e6e9ef}
+.marchclock i{font-style:normal;color:var(--dim);letter-spacing:.08em;font-size:10px;text-transform:uppercase}
+.roster{height:100%;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:10px}
+.roster h4{margin:0;font:11px/1 "Alegreya SC","Alegreya Sans",serif;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.sqd{border:1px solid var(--edge);background:rgba(255,255,255,.03)}
+.sqd.drop{border-color:var(--gold);background:rgba(184,146,63,.13)}
+.sqd>header{display:flex;align-items:center;gap:6px;padding:5px 7px;border-bottom:1px solid var(--edge);
+  font:11px/1.2 "Alegreya SC","Alegreya Sans",serif;letter-spacing:.06em;cursor:pointer}
+.sqd>header .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.sqd>header .n{margin-left:auto;font:10px/1 "JetBrains Mono",ui-monospace,monospace;color:var(--dim)}
+.sqd.sel>header{background:rgba(184,146,63,.18);color:#f0e2bd}
+.sqd ul{list-style:none;margin:0;padding:3px}
+.unitrow{display:flex;align-items:center;gap:6px;padding:3px 4px;font:11px/1.25 "Alegreya Sans",Georgia,serif;cursor:grab}
+.unitrow:hover{background:rgba(255,255,255,.05)}
+.unitrow.drag{opacity:.4}
+.unitrow img{width:22px;height:22px;object-fit:contain;flex:none}
+.unitrow .w{margin-left:auto;font:9px/1 "JetBrains Mono",ui-monospace,monospace;color:var(--gold)}
+.roster .loose{border-style:dashed}
+.roster p{margin:0;font:10px/1.5 "Alegreya Sans",Georgia,serif;color:var(--dim)}
 @media (max-width:900px){.holdgrid{grid-template-columns:1fr}.holdmap{display:none}.detail .box{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -301,6 +330,11 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
       <div class="hud rightcol"><div class="panel mini" id="minimap"></div><div class="panel rivet cam" id="cam"></div></div>
       <div class="hud cmdwrap"><div class="panel rivet cmd" id="cmd"></div></div>
     </section>
+    <section class="pane" id="p-march">
+      <div id="march-wrap"><canvas id="marchmap"></canvas><div class="marchhint" id="marchhint"></div></div>
+      <div class="hud marchtop"><div class="panel rivet marchclock" id="marchclock"></div></div>
+      <div class="hud marchside"><div class="panel rivet roster" id="roster"></div></div>
+    </section>
     <section class="pane" id="p-deck"><div class="scroll" id="deckpane"></div></section>
     <section class="pane" id="p-rites"><div class="scroll" id="ritespane"></div></section>
     <section class="pane" id="p-writs"><div class="scroll" id="writspane"></div></section>
@@ -311,6 +345,7 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 <div class="detail" id="detail"><div class="panel rivet box" id="detailbox"></div></div>
 <div class="tip" id="tip"></div>
 
+<script>__MARCH_ENGINE__</script>
 <script>
 const D = __DATA__, A = __ASSETS__;
 const $ = (id)=>document.getElementById(id);
@@ -348,12 +383,12 @@ const esc = (s)=>String(s).replace(/[&<>"]/g,(m)=>({'&':'&amp;','<':'&lt;','>':'
 const secs = (s)=> s>=3600? Math.round(s/360)/10+' h' : s>=60? Math.round(s/60)+' min' : Math.round(s)+' s';
 
 /* ---------------- rail ---------------- */
-const SCREENS = [['field','Field','UI-BANNER'],['deck','Deck','UI-DRAW'],['rites','Rites','BLD-RESEARCH'],['writs','Writs','BLD-RECRUIT'],['hold','Hold','BLD-KEEP'],['lands','Lands','BLD-BUILD']];
+const SCREENS = [['field','Field','UI-BANNER'],['march','March','BLD-BARRACKS'],['deck','Deck','UI-DRAW'],['rites','Rites','BLD-RESEARCH'],['writs','Writs','BLD-RECRUIT'],['hold','Hold','BLD-KEEP'],['lands','Lands','BLD-BUILD']];
 let screen='field';
 function renderRail(){
   $('rail').innerHTML = `<div class="crest" style="background-image:url('${A.art.cardback}')"></div>` +
     SCREENS.map(([id,label,icon])=>`<button data-s="${id}" class="${id===screen?'on':''}"><img src="${A.icons[icon]}" alt=""><span>${label}</span></button>`).join('');
-  $('rail').querySelectorAll('button').forEach(b=>b.onclick=()=>{screen=b.dataset.s;renderRail();document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='p-'+screen));if(screen==='field')drawMap();});
+  $('rail').querySelectorAll('button').forEach(b=>b.onclick=()=>{screen=b.dataset.s;renderRail();document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='p-'+screen));if(screen==='field')drawMap(); if(screen==='march')fitCanvas();});
 }
 
 /* ---------------- field ---------------- */
@@ -567,6 +602,316 @@ function miniCard(c){
    <div class="mstars">${Array.from({length:Math.min(c.stars,10)},()=>`<img src="${A.star.on}" alt="">`).join('')}</div>
    <div class="mart">${t?`<img src="${t}" alt="">`:''}</div>
    <div class="mname">${esc(c.name)}</div><div class="mcost">${c.tribute===null?'R':c.tribute}</div></div>`;
+}
+
+/* ---------------- march ---------------- */
+/**
+ * A march is the one screen that cannot be a snapshot. The user picks where a squad goes, so the walk
+ * has to be worked out here and now — which is why `web/sample/march-boot.mts` is bundled into the page
+ * and everything below calls the real `core/src/march.ts`. No arrival time on this screen is computed
+ * in the template; they all come back from `travelSeconds`.
+ *
+ * The ground is drawn as blended terrain rather than tiles. The grid is still there underneath — the
+ * battle rules need it — but a march is continuous, and a walk that visibly steps from hex to hex would
+ * be a lie about how the movement works.
+ */
+const M = window.MARCH;
+const ME = M.engine;
+const F = ME.newMarchField(M.reg, M.map);
+
+/** World units per screen pixel, and where the field sits in the canvas. Set on every resize. */
+let mv = { scale: 8, ox: 0, oy: 0 };
+let sel = null;              // selected squad id
+let drag = null;             // { unitId, over } while a roster row is being dragged
+let hover = null;            // { pt, seconds } while a destination is being considered
+let last = 0, running = true;
+
+const SIDE_HUE = { A: '#c9562c', B: '#7fb6c2' };
+const SEED_SQUADS = [
+  // Deliberately mixed pace: a battery at mov 2 marching beside foot at mov 4 is the clearest way to see
+  // that a squad travels at its slowest member and a lone courier does not.
+  { name: 'Ember column', side: 'A', defs: [
+    'SAM_COMMANDER_EMBER-BANNER-DAIMYO', 'SAM_FOOT_EMBERLINE-ASHIGARU',
+    'SAM_FOOT_EMBERLINE-ASHIGARU', 'SAM_SIEGE_EMBER-OZUTSU-BATTERY'] },
+  { name: 'Left horn', side: 'A', defs: [
+    'KNI_ELITE_SKY-LANCE-DRAGOON', 'KNI_FOOT_BASTION-MAN-AT-ARMS', 'KNI_FOOT_BASTION-MAN-AT-ARMS'] },
+];
+const SEED_LOOSE = ['SHI_CAVALRY_NIGHT-COURIER-RIDER', 'SHI_ELITE_MIRROR-SHADE-ADEPT', 'DRG_FOOT_SLATEWING-DRAKE'];
+
+/**
+ * The nearest point the map actually has ground under.
+ *
+ * The field's bounds are a rectangle around a ragged blob, so a drag into a corner lands on nothing;
+ * the engine correctly walks to the shore and stops, but pointing at emptiness and being told "45s" is
+ * a poor thing to hand a player. Snapping the destination is the UI's job — the engine is right not to
+ * guess where someone meant to click.
+ */
+const CENTRES = M.map.hexes.map((h) => ME.pointOfHex(h));
+function snapToGround(p) {
+  let best = null, bd = Infinity;
+  for (const c of CENTRES) {
+    const d = (c.x - p.x) ** 2 + (c.y - p.y) ** 2;
+    if (d < bd) { bd = d; best = c; }
+  }
+  // inside the blob the containing hex centre is within one hex, so the point is left where it was
+  return bd <= 1.2 ? p : best;
+}
+
+/** Anything the seed asks for that is not in the registry is skipped rather than crashing the page. */
+const known = (id) => { try { M.reg.unit(id); return true; } catch { return false; } };
+
+function seedField() {
+  // Everyone starts on the map's own deployment zone rather than at coordinates picked by eye: the field
+  // is an irregular blob and a made-up point lands in the void as often as not.
+  const zone = M.map.deployZones.A.map(ME.pointOfHex);
+  let next = 0, n = 0;
+  // the zone is not in spatial order, so stepping through it can still hand out two neighbouring hexes;
+  // a small fanned offset per unit keeps anyone from spawning exactly under someone else
+  const spot = (step) => {
+    const c = zone[(next += step) % zone.length] || zone[0], a = n * 2.4;
+    n++;
+    return ME.clampToField(F, { x: c.x + Math.cos(a) * 0.8, y: c.y + Math.sin(a) * 0.8 });
+  };
+  for (const sq of SEED_SQUADS) {
+    const ids = sq.defs.filter(known).map((d) => ME.enlist(F, d, spot(2), { side: sq.side }).id);
+    if (ids.length) ME.formSquad(F, { leaderId: ids[0], memberIds: ids.slice(1), name: sq.name });
+  }
+  for (const d of SEED_LOOSE) if (known(d)) ME.enlist(F, d, spot(7), { side: 'A' });
+  sel = [...F.squads.keys()][0] ?? null;
+}
+
+/* ---- ground ---- */
+/** Terrain colours, read once out of the same custom properties the field screen paints with. */
+const TCOL = {};
+function readTerrainColours() {
+  const cs = getComputedStyle(document.documentElement);
+  for (const t of Object.keys(TL)) TCOL[t] = cs.getPropertyValue('--t-' + t).trim() || '#57604a';
+}
+/** The ground, rendered once to an offscreen canvas: 950 blurred hexes is not a per-frame job. */
+let ground = null;
+function paintGround() {
+  const c = document.createElement('canvas');
+  c.width = Math.max(1, cvs.width); c.height = Math.max(1, cvs.height);
+  const g = c.getContext('2d');
+  g.fillStyle = '#0d0f14'; g.fillRect(0, 0, c.width, c.height);
+  // Painted as regions, not tiles. The terrain data is per hex, but a march is continuous and a visibly
+  // hexagonal ground would keep telling the player the movement is on a grid when it is not. Each hex is
+  // laid down as a disc wider than the hex spacing so neighbours of a kind merge into one mass, then the
+  // whole layer is blurred enough to lose the cell edges while a river still reads as a river.
+  const step = mv.scale * 1.73;
+  g.filter = `blur(${(step * 0.42).toFixed(1)}px)`;
+  for (const h of M.map.hexes) {
+    const s = toScreen(ME.pointOfHex(h));
+    g.fillStyle = TCOL[h.terrain] || TCOL.Open;
+    g.globalAlpha = h.terrain === 'Open' ? 0.9 : 1;
+    g.beginPath(); g.arc(s.x, s.y, step * 0.82, 0, Math.PI * 2); g.fill();
+  }
+  g.filter = 'none'; g.globalAlpha = 1;
+  ground = c;
+}
+
+const toScreen = (p) => ({ x: (p.x - F.bounds.minX) * mv.scale + mv.ox, y: (p.y - F.bounds.minY) * mv.scale + mv.oy });
+const toWorld = (x, y) => ({ x: (x - mv.ox) / mv.scale + F.bounds.minX, y: (y - mv.oy) / mv.scale + F.bounds.minY });
+
+let cvs, ctx;
+function fitCanvas() {
+  const wrap = $('march-wrap'), r = wrap.getBoundingClientRect(), dpr = Math.min(2, devicePixelRatio || 1);
+  // the pane is display:none until its rail button is pressed, so this is called once on a box with no
+  // size; fitting to that gives a negative scale. The rail refits when the screen is actually shown.
+  if (r.width < 360 || r.height < 240) return false;
+  cvs.width = Math.round(r.width * dpr); cvs.height = Math.round(r.height * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const w = F.bounds.maxX - F.bounds.minX, h = F.bounds.maxY - F.bounds.minY;
+  const padR = 250, pad = 40;
+  mv.scale = Math.min((r.width - padR - pad * 2) / w, (r.height - pad * 2) / h);
+  mv.ox = pad + ((r.width - padR - pad * 2) - w * mv.scale) / 2;
+  mv.oy = pad + ((r.height - pad * 2) - h * mv.scale) / 2;
+  // the offscreen ground is in device pixels, so it is painted at the same scale the context uses
+  const s = mv.scale, ox = mv.ox, oy = mv.oy;
+  mv.scale = s * dpr; mv.ox = ox * dpr; mv.oy = oy * dpr;
+  paintGround();
+  mv.scale = s; mv.ox = ox; mv.oy = oy;
+  return true;
+}
+
+/* ---- sprites ---- */
+const sprite = {};
+function loadSprites() {
+  for (const u of F.units.values()) {
+    const src = A.tokens[u.defId];
+    if (!src || sprite[u.defId]) continue;
+    const im = new Image(); im.src = src; sprite[u.defId] = im;
+  }
+}
+
+/** Draw one unit: a walk cycle is a bob and a lean, phased by how far the figure has actually walked. */
+function drawUnit(p, pose) {
+  const s = toScreen(p.pos), size = Math.max(26, mv.scale * 3.4);
+  const walkPhase = pose.walking ? F.time * 6 + p.pos.x * 0.7 : 0;
+  const bob = pose.walking ? Math.abs(Math.sin(walkPhase)) * size * 0.055 : 0;
+  const lean = pose.walking ? Math.sin(walkPhase) * 0.045 : 0;
+  ctx.save();
+  ctx.translate(s.x, s.y);
+  // shadow first, and it does not bob with the figure
+  ctx.globalAlpha = 0.42; ctx.fillStyle = '#05060a';
+  ctx.beginPath(); ctx.ellipse(0, 0, size * 0.26, size * 0.09, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.rotate(lean);
+  const im = sprite[p.defId];
+  if (im && im.complete && im.naturalWidth) {
+    // walking left means the figure faces left; the art is all drawn facing lower-left
+    const flip = Math.cos(pose.facing) > 0.2 ? -1 : 1;
+    ctx.scale(flip, 1);
+    ctx.drawImage(im, -size / 2, -size - bob, size, size);
+  } else {
+    ctx.fillStyle = SIDE_HUE[p.side] || '#9aa7b3';
+    ctx.beginPath(); ctx.arc(0, -size * 0.3, size * 0.16, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+  if (p.squadId && p.squadId === sel) {
+    ctx.strokeStyle = 'rgba(184,146,63,.85)'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.ellipse(s.x, s.y, size * 0.28, size * 0.1, 0, 0, Math.PI * 2); ctx.stroke();
+  }
+}
+
+function drawFrame(now) {
+  if (screen !== 'march') { last = now; requestAnimationFrame(drawFrame); return; }
+  const dt = Math.min(0.05, (now - last) / 1000 || 0); last = now;
+  if (running && dt > 0) ME.step(F, dt);
+
+  if (!ground && !fitCanvas()) { requestAnimationFrame(drawFrame); return; }
+  const r = cvs.getBoundingClientRect();
+  ctx.clearRect(0, 0, r.width, r.height);
+  if (ground) ctx.drawImage(ground, 0, 0, r.width, r.height);
+
+  // ordered destinations, drawn behind everyone
+  for (const u of F.units.values()) {
+    if (!u.order || u.squadId !== sel) continue;
+    const a = toScreen(u.pos), b = toScreen(u.order.target);
+    ctx.strokeStyle = 'rgba(184,146,63,.28)'; ctx.lineWidth = 1; ctx.setLineDash([4, 5]);
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); ctx.setLineDash([]);
+  }
+  if (hover) {
+    const b = toScreen(hover.pt);
+    ctx.strokeStyle = 'rgba(217,164,65,.9)'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(b.x, b.y, 9 + Math.sin(now / 260) * 2, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = '#e6e9ef'; ctx.font = '11px "JetBrains Mono",monospace'; ctx.textAlign = 'center';
+    ctx.fillText(secs(hover.seconds), b.x, b.y - 15);
+  }
+  // painter's order: whoever is further down the field is nearer the viewer
+  for (const p of ME.poses(F).sort((a, b) => a.pos.y - b.pos.y)) drawUnit(p, p);
+
+  renderClock();
+  refreshRoster(now);
+  requestAnimationFrame(drawFrame);
+}
+
+/**
+ * Keep the roster honest about what the engine has done.
+ *
+ * A dragged unit does not join on the drop — it is given a Join order, walks over, and falls in when it
+ * is close enough — so the panel has to follow the field rather than the click, or a unit that joined
+ * thirty seconds ago is still listed as unattached. Redrawn when the event log grows, and a few times a
+ * second while anyone is walking so the countdowns run. Never mid-drag: rebuilding the list under the
+ * pointer cancels the drag.
+ */
+let rosterAt = 0, rosterEvents = 0;
+function refreshRoster(now) {
+  if (drag) return;
+  const walking = [...F.units.values()].some((u) => u.order);
+  if (F.events.length === rosterEvents && (!walking || now - rosterAt < 250)) return;
+  rosterEvents = F.events.length; rosterAt = now;
+  renderRoster();
+}
+
+/* ---- readouts ---- */
+function renderClock() {
+  const walking = [...F.units.values()].filter((u) => u.order);
+  const eta = walking.length ? Math.max(...walking.map((u) => u.order.seconds - u.order.elapsed)) : 0;
+  $('marchclock').innerHTML =
+    `<span><i>Elapsed</i> <b>${F.time.toFixed(1)}s</b></span>` +
+    `<span><i>Walking</i> <b>${walking.length}</b></span>` +
+    `<span><i>Longest arrival</i> <b>${eta > 0 ? secs(eta) : '—'}</b></span>` +
+    `<span><i>Cap</i> <b>${F.rules.travelCapSeconds}s</b></span>`;
+}
+
+const unitLabel = (defId) => { try { return M.reg.unit(defId).name; } catch { return defId; } };
+
+function renderRoster() {
+  const loose = [...F.units.values()].filter((u) => !u.squadId);
+  const row = (u) => {
+    const p = ME.poseOf(F, u.id);
+    return `<li class="unitrow" draggable="true" data-u="${u.id}">` +
+      (A.tokens[u.defId] ? `<img src="${A.tokens[u.defId]}" alt="">` : '') +
+      `<span>${esc(unitLabel(u.defId))}</span>` +
+      (p.walking ? `<span class="w">${secs(p.secondsLeft)}</span>` : '') + `</li>`;
+  };
+  $('roster').innerHTML =
+    `<h4>Squads</h4>` +
+    [...F.squads.values()].map((s) => {
+      const members = [s.leaderId, ...s.memberIds.filter((m) => m !== s.leaderId)];
+      return `<div class="sqd ${s.id === sel ? 'sel' : ''}" data-sq="${s.id}">` +
+        `<header><span class="dot" style="background:${SIDE_HUE[s.side] || '#888'}"></span>` +
+        `${esc(s.name)}<span class="n">${members.length}</span></header>` +
+        `<ul>${members.map((id) => row(F.units.get(id))).join('')}</ul></div>`;
+    }).join('') +
+    `<h4>Unattached</h4>` +
+    `<div class="sqd loose" data-sq=""><ul>${loose.map(row).join('') || '<p>Everyone is in a squad.</p>'}</ul></div>` +
+    `<p>Drag a name onto a squad and they will walk over and fall in when they get close.</p>`;
+
+  $('roster').querySelectorAll('.sqd[data-sq]').forEach((box) => {
+    const sq = box.dataset.sq;
+    if (sq) box.querySelector('header').onclick = () => { sel = sq; renderRoster(); hint(); };
+    box.ondragover = (e) => { if (sq && drag) { e.preventDefault(); box.classList.add('drop'); } };
+    box.ondragleave = () => box.classList.remove('drop');
+    box.ondrop = (e) => {
+      e.preventDefault(); box.classList.remove('drop');
+      const d = drag; drag = null;          // a drop ends the drag whether or not dragend ever fires
+      if (sq && d) { ME.followSquad(F, d.unitId, sq); renderRoster(); }
+    };
+  });
+  $('roster').querySelectorAll('.unitrow').forEach((li) => {
+    li.ondragstart = () => { drag = { unitId: li.dataset.u }; li.classList.add('drag'); };
+    li.ondragend = () => { drag = null; li.classList.remove('drag'); renderRoster(); };
+  });
+}
+
+function hint(msg) {
+  const s = sel ? F.squads.get(sel) : null;
+  $('marchhint').textContent = msg || (s
+    ? `Click the ground to march ${s.name} there. Nothing crosses the field in more than ${F.rules.travelCapSeconds} seconds.`
+    : 'Pick a squad on the right, then click the ground.');
+}
+
+/* ---- pointer ---- */
+function marchPointer() {
+  const pt = (e) => { const r = cvs.getBoundingClientRect();
+    return snapToGround(ME.clampToField(F, toWorld(e.clientX - r.left, e.clientY - r.top))); };
+  cvs.onpointermove = (e) => {
+    const p = pt(e);
+    if (!sel) { hover = null; return; }
+    hover = { pt: p, seconds: ME.squadTravelSeconds(F, sel, p) };
+  };
+  cvs.onpointerleave = () => { hover = null; };
+  cvs.onpointerdown = (e) => {
+    const p = pt(e);
+    if (!sel) return;
+    ME.orderSquad(F, sel, p);
+    const s = F.squads.get(sel);
+    hint(`${s.name} is walking — ${secs(ME.squadTravelSeconds(F, sel, p))} at this distance.`);
+    renderRoster();
+  };
+}
+
+function initMarch() {
+  cvs = $('marchmap'); ctx = cvs.getContext('2d');
+  readTerrainColours(); seedField(); loadSprites(); fitCanvas();
+  marchPointer(); renderRoster(); hint();
+  addEventListener('resize', () => { if (screen === 'march') fitCanvas(); });
+  // a drag left hanging would freeze the roster, which only redraws when no drag is in flight
+  addEventListener('pointerup', () => { drag = null; });
+  addEventListener('dragend', () => { drag = null; });
+  requestAnimationFrame((t) => { last = t; drawFrame(t); });
 }
 
 /* ---------------- deck ---------------- */
@@ -841,7 +1186,7 @@ function renderLands(){
      <p>The earlier three-quarter battlefield paintings are gone. These are drawn straight down like the reference, with heavier grunge and readable regions, and the tactical field on the Field screen now uses a painted ground clipped to the generated shape instead of flat coloured polygons.</p></div></div>`;
 }
 
-renderRail(); renderField(); renderCam(); renderDeck(); renderRites(); renderWrits(); renderHold(); renderLands();
+renderRail(); renderField(); renderCam(); renderDeck(); renderRites(); renderWrits(); renderHold(); renderLands(); initMarch();
 requestAnimationFrame(drawMap);
 addEventListener('resize',()=>{if(screen==='field')drawMap();});
 </script>

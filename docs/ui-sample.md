@@ -16,16 +16,28 @@ Three steps, each its own file so any of them can be run or read alone:
 |---|---|---|
 | 1 | `scripts/pack-sample-assets.py` | Reads the art off disk, downscales each class of asset to the size the page actually draws it at, and encodes it as data URIs. Cutouts go out as WebP, which carries the alpha a card face needs at roughly a sixth of PNG's weight. |
 | 2 | `web/sample/data.mts` | Drives the real engine — a holding with buildings and research, a battle paused mid-activation, a hundred-card deck built against a collection, a warrant board — and writes the state as JSON. |
-| 3 | `scripts/build-sample.mjs` | Substitutes both into `web/sample/template.html` and writes `docs/samples/ashfall-hold.html`. |
+| 2b | `scripts/bundle-march.mjs` | Compiles the march engine for the browser through esbuild. |
+| 3 | `scripts/build-sample.mjs` | Substitutes all three into `web/sample/template.html` and writes `docs/samples/ashfall-hold.html`. |
+
+The March screen is the one screen that cannot be a snapshot. Every other screen shows a state the engine
+had already reached when the page was built, which is fine for a battle paused mid-activation; but a march
+is chosen by the person looking at it, so the walk has to be worked out in the page. Rather than
+reimplement the movement rules in the template — where they would quietly drift from the ones the tests
+run against — `web/sample/march-boot.mts` bundles the real `core/src/march.ts`, the map generator and the
+data JSON into the page. That is why `Registry` lives in `core/src/registry.ts` with nothing that touches
+a disk, and `core/src/data.ts` owns the file reading: the class has to be reachable without dragging
+node:fs in behind it. No arrival time on that screen is computed by the template; they all come back from
+`travelSeconds`.
 
 The page has to open from a bare `file://` path with nothing beside it, so everything travels inside the HTML.
 That is why it is tens of megabytes and why the packer downscales as hard as it does.
 
-## The six screens
+## The seven screens
 
 | Screen | What it shows |
 |---|---|
 | **Field** | The generated battlefield, painted ground clipped to the irregular shape, pan and zoom with a minimap. Round and phase, both sides' morale bands, cohesion links, the selected unit's reach and the summon zone, and a command bar carrying the engine's own ATK and DEF breakdowns term by term. |
+| **March** | Movement between battles, running live. Two squads and a few loose units stand on the generated ground; click anywhere to send the selected squad and they walk there, at the pace of their slowest member. Drag a name from the roster onto a squad and that unit walks over and falls in when it gets close. The clock reads elapsed time, who is still walking and the longest arrival, against the 45-second cap. |
 | **Deck** | All hundred cards on paper stock, filterable by faction and sortable by star, copies or name. The name runs across the top band of the paper, LIFE, ATK and DEF sit under the art in dark ink, and the star row and wax seal close the foot. The detail panel adds the role, the summon cost and how many copies the hold physically owns, because the copy limit is a ceiling and not a grant. |
 | **Rites** | The twenty-card side deck. Rituals name a star total to sacrifice; fusions name exact adjacent materials. Cards playable on the current field are lit; the rest are dimmed with their requirements spelled out. |
 | **Writs** | The wanted board: five warrants posted, what each pays in cards and bounty, the escort standing in the way, and how the target is taken alive. Below it, every card the current deck asks for that the hold cannot cover. |
@@ -34,6 +46,10 @@ That is why it is tens of megabytes and why the packer downscales as hard as it 
 
 ## Visual identity
 
+- The march ground is painted as regions, not tiles. The terrain data is per hex, because the battle rules
+  need a grid, but a march is continuous: each hex is laid down as a disc wider than the hex spacing and
+  the layer is blurred until the cell edges are gone, so a river reads as a river and nothing on screen
+  suggests the walking is done in steps.
 - Ground soot black-blue `#12141a`; panels iron `#23272e` to `#2c3139`; parchment `#cfc3a6` for tooltips.
 - Faction accents: Samurai ember `#c9562c`, Shinobi moon `#9aa7b3`, Knight dull gold `#b8923f`, Dragon pale cyan
   `#7fb6c2`, Ritual marsh `#7c9a5a`. The sworn companies and the seven divisions borrow the nearest of these rather than adding new

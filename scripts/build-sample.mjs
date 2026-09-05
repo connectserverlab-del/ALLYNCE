@@ -7,6 +7,9 @@
  *
  *   1. `scripts/pack-sample-assets.py` reads the art off disk, downscales each class of asset to
  *      the size the page actually draws it at, and encodes it.
+ *   1b. `scripts/bundle-march.mjs` compiles the march engine for the browser. The March screen is the
+ *      one screen that cannot be a snapshot — the user chooses where a squad walks — so it runs the
+ *      real `core/src/march.ts` in the page rather than replaying a recording.
  *   2. Run `web/sample/data.mts` under tsx, which drives the real engine — a holding, a battle
  *      mid-activation, a deck, a warrant board — and writes the state as JSON.
  *   3. Substitute both into `web/sample/template.html` and write `docs/samples/ashfall-hold.html`.
@@ -27,12 +30,15 @@ const p = (...xs) => join(ROOT, ...xs);
 const scratch = mkdtempSync(join(tmpdir(), "allynce-sample-"));
 const statePath = join(scratch, "state.json");
 const assetPath = join(scratch, "assets.json");
+const marchPath = join(scratch, "march.js");
 try {
   execFileSync("python3", [p("scripts/pack-sample-assets.py"), assetPath], { cwd: ROOT, stdio: "inherit" });
+  execFileSync("node", [p("scripts/bundle-march.mjs"), marchPath], { cwd: ROOT, stdio: "inherit" });
   execFileSync("npx", ["tsx", p("web/sample/data.mts"), statePath], { cwd: ROOT, stdio: "inherit" });
   const html = readFileSync(p("web/sample/template.html"), "utf8")
     .replace("__DATA__", () => readFileSync(statePath, "utf8"))
-    .replace("__ASSETS__", () => readFileSync(assetPath, "utf8"));
+    .replace("__ASSETS__", () => readFileSync(assetPath, "utf8"))
+    .replace("__MARCH_ENGINE__", () => readFileSync(marchPath, "utf8"));
   const out = p("docs/samples/ashfall-hold.html");
   writeFileSync(out, html);
   console.log(`wrote ${out} (${(html.length / 1e6).toFixed(1)} MB)`);
