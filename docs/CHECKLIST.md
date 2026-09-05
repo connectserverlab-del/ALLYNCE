@@ -90,3 +90,4 @@ Three things bite:
 | `D-23` | Marching: continuous movement in seconds, squads with formation slots, a 45-second cap scaled by distance, and hex routing round anything a straight line cannot cross |
 | `D-24` | March screen: click the ground to send a squad, drag a name onto a squad to have that unit walk over and fall in, with the real engine bundled into the page rather than a recording of it |
 | `D-25` | `scripts/audit-cutouts.py` fails a cutout that kept its background or lost its figure, so a card cannot ship as a pale slab again |
+| `D-26` | Fusion recipes are checked at registry load time like every other cross-reference: a bad input unit, result unit or granted ability now throws at startup instead of failing silently mid-battle or leaving a recipe permanently unreachable |

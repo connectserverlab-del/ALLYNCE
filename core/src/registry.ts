@@ -87,5 +87,10 @@ export class Registry {
       if (f.platoonOrder && !this.abilities.has(f.platoonOrder)) throw new Error(`Faction ${f.id} missing order ${f.platoonOrder}`);
       if (f.passiveDoctrine && !this.abilities.has(f.passiveDoctrine)) throw new Error(`Faction ${f.id} missing doctrine ${f.passiveDoctrine}`);
     }
+    for (const r of this.fusions.values()) {
+      for (const inp of r.inputs) if (inp.defId && !this.units.has(inp.defId)) throw new Error(`Fusion ${r.id} names a missing input ${inp.defId}`);
+      if (r.result.defId && !this.units.has(r.result.defId)) throw new Error(`Fusion ${r.id} names a missing result unit ${r.result.defId}`);
+      for (const id of r.result.passives ?? []) if (!this.abilities.has(id)) throw new Error(`Fusion ${r.id} grants missing ability ${id}`);
+    }
   }
 }
