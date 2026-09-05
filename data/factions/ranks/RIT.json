@@ -1,0 +1,15 @@
+{
+  "faction": "RIT",
+  "notes": "Four ranks, ordered low to high. The Ritual Cult fields specialist teams only and never a full platoon (see the faction's own weakness), so the ladder is short and canLead is mostly unused; it exists for the same reason the Samurai ladder carries ranks no current unit holds. Waterwalk is the Cult's signature movement trait, matching its marsh-and-reed territory.",
+  "ranks": [
+    { "id": "INITIATE", "title": "Initiate", "tier": 0, "description": "Newly bound to the rite, still learning the foreign tongue.", "privileges": {}, "movement": {}, "canLead": [] },
+    { "id": "ADEPT", "title": "Adept", "tier": 1, "description": "Practiced channeler. Crosses standing water and fords as if they were open ground.", "privileges": {}, "movement": { "waterwalk": true }, "canLead": [] },
+    { "id": "VOICE_OF_THE_RITE", "title": "Voice of the Rite", "tier": 2, "description": "Speaks the rite for others to follow; steadies a circle from nearby.", "privileges": { "commandRadiusBonus": 1 }, "movement": { "waterwalk": true }, "canLead": ["Patrol"] },
+    { "id": "HIEROPHANT", "title": "Hierophant", "tier": 3, "description": "Eldest of the affiliated channelers, melts into the reeds between rites.", "privileges": { "commandRadiusBonus": 2 }, "movement": { "waterwalk": true, "hideOnForestStop": true }, "canLead": ["Patrol", "Platoon"] }
+  ],
+  "privilegeRules": {
+    "waterwalk": "Water and Ford cost 1 Movement instead of impassable (Water) or 2 (Ford) for ground units; no change for flying.",
+    "hideOnForestStop": "Ending a move on a Forest hex applies Hidden.",
+    "commandRadiusBonus": "Added to the unit's command radius for auras and morale recovery."
+  }
+}

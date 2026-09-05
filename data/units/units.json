@@ -301,6 +301,7 @@
   },
   {
     "id": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL",
+    "factionRank": "MARSHAL",
     "name": "Solar Bastion Marshal",
     "faction": "KNI",
     "themes": [
@@ -338,6 +339,7 @@
   },
   {
     "id": "KNI_SECOND_OATHBOUND-CASTELLAN",
+    "factionRank": "CASTELLAN",
     "name": "Oathbound Castellan",
     "faction": "KNI",
     "themes": [
@@ -375,6 +377,7 @@
   },
   {
     "id": "KNI_ELITE_SKY-LANCE-DRAGOON",
+    "factionRank": "KNIGHT_BANNERET",
     "name": "Sky-Lance Dragoon",
     "faction": "KNI",
     "themes": [
@@ -414,6 +417,7 @@
   },
   {
     "id": "KNI_FOOT_BASTION-MAN-AT-ARMS",
+    "factionRank": "MAN_AT_ARMS",
     "name": "Bastion Man-at-Arms",
     "faction": "KNI",
     "themes": [
@@ -450,6 +454,7 @@
   },
   {
     "id": "DRG_COMMANDER_RIFTWING-DOMINANT",
+    "factionRank": "WING_DOMINANT",
     "name": "Riftwing Dominant",
     "faction": "DRG",
     "themes": [
@@ -488,6 +493,7 @@
   },
   {
     "id": "DRG_SECOND_STORMCLAW-WINGSECOND",
+    "factionRank": "WINGSECOND",
     "name": "Stormclaw Wingsecond",
     "faction": "DRG",
     "themes": [
@@ -526,6 +532,7 @@
   },
   {
     "id": "DRG_ELITE_OBSIDIAN-MAW",
+    "factionRank": "WING_ADEPT",
     "name": "Obsidian Maw",
     "faction": "DRG",
     "themes": [
@@ -563,6 +570,7 @@
   },
   {
     "id": "DRG_FOOT_SLATEWING-DRAKE",
+    "factionRank": "WINGLING",
     "name": "Slatewing Drake",
     "faction": "DRG",
     "themes": [
@@ -600,6 +608,7 @@
   },
   {
     "id": "RIT_LEADER_AFFILIATED-SUMMONER",
+    "factionRank": "VOICE_OF_THE_RITE",
     "name": "Affiliated Summoner",
     "faction": "RIT",
     "themes": [
@@ -643,6 +652,7 @@
   },
   {
     "id": "RIT_FOOT_FOREIGN-RITUALIST",
+    "factionRank": "INITIATE",
     "name": "Foreign Ritualist",
     "faction": "RIT",
     "themes": [
@@ -685,6 +695,7 @@
   },
   {
     "id": "KNI_SUPPORT_PORTAL-KEEPER",
+    "factionRank": "SERGEANT_AT_ARMS",
     "name": "Bastion Portal Keeper",
     "faction": "KNI",
     "themes": [
@@ -994,6 +1005,7 @@
   },
   {
     "id": "KNI_SIEGE_BASTION-BOMBARD",
+    "factionRank": "SERGEANT_AT_ARMS",
     "name": "Bastion Bombard",
     "faction": "KNI",
     "themes": [
@@ -1037,6 +1049,7 @@
   },
   {
     "id": "KNI_CAVALRY_DAWN-LANCER",
+    "factionRank": "KNIGHT_ERRANT",
     "name": "Dawn Lancer",
     "faction": "KNI",
     "themes": [
@@ -1074,6 +1087,7 @@
   },
   {
     "id": "DRG_SIEGE_CINDERTHROAT-SIEGEWYRM",
+    "factionRank": "WYRMKIN",
     "name": "Cinderthroat Siegewyrm",
     "faction": "DRG",
     "themes": [
@@ -1117,6 +1131,7 @@
   },
   {
     "id": "DRG_CAVALRY_RIDGEBACK-RUNNER",
+    "factionRank": "WYRMKIN",
     "name": "Ridgeback Runner",
     "faction": "DRG",
     "themes": [
@@ -1262,6 +1277,7 @@
   },
   {
     "id": "KNI_LEVY_BASTION-SQUIRE",
+    "factionRank": "SQUIRE",
     "name": "Bastion Squire",
     "faction": "KNI",
     "themes": [
@@ -1296,6 +1312,7 @@
   },
   {
     "id": "DRG_LEVY_SCREE-HATCHLING",
+    "factionRank": "HATCHLING",
     "name": "Scree Hatchling",
     "faction": "DRG",
     "themes": [
@@ -1370,6 +1387,7 @@
   },
   {
     "id": "DRG_ELDER_HOLLOW-CROWN-ELDER",
+    "factionRank": "ELDER",
     "name": "Hollow Crown Elder",
     "faction": "DRG",
     "themes": [
@@ -1493,6 +1511,7 @@
   },
   {
     "id": "KNI_KING_OATHBREAKER-KING",
+    "factionRank": "OATHBREAKER_KING",
     "name": "Oathbreaker King",
     "faction": "KNI",
     "themes": [

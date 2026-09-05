@@ -64,3 +64,4 @@ so in the PR.
 | `D-15` | Five sworn companies: Cobalt Conclave mages, Thorn Coven hexers, Cutpurse Court rogues, Windmarch Host steppe archers, Dunewake Compact caravaneers — 20 cards, painted |
 | `D-16` | Card ownership: a deck may only run the copies the holding actually owns, with a starter box that opens a legal hundred |
 | `D-17` | Wanted board: rotating warrants up to 7 stars, subdue-not-kill capture, copies paid into the collection |
+| `D-18` | Knight (8 ranks), Dragon Host (7 ranks) and Ritual Cult (4 ranks) rank ladders, each escalating one mechanical trait per rank (surefoot, climber, waterwalk respectively), matching the Samurai and Shinobi ladders already in place |
