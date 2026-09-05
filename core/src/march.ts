@@ -389,7 +389,11 @@ function advance(field: MarchField, u: MarchUnit, dt: number): void {
   const dx = o.target.x - u.pos.x, dy = o.target.y - u.pos.y;
   const left = Math.hypot(dx, dy);
   o.elapsed += dt;
-  if (left <= field.rules.arriveRadius) { arrive(field, u, o); return; }
+  if (left <= field.rules.arriveRadius) {
+    // the plan ran out at the edge of something impassable rather than at the destination: go around it
+    if (o.blocked && steerAround(field, u, o, dt)) { replan(field, u); return; }
+    arrive(field, u, o); return;
+  }
   const factor = terrainSpeedFactor(field, field.reg.unit(u.defId), terrainAt(field, u.pos));
   if (factor === null) { o.blocked = true; arrive(field, u, o); return; } // walked into ground it cannot cross
   const travel = field.speed * paceOf(field, u) * factor * o.haste * dt;
@@ -397,6 +401,39 @@ function advance(field: MarchField, u: MarchUnit, dt: number): void {
   if (travel >= left) { u.pos = { x: o.target.x, y: o.target.y }; arrive(field, u, o); return; }
   u.pos = { x: u.pos.x + (dx / left) * travel, y: u.pos.y + (dy / left) * travel };
 }
+
+/**
+ * Walk around what is in the way.
+ *
+ * A plan is a straight line, so ground the unit cannot cross truncates it and leaves the unit standing
+ * at the edge — which for a follower means standing four metres from a squad it will never join because
+ * a trench runs between them. Rather than a pathfinder, the unit fans out from the heading it wanted and
+ * takes the first passable one that still brings it closer: enough to round a trench, a river or a spur,
+ * and honest about being nothing more than that. A pocket it cannot see out of will still hold it.
+ */
+function steerAround(field: MarchField, u: MarchUnit, o: MarchOrder, dt: number): boolean {
+  const d = field.reg.unit(u.defId);
+  const here = terrainSpeedFactor(field, d, terrainAt(field, u.pos));
+  if (here === null) return false;                       // already standing somewhere it cannot be
+  const want = Math.atan2(o.destination.y - u.pos.y, o.destination.x - u.pos.x);
+  const reach = Math.hypot(o.destination.x - u.pos.x, o.destination.y - u.pos.y);
+  const stride = field.speed * paceOf(field, u) * here * o.haste * dt;
+  if (stride <= 0) return false;
+  // fanned both ways, nearest heading first, so the unit hugs the obstacle rather than turning about
+  for (const off of STEER_FAN) {
+    const a = want + off;
+    const probe = clampToField(field, { x: u.pos.x + Math.cos(a) * stride, y: u.pos.y + Math.sin(a) * stride });
+    if (terrainSpeedFactor(field, d, terrainAt(field, probe)) === null) continue;
+    if (Math.hypot(o.destination.x - probe.x, o.destination.y - probe.y) >= reach) continue;
+    u.pos = probe;
+    u.facing = a;
+    return true;
+  }
+  return false;
+}
+
+/** Headings tried when a walk is blocked, in order: a little aside, then a lot, each way. */
+const STEER_FAN = [0.45, -0.45, 0.9, -0.9, 1.35, -1.35] as const;
 
 function arrive(field: MarchField, u: MarchUnit, o: MarchOrder): void {
   if (o.kind === "Join") return; // a follower that has caught up is joined below, not stopped here
