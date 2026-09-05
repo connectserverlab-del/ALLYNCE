@@ -2,6 +2,7 @@ import type { Registry } from "./data.js";
 import type { Role, Modifier } from "./types.js";
 import type { Battle } from "./state.js";
 import { Rng } from "./rng.js";
+import { newWantedState, type WantedState } from "./wanted.js";
 
 export type ResourceId = "koku" | "iron" | "timber" | "silver";
 export type Resources = Partial<Record<ResourceId, number>>;
@@ -52,6 +53,7 @@ export interface KingdomState {
   research: { done: string[]; active: ResearchJob | null };
   collection: Record<string, number>;   // unit id -> copies owned
   pity: Record<string, number>;         // banner id -> draws since a high-star result
+  wanted: WantedState;                  // warrants posted, in hand and settled
   seed: number;
   elapsed: number;
 }
@@ -64,7 +66,7 @@ export function newKingdom(reg: Registry, faction: string, opts: { name?: string
     name: opts.name ?? "Ashfall Hold", faction,
     resources: { ...reg.kingdom.startingResources },
     levels, buildQueue: [], research: { done: [], active: null },
-    collection: {}, pity: {}, seed: opts.seed ?? 1, elapsed: 0,
+    collection: {}, pity: {}, wanted: newWantedState(), seed: opts.seed ?? 1, elapsed: 0,
   };
 }
 
@@ -161,6 +163,35 @@ export function tick(reg: Registry, k: KingdomState, seconds: number): TickRepor
 }
 
 // ---------------------------------------------------------------- recruitment
+
+/**
+ * The starter box a new holding opens with.
+ *
+ * A card in a deck is a physical card you hold, so a fresh player needs enough of them to sleeve a
+ * legal hundred. The box is generous with line soldiers and stingy upward: everything at three stars
+ * and below arrives at its full rules allowance, the middle ranks arrive thinned, and anything at
+ * eight stars or above arrives not at all. Those are won at the recruitment hall or taken off the
+ * field on a wanted contract.
+ */
+export function grantStarterCollection(reg: Registry, k: KingdomState): void {
+  const share = (stars: number, own: boolean): number => {
+    if (own) return stars <= 7 ? 1 : 0;   // your own host arrives whole up to its champions
+    if (stars <= 3) return 1;             // hired line soldiers are cheap and everywhere
+    if (stars <= 6) return 0.5;
+    if (stars === 7) return 1 / 3;
+    return 0;
+  };
+  for (const d of reg.units.values()) {
+    if (d.summonOnly || d.faction === "DIV") continue;
+    const stars = d.stars ?? 1;
+    const limit = reg.deckRules.copyLimitByStar[String(stars)] ?? 0;
+    if (limit <= 0) continue;
+    const own = d.faction === k.faction;
+    // a named unique is one card in the world; you either hold it or you do not
+    const n = d.unique ? (own || stars <= 6 ? 1 : 0) : Math.floor(limit * share(stars, own));
+    if (n > 0) k.collection[d.id] = Math.max(k.collection[d.id] ?? 0, n);
+  }
+}
 
 export interface DrawResult { unitId: string; stars: number; name: string; duplicate: boolean; pityTriggered: boolean }
 

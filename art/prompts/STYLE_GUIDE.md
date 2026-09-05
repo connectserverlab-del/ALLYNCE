@@ -37,6 +37,11 @@ For creatures replace the material list with: *scarred weathered hide, chipped h
 | Knight | dull gold | stained ivory, cold blue steel |
 | Dragon Host | cold pale cyan | slate blue, charcoal membranes |
 | Ritual Cult | pale teal | marsh green, weathered teal |
+| Cobalt Conclave | cold blue-white | cobalt blue, tarnished pewter |
+| Thorn Coven | sickly green-grey | bruised violet, moss green, bone |
+| Cutpurse Court | dull lamp amber | soot black, dirty brass, oxblood |
+| Windmarch Host | bleached bone-white | dust ochre, felt brown, weathered horn |
+| Dunewake Compact | low amber | sun-bleached linen, pale turquoise, scorched umber |
 
 ## Rules that never change per unit
 
@@ -73,3 +78,13 @@ cards and for every rite in the side deck.
 The stronghold overview is painted **straight down**. Individual building portraits are painted at a **low angle**
 so their walls, roofs and towers read. Both are correct; use the overview for the map and the portrait for the
 upgrade panels.
+
+## Background removal on toned grounds
+
+The model sometimes returns a cream or lightly brushed ground instead of pure white, and the border flood fill
+then lifts nothing. The cutter seeds its fill from the median of the four corner pixels rather than from pure
+white, and escalates its tolerance (30, 40, 52, 66, 82) until at least 28% of the frame is cleared. Two passes
+follow: isolated specks smaller than 0.4% of the frame are dropped so the crop box hugs the figure, and
+background-coloured pockets the border fill could not reach — the inside of a drawn bow, a gap under a raised
+arm — are cleared separately. A frame with visible brush texture in the background is not worth rescuing;
+regenerate it with *absolutely no visible brush strokes or paint texture in the background* added to the prompt.

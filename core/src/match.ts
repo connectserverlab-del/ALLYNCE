@@ -6,6 +6,9 @@ import { deployPlatoon } from "./deploy.js";
 import { DeckState, type DeckList, summonFromHand, summonZone, tributeCost, starOf, playableSideCards, ritualSummon, fusionSummon } from "./cards.js";
 import { runAiActivation, holdForSyncPolicy, DIFFICULTY, type AiProfile } from "./ai.js";
 import { applyKingdom, type KingdomState, type ResourceId } from "./kingdom.js";
+import { markWanted, resolveContract, type Contract, type ContractOutcome } from "./wanted.js";
+import { buildStarterDeck } from "./cards.js";
+import type { Capture } from "./state.js";
 import { Rng } from "./rng.js";
 import type { Hex } from "./hex.js";
 import type { UnitState } from "./types.js";
@@ -69,7 +72,9 @@ export function aiPlayCards(ctrl: BattleController, side: string, profile: AiPro
   const zone = summonZone(b, side);
   if (zone.length) {
     const leaderUid = b.sides.get(side)!.leaderUid;
-    const spare = [...b.activeUnits(side)].filter((u) => !u.isClone && u.uid !== leaderUid && !b.def(u).roles.includes("Commander"))
+    // never spend the one unit somebody holds a warrant for: the escort exists to keep it alive
+    const hunted = new Set([...b.wanted.entries()].filter(([s]) => s !== side).flatMap(([, ids]) => [...ids]));
+    const spare = [...b.activeUnits(side)].filter((u) => !u.isClone && u.uid !== leaderUid && !b.def(u).roles.includes("Commander") && !hunted.has(u.defId))
       .sort((a, c) => starOf(b.reg, a.defId) - starOf(b.reg, c.defId));
     const options = [...new Set(deck.hand)]
       .map((id) => ({ id, cost: tributeCost(b.reg, id), stars: starOf(b.reg, id) }))
@@ -98,6 +103,11 @@ export function aiPlayCards(ctrl: BattleController, side: string, profile: AiPro
 /** Play a whole match to a decision. Deterministic for a given seed. */
 export function runMatch(spec: MatchSpec): MatchResult {
   const { ctrl, map } = setUpMatch(spec);
+  return playOut(ctrl, map, spec);
+}
+
+/** Run an already-set-up battle to a decision. Wanted missions dress the field first, then call this. */
+export function playOut(ctrl: BattleController, map: GeneratedMap, spec: MatchSpec): MatchResult {
   const b = ctrl.b;
   const startStars: Record<string, number> = { A: 0, B: 0 };
   for (const s of ["A", "B"]) startStars[s] = [...b.activeUnits(s)].reduce((t, u) => t + starOf(b.reg, u.defId), 0);
@@ -149,3 +159,69 @@ export function collectReward(k: KingdomState, reward: Reward): void {
   for (const c of reward.cards) k.collection[c] = (k.collection[c] ?? 0) + 1;
 }
 export type { Hex, UnitState };
+
+
+// ---------------------------------------------------------------- wanted missions
+
+/** Armies that can actually field a host of their own. The sworn companies fight under one of these. */
+const HOST_FACTIONS = ["SAM", "SHI", "KNI", "DRG"];
+
+export interface WantedMissionSpec {
+  reg: Registry; seed: number;
+  kingdom: KingdomState; deck: DeckList; contract: Contract;
+  map?: MapSpec; roundLimit?: number; difficulty?: keyof typeof DIFFICULTY;
+}
+export interface WantedMissionResult { result: MatchResult; outcome: ContractOutcome; captures: Capture[] }
+
+/**
+ * Run a warrant.
+ *
+ * The target is put on the field with an escort sized by the writ, the player's side is told whose
+ * name is on the warrant, and the match plays out normally — except that a broken target adjacent
+ * to one of your units is taken alive rather than finished off. Winning the fight is not the same
+ * as filling the warrant: kill the target and you go home with spoils and no card.
+ */
+export function runWantedMission(spec: WantedMissionSpec): WantedMissionResult {
+  const { reg, contract } = spec;
+  const target = reg.unit(contract.targetId);
+  const rng = new Rng(spec.seed ^ 0x5eed);
+  const host = HOST_FACTIONS.includes(target.faction) ? target.faction : HOST_FACTIONS[rng.int(HOST_FACTIONS.length)]!;
+  const escortDeck = buildStarterDeck(reg, host, `${contract.title}: ${contract.targetName}'s escort`);
+
+  // A warrant is a snatch, not a pitched battle: a close hunting ground where the escort can
+  // actually be reached inside the round limit, with cover to close under.
+  const huntingGround: MapSpec = { seed: spec.seed, width: 30, height: 22, size: 300, forest: 0.28, rugged: 0.1, river: false, name: `${contract.title}: ${contract.targetName}` };
+  const matchSpec: MatchSpec = {
+    reg, seed: spec.seed, map: spec.map ?? huntingGround,
+    roundLimit: spec.roundLimit ?? reg.wanted.escortRoundLimit,
+    A: { deck: spec.deck, kingdom: spec.kingdom, name: spec.kingdom.name },
+    B: { deck: escortDeck, name: `${contract.targetName}'s escort`, difficulty: spec.difficulty ?? "normal" },
+  };
+  const { ctrl, map } = setUpMatch(matchSpec);
+  const b = ctrl.b;
+  markWanted(b, "A", [contract]);
+
+  // put the named target on the field, then bring the escort up to the strength the writ warns of
+  const free = () => map.deployZones.B.find((h) => b.isFree(h));
+  if (![...b.activeUnits("B")].some((u) => u.defId === contract.targetId)) {
+    const h = free();
+    if (h) b.spawn(contract.targetId, "B", h);
+  }
+  const escortPool = [...reg.units.values()]
+    .filter((d) => d.faction === host && !d.summonOnly && !d.unique && (d.stars ?? 1) <= 5)
+    .sort((x, y) => (y.stars ?? 1) - (x.stars ?? 1));
+  let guard = 0;
+  while (escortPool.length && guard++ < 40) {
+    const have = [...b.activeUnits("B")].reduce((t, u) => t + starOf(reg, u.defId), 0);
+    if (have >= contract.escortStars) break;
+    const h = free();
+    if (!h) break;
+    b.spawn(escortPool[guard % escortPool.length]!.id, "B", h);
+  }
+
+  const result = playOut(ctrl, map, matchSpec);
+  const captures = [...b.captures];
+  const outcome = resolveContract(reg, spec.kingdom, contract, captures, "A");
+  if (result.winner === "A") collectReward(spec.kingdom, result.reward.A!);
+  return { result, outcome, captures };
+}

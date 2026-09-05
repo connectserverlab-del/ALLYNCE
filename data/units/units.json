@@ -69,7 +69,11 @@
     "summonOnly": false,
     "ai": "leader_support",
     "factionRank": "CHURO",
-    "stars": 5
+    "stars": 5,
+    "art": {
+      "concept": "art/samples/SAM_SECOND_WHITE-CRANE-RETAINER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_SECOND_WHITE-CRANE-RETAINER_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SAM_ELITE_ONI-GATE-CHAMPION",
@@ -102,7 +106,11 @@
     "summonOnly": false,
     "ai": "line_breaker",
     "factionRank": "UMAMAWARI",
-    "stars": 7
+    "stars": 7,
+    "art": {
+      "concept": "art/samples/SAM_ELITE_ONI-GATE-CHAMPION_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_ELITE_ONI-GATE-CHAMPION_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SAM_FOOT_EMBERLINE-ASHIGARU",
@@ -211,7 +219,11 @@
     "summonOnly": false,
     "ai": "leader_support",
     "factionRank": "CHUNIN",
-    "stars": 4
+    "stars": 4,
+    "art": {
+      "concept": "art/samples/SHI_SECOND_REED-SIGNAL-LIEUTENANT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_SECOND_REED-SIGNAL-LIEUTENANT_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SHI_ELITE_MIRROR-SHADE-ADEPT",
@@ -281,7 +293,11 @@
     "summonOnly": false,
     "ai": "raider",
     "factionRank": "GENIN",
-    "stars": 2
+    "stars": 2,
+    "art": {
+      "concept": "art/samples/SHI_FOOT_NIGHT-THREAD-OPERATIVE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_FOOT_NIGHT-THREAD-OPERATIVE_CUTOUT_V01.png"
+    }
   },
   {
     "id": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL",
@@ -351,7 +367,11 @@
     "unique": true,
     "summonOnly": false,
     "ai": "leader_support",
-    "stars": 5
+    "stars": 5,
+    "art": {
+      "concept": "art/samples/KNI_SECOND_OATHBOUND-CASTELLAN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_SECOND_OATHBOUND-CASTELLAN_CUTOUT_V01.png"
+    }
   },
   {
     "id": "KNI_ELITE_SKY-LANCE-DRAGOON",
@@ -498,7 +518,11 @@
     "unique": true,
     "summonOnly": false,
     "ai": "leader_support",
-    "stars": 6
+    "stars": 6,
+    "art": {
+      "concept": "art/samples/DRG_SECOND_STORMCLAW-WINGSECOND_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_SECOND_STORMCLAW-WINGSECOND_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DRG_ELITE_OBSIDIAN-MAW",
@@ -531,7 +555,11 @@
     "unique": true,
     "summonOnly": false,
     "ai": "line_breaker",
-    "stars": 8
+    "stars": 8,
+    "art": {
+      "concept": "art/samples/DRG_ELITE_OBSIDIAN-MAW_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_ELITE_OBSIDIAN-MAW_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DRG_FOOT_SLATEWING-DRAKE",
@@ -607,7 +635,11 @@
     "unique": true,
     "summonOnly": false,
     "ai": "ritualist",
-    "stars": 5
+    "stars": 5,
+    "art": {
+      "concept": "art/samples/RIT_LEADER_AFFILIATED-SUMMONER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/RIT_LEADER_AFFILIATED-SUMMONER_CUTOUT_V01.png"
+    }
   },
   {
     "id": "RIT_FOOT_FOREIGN-RITUALIST",
@@ -645,7 +677,11 @@
     "unique": false,
     "summonOnly": false,
     "ai": "ritualist",
-    "stars": 3
+    "stars": 3,
+    "art": {
+      "concept": "art/samples/RIT_FOOT_FOREIGN-RITUALIST_CONCEPT_V01.jpg",
+      "cutout": "art/samples/RIT_FOOT_FOREIGN-RITUALIST_CUTOUT_V01.png"
+    }
   },
   {
     "id": "KNI_SUPPORT_PORTAL-KEEPER",
@@ -678,7 +714,11 @@
     "unique": false,
     "summonOnly": false,
     "ai": "portal_keeper",
-    "stars": 3
+    "stars": 3,
+    "art": {
+      "concept": "art/samples/KNI_SUPPORT_PORTAL-KEEPER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_SUPPORT_PORTAL-KEEPER_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DIV_BOSS_SOVEREIGN-OF-MEMORY",
@@ -711,7 +751,11 @@
     "unique": true,
     "summonOnly": true,
     "ai": "deity",
-    "stars": 10
+    "stars": 10,
+    "art": {
+      "concept": "art/samples/DIV_BOSS_SOVEREIGN-OF-MEMORY_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DIV_BOSS_SOVEREIGN-OF-MEMORY_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DIV_BOSS_SOVEREIGN-OF-TORMENT",
@@ -743,7 +787,11 @@
     "unique": true,
     "summonOnly": true,
     "ai": "deity",
-    "stars": 10
+    "stars": 10,
+    "art": {
+      "concept": "art/samples/DIV_BOSS_SOVEREIGN-OF-TORMENT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DIV_BOSS_SOVEREIGN-OF-TORMENT_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DIV_BOSS_SOVEREIGN-OF-REINCARNATION",
@@ -775,7 +823,11 @@
     "unique": true,
     "summonOnly": true,
     "ai": "deity",
-    "stars": 10
+    "stars": 10,
+    "art": {
+      "concept": "art/samples/DIV_BOSS_SOVEREIGN-OF-REINCARNATION_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DIV_BOSS_SOVEREIGN-OF-REINCARNATION_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SAM_SIEGE_EMBER-OZUTSU-BATTERY",
@@ -1132,7 +1184,11 @@
     "unique": true,
     "summonOnly": true,
     "ai": "deity",
-    "stars": 10
+    "stars": 10,
+    "art": {
+      "concept": "art/samples/DIV_BOSS_CALAMITY-FORM_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DIV_BOSS_CALAMITY-FORM_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SAM_LEVY_ASHFIELD-CONSCRIPT",
@@ -1163,7 +1219,11 @@
     ],
     "unique": false,
     "summonOnly": false,
-    "ai": "formation_hold"
+    "ai": "formation_hold",
+    "art": {
+      "concept": "art/samples/SAM_LEVY_ASHFIELD-CONSCRIPT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_LEVY_ASHFIELD-CONSCRIPT_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SHI_LEVY_THREAD-APPRENTICE",
@@ -1194,7 +1254,11 @@
     ],
     "unique": false,
     "summonOnly": false,
-    "ai": "raider"
+    "ai": "raider",
+    "art": {
+      "concept": "art/samples/SHI_LEVY_THREAD-APPRENTICE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_LEVY_THREAD-APPRENTICE_CUTOUT_V01.png"
+    }
   },
   {
     "id": "KNI_LEVY_BASTION-SQUIRE",
@@ -1224,7 +1288,11 @@
     ],
     "unique": false,
     "summonOnly": false,
-    "ai": "formation_hold"
+    "ai": "formation_hold",
+    "art": {
+      "concept": "art/samples/KNI_LEVY_BASTION-SQUIRE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_LEVY_BASTION-SQUIRE_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DRG_LEVY_SCREE-HATCHLING",
@@ -1255,7 +1323,11 @@
     ],
     "unique": false,
     "summonOnly": false,
-    "ai": "raider"
+    "ai": "raider",
+    "art": {
+      "concept": "art/samples/DRG_LEVY_SCREE-HATCHLING_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_LEVY_SCREE-HATCHLING_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SAM_LORD_ASHFALL-DAIMYO",
@@ -1290,7 +1362,11 @@
     ],
     "unique": true,
     "summonOnly": false,
-    "ai": "leader_hold"
+    "ai": "leader_hold",
+    "art": {
+      "concept": "art/samples/SAM_LORD_ASHFALL-DAIMYO_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_LORD_ASHFALL-DAIMYO_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DRG_ELDER_HOLLOW-CROWN-ELDER",
@@ -1327,7 +1403,11 @@
     ],
     "unique": true,
     "summonOnly": false,
-    "ai": "leader_flank"
+    "ai": "leader_flank",
+    "art": {
+      "concept": "art/samples/DRG_ELDER_HOLLOW-CROWN-ELDER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_ELDER_HOLLOW-CROWN-ELDER_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SHI_KAGE_VOID-CROWN-KAGE",
@@ -1365,7 +1445,11 @@
     ],
     "unique": true,
     "summonOnly": true,
-    "ai": "leader_flank"
+    "ai": "leader_flank",
+    "art": {
+      "concept": "art/samples/SHI_KAGE_VOID-CROWN-KAGE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_KAGE_VOID-CROWN-KAGE_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SAM_SHOGUN_IRON-TIDE-SHOGUN",
@@ -1401,7 +1485,11 @@
     ],
     "unique": true,
     "summonOnly": true,
-    "ai": "leader_hold"
+    "ai": "leader_hold",
+    "art": {
+      "concept": "art/samples/SAM_SHOGUN_IRON-TIDE-SHOGUN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_SHOGUN_IRON-TIDE-SHOGUN_CUTOUT_V01.png"
+    }
   },
   {
     "id": "KNI_KING_OATHBREAKER-KING",
@@ -1436,6 +1524,798 @@
     ],
     "unique": true,
     "summonOnly": true,
-    "ai": "leader_hold"
+    "ai": "leader_hold",
+    "art": {
+      "concept": "art/samples/KNI_KING_OATHBREAKER-KING_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_KING_OATHBREAKER-KING_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "ARC_FOOT_COBALT-LINE-MAGE",
+    "name": "Cobalt Line Mage",
+    "faction": "ARC",
+    "themes": [
+      "Arcanist"
+    ],
+    "roles": [
+      "FootSoldier",
+      "Ranged"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 950,
+    "atk": 1350,
+    "def": 900,
+    "mov": 4,
+    "range": 3,
+    "initiative": 7,
+    "morale": 60,
+    "commandRadius": 0,
+    "capacityCost": 4,
+    "passives": [],
+    "actives": [
+      "ABL_COBALT_VOLLEY"
+    ],
+    "slots": [
+      "FootSoldier",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "art": {
+      "concept": "art/samples/ARC_FOOT_COBALT-LINE-MAGE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ARC_FOOT_COBALT-LINE-MAGE_CUTOUT_V01.png"
+    },
+    "stars": 3
+  },
+  {
+    "id": "ARC_SECOND_WARD-CAPTAIN",
+    "name": "Ward Captain",
+    "faction": "ARC",
+    "themes": [
+      "Arcanist"
+    ],
+    "roles": [
+      "Second",
+      "Support"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1350,
+    "atk": 1300,
+    "def": 1600,
+    "mov": 4,
+    "range": 2,
+    "initiative": 6,
+    "morale": 75,
+    "commandRadius": 2,
+    "capacityCost": 7,
+    "passives": [],
+    "actives": [
+      "ABL_WARDING_SIGIL"
+    ],
+    "slots": [
+      "Second",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "art": {
+      "concept": "art/samples/ARC_SECOND_WARD-CAPTAIN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ARC_SECOND_WARD-CAPTAIN_CUTOUT_V01.png"
+    },
+    "stars": 5
+  },
+  {
+    "id": "ARC_ELITE_STORMGLASS-WIZARD",
+    "name": "Stormglass Wizard",
+    "faction": "ARC",
+    "themes": [
+      "Arcanist"
+    ],
+    "roles": [
+      "Elite",
+      "Ranged"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1200,
+    "atk": 1800,
+    "def": 1150,
+    "mov": 4,
+    "range": 4,
+    "initiative": 9,
+    "morale": 70,
+    "commandRadius": 0,
+    "capacityCost": 9,
+    "passives": [],
+    "actives": [
+      "ABL_STORMGLASS_BURST"
+    ],
+    "slots": [
+      "Elite",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "art": {
+      "concept": "art/samples/ARC_ELITE_STORMGLASS-WIZARD_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ARC_ELITE_STORMGLASS-WIZARD_CUTOUT_V01.png"
+    },
+    "stars": 7,
+    "minRange": 2
+  },
+  {
+    "id": "ARC_COMMANDER_AZURE-SEAL-MAGISTER",
+    "name": "Azure Seal Magister",
+    "faction": "ARC",
+    "themes": [
+      "Arcanist"
+    ],
+    "roles": [
+      "Commander",
+      "Ranged"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1450,
+    "atk": 1700,
+    "def": 1450,
+    "mov": 4,
+    "range": 3,
+    "initiative": 8,
+    "morale": 80,
+    "commandRadius": 3,
+    "capacityCost": 10,
+    "passives": [],
+    "actives": [
+      "ABL_COBALT_VOLLEY",
+      "ABL_WARDING_SIGIL"
+    ],
+    "slots": [
+      "Commander",
+      "Specialist"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "art": {
+      "concept": "art/samples/ARC_COMMANDER_AZURE-SEAL-MAGISTER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ARC_COMMANDER_AZURE-SEAL-MAGISTER_CUTOUT_V01.png"
+    },
+    "stars": 8
+  },
+  {
+    "id": "WIT_LEVY_VESSEL-KEEPER",
+    "name": "Vessel Keeper",
+    "faction": "WIT",
+    "themes": [
+      "Coven"
+    ],
+    "roles": [
+      "FootSoldier",
+      "Support"
+    ],
+    "rank": "Levy",
+    "size": "Standard",
+    "hp": 800,
+    "atk": 900,
+    "def": 1000,
+    "mov": 3,
+    "range": 1,
+    "initiative": 4,
+    "morale": 55,
+    "commandRadius": 0,
+    "capacityCost": 3,
+    "passives": [],
+    "actives": [
+      "ABL_COVEN_DIRGE"
+    ],
+    "slots": [
+      "FootSoldier",
+      "Second"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "formation_hold",
+    "art": {
+      "concept": "art/samples/WIT_LEVY_VESSEL-KEEPER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WIT_LEVY_VESSEL-KEEPER_CUTOUT_V01.png"
+    },
+    "stars": 2
+  },
+  {
+    "id": "WIT_FOOT_FEN-HEXER",
+    "name": "Fen Hexer",
+    "faction": "WIT",
+    "themes": [
+      "Coven"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 1000,
+    "atk": 1250,
+    "def": 1050,
+    "mov": 4,
+    "range": 2,
+    "initiative": 6,
+    "morale": 60,
+    "commandRadius": 0,
+    "capacityCost": 4,
+    "passives": [],
+    "actives": [
+      "ABL_CREEPING_HEX"
+    ],
+    "slots": [
+      "FootSoldier",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider",
+    "art": {
+      "concept": "art/samples/WIT_FOOT_FEN-HEXER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WIT_FOOT_FEN-HEXER_CUTOUT_V01.png"
+    },
+    "stars": 3
+  },
+  {
+    "id": "WIT_ELITE_PALE-BRIAR-SEER",
+    "name": "Pale-Briar Seer",
+    "faction": "WIT",
+    "themes": [
+      "Coven"
+    ],
+    "roles": [
+      "Elite",
+      "Ritualist"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1250,
+    "atk": 1650,
+    "def": 1300,
+    "mov": 4,
+    "range": 3,
+    "initiative": 8,
+    "morale": 70,
+    "commandRadius": 0,
+    "capacityCost": 9,
+    "passives": [],
+    "actives": [
+      "ABL_BRIAR_SNARE",
+      "ABL_CHANNEL"
+    ],
+    "slots": [
+      "Elite",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "ritualist",
+    "art": {
+      "concept": "art/samples/WIT_ELITE_PALE-BRIAR-SEER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WIT_ELITE_PALE-BRIAR-SEER_CUTOUT_V01.png"
+    },
+    "stars": 7,
+    "ritual": true
+  },
+  {
+    "id": "WIT_COMMANDER_THORN-CIRCLE-ELDER",
+    "name": "Thorn-Circle Elder",
+    "faction": "WIT",
+    "themes": [
+      "Coven"
+    ],
+    "roles": [
+      "Commander",
+      "Ritualist"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1500,
+    "atk": 1600,
+    "def": 1550,
+    "mov": 4,
+    "range": 2,
+    "initiative": 7,
+    "morale": 80,
+    "commandRadius": 3,
+    "capacityCost": 10,
+    "passives": [],
+    "actives": [
+      "ABL_COVEN_DIRGE",
+      "ABL_CREEPING_HEX"
+    ],
+    "slots": [
+      "Commander",
+      "Specialist"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "art": {
+      "concept": "art/samples/WIT_COMMANDER_THORN-CIRCLE-ELDER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WIT_COMMANDER_THORN-CIRCLE-ELDER_CUTOUT_V01.png"
+    },
+    "stars": 8,
+    "ritual": true
+  },
+  {
+    "id": "ROG_LEVY_ALLEY-RUNNER",
+    "name": "Alley Runner",
+    "faction": "ROG",
+    "themes": [
+      "Rogue"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Levy",
+    "size": "Standard",
+    "hp": 700,
+    "atk": 950,
+    "def": 750,
+    "mov": 6,
+    "range": 1,
+    "initiative": 9,
+    "morale": 50,
+    "commandRadius": 0,
+    "capacityCost": 2,
+    "passives": [
+      "ABL_HIT_AND_FADE"
+    ],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider",
+    "art": {
+      "concept": "art/samples/ROG_LEVY_ALLEY-RUNNER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ROG_LEVY_ALLEY-RUNNER_CUTOUT_V01.png"
+    },
+    "stars": 1
+  },
+  {
+    "id": "ROG_SECOND_FENCE-CAPTAIN",
+    "name": "Fence-Captain",
+    "faction": "ROG",
+    "themes": [
+      "Rogue"
+    ],
+    "roles": [
+      "Second",
+      "Support"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1200,
+    "atk": 1450,
+    "def": 1300,
+    "mov": 5,
+    "range": 1,
+    "initiative": 8,
+    "morale": 70,
+    "commandRadius": 2,
+    "capacityCost": 6,
+    "passives": [],
+    "actives": [
+      "ABL_COURT_SIGNAL"
+    ],
+    "slots": [
+      "Second",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "leader_flank",
+    "art": {
+      "concept": "art/samples/ROG_SECOND_FENCE-CAPTAIN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ROG_SECOND_FENCE-CAPTAIN_CUTOUT_V01.png"
+    },
+    "stars": 4
+  },
+  {
+    "id": "ROG_ELITE_GARROTE-ADEPT",
+    "name": "Garrote Adept",
+    "faction": "ROG",
+    "themes": [
+      "Rogue"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1100,
+    "atk": 1900,
+    "def": 1050,
+    "mov": 6,
+    "range": 1,
+    "initiative": 11,
+    "morale": 65,
+    "commandRadius": 0,
+    "capacityCost": 8,
+    "passives": [
+      "ABL_HIT_AND_FADE"
+    ],
+    "actives": [
+      "ABL_SLIT_THE_PURSE"
+    ],
+    "slots": [
+      "Elite",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "assassin",
+    "art": {
+      "concept": "art/samples/ROG_ELITE_GARROTE-ADEPT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ROG_ELITE_GARROTE-ADEPT_CUTOUT_V01.png"
+    },
+    "stars": 6
+  },
+  {
+    "id": "ROG_COMMANDER_COURT-WHISPERER",
+    "name": "Court Whisperer",
+    "faction": "ROG",
+    "themes": [
+      "Rogue"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1350,
+    "atk": 1700,
+    "def": 1350,
+    "mov": 5,
+    "range": 2,
+    "initiative": 10,
+    "morale": 75,
+    "commandRadius": 3,
+    "capacityCost": 9,
+    "passives": [],
+    "actives": [
+      "ABL_COURT_SIGNAL",
+      "ABL_SLIT_THE_PURSE"
+    ],
+    "slots": [
+      "Commander",
+      "Specialist"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_flank",
+    "art": {
+      "concept": "art/samples/ROG_COMMANDER_COURT-WHISPERER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ROG_COMMANDER_COURT-WHISPERER_CUTOUT_V01.png"
+    },
+    "stars": 7
+  },
+  {
+    "id": "STP_CAVALRY_WINDMARCH-OUTRIDER",
+    "name": "Windmarch Outrider",
+    "faction": "STP",
+    "themes": [
+      "Windmarch"
+    ],
+    "roles": [
+      "Cavalry",
+      "Ranged"
+    ],
+    "rank": "Cavalry",
+    "size": "Standard",
+    "hp": 1050,
+    "atk": 1300,
+    "def": 1050,
+    "mov": 7,
+    "range": 3,
+    "initiative": 9,
+    "morale": 65,
+    "commandRadius": 0,
+    "capacityCost": 5,
+    "passives": [
+      "ABL_PARTHIAN_LOOSE"
+    ],
+    "actives": [],
+    "slots": [
+      "FootSoldier",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "cavalry_raid",
+    "art": {
+      "concept": "art/samples/STP_CAVALRY_WINDMARCH-OUTRIDER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/STP_CAVALRY_WINDMARCH-OUTRIDER_CUTOUT_V01.png"
+    },
+    "stars": 3
+  },
+  {
+    "id": "STP_SECOND_HORN-SERJEANT",
+    "name": "Horn Serjeant",
+    "faction": "STP",
+    "themes": [
+      "Windmarch"
+    ],
+    "roles": [
+      "Second",
+      "Support"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1300,
+    "atk": 1450,
+    "def": 1400,
+    "mov": 6,
+    "range": 3,
+    "initiative": 7,
+    "morale": 75,
+    "commandRadius": 2,
+    "capacityCost": 7,
+    "passives": [],
+    "actives": [
+      "ABL_HORN_CALL"
+    ],
+    "slots": [
+      "Second",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "art": {
+      "concept": "art/samples/STP_SECOND_HORN-SERJEANT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/STP_SECOND_HORN-SERJEANT_CUTOUT_V01.png"
+    },
+    "stars": 5
+  },
+  {
+    "id": "STP_ELITE_HOLLOW-BOW-MASTER",
+    "name": "Hollow-Bow Master",
+    "faction": "STP",
+    "themes": [
+      "Windmarch"
+    ],
+    "roles": [
+      "Elite",
+      "Ranged"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1200,
+    "atk": 1850,
+    "def": 1200,
+    "mov": 6,
+    "range": 4,
+    "initiative": 10,
+    "morale": 70,
+    "commandRadius": 0,
+    "capacityCost": 9,
+    "passives": [
+      "ABL_PARTHIAN_LOOSE"
+    ],
+    "actives": [
+      "ABL_HOLLOW_BOW_VOLLEY"
+    ],
+    "slots": [
+      "Elite",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "art": {
+      "concept": "art/samples/STP_ELITE_HOLLOW-BOW-MASTER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/STP_ELITE_HOLLOW-BOW-MASTER_CUTOUT_V01.png"
+    },
+    "stars": 7,
+    "minRange": 2
+  },
+  {
+    "id": "STP_COMMANDER_WINDMARCH-SOVEREIGN",
+    "name": "Windmarch Sovereign",
+    "faction": "STP",
+    "themes": [
+      "Windmarch"
+    ],
+    "roles": [
+      "Commander",
+      "Cavalry"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1650,
+    "atk": 1900,
+    "def": 1600,
+    "mov": 7,
+    "range": 3,
+    "initiative": 9,
+    "morale": 85,
+    "commandRadius": 3,
+    "capacityCost": 11,
+    "passives": [
+      "ABL_PARTHIAN_LOOSE"
+    ],
+    "actives": [
+      "ABL_HORN_CALL",
+      "ABL_HOLLOW_BOW_VOLLEY"
+    ],
+    "slots": [
+      "Commander",
+      "Specialist"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_flank",
+    "art": {
+      "concept": "art/samples/STP_COMMANDER_WINDMARCH-SOVEREIGN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/STP_COMMANDER_WINDMARCH-SOVEREIGN_CUTOUT_V01.png"
+    },
+    "stars": 8
+  },
+  {
+    "id": "DUN_SECOND_GLASSROAD-GUIDE",
+    "name": "Glassroad Guide",
+    "faction": "DUN",
+    "themes": [
+      "Dunewake"
+    ],
+    "roles": [
+      "Second",
+      "Support"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1250,
+    "atk": 1300,
+    "def": 1450,
+    "mov": 5,
+    "range": 2,
+    "initiative": 7,
+    "morale": 75,
+    "commandRadius": 2,
+    "capacityCost": 6,
+    "passives": [],
+    "actives": [
+      "ABL_GLASSROAD_MARCH"
+    ],
+    "slots": [
+      "Second",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "art": {
+      "concept": "art/samples/DUN_SECOND_GLASSROAD-GUIDE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DUN_SECOND_GLASSROAD-GUIDE_CUTOUT_V01.png"
+    },
+    "stars": 4
+  },
+  {
+    "id": "DUN_FOOT_DUNEWAKE-SKIRMISHER",
+    "name": "Dunewake Skirmisher",
+    "faction": "DUN",
+    "themes": [
+      "Dunewake"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 1000,
+    "atk": 1300,
+    "def": 1050,
+    "mov": 5,
+    "range": 1,
+    "initiative": 8,
+    "morale": 60,
+    "commandRadius": 0,
+    "capacityCost": 4,
+    "passives": [],
+    "actives": [
+      "ABL_SAND_VEIL"
+    ],
+    "slots": [
+      "FootSoldier",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider",
+    "art": {
+      "concept": "art/samples/DUN_FOOT_DUNEWAKE-SKIRMISHER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DUN_FOOT_DUNEWAKE-SKIRMISHER_CUTOUT_V01.png"
+    },
+    "stars": 3
+  },
+  {
+    "id": "DUN_ELITE_SANDGLASS-DUELLIST",
+    "name": "Sandglass Duellist",
+    "faction": "DUN",
+    "themes": [
+      "Dunewake"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1250,
+    "atk": 1900,
+    "def": 1250,
+    "mov": 5,
+    "range": 1,
+    "initiative": 10,
+    "morale": 70,
+    "commandRadius": 0,
+    "capacityCost": 9,
+    "passives": [],
+    "actives": [
+      "ABL_SANDGLASS_DUEL"
+    ],
+    "slots": [
+      "Elite",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "art": {
+      "concept": "art/samples/DUN_ELITE_SANDGLASS-DUELLIST_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DUN_ELITE_SANDGLASS-DUELLIST_CUTOUT_V01.png"
+    },
+    "stars": 7
+  },
+  {
+    "id": "DUN_COMMANDER_DUNEWAKE-ARBITER",
+    "name": "Dunewake Arbiter",
+    "faction": "DUN",
+    "themes": [
+      "Dunewake"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1500,
+    "atk": 1700,
+    "def": 1550,
+    "mov": 5,
+    "range": 2,
+    "initiative": 8,
+    "morale": 85,
+    "commandRadius": 3,
+    "capacityCost": 10,
+    "passives": [],
+    "actives": [
+      "ABL_ARBITERS_WORD",
+      "ABL_GLASSROAD_MARCH"
+    ],
+    "slots": [
+      "Commander",
+      "Specialist"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "art": {
+      "concept": "art/samples/DUN_COMMANDER_DUNEWAKE-ARBITER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DUN_COMMANDER_DUNEWAKE-ARBITER_CUTOUT_V01.png"
+    },
+    "stars": 8
   }
 ]

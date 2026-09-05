@@ -7,8 +7,9 @@ import { DeckState } from "./cards.js";
 import { Rng } from "./rng.js";
 import type { RitualCircle } from "./rituals.js";
 import type { Portal } from "./portals.js";
+import type { Capture } from "./state.js";
 
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 
 export interface BattleSave {
   version: number; seed: number; round: number; phase: string;
@@ -22,6 +23,8 @@ export interface BattleSave {
   activatedGroups: string[]; activeSide: string;
   winner: string | null; winReason: string | null;
   events: GameEvent[];
+  captures: Capture[];
+  wanted: Array<[string, string[]]>;
 }
 export interface GameSave { version: number; battle: BattleSave | null; kingdom: KingdomState | null; savedAt: string }
 
@@ -39,6 +42,8 @@ export function saveBattle(b: Battle): BattleSave {
     decks: [...b.decks.entries()].map(([side, d]) => ({ side, list: d.list, drawPile: [...d.drawPile], hand: [...d.hand], graveyard: [...d.graveyard], sideDeck: [...d.side], usedSide: [...d.usedSide] })),
     activatedGroups: [...b.activatedGroupsThisRound], activeSide: b.activeSide,
     winner: b.winner, winReason: b.winReason, events: b.events.map((e) => ({ ...e })),
+    captures: b.captures.map((c) => ({ ...c })),
+    wanted: [...b.wanted.entries()].map(([side, ids]) => [side, [...ids]] as [string, string[]]),
   };
 }
 
@@ -70,6 +75,8 @@ export function loadBattle(reg: Registry, save: BattleSave): Battle {
   for (const g of save.activatedGroups) b.activatedGroupsThisRound.add(g);
   b.activeSide = save.activeSide; b.winner = save.winner; b.winReason = save.winReason;
   b.events.push(...save.events);
+  b.captures.push(...(save.captures ?? []).map((c) => ({ ...c })));
+  for (const [side, ids] of save.wanted ?? []) b.wanted.set(side, new Set(ids));
   return b;
 }
 

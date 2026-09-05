@@ -97,6 +97,7 @@ export interface UnitState {
   setUp: boolean;
   shadowStepped: boolean;
   freeMoveHexes: number;
+  captured: boolean;
   fusedFrom?: string[];
   fusionRoundsLeft?: number;
   divine?: { manifestation: number; anchors: number };

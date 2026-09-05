@@ -12,6 +12,9 @@ export type Phase = "Command" | "Activation" | "Objective" | "End" | "Ended";
 
 export interface SideState { id: string; reservePoints: number; armyCapacity: number; morale: number; leaderUid?: string | null; surrendered?: boolean; fusionCharges?: number }
 
+/** One enemy taken alive off the field. A kill leaves no card behind; only a subdual does. */
+export interface Capture { defId: string; uid: string; from: string; by: string; byUid: string; round: number }
+
 /** Simulation state. No presentation concerns live here. */
 export class Battle {
   round = 1;
@@ -29,6 +32,10 @@ export class Battle {
   readonly decks = new Map<string, DeckState>();
   readonly kingdomEffects = new Map<string, KingdomEffects>();
   readonly events: GameEvent[] = [];
+  /** Enemies subdued rather than killed, in the order they were taken. Wanted contracts read this. */
+  readonly captures: Capture[] = [];
+  /** Per side, the unit definitions its warrants name. Subduing one of these is worth a card. */
+  readonly wanted = new Map<string, Set<string>>();
   readonly rng: Rng;
   width: number; height: number;
   activeSide = "A";
@@ -91,7 +98,7 @@ export class Battle {
     const u: UnitState = {
       uid: this.newUid(opts.uidPrefix), defId, side, platoonId: opts.platoonId ?? null, pos: null, facing: opts.facing ?? 0,
       hp: d.hp, morale: d.morale, ap: 0, statuses: [], cooldowns: {}, isClone: false, defeated: false, promotedFromSecond: false,
-      movedThisActivation: 0, chargeMoved: 0, attackedThisActivation: false, setUp: false, shadowStepped: false, freeMoveHexes: 0, overwatch: false, defending: false, usedChargeLastRound: false,
+      movedThisActivation: 0, chargeMoved: 0, attackedThisActivation: false, setUp: false, shadowStepped: false, freeMoveHexes: 0, overwatch: false, defending: false, usedChargeLastRound: false, captured: false,
       divine: d.divine ? { manifestation: d.divine.manifestation, anchors: d.divine.anchors } : undefined,
     };
     this.units.set(u.uid, u);

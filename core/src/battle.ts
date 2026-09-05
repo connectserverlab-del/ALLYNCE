@@ -220,6 +220,38 @@ export class BattleController {
     for (const r of b.rituals.values()) if (r.side === target.side && r.participantUids.includes(target.uid)) disruptRitual(b, r, 1, u.uid);
   }
 
+  /**
+   * Take an enemy alive. A body is worth nothing to a warrant, so a wanted target has to be beaten
+   * down and then subdued: the target must be broken (at or under the capture threshold of its
+   * maximum HP, or Routed), adjacent, and not a leader, a clone or a deity. It leaves the field
+   * exactly as a casualty does, but a card comes off it.
+   */
+  subdue(u: UnitState, target: UnitState): void {
+    const b = this.b;
+    if (!u.pos || !target.pos) throw new Error("Not deployed");
+    if (target.side === u.side) throw new Error("You may only subdue an enemy");
+    if (target.defeated) throw new Error("Nothing left to take");
+    if (u.isClone) throw new Error("Clones cannot take prisoners");
+    if (hexDistance(u.pos, target.pos) > 1) throw new Error("Subduing is done hand to hand");
+    if (!canBeSubdued(b, target)) throw new Error(`${b.def(target).name} cannot be taken alive`);
+    if (!canBeTaken(b, target, u.side)) throw new Error(`${b.def(target).name} is still fighting; break it or surround it first`);
+    this.spend(u, 1);
+    u.facing = directionTo(u.pos, target.pos);
+    b.remove(target);
+    target.defeated = true; target.captured = true; target.hp = Math.max(1, target.hp);
+    b.captures.push({ defId: target.defId, uid: target.uid, from: target.side, by: u.side, byUid: u.uid, round: b.round });
+    b.log("Subdued", { uid: target.uid, def: target.defId, by: u.uid, side: u.side });
+    this.evaluateVictory();
+  }
+
+  /** Is this enemy beaten down far enough to take alive right now? */
+  canSubdue(u: UnitState, target: UnitState): boolean {
+    const b = this.b;
+    if (!u.pos || !target.pos || target.defeated || u.isClone || u.ap < 1) return false;
+    if (target.side === u.side || hexDistance(u.pos, target.pos) > 1) return false;
+    return canBeSubdued(b, target) && canBeTaken(b, target, u.side);
+  }
+
   attackStructure(u: UnitState, portal: Portal): void {
     const d = this.b.def(u);
     if (d.siege?.setupRequired && !u.setUp) throw new Error("Siege piece must Set Up before firing");
@@ -388,3 +420,40 @@ export class BattleController {
 
 export { Battle, changeMorale };
 export type { PlatoonState };
+
+
+/** The share of maximum HP at or below which a unit can be taken alive instead of killed. */
+export const CAPTURE_THRESHOLD = 0.25;
+
+/** A unit is broken once it is down to the capture threshold, or once it has routed. */
+export function isBroken(b: Battle, u: UnitState): boolean {
+  return u.hp <= Math.ceil(b.def(u).hp * CAPTURE_THRESHOLD) || b.hasStatus(u, "Routed");
+}
+
+/**
+ * A unit is cornered when there are more hands on it than friends beside it: two or more of the
+ * capturing side pressed against it, outnumbering whatever is left of its own line. Damage in this
+ * game is blunt enough that a levy dies to one clean hit, so grinding a small target down to a
+ * quarter of its health is not a plan anyone can carry out on purpose. Surrounding it is. That is
+ * the route that makes a warrant playable.
+ */
+export function isCornered(b: Battle, u: UnitState, bySide: string): boolean {
+  if (!u.pos) return false;
+  const holders = b.adjacentUnits(u).filter((x) => x.side === bySide && !x.isClone).length;
+  const friends = b.adjacentAllies(u).filter((a) => !a.isClone).length;
+  return holders >= 2 && holders > friends;
+}
+
+/** The two ways an enemy stops being a fight and starts being a prisoner. */
+export function canBeTaken(b: Battle, u: UnitState, bySide: string): boolean {
+  return isBroken(b, u) || isCornered(b, u, bySide);
+}
+
+/** Who can be taken alive at all: not clones, not gods, not an army's own leader. */
+export function canBeSubdued(b: Battle, u: UnitState): boolean {
+  if (u.isClone || u.fusedFrom) return false;
+  const d = b.def(u);
+  if (d.divine || d.roles.includes("Deity")) return false;
+  if (b.sides.get(u.side)?.leaderUid === u.uid) return false;
+  return true;
+}

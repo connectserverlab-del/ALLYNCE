@@ -39,6 +39,49 @@ its frame. Nothing in the interface carries punched holes, rivets or rows of dot
 
 Summoning from hand places the card in a free hex within two of one of your commanders.
 
+### A card in a deck is a card you own
+
+The copy limit is a ceiling, not a grant. `validateDeck(reg, deck, { collection })` caps every card at the
+copies the holding actually holds in `KingdomState.collection`, so owning one Emberline Ashigaru lets you sleeve
+one, not the sixteen the star limit would otherwise allow. Owning none of a card is an error in its own right —
+*"You hold no copies of Fen Hexer; capture one before sleeving it"* — and the validation returns a `missing` map
+naming every shortfall. Pass no collection and the rules limit stands alone, which is the path preset and
+sandbox decks take.
+
+A new holding opens a **starter box** (`grantStarterCollection`). It is generous with your own host — every card
+of your faction up to seven stars arrives at its full allowance — and thinner with hired allies: their line
+soldiers arrive whole, their specialists at half, their champions at a third, and nothing at eight stars or
+above arrives at all. That is exactly enough to sleeve a legal hundred on day one, and not one card more.
+Everything past it is drawn at the Recruitment Hall or taken off the field on a warrant.
+
+## The wanted board
+
+Warrants are the deliberate way to deepen a line. The board posts five at a time, rotating on the hour, and it
+favours cards the holding is short of for the deck it fields, so the writs read as useful rather than random.
+
+| | |
+|---|---|
+| Range | Two to seven stars. Eight-star greater elites, nine-star lords and ten-star deities are never named; they arrive by ritual, fusion or the Recruitment Hall. |
+| Carried at once | Three |
+| Pays | Cards into the collection plus a bounty in all four resources, rising steeply with the star |
+| Fails | If the target dies |
+
+**The writ pays for a prisoner, not a body.** A target is taken alive by *subduing* it hand to hand, and there
+are two ways to reach that point:
+
+- **Broken** — down to a quarter of its maximum health, or routed.
+- **Cornered** — two or more of your units pressed against it, outnumbering whatever is left of its own line.
+
+Cornering is the route that matters. Damage in this game is blunt enough that a levy dies to one clean hit, so
+grinding a two-star target down to a quarter of its health is not a plan anyone can carry out on purpose.
+Surrounding it is. The army leader, clones, fused bodies and Divine Entities can never be taken alive.
+
+`runWantedMission` puts the named target on a close hunting ground with an escort sized by the writ, tells your
+side whose name is on it, and plays the match out. Your units then decline to shoot the target while anyone can
+still reach it, converge on it instead, and take it the moment it is cornered; the escort, for its part, will
+not spend the one unit somebody holds a warrant for as a summoning tribute. Winning the fight is not the same as
+filling the warrant: kill the target and you go home with spoils and no card.
+
 ## The side deck: 20 cards
 
 Twenty ritual and fusion cards that never enter the draw pile. They are played straight from the side deck when
@@ -103,6 +146,9 @@ to paint.
 5. The battle ends on one of the three universal conditions or the round limit.
 6. `spoils` pays both sides, more for winning and more for the enemy stars broken, and the winner takes a card.
    `collectReward` banks it into the holding, and the loop begins again.
+
+A warrant runs the same circle through `runWantedMission`, and settles with `resolveContract`, which reads the
+battle's `captures` rather than its casualties.
 
 `saveBattle` and `loadBattle` round-trip a match in progress, including decks, hands and the uid counter, so a
 restored battle keeps issuing fresh unit ids instead of colliding with saved ones.

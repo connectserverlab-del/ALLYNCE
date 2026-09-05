@@ -18,7 +18,12 @@ export interface SideCard {
 }
 /** A deck list: main is unit ids (one entry per physical card), side is side-card ids. */
 export interface DeckList { id: string; name: string; faction: string; main: string[]; side: string[] }
-export interface DeckValidation { ok: boolean; errors: string[]; mainCount: number; sideCount: number; starCurve: Record<number, number> }
+export interface DeckValidation {
+  ok: boolean; errors: string[]; mainCount: number; sideCount: number;
+  starCurve: Record<number, number>;
+  /** Card id -> copies the deck runs beyond what the collection holds. Empty when no collection was checked. */
+  missing: Record<string, number>;
+}
 
 export const starOf = (reg: Registry, unitId: string): number => reg.unit(unitId).stars ?? 1;
 
@@ -38,8 +43,33 @@ export function copyLimit(reg: Registry, unitId: string): number {
   return d.unique ? Math.min(1, byStar) : byStar;
 }
 
-export function validateDeck(reg: Registry, deck: DeckList): DeckValidation {
+/** Card id -> physical copies the player actually holds. This is `KingdomState.collection`. */
+export type Collection = Record<string, number>;
+
+/** How many copies of a card the player owns. Nothing owned means nothing to sleeve. */
+export function ownedCopies(collection: Collection | undefined, unitId: string): number {
+  return collection ? collection[unitId] ?? 0 : 0;
+}
+
+/**
+ * How many copies of a card may go in a deck.
+ *
+ * Without a collection this is the rules limit alone, which is what preset and sandbox decks use.
+ * With one it is also capped by the copies actually owned: holding a single Ember Banner Daimyo
+ * lets you sleeve one, not the three the star limit would otherwise allow.
+ */
+export function effectiveCopyLimit(reg: Registry, unitId: string, collection?: Collection): number {
+  const lim = copyLimit(reg, unitId);
+  return collection ? Math.min(lim, ownedCopies(collection, unitId)) : lim;
+}
+
+/**
+ * Check a deck list against the rules, and — when a collection is supplied — against what the
+ * player actually owns. Owning one copy of a card never entitles you to run several.
+ */
+export function validateDeck(reg: Registry, deck: DeckList, opts: { collection?: Collection } = {}): DeckValidation {
   const rules = reg.deckRules;
+  const { collection } = opts;
   const errors: string[] = [];
   const starCurve: Record<number, number> = {};
   const counts = new Map<string, number>();
@@ -52,11 +82,21 @@ export function validateDeck(reg: Registry, deck: DeckList): DeckValidation {
   if (deck.main.length !== rules.mainDeckSize) errors.push(`Main deck holds ${deck.main.length} cards; it must hold exactly ${rules.mainDeckSize}`);
   const primary = deck.main.filter((id) => reg.units.get(id)?.faction === deck.faction).length;
   if (primary < rules.primaryFactionMin) errors.push(`Only ${primary} cards belong to ${deck.faction}; a deck led by that faction needs at least ${rules.primaryFactionMin}`);
+  const missing: Record<string, number> = {};
   for (const [id, n] of counts) {
     const lim = copyLimit(reg, id);
     const d = reg.unit(id);
-    if (lim === 0) errors.push(`${d.name} cannot sit in the main deck (${d.summonOnly ? "summon-only" : `${d.stars}-star`}); it belongs to a ritual or fusion card`);
-    else if (n > lim) errors.push(`${d.name} appears ${n} times; a ${d.stars}-star card is limited to ${lim}`);
+    if (lim === 0) { errors.push(`${d.name} cannot sit in the main deck (${d.summonOnly ? "summon-only" : `${d.stars}-star`}); it belongs to a ritual or fusion card`); continue; }
+    if (n > lim) errors.push(`${d.name} appears ${n} times; a ${d.stars}-star card is limited to ${lim}`);
+    if (collection) {
+      const owned = ownedCopies(collection, id);
+      if (n > owned) {
+        missing[id] = n - owned;
+        errors.push(owned === 0
+          ? `You hold no copies of ${d.name}; capture one before sleeving it`
+          : `${d.name} appears ${n} times but you hold only ${owned} cop${owned === 1 ? "y" : "ies"}`);
+      }
+    }
   }
   const sideCounts = new Map<string, number>();
   for (const id of deck.side) {
@@ -69,7 +109,7 @@ export function validateDeck(reg: Registry, deck: DeckList): DeckValidation {
     const c = reg.sideCards.get(id)!;
     if (n > c.copyLimit) errors.push(`${c.name} appears ${n} times; it is limited to ${c.copyLimit}`);
   }
-  return { ok: errors.length === 0, errors, mainCount: deck.main.length, sideCount: deck.side.length, starCurve };
+  return { ok: errors.length === 0, errors, mainCount: deck.main.length, sideCount: deck.side.length, starCurve, missing };
 }
 
 /** Runtime deck for one side: draw pile, hand, graveyard and the side deck. */
@@ -260,12 +300,13 @@ function findFusionMaterials(b: Battle, pool: UnitState[], size: number, recipeI
 export const STARTER_CURVE: Record<number, number> = { 1: 18, 2: 20, 3: 16, 4: 14, 5: 12, 6: 8, 7: 6, 8: 4, 9: 2 };
 
 /** Build a legal starter deck: fill each star tier toward the curve, own faction first, then sworn allies. */
-export function buildStarterDeck(reg: Registry, faction: string, name = `${faction} starter`): DeckList {
-  const usable = (d: UnitDef) => !d.summonOnly && (d.stars ?? 1) <= 9 && d.faction !== "DIV" && copyLimit(reg, d.id) > 0;
+export function buildStarterDeck(reg: Registry, faction: string, name = `${faction} starter`, opts: { collection?: Collection } = {}): DeckList {
+  const { collection } = opts;
+  const usable = (d: UnitDef) => !d.summonOnly && (d.stars ?? 1) <= 9 && d.faction !== "DIV" && effectiveCopyLimit(reg, d.id, collection) > 0;
   const pool = [...reg.units.values()].filter(usable);
   const main: string[] = [];
   const have = (id: string) => main.filter((x) => x === id).length;
-  const room = (d: UnitDef) => copyLimit(reg, d.id) - have(d.id);
+  const room = (d: UnitDef) => effectiveCopyLimit(reg, d.id, collection) - have(d.id);
 
   const fillTier = (star: number, target: number) => {
     let placed = main.filter((id) => (reg.unit(id).stars ?? 1) === star).length;
