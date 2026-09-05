@@ -17,7 +17,8 @@ Three steps, each its own file so any of them can be run or read alone:
 | 1 | `scripts/pack-sample-assets.py` | Reads the art off disk, downscales each class of asset to the size the page actually draws it at, and encodes it as data URIs. Cutouts go out as WebP, which carries the alpha a card face needs at roughly a sixth of PNG's weight. |
 | 2 | `web/sample/data.mts` | Drives the real engine — a holding with buildings and research, a battle paused mid-activation, a hundred-card deck built against a collection, a warrant board — and writes the state as JSON. |
 | 2b | `scripts/bundle-march.mjs` | Compiles the march engine for the browser through esbuild. |
-| 3 | `scripts/build-sample.mjs` | Substitutes all three into `web/sample/template.html` and writes `docs/samples/ashfall-hold.html`. |
+| 2c | `scripts/bundle-writs.mjs` | Compiles the wanted-board engine for the browser through esbuild. |
+| 3 | `scripts/build-sample.mjs` | Substitutes all four into `web/sample/template.html` and writes `docs/samples/ashfall-hold.html`. |
 
 The March screen is the one screen that cannot be a snapshot. Every other screen shows a state the engine
 had already reached when the page was built, which is fine for a battle paused mid-activation; but a march
@@ -28,6 +29,14 @@ data JSON into the page. That is why `Registry` lives in `core/src/registry.ts` 
 a disk, and `core/src/data.ts` owns the file reading: the class has to be reachable without dragging
 node:fs in behind it. No arrival time on that screen is computed by the template; they all come back from
 `travelSeconds`.
+
+The Writs screen keeps its board baked like most of the page — a warrant does not change until the board
+rotates — but taking one, or giving one back, is a decision made by whoever is looking at the page, and it
+has to change what the page shows next. `web/sample/writs-boot.mts` bundles the real `core/src/wanted.ts`
+into the page the same way, under `window.WRITS`, so `acceptContract`, `abandonContract`,
+`missingForDeck` and `contractRelief` are the exact functions the tests run against rather than a
+template copy of them. The page keeps a live clone of the kingdom's warrant ledger (`WK`) that starts
+equal to what `data.mts` baked and diverges from there.
 
 The page has to open from a bare `file://` path with nothing beside it, so everything travels inside the HTML.
 That is why it is tens of megabytes and why the packer downscales as hard as it does.
@@ -40,7 +49,7 @@ That is why it is tens of megabytes and why the packer downscales as hard as it 
 | **March** | Movement between battles, running live. Two squads and a few loose units stand on the generated ground; click anywhere to send the selected squad and they walk there, at the pace of their slowest member. Drag a name from the roster onto a squad and that unit walks over and falls in when it gets close. The clock reads elapsed time, who is still walking and the longest arrival, against the 45-second cap. |
 | **Deck** | All hundred cards on paper stock, filterable by faction and sortable by star, copies or name. The name runs across the top band of the paper, LIFE, ATK and DEF sit under the art in dark ink, and the star row and wax seal close the foot. The detail panel adds the role, the summon cost and how many copies the hold physically owns, because the copy limit is a ceiling and not a grant. |
 | **Rites** | The twenty-card side deck. Rituals name a star total to sacrifice; fusions name exact adjacent materials. Cards playable on the current field are lit; the rest are dimmed with their requirements spelled out. |
-| **Writs** | The wanted board: five warrants posted, what each pays in cards and bounty, the escort standing in the way, and how the target is taken alive. Below it, every card the current deck asks for that the hold cannot cover. |
+| **Writs** | The wanted board: five warrants posted, what each pays in cards and bounty, the escort standing in the way, and how the target is taken alive. A face that would close or chip at a gap in the current deck says so on the card itself. Taking a warrant and giving one back are both live — the count in hand updates, a taken face unlocks, and the panel button flips between the two — because this is the real `core/src/wanted.ts` running in the page, not a snapshot of it. Below the board, every card the current deck asks for that the hold cannot cover. |
 | **Hold** | The stronghold seen from above with a pin per building, each at its real level and tier art, plus the research tree and the recruitment banners. |
 | **Lands** | The world and province paintings, and the art-direction notes behind them. |
 

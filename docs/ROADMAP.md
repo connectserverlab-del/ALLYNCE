@@ -102,3 +102,7 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-05: Proposal — scale a warrant's escort by the target's rank on its own faction ladder rather than
+  star count alone, so a Samurai target standing at Ashigaru carries a lighter escort than one standing at
+  Hatamoto. Rank already carries mechanical weight in a platoon; the wanted board is the one place it still
+  reads as flavour text.
