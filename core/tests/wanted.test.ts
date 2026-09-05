@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { reg, newBattle, deploy, SAM, KNI, blob } from "./helpers.js";
 import { buildStarterDeck, validateDeck, effectiveCopyLimit, ownedCopies, copyLimit } from "../src/cards.js";
 import { newKingdom, grantStarterCollection } from "../src/kingdom.js";
-import { rollBoard, acceptContract, abandonContract, resolveContract, warrantPool, markWanted, missingForDeck, shortfall } from "../src/wanted.js";
+import { rollBoard, acceptContract, abandonContract, resolveContract, warrantPool, markWanted, missingForDeck, shortfall, contractRelief } from "../src/wanted.js";
 import { isBroken, isCornered, canBeTaken, canBeSubdued, CAPTURE_THRESHOLD } from "../src/battle.js";
 import { runWantedMission } from "../src/match.js";
 import { saveBattle, loadBattle } from "../src/save.js";
@@ -61,6 +61,21 @@ describe("owning your cards", () => {
     expect(gaps[0]!.need).toBeGreaterThanOrEqual(gaps[gaps.length - 1]!.need);
     grantStarterCollection(reg, k);
     expect(shortfall(reg, k, "SAM_FOOT_EMBERLINE-ASHIGARU")).toBe(0);
+  });
+
+  it("tells a warrant apart from a gap it does not touch, and whether it would close one it does", () => {
+    const deck = buildStarterDeck(reg, "SAM");
+    const k = newKingdom(reg, "SAM");
+    const gaps = missingForDeck(reg, deck, k.collection);
+    const inDeck = gaps[0]!;
+    const filling = contractRelief({ targetId: inDeck.unitId, copies: inDeck.need }, gaps);
+    expect(filling).toMatchObject({ unitId: inDeck.unitId, need: inDeck.need, owned: inDeck.owned, pays: inDeck.need, closesFully: true });
+
+    const partial = contractRelief({ targetId: inDeck.unitId, copies: 1 }, gaps);
+    expect(partial?.closesFully).toBe(inDeck.need <= 1);
+
+    const outsideId = [...reg.units.keys()].find((id) => !gaps.some((g) => g.unitId === id))!;
+    expect(contractRelief({ targetId: outsideId, copies: 5 }, gaps)).toBeNull();
   });
 });
 

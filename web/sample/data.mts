@@ -11,7 +11,7 @@ import { hexDistance } from "../../core/src/hex.js";
 import { TERRAIN_RULES } from "../../core/src/types.js";
 import { buildStarterDeck, validateDeck, DeckState, tributeCost, copyLimit, starOf, playableSideCards, summonZone, STARTER_CURVE } from "../../core/src/cards.js";
 import { newKingdom, grantStarterCollection, startUpgrade, tick, startResearch, researchable, upgradeCost, upgradeSeconds, kingdomEffects, applyKingdom, storageCap, BUILDING_IDS, buildingTier, buildingArt, nextTierAt } from "../../core/src/kingdom.js";
-import { rollBoard, acceptContract, missingForDeck, shortfall } from "../../core/src/wanted.js";
+import { rollBoard, acceptContract, missingForDeck } from "../../core/src/wanted.js";
 import { Rng } from "../../core/src/rng.js";
 
 const reg = loadRegistry();
@@ -91,8 +91,12 @@ const sideFace = (c: any, recipe: any) => {
 };
 const sideGroup = (ids: string[]) => { const m = new Map<string, number>(); for (const i of ids) m.set(i, (m.get(i) ?? 0) + 1); return [...m].map(([id, n]) => { const c = reg.sideCards.get(id)!; const recipe = c.recipe ? reg.fusions.get(c.recipe) : null; const f = sideFace(c, recipe); return { ...c, count: n, resultCard: c.result ? unitCard(c.result) : null, faceCard: f.face, faceStats: f.stats, resultFormula: f.formula, materials: recipe ? recipe.inputs.map((i: any) => i.defId ? reg.unit(i.defId).name : (i.roles ?? []).join("+")) : null, recipeText: recipe?.text ?? null }; }).sort((a, c) => c.stars - a.stars); };
 
-const board = rollBoard(reg, k, deckList);
-acceptContract(reg, k, board.find((c) => c.stars >= 5)?.id ?? board[0]!.id, deckList);
+// Seed one warrant as already in hand, so the Writs screen opens mid-use rather than empty. The
+// board itself is not baked into the page: `web/sample/writs-boot.mts` bundles the real
+// `core/src/wanted.ts` into the page so taking and giving back a warrant runs the actual rules
+// instead of a snapshot of them, the same way the March screen runs the real march engine.
+const initialBoard = rollBoard(reg, k, deckList);
+acceptContract(reg, k, initialBoard.find((c) => c.stars >= 5)?.id ?? initialBoard[0]!.id, deckList);
 
 const out = {
   map, terrainRules: TERRAIN_RULES,
@@ -113,11 +117,6 @@ const out = {
   deck: { ...deckList, cards: group(deckList.main), side: sideGroup(deckList.side), validation: validateDeck(reg, deckList, { collection: k.collection }), curve: STARTER_CURVE,
     owned: Object.fromEntries(deckList.main.map((id) => [id, k.collection[id] ?? 0])),
     missing: missingForDeck(reg, deckList, k.collection) },
-  warrants: {
-    rules: reg.wanted,
-    board: board.map((c) => ({ ...c, target: unitCard(c.targetId), taken: k.wanted.accepted.includes(c.id), short: shortfall(reg, k, c.targetId, deckList), owned: k.collection[c.targetId] ?? 0 })),
-    accepted: k.wanted.accepted,
-  },
   rules: { ...reg.deckRules },
   factions: Object.fromEntries([...reg.factions.values()].map((f) => [f.id, { name: f.name, identity: f.identity, palette: f.palette }])),
   kingdom: {
@@ -130,4 +129,4 @@ const out = {
   },
 };
 writeFileSync(process.argv[2]!, JSON.stringify(out));
-console.log("warrants", out.warrants.board.length, "deck gaps", out.deck.missing.length, "collection", Object.keys(k.collection).length, "\nunits", out.battle.units.length, "hand", out.battle.hand.length, "deck cards", out.deck.cards.length, "side", out.deck.side.length, "sel", out.battle.selected.name, atk.final, "reach", out.battle.reachable.length, "playable", out.battle.playableSide.length, "kingdom cap+", kEff.armyCapacity);
+console.log("warrants in hand", k.wanted.accepted.length, "deck gaps", out.deck.missing.length, "collection", Object.keys(k.collection).length, "\nunits", out.battle.units.length, "hand", out.battle.hand.length, "deck cards", out.deck.cards.length, "side", out.deck.side.length, "sel", out.battle.selected.name, atk.final, "reach", out.battle.reachable.length, "playable", out.battle.playableSide.length, "kingdom cap+", kEff.armyCapacity);

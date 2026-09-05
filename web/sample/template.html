@@ -144,6 +144,14 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 .chips{display:flex;gap:5px;flex-wrap:wrap}
 .chip{font-size:12px;padding:3px 9px;border:1px solid var(--edge);color:var(--dim);font-family:"Alegreya SC";letter-spacing:.04em}
 .chip.on{color:var(--text);border-color:var(--dim);background:rgba(255,255,255,.05)}
+.btn{font-size:12.5px;padding:6px 14px;border:1px solid var(--edge-2);color:var(--text);background:rgba(255,255,255,.04);font-family:"Alegreya SC";letter-spacing:.04em;cursor:pointer}
+.btn:hover:not(:disabled){border-color:var(--dim);background:rgba(255,255,255,.08)}
+.btn:disabled{color:var(--faint);cursor:default;opacity:.6}
+/* a warrant that would help the current deck says so on the card face, without a player having to
+   cross-reference the shortfall list below by hand */
+.card .relief{position:absolute;left:6%;bottom:1.5%;width:88%;text-align:center;font-size:8px;letter-spacing:.02em;
+  background:rgba(10,11,14,.82);color:var(--warn);border:1px solid rgba(207,154,55,.5);padding:1.5px 2px;line-height:1.15}
+.card .relief.full{color:var(--good);border-color:rgba(127,168,106,.5)}
 .curve{display:flex;align-items:flex-end;gap:3px;height:44px}
 .curve div{width:15px;background:linear-gradient(180deg,#6a5a3a,#3a3226);border:1px solid var(--edge);position:relative}
 .curve div b{position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--dim);font-family:"JetBrains Mono";font-weight:400}
@@ -346,6 +354,7 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 <div class="tip" id="tip"></div>
 
 <script>__MARCH_ENGINE__</script>
+<script>__WRITS_ENGINE__</script>
 <script>
 const D = __DATA__, A = __ASSETS__;
 const $ = (id)=>document.getElementById(id);
@@ -1059,24 +1068,48 @@ function openRite(c){
 }
 
 /* ---------------- writs ---------------- */
+/**
+ * Every other pane on this page reads a snapshot the engine wrote at build time, which is fine for a
+ * board that only rotates on the hour — but *taking* a warrant is a decision made by whoever is
+ * looking at the page, and it has to change what the page shows next: the count in hand, which face
+ * locks, and which of the remaining gaps a fresh warrant would still close. Recomputing that by hand
+ * here would mean a second copy of `acceptContract` and `missingForDeck` that could quietly drift from
+ * the ones `core/tests/wanted.test.ts` runs against, so instead `web/sample/writs-boot.mts` bundles the
+ * real `core/src/wanted.ts` into the page under `window.WRITS`, the same way the March screen runs the
+ * real `core/src/march.ts`. `WK` is a live copy of the kingdom the rest of the page was baked from; it
+ * starts equal to what `data.mts` already wrote and diverges from there as warrants are taken and given back.
+ */
+const WE=window.WRITS.engine, WREG=window.WRITS.reg;
+const WK=JSON.parse(JSON.stringify(D.kingdom.state));
+const wDeck={main:D.deck.main};
+const wBoard=()=>WE.rollBoard(WREG,WK,wDeck);
+const wGaps=()=>WE.missingForDeck(WREG,wDeck,WK.collection);
+function targetInfo(id){
+  const u=WREG.unit(id);
+  return {name:u.name,stars:u.stars??1,roles:u.roles,hp:u.hp,atk:u.atk,def:u.def,mov:u.mov,range:u.range,
+    abilities:[...u.passives,...u.actives].map(a=>{const d=WREG.ability(a);return {name:d.name,text:d.text};})};
+}
 function renderWrits(){
-  const W=D.warrants, R=W.rules, board=W.board;
-  const gaps=D.deck.missing;
+  const R=WREG.wanted, board=wBoard(), gaps=wGaps();
   $('writspane').innerHTML=`
    <div class="head"><div><h2 class="sc">The Wanted Board</h2>
      <p>A card in your deck is a card you hold. Recruitment draws hand you what it feels like; a writ names one soldier and pays for that one. The board posts ${R.boardSize} at a time, rotates on the hour, and leans toward the cards this muster is short of. You may carry ${R.acceptLimit} at once.</p>
      <p><b>The writ pays for a prisoner, not a body.</b> Break the target to a quarter of its health or rout it, or corner it — two of yours pressed against it and outnumbering what is left of its line — then take it hand to hand. Kill it and the warrant closes unpaid. Leaders, clones and gods are never taken alive, and the board never names anything above ${R.maxStars}★.</p></div>
-     <div style="text-align:right"><div class="mono" style="font-size:22px">${W.accepted.length}<span class="faint" style="font-size:14px"> / ${R.acceptLimit}</span></div>
+     <div style="text-align:right"><div class="mono" style="font-size:22px">${WK.wanted.accepted.length}<span class="faint" style="font-size:14px"> / ${R.acceptLimit}</span></div>
      <div class="faint" style="font-size:12px">in hand · ${board.length} posted</div></div></div>
    <div class="grid">${board.map(c=>{
      const t=A.tokens[c.targetId];
-     return `<div class="card ${c.taken?'':'locked'}" data-wid="${c.id}">
+     const taken=WK.wanted.accepted.includes(c.id);
+     const owned=WK.collection[c.targetId]??0;
+     const relief=WE.contractRelief(c,gaps);
+     return `<div class="card ${taken?'':'locked'}" data-wid="${c.id}">
        <img class="fr" src="${A.frames.SEALED}" alt="">
        <div class="pips">${starRow(c.stars)}</div>
        <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
        <div class="nm">${esc(c.targetName)}</div>
-       <div class="sub">${esc(c.title)}${c.taken?' · in hand':''}</div>
-       <div class="pair"><span>${c.copies} card${c.copies===1?'':'s'}</span><span class="faint">hold ${c.owned}</span></div>
+       <div class="sub">${esc(c.title)}${taken?' · in hand':''}</div>
+       <div class="pair"><span>${c.copies} card${c.copies===1?'':'s'}</span><span class="faint">hold ${owned}</span></div>
+       ${relief?`<div class="relief ${relief.closesFully?'full':''}">${relief.closesFully?'closes':'chips at'} this deck's gap — would hold ${relief.owned+relief.pays} of ${relief.owned+relief.need} asked</div>`:''}
      </div>`;}).join('')}</div>
    <div class="hd" style="margin-top:16px">What this muster is still short of</div>
    ${gaps.length? `<div class="req">${gaps.slice(0,8).map(g=>`<div class="line"><span class="dim">${esc(g.name)} <em class="faint">${g.stars}★</em></span><b>hold ${g.owned}, deck asks ${g.owned+g.need}</b></div>`).join('')}</div>`
@@ -1084,15 +1117,18 @@ function renderWrits(){
   $('writspane').querySelectorAll('[data-wid]').forEach(el2=>el2.onclick=()=>openWrit(board.find(x=>x.id===el2.dataset.wid)));
 }
 function openWrit(c){
-  const t=A.tokens[c.targetId], u=c.target;
-  const R=D.warrants.rules;
+  const t=A.tokens[c.targetId], u=targetInfo(c.targetId);
+  const R=WREG.wanted;
+  const taken=WK.wanted.accepted.includes(c.id);
+  const owned=WK.collection[c.targetId]??0;
+  const relief=WE.contractRelief(c,wGaps());
   $('detailbox').innerHTML=`<div class="big"><img class="fr" src="${A.frames.SEALED}" alt="">
       <div class="pips">${starRow(c.stars,true)}</div>
       <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
       <div class="nm">${esc(c.targetName)}</div><div class="sub">${esc(FACNAME[c.targetFaction]||c.targetFaction)}</div></div>
     <div style="position:relative"><button class="close">×</button>
       <h3 class="sc">${esc(c.title)}</h3>
-      <div class="faint" style="font-size:13px;margin-bottom:8px">${c.stars}★ warrant · ${c.taken?'in hand':'posted'} · you hold ${c.owned} cop${c.owned===1?'y':'ies'}</div>
+      <div class="faint" style="font-size:13px;margin-bottom:8px">${c.stars}★ warrant · ${taken?'in hand':'posted'} · you hold ${owned} cop${owned===1?'y':'ies'}</div>
       <p style="font-size:14px;color:var(--dim);margin:0 0 8px">${esc(c.text)}</p>
       <div class="req">
         <div class="line"><span class="dim">Pays</span><b><span class="mono">${c.copies}</span> card${c.copies===1?'':'s'} into the collection</b></div>
@@ -1100,7 +1136,11 @@ function openWrit(c){
         <div class="line"><span class="dim">Escort</span><b>about <span class="mono">${c.escortStars}★</span> standing between you and the writ</b></div>
         <div class="line"><span class="dim">Taken by</span><b>subduing it — broken to a quarter health, routed, or cornered</b></div>
         <div class="line"><span class="dim">Fails if</span><b style="color:var(--bad)">the target dies</b></div>
+        ${relief?`<div class="line"><span class="dim">This deck</span><b style="color:${relief.closesFully?'var(--good)':'var(--warn)'}">${relief.closesFully?'would fully close a gap':'would chip at a gap'} — asks ${relief.owned+relief.need}, filled leaves ${relief.owned+relief.pays}</b></div>`
+          :`<div class="line"><span class="dim">This deck</span><b class="faint">not one of its current gaps</b></div>`}
       </div>
+      <div style="margin:12px 0 4px"><button class="btn" id="writ-action">${taken?'Give the warrant back':(WK.wanted.accepted.length>=R.acceptLimit?'Board is full':'Take this warrant')}</button>
+        <span class="faint" id="writ-msg" style="margin-left:8px;font-size:12.5px"></span></div>
       <div class="hd" style="margin-top:12px">The target</div>
       <div class="abil"><b>${esc(u.name)}</b> <span class="faint" style="font-size:11px">${u.stars}★ ${esc(u.roles.join(' · '))}</span>
         <p class="mono" style="font-size:12.5px;color:var(--dim)">${u.hp} HP · ${u.atk} ATK · ${u.def} DEF · move ${u.mov} · range ${u.range}</p></div>
@@ -1108,6 +1148,18 @@ function openWrit(c){
     </div>`;
   $('detail').classList.add('on');
   $('detailbox').querySelector('.close').onclick=()=>$('detail').classList.remove('on');
+  const actionBtn=$('writ-action');
+  if(!taken && WK.wanted.accepted.length>=R.acceptLimit) actionBtn.disabled=true;
+  actionBtn.onclick=()=>{
+    if(taken){
+      WE.abandonContract(WK,c.id);
+      renderWrits(); $('detail').classList.remove('on');
+    } else {
+      const res=WE.acceptContract(WREG,WK,c.id,wDeck);
+      if(res.ok){ renderWrits(); $('detail').classList.remove('on'); }
+      else { $('writ-msg').textContent=res.reason; }
+    }
+  };
 }
 
 /* ---------------- hold ---------------- */

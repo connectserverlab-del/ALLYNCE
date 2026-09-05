@@ -56,7 +56,6 @@ Three things bite:
 | `Q-8` | Stratagem cards as a third side-deck kind, one-round battlefield effects | Fills out the side deck beyond ritual and fusion |
 | `Q-9` | Unity port scaffolding: ScriptableObject importer for `data/`, and the C# module skeleton in `docs/mechanics.md` | The engine target the brief names |
 | `Q-10` | Replay viewer: step through a saved event log | The event log already exists and is unused |
-| `Q-11` | Warrant board screen in the sample page: read the posted writs, take one, and see which of them close the gaps in the current deck | The board exists in the core and has no interface |
 | `Q-12` | Give the sworn companies and the seven divisions depth: each has four cards, enough to hire but not to lead | A division is a flavour of ally until it can field a line of its own |
 | `Q-13` | Escort composition for warrants: build the escort around the target's own company rather than a generic host starter deck | The escort currently reads as a borrowed army with the target bolted on |
 | `Q-15` | A division's own doctrine and platoon order, so a Choir or a Swarm can lead a deck instead of only joining one | Seven divisions is a lot of flavour with no army identity behind it |
@@ -90,3 +89,4 @@ Three things bite:
 | `D-23` | Marching: continuous movement in seconds, squads with formation slots, a 45-second cap scaled by distance, and hex routing round anything a straight line cannot cross |
 | `D-24` | March screen: click the ground to send a squad, drag a name onto a squad to have that unit walk over and fall in, with the real engine bundled into the page rather than a recording of it |
 | `D-25` | `scripts/audit-cutouts.py` fails a cutout that kept its background or lost its figure, so a card cannot ship as a pale slab again |
+| `D-26` | Writs screen made live: taking and giving back a warrant runs the real `core/src/wanted.ts` in the page (`web/sample/writs-boot.mts`, `scripts/bundle-writs.mjs`), and each posted warrant shows whether it would close or chip at a gap in the current deck (`contractRelief`) |
