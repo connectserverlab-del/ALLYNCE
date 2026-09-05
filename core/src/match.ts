@@ -9,10 +9,13 @@ import { applyKingdom, type KingdomState, type ResourceId } from "./kingdom.js";
 import { Rng } from "./rng.js";
 import type { Hex } from "./hex.js";
 import type { UnitState } from "./types.js";
+import { rollWeather, rollTimeOfDay, applyWeatherTerrain, type WeatherId, type TimeOfDayId } from "./weather.js";
 
 export interface SideSetup { deck: DeckList; kingdom?: KingdomState; name: string; difficulty?: keyof typeof DIFFICULTY }
 export interface MatchSpec {
   reg: Registry; seed: number; map?: MapSpec; roundLimit?: number;
+  /** Force a round modifier instead of rolling it from the seed (scenarios, tests). Omitted = rolled. */
+  weather?: WeatherId; timeOfDay?: TimeOfDayId;
   A: SideSetup; B: SideSetup;
 }
 export interface Reward { koku: number; iron: number; timber: number; silver: number; cards: string[] }
@@ -42,6 +45,10 @@ export function setUpMatch(spec: MatchSpec): { ctrl: BattleController; map: Gene
     { id: "A", reservePoints: 12, armyCapacity: 120, morale: 100, fusionCharges: 1 },
     { id: "B", reservePoints: 12, armyCapacity: 120, morale: 100, fusionCharges: 1 }] });
   applyMap(b, map);
+  const weatherRng = new Rng(spec.seed + 909);
+  b.weather = spec.weather ?? rollWeather(weatherRng, reg.weather);
+  b.timeOfDay = spec.timeOfDay ?? rollTimeOfDay(weatherRng, reg.weather);
+  applyWeatherTerrain(b);
   const ctrl = new BattleController(b, { sides: { A: [], B: [] }, roundLimit: spec.roundLimit ?? 20 });
   for (const side of ["A", "B"] as const) {
     const setup = spec[side];
