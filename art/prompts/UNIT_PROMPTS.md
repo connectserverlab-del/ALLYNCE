@@ -2,6 +2,24 @@
 
 Combine each subject block with the Global Style Block in `STYLE_GUIDE.md`. Subject text follows the engineering brief; the style text is the approved V01 direction.
 
+## Write the silhouette, not the costume
+
+Left to itself the model paints every unit as the same standing three-quarter human: same height, same mass,
+weight even on both feet, arms down, weapon vertical. Costume detail does not survive to card size — the
+outline does. So each subject block carries the five silhouette decisions below, and **within a faction of four
+no two cards may share an answer to any of them**:
+
+1. **Height and mass.** State it as a comparison, not an adjective: *barely shoulder-high to a grown man*, *half
+   again the height and twice the width of a common soldier*. A levy must not have its commander's footprint.
+2. **Stance and weight.** Braced, mid-stride, crouched on one knee, coiled on the balls of both feet, planted
+   with the feet together, leaning on a weapon. Name which foot carries the weight.
+3. **How the weapon breaks the outline.** Vertical is the default and is therefore rationed: allow it to one
+   card per faction. The others get a long low diagonal, a hard horizontal across the shoulders, a shaft slung
+   across the back, or nothing in the hands at all.
+4. **The head.** Bare, hooded, helmed, masked, horned, antlered, or absent. Vary it deliberately.
+5. **What hangs off the body.** Cloak, banner, pack, chains, a belt hung with clutter — or explicitly *nothing
+   at all*, which is a silhouette decision in its own right and reads as strongly as clutter does.
+
 ## Samurai — Ember Banner
 - **Ember Banner Daimyo (Commander):** Grizzled veteran leader radiating calm authority, layered charcoal-black lamellar armor with ember-red silk lacing and aged bronze fittings, asymmetrical shoulder guard, closed gauntlets, armored skirt panels and shin guards, compact war banner behind one shoulder with an original abstract rising-ember mark, sheathed curved sword and a short command baton held low. Ember-orange rim light.
 - **White Crane Retainer (Second):** Alert disciplined officer, lighter ivory-and-deep-navy lamellar, subtle crane-wing geometry in the shoulder plates, practical helmet with a narrow crescent crest, long naginata, signal cords and folded field orders at the waist. Visually subordinate to the Daimyo.
@@ -36,10 +54,12 @@ Five hired companies. They fight under someone else's banner: four cards each, e
 a host, and each is a different culture of soldier so a hundred-card deck stops reading as one army twice over.
 
 ### Cobalt Conclave (battle magi)
-- **Cobalt Line Mage (Foot):** Practical field mage, not a robed wizard. Dark blue coat over a mail shirt, a plain iron-shod stave, satchel of charges at the hip, ink-stained hands, mud to the knee.
-- **Ward Captain (Second):** Heavy blue-and-steel harness with a large scarred rectangular shield, warding sigils scratched rather than gilded into the plate, a hammer for a sidearm.
-- **Stormglass Wizard (Elite):** Grey-bearded, layered slate robes over a worn hauberk, a long stave capped with a clouded glass charge, glass shards strung at the belt.
-- **Azure Seal Magister (Commander, unique):** Blue-black coat and cloak over half-plate, seal-rings on a cord, a ringed stave of office, one cold blue-white rim light. Cobalt blue and tarnished pewter.
+The first pass gave three of these four the same upright stave in the same planted stance. The stave now
+appears once vertically and never twice: slung, angled, or carried across the shoulders.
+- **Cobalt Line Mage (Foot):** Practical field mage, not a robed wizard. **Crouched down on one knee**, weight on the front foot, the sole of the rear boot showing, both hands busy at a satchel of charges at the hip, head down. The iron-shod stave is **slung across his back on a strap in a long diagonal, never held upright.** Dark blue coat cut short over a mail shirt, mud to the knee, ink-stained hands, bare cropped head, nothing hanging off him but the satchel. Compact and short.
+- **Ward Captain (Second):** **The heaviest and widest silhouette in the company.** Braced hard side-on with his shoulder driven into the back of an enormous scarred rectangular shield, both feet planted wide, knees deep, weight low. Battered enclosed helm with a narrow slit, face hidden. Heavy blue-and-steel harness, warding sigils scratched rather than gilded into the plate, a short hammer held low and drawn back behind the hip.
+- **Stormglass Wizard (Elite):** Tall but **stooped and thin**, leaning his whole weight sideways onto a very long iron stave set far out to one side at a steep angle, so the stave cuts a **long low diagonal** across the outline; the other arm folded across the chest in a sling of strung glass shards. Deep hood, face lost in shadow. Layered slate robes over a worn hauberk, hem long and torn and spreading wide at the base. Clouded glass charge, no glow.
+- **Azure Seal Magister (Commander, unique):** **Mid-stride**, coat and cloak thrown out behind so the whole silhouette streams backward. Carries **no staff in his hands**: the ringed stave of office lies **horizontally across the back of his shoulders** in the crook of both elbows, a hard horizontal bar breaking the outline sideways. Seal-rings on a cord swinging from one hand. Half-plate under the coat, bare head, hair tied back. Cobalt blue and tarnished pewter, cold blue-white rim light.
 
 ### Thorn Coven (hexers)
 - **Vessel Keeper (Levy/Second):** Hooded figure in sackcloth and patched leather, stoppered clay vessels and charms roped across the body, a bent thorn-wood crook.
@@ -48,10 +68,12 @@ a host, and each is a different culture of soldier so a hundred-card deck stops 
 - **Thorn-Circle Elder (Commander, unique):** Deep hood over a bruised-violet and moss-green mantle, a gnarled briar stave, coin charms and a thorn circlet. Bone-grey skin, sickly green-grey rim light.
 
 ### Cutpurse Court (rogues)
-- **Alley Runner (Levy):** Skinny, soot-blacked scarf over the face, a plain dark coat, a single knife and a lantern hook, worn boots. Nothing on them worth taking.
-- **Fence-Captain (Second):** Heavy-set, scarred face, a long dirty coat hung with purses, cut cords and a lantern, a sword cane and a set of manacles.
-- **Garrote Adept (Elite):** All in oiled black, hood and mask, twin knives and a wire coil at the wrist, no armour anywhere it would rattle.
-- **Court Whisperer (Commander, unique):** Long black coat over quiet leathers, a cane with a hidden blade, a rolled paper in one hand, one dull lamp-amber rim light. Oxblood lining, dirty brass.
+The first pass put all four in the same long grey coat, standing, arms at the sides. The company is now built
+as a mass ladder — tiny coil, narrow column, tall twist, wide clutter — and only two of them own a coat.
+- **Alley Runner (Levy):** **A child's build, the smallest and thinnest figure in the company**, barely shoulder-high to a grown man. **Crouched right down on the balls of both feet**, knees under the chin, one hand splayed down for balance, head lowered and turned away. **No coat and nothing hanging off them at all**: a short ragged sleeveless jerkin, bare thin dirt-streaked forearms, wrapped shins, a soot-blacked scarf pulled high over the face. One knife through a rope belt. A tiny coiled footprint. The face must stay small, shadowed under a low brow and lank hair — this unit pulls the model toward anime if the head is left clean.
+- **Fence-Captain (Second):** **Enormously broad and fat, the widest and heaviest silhouette in the company**, planted with both feet far apart, weight thrown back on the heels, belly out, both thumbs hooked into a wide belt. That belt and the shoulder straps are **hung with a dozen cut purses, cut cord, manacles and a brass lantern** so the outline is cluttered and jangling all the way down. Sword cane carried horizontally across the front in the crook of one arm. Bare scarred head, long filthy coat hanging open.
+- **Garrote Adept (Elite):** Middle height and very narrow — **the cleanest, most closed silhouette in the army, with absolutely nothing hanging off the body**: no coat, no cloak, no pouches, nothing that could swing or rattle. Tight oiled black wraps and close leathers throat to boot, arms folded high and tight, weight on one hip, shoulders leaning back. A smooth featureless black mask with no eye slits. A wire coil at one wrist and a knife flat along a forearm are the only hard edges.
+- **Court Whisperer (Commander, unique):** Tall and lean, **caught mid-stride and turning away** — one shoulder swung toward the viewer, head turned back, so the body reads as a twist rather than a stance. The cane is **extended forward and low, well ahead of the leading foot**, cutting a long shallow diagonal out of the bottom of the outline. Long black coat swung open by the movement. Pale expressionless porcelain half-mask. Rolled paper in the trailing hand. Oxblood lining, dirty brass, dull lamp-amber rim light.
 
 ### Windmarch Host (steppe horse-archers)
 - **Windmarch Outrider (Cavalry):** Scaled lamellar over a felt coat, fur-lined cap, recurve bow of horn and sinew, a quiver at the thigh, a sabre. Dust ochre and weathered horn.
@@ -72,10 +94,19 @@ specialist, an elite, and a commander.
 
 ### Choir Militant (angels)
 Grey, half-moulted, and clearly under orders. Dirty broken feathers, no halos and no glow anywhere.
-- **Lampbearer Chorister (Foot):** Brass lamp on a pole, plain grey-white robes over dented mail, a blank riveted face-mask, two small tight-folded wings.
-- **Warding Seraph (Second):** Scorched pale plate, a scratched kite shield, sword reversed point-down, a veiled eyeless helm, four ragged wings in mismatched pairs.
-- **Sword of the Seventh Gate (Elite):** Blackened plate, a huge two-hander held low, a closed featureless war-mask, one wing taken off at the root and scarred over.
-- **Throne Archon (Commander, unique):** Scorched gold-and-grey plate hung with censers and sealed scrolls, a staff-sceptre, a crowned helm with nothing behind the slit, six vast tattered wings.
+
+The first pass came back as four men in armour with a symmetrical pair of wings glued on the back. **These are
+not people.** Every prompt in this faction must state, in these words, that the subject is *NOT a human being
+and NOT a man with wings*, and must then name four things explicitly, because the model will not infer any of
+them: **no head and no face anywhere** (say where the head *isn't* — a sealed collar, an open hollow socket, a
+wing folded over the gap); **the exact count and sockets of the wings**, which are never a symmetrical pair on
+the back; **the exact number of arms and legs**, in place of the Global Style Block's *no extra limbs*, which
+is dropped for this faction only; and **one specific wrongness of proportion** rather than a heroic one.
+Bodies are assembled, riveted and bolted to a purpose, not born.
+- **Lampbearer Chorister (Foot):** **Short, squat and wide**, barely chest-high to a man, hunched forward mid-shuffle with its weight on the leading foot. No head: the riveted plate closes at the top into a sealed collar with nothing above it. A bell-shaped riveted drum of dented plate over dirty mail. **Three arms** — a thin pair at the shoulders and a third growing from the centre of the chest, and it is the chest arm that carries the brass lamp on a short pole. **One single** ragged wing growing straight up out of the top of the torso like a mast. Legs bend backward with one joint too many onto blunt clawed feet. Very dark: soot-blackened iron, not white plate.
+- **Warding Seraph (Second):** **Tall and narrow, built as a standing wall** — braced hard side-on in a low wide crouch, weight sunk on the back leg. No head: the shoulder plates rise past where a head should be and close over an empty riveted socket. Torso far too long, hips far too low, proportioned like a doorway. **Four wings in wrong places**: two from the hips hanging down like a shredded skirt, and the other two **are the forearms** — each arm ends in a broken wing instead of a hand. A huge scarred slab shield carried low and edge-on in the crook of a wing-arm. Sword reversed point-down on a hip chain.
+- **Sword of the Seventh Gate (Elite):** **Gaunt and far too tall, mid-lunge** with the trailing leg fully extended. Torso half again too long, waist absurdly high, **an extra elbow in each arm**, digitigrade legs onto long hooved feet. No head — **a single wing is folded permanently over the front of the shoulders where a head should be**, sealing the face off. Violently asymmetrical: that face-wing plus one shoulder wing on the same side, and **no wing at all on the other side**, only a scarred-over stump. A huge blackened two-hander gripped low in four hands, trailing behind in a long diagonal.
+- **Throne Archon (Commander, unique):** **Vast and towering, a siege-engine of a thing.** Nothing rises on a neck: where a head would be there is an **open riveted collar standing between the shoulders like the mouth of a chimney, hollow, with nothing inside it**. The body is a stacked column — two extra pairs of shoulders bolted one above the other, **six arms**, the lowest pair reaching almost to the ankles; against that column the legs are stubby and squat onto broad splayed clawed feet. **Six wings from wrong sockets**: two limp from the small of the back, two low and sideways from the middle shoulders, two folded flat against the chest like a second breastplate. Leans forward on a staff-sceptre held across the body. Censers and sealed scrolls on chains from every shoulder. Never say *crown* or *circlet* in this prompt — it paints a halo.
 
 ### Ashpit Legion (demons)
 Cracked black hide with ember-red splits, soot, sulphur. Grim rather than gory: no viscera, no blood spray.
@@ -93,10 +124,14 @@ Looted and fused armour, spiral brands, torn banner scraps. Rust and oxidised co
 
 ### Half-Born Host (demigods)
 Weathered bronze and grey wool. Branching pale scars, never a glow.
-- **Godtouched Scion (Foot):** Plain bronze cuirass over a travel-worn tunic, spear and small round shield, one colourless eye.
-- **Oathkeeper of the Half-Born (Second):** Battered bronze-and-iron harness, crested helm carried under the arm, an oath-cord of knotted bronze wire on the sword arm.
-- **Storm-Sired Champion (Elite):** Heavy bronze pitted with lightning-scarring, a two-handed war-club bound in iron, hair whipped stiff, skin cracked with pale fissures.
-- **Demigod Sovereign (Commander, unique):** Layered bronze and dark iron regalia, a sceptre-spear, a blackened laurel beaten into the brow, a face too symmetrical to be quite human.
+
+The worst collision of the first pass: four bronze spearmen of the same height, planted the same way, holding
+the same upright shaft. The company is now built so that no two share a footprint — a run, a kneel, a swing,
+and a column — and mass runs from the smallest figure in the army to one of the largest.
+- **Godtouched Scion (Foot):** **The smallest and leanest of his company**, young and wiry, **caught running low in a full stride**, all weight on the front foot, back heel lifted clear. A small round bronze shield brought up **high across the face** so the head is almost hidden behind its rim; the spear carried **low and level at the hip**, angled back behind him. Plain bronze cuirass over a travel-worn grey tunic, bare legs, one colourless eye. Nothing hangs off him.
+- **Oathkeeper of the Half-Born (Second):** **Down on one knee** in a formal oath-taking — forward knee raised, rear boot turned so its sole shows, a battered sword held **point-down in both hands** with the arms straight. A **tall transverse horsehair crest** on the helm pushed back on his head breaks the outline upward. A heavy grey wool cloak falls from both shoulders and **pools around the kneeling leg, widening the base into a triangle**. Oath-cord of knotted bronze wire wound up the sword arm.
+- **Storm-Sired Champion (Elite):** **Enormous mass — half again the height and twice the width of a common soldier — caught at the top of a swing**: torso twisted hard, weight dropped onto the back foot, a huge two-handed iron-bound war-club carried across and above one shoulder in **a long horizontal running out past the edge of the body**. **No cloak and nothing hanging**; the shape is pure mass. Bare arms and bare head, hair whipped stiff, skin cracked with branching pale fissures, bronze plate on chest and shins only.
+- **Demigod Sovereign (Commander, unique):** **Tall, narrow and utterly still, standing like a grave-statue**: feet placed **close together** so the footprint is the narrowest in the army, and a stiff floor-length mantle of dark iron scales and grey wool **closing the legs into a single tapering column**. An extremely long sceptre-spear held straight down at his side, butt level with the ankles and head a full head above the shoulder, so **one hard vertical line runs the whole height of the figure**. A blackened laurel beaten flat into the brow, a face too symmetrical to be quite human.
 
 ### Winter Famine (wendigo-themed)
 Original famine-spirits — see the note in `STYLE_GUIDE.md`. Starved frames, broken antlers, frostbitten grey-blue hide.
