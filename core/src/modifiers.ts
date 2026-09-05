@@ -1,5 +1,6 @@
 import type { Battle } from "./state.js";
 import type { UnitState, Modifier, StatBreakdown, DoctrineState } from "./types.js";
+import { TERRAIN_RULES } from "./types.js";
 import { themeCohesionBonus } from "./cohesion.js";
 import { doctrineState } from "./composition.js";
 import { commandBonus } from "./command.js";
@@ -48,17 +49,24 @@ export function computeStat(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: C
     if (b.hasStatus(u, "Exposed")) mods.push({ source: "Status: Exposed", stat, value: -150 });
   }
 
-  // 6. Terrain
+  // 6. Terrain (from the rules table) and elevation
   if (u.pos && !d.flying) {
-    const t = b.terrainAt(u.pos);
-    if (stat === "DEF" && t === "Fortification") mods.push({ source: "Terrain: Fortification", stat, value: 200 });
-    if (stat === "ATK" && t === "HighGround" && ctx.ranged) mods.push({ source: "Terrain: High Ground", stat, value: 100 });
+    const t = b.terrainAt(u.pos); const rule = TERRAIN_RULES[t];
+    if (stat === "DEF" && rule.def) mods.push({ source: `Terrain: ${t}`, stat, value: rule.def });
+    if (stat === "ATK" && ctx.ranged && rule.ranged.atk) mods.push({ source: `Terrain: ${t}`, stat, value: rule.ranged.atk });
   }
+  if (stat === "ATK" && ctx.attacker === u && ctx.defender?.pos && u.pos && !d.flying && b.elevationAt(u.pos) > b.elevationAt(ctx.defender.pos)) mods.push({ source: "Elevation advantage", stat, value: 50 });
 
   // 7. Ability conditionals and platoon orders (data-driven)
   if (!u.isClone) mods.push(...abilityModifiers(b, u, stat, ctx));
 
-  // 8. Faction rank privileges
+  // 8. Siege: breaching shot against fortified targets
+  if (stat === "ATK" && ctx.attacker === u && d.siege && ctx.defender?.pos && d.passives.includes("ABL_BREACHING_SHOT")) {
+    const t = b.terrainAt(ctx.defender.pos);
+    if (t === "Fortification" || t === "Ruins" || t === "Trench") mods.push({ source: "Breaching Shot", stat, value: d.siege.structureAtk });
+  }
+
+  // 9. Faction rank privileges
   if (!u.isClone && !isDivine) {
     const pv = privileges(b, u);
     if (stat === "ATK" && ctx.reaction && pv.twoSwords) mods.push({ source: "Rank: two swords (reaction)", stat, value: 50 });

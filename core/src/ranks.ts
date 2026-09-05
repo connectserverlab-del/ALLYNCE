@@ -1,9 +1,10 @@
 import type { Battle } from "./state.js";
-import type { UnitState } from "./types.js";
+import type { UnitState, Terrain } from "./types.js";
+import { TERRAIN_RULES } from "./types.js";
 
 export type Organization = "Patrol" | "Platoon" | "Company" | "Battalion" | "Army";
 export interface RankPrivileges { twoSwords?: boolean; mounted?: "war" | "always"; commandRadiusBonus?: number; banner?: boolean; castle?: boolean; supreme?: boolean }
-export interface RankDef { id: string; title: string; tier: number; description: string; koku?: [number, number | null]; privileges: RankPrivileges; canLead: Organization[] }
+export interface RankDef { id: string; title: string; tier: number; description: string; koku?: [number, number | null]; privileges: RankPrivileges; canLead: Organization[]; movement?: MovementTraits }
 export interface RankLadder { faction: string; notes?: string; ranks: RankDef[]; privilegeRules: Record<string, string> }
 
 /** Faction rank of a unit, if the faction has a ladder and the unit declares one. */
@@ -35,3 +36,18 @@ export function canLead(ladder: RankLadder | undefined, factionRank: string | un
   const r = ladder.ranks.find((x) => x.id === factionRank);
   return !!r && r.canLead.includes(org);
 }
+
+/** Movement cost of entering `t` for this unit: flying / cavalry / foot column of the terrain table, then rank traits. */
+export function terrainCostFor(b: Battle, u: UnitState, t: Terrain): number | null {
+  const d = b.def(u); const rule = TERRAIN_RULES[t];
+  let cost = d.flying ? rule.costFlying : d.roles.includes("Cavalry") ? rule.costCavalry : rule.costFoot;
+  const traits = movementTraits(b, u);
+  if (t === "Forest" && traits.canopy && cost !== null) cost = 1;               // tree to tree
+  if (t === "Mud" && traits.surefoot && cost !== null) cost = Math.min(cost, 1);
+  if ((t === "Water" || t === "Ford") && traits.waterwalk) cost = 1;
+  if (t === "Mountain" && traits.climber) cost = 3;
+  return cost;
+}
+
+export interface MovementTraits { canopy?: boolean; surefoot?: boolean; waterwalk?: boolean; climber?: boolean; ignoreZoc?: boolean; passAllies?: boolean; hideOnForestStop?: boolean; bonusMov?: number; shadowStep?: number }
+export function movementTraits(b: Battle, u: UnitState): MovementTraits { return (rankOf(b, u)?.movement ?? {}) as MovementTraits; }

@@ -16,7 +16,7 @@ This repository currently holds three things:
 
 ```bash
 npm install
-npm test            # 38 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
+npm test            # 54 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 ```
@@ -38,6 +38,11 @@ npm run typecheck
 - **Turn machine**: Command → alternating Activation (2 AP per unit) → Objective → End, seeded RNG, serializable event log for save, replay and tests.
 - **AI**: goal-oriented utility scoring (objective urgency, kill potential, formation gain or loss, isolation risk, commander caution), a release policy that holds for synchronization until instability forces a decision, and difficulty profiles that change risk and planning depth only.
 - **Scenario**: `Threefold Invocation` fully data-defined and playable start to finish.
+- **Irregular battlefields**: seeded generator (`core/src/mapgen.ts`) carves an odd-shaped playable mask from a canvas, layers elevation into mountain ranges, high ground, open ground and valley floors, runs a river downhill with fords, digs trenches in front of each army, lays a road, gathers mud in low wet ground, and places ruins and fortifications. Fourteen terrain types with a data table for movement cost by foot, cavalry and flying, defence, concealment, sight and charge-breaking.
+- **Universal win conditions**: wipe out the opponent, kill their army leader, or force a surrender. Scenario objectives layer on top.
+- **Shinobi ranks**: Apprentice, Genin, Chunin, Jounin, Anbu, Kage, each with a movement trait (canopy movement through forest, hide on stopping in forest, ignore zones of control, pass allies, bonus movement, Shadow Step).
+- **Fusion**: recipe-driven merging of adjacent units into one (Paired Line, Gate Wardens, Twinwing Drake, and the Calamity Form from the three Sovereigns), paid with Fusion charges.
+- **Siege and cavalry**: cannons per faction with set-up, minimum range and breaching shots (plus smoke shells and the Siegewyrm's concussive blast); cavalry per faction with lance charges that break in rough ground, and hit-and-fade riders.
 - **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. See `docs/samurai-ranks.md`.
 
 ## Engine note

@@ -4,6 +4,7 @@ import { hexNeighbors, hexKey } from "./hex.js";
 import { platoonMorale, platoonMembers, tempPreventRouted, changeMorale } from "./morale.js";
 import { addTempMod } from "./modifiers.js";
 import { computeStat } from "./modifiers.js";
+import { applyDamage } from "./combat.js";
 import { commandRadiusOf } from "./ranks.js";
 
 export interface EffectContext { platoon?: PlatoonState; target?: UnitState; targetHex?: { q: number; r: number } }
@@ -47,7 +48,7 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
       return n > 0;
     }
     case "ChargeBonus": {
-      if (user.movedThisActivation < e.minHexesMoved || user.usedChargeLastRound) return false;
+      if (user.chargeMoved < e.minHexesMoved || user.usedChargeLastRound) return false;
       addTempMod(user, { source: ability.name, stat: "ATK", value: e.atk });
       user.usedChargeLastRound = true;
       if (e.thenStatus) b.addStatus(user, e.thenStatus, 1, ability.name);
@@ -85,8 +86,28 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
       duels.set(user.uid, ctx.target.uid); duels.set(ctx.target.uid, user.uid);
       b.log("Ability", { ability: ability.id, uid: user.uid, target: ctx.target.uid });
       return true;
+    case "SiegeSetup":
+      user.setUp = true; b.log("SiegeSetup", { uid: user.uid }); return true;
+    case "SpawnTerrainAt": {
+      const center = ctx.targetHex ?? ctx.target?.pos; if (!center) return false;
+      const hexes = [center, ...hexNeighbors(center)].filter((h) => b.inBounds(h) && b.terrainAt(h) !== "Water" && b.terrainAt(h) !== "Mountain");
+      for (const h of hexes) { if (!b.terrain.has(hexKey(h)) || b.terrainAt(h) === "Open") { b.terrain.set(hexKey(h), e.terrain); timedTerrain.push({ key: hexKey(h), rounds: e.duration }); } }
+      b.log("TerrainSpawned", { terrain: e.terrain, count: hexes.length, uid: user.uid, center });
+      return true;
+    }
+    case "AreaShock": {
+      const center = ctx.targetHex ?? ctx.target?.pos; if (!center) return false;
+      let hit = 0;
+      for (const h of [center, ...hexNeighbors(center)]) { const v = b.unitAt(h); if (v && v.side !== user.side) { applyDamage(b, v, e.damage, ability.name); if (!v.defeated && e.status) b.addStatus(v, e.status, 1, ability.name); hit++; } }
+      b.log("Ability", { ability: ability.id, uid: user.uid, hit });
+      return hit > 0;
+    }
+    case "Surrender": {
+      const side = b.sides.get(user.side)!; side.surrendered = true; b.log("Surrender", { side: user.side, by: user.uid }); return true;
+    }
     case "RitualChannel":
     case "PortalCall":
+    case "ShadowStep":
       return true; // handled by ritual / portal managers through the action layer
     default:
       // Passive kinds (ConditionalDef/Atk, SharedVision, Intercept, DenyFlyingMovement) are evaluated where relevant.
@@ -112,6 +133,8 @@ function spawnClones(b: Battle, user: UnitState, ability: AbilityDef, e: Record<
 }
 
 export const hideAfterAttack = new Set<string>();
+/** Terrain placed by abilities (smoke) with a lifetime in rounds. */
+export const timedTerrain: Array<{ key: string; rounds: number }> = [];
 export const orderFlags = new Map<string, string>();
 export const duels = new Map<string, string>();
 export function clearRoundEffectFlags(): void { hideAfterAttack.clear(); orderFlags.clear(); duels.clear(); tempPreventRouted.clear(); }

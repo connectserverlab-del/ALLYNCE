@@ -139,7 +139,7 @@
   },
   {
     "id": "SHI_COMMANDER_VEILED-MOON-JONIN",
-    "name": "Veiled Moon Jōnin",
+    "name": "Veiled Moon J\u014dnin",
     "faction": "SHI",
     "themes": [
       "Shinobi"
@@ -171,7 +171,8 @@
     "art": {
       "concept": "art/samples/SHI_COMMANDER_VEILED-MOON-JONIN_CONCEPT_V01.jpg",
       "cutout": "art/samples/SHI_COMMANDER_VEILED-MOON-JONIN_CUTOUT_V01.png"
-    }
+    },
+    "factionRank": "JOUNIN"
   },
   {
     "id": "SHI_SECOND_REED-SIGNAL-LIEUTENANT",
@@ -203,7 +204,8 @@
     ],
     "unique": true,
     "summonOnly": false,
-    "ai": "leader_support"
+    "ai": "leader_support",
+    "factionRank": "CHUNIN"
   },
   {
     "id": "SHI_ELITE_MIRROR-SHADE-ADEPT",
@@ -238,7 +240,8 @@
     "art": {
       "concept": "art/samples/SHI_ELITE_MIRROR-SHADE-ADEPT_CONCEPT_V01.jpg",
       "cutout": "art/samples/SHI_ELITE_MIRROR-SHADE-ADEPT_CUTOUT_V01.png"
-    }
+    },
+    "factionRank": "ANBU"
   },
   {
     "id": "SHI_FOOT_NIGHT-THREAD-OPERATIVE",
@@ -269,7 +272,8 @@
     ],
     "unique": false,
     "summonOnly": false,
-    "ai": "raider"
+    "ai": "raider",
+    "factionRank": "GENIN"
   },
   {
     "id": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL",
@@ -743,6 +747,354 @@
       "manifestation": 3,
       "anchors": 3,
       "arrival": "ReturnFallen"
+    },
+    "passives": [],
+    "actives": [],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "deity"
+  },
+  {
+    "id": "SAM_SIEGE_EMBER-OZUTSU-BATTERY",
+    "name": "Ember Ozutsu Battery",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Siege"
+    ],
+    "rank": "Specialist",
+    "size": "Standard",
+    "hp": 1000,
+    "atk": 1900,
+    "def": 1100,
+    "mov": 2,
+    "range": 4,
+    "minRange": 2,
+    "initiative": 2,
+    "morale": 70,
+    "capacityCost": 9,
+    "siege": {
+      "setupRequired": true,
+      "structureAtk": 300
+    },
+    "factionRank": "UMAMAWARI",
+    "passives": [
+      "ABL_BREACHING_SHOT"
+    ],
+    "actives": [
+      "ABL_SIEGE_SETUP"
+    ],
+    "slots": [
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "siege",
+    "art": {
+      "concept": "art/samples/SAM_SIEGE_EMBER-OZUTSU-BATTERY_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_SIEGE_EMBER-OZUTSU-BATTERY_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "SAM_CAVALRY_CRIMSON-UMAMAWARI-LANCER",
+    "name": "Crimson Umamawari Lancer",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Cavalry"
+    ],
+    "rank": "Cavalry",
+    "size": "Standard",
+    "hp": 1500,
+    "atk": 1900,
+    "def": 1500,
+    "mov": 7,
+    "range": 1,
+    "initiative": 7,
+    "morale": 80,
+    "capacityCost": 9,
+    "factionRank": "UMAMAWARI",
+    "passives": [],
+    "actives": [
+      "ABL_LANCE_CHARGE"
+    ],
+    "slots": [
+      "Elite",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "cavalry_raid",
+    "art": {
+      "concept": "art/samples/SAM_CAVALRY_CRIMSON-UMAMAWARI-LANCER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_CAVALRY_CRIMSON-UMAMAWARI-LANCER_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "SHI_SIEGE_REED-SMOKE-MORTAR",
+    "name": "Reed-Smoke Mortar",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "Siege",
+      "Support"
+    ],
+    "rank": "Specialist",
+    "size": "Standard",
+    "hp": 900,
+    "atk": 1500,
+    "def": 1000,
+    "mov": 3,
+    "range": 5,
+    "minRange": 2,
+    "initiative": 3,
+    "morale": 70,
+    "capacityCost": 8,
+    "siege": {
+      "setupRequired": true,
+      "structureAtk": 100
+    },
+    "factionRank": "GENIN",
+    "passives": [],
+    "actives": [
+      "ABL_SIEGE_SETUP",
+      "ABL_SMOKE_SHELL"
+    ],
+    "slots": [
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "siege",
+    "art": {
+      "concept": "art/samples/SHI_SIEGE_REED-SMOKE-MORTAR_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_SIEGE_REED-SMOKE-MORTAR_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "SHI_CAVALRY_NIGHT-COURIER-RIDER",
+    "name": "Night Courier Rider",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "Cavalry"
+    ],
+    "rank": "Cavalry",
+    "size": "Standard",
+    "hp": 1100,
+    "atk": 1500,
+    "def": 1200,
+    "mov": 9,
+    "range": 1,
+    "initiative": 9,
+    "morale": 75,
+    "capacityCost": 7,
+    "factionRank": "CHUNIN",
+    "passives": [
+      "ABL_HIT_AND_FADE"
+    ],
+    "actives": [],
+    "slots": [
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider",
+    "art": {
+      "concept": "art/samples/SHI_CAVALRY_NIGHT-COURIER-RIDER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_CAVALRY_NIGHT-COURIER-RIDER_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "KNI_SIEGE_BASTION-BOMBARD",
+    "name": "Bastion Bombard",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "Siege"
+    ],
+    "rank": "Specialist",
+    "size": "Standard",
+    "hp": 1200,
+    "atk": 2100,
+    "def": 1300,
+    "mov": 2,
+    "range": 4,
+    "minRange": 2,
+    "initiative": 2,
+    "morale": 75,
+    "capacityCost": 10,
+    "siege": {
+      "setupRequired": true,
+      "structureAtk": 400
+    },
+    "passives": [
+      "ABL_BREACHING_SHOT"
+    ],
+    "actives": [
+      "ABL_SIEGE_SETUP"
+    ],
+    "slots": [
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "siege",
+    "art": {
+      "concept": "art/samples/KNI_SIEGE_BASTION-BOMBARD_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_SIEGE_BASTION-BOMBARD_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "KNI_CAVALRY_DAWN-LANCER",
+    "name": "Dawn Lancer",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "Cavalry"
+    ],
+    "rank": "Cavalry",
+    "size": "Standard",
+    "hp": 1700,
+    "atk": 2000,
+    "def": 1800,
+    "mov": 6,
+    "range": 1,
+    "initiative": 6,
+    "morale": 80,
+    "capacityCost": 10,
+    "passives": [],
+    "actives": [
+      "ABL_LANCE_CHARGE"
+    ],
+    "slots": [
+      "Elite",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "cavalry_raid",
+    "art": {
+      "concept": "art/samples/KNI_CAVALRY_DAWN-LANCER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_CAVALRY_DAWN-LANCER_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "DRG_SIEGE_CINDERTHROAT-SIEGEWYRM",
+    "name": "Cinderthroat Siegewyrm",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "Siege"
+    ],
+    "rank": "Specialist",
+    "size": "Large",
+    "hp": 2200,
+    "atk": 2200,
+    "def": 1700,
+    "mov": 3,
+    "range": 3,
+    "minRange": 1,
+    "initiative": 3,
+    "morale": 80,
+    "capacityCost": 13,
+    "siege": {
+      "setupRequired": false,
+      "structureAtk": 300
+    },
+    "passives": [
+      "ABL_BREACHING_SHOT"
+    ],
+    "actives": [
+      "ABL_CONCUSSIVE_BLAST"
+    ],
+    "slots": [
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "siege",
+    "art": {
+      "concept": "art/samples/DRG_SIEGE_CINDERTHROAT-SIEGEWYRM_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_SIEGE_CINDERTHROAT-SIEGEWYRM_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "DRG_CAVALRY_RIDGEBACK-RUNNER",
+    "name": "Ridgeback Runner",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "Cavalry"
+    ],
+    "rank": "Cavalry",
+    "size": "Standard",
+    "hp": 1300,
+    "atk": 1700,
+    "def": 1300,
+    "mov": 8,
+    "range": 1,
+    "initiative": 8,
+    "morale": 70,
+    "capacityCost": 7,
+    "passives": [
+      "ABL_PACK_WING"
+    ],
+    "actives": [
+      "ABL_LANCE_CHARGE"
+    ],
+    "slots": [
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "cavalry_raid",
+    "art": {
+      "concept": "art/samples/DRG_CAVALRY_RIDGEBACK-RUNNER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_CAVALRY_RIDGEBACK-RUNNER_CUTOUT_V01.png"
+    }
+  },
+  {
+    "id": "DIV_BOSS_CALAMITY-FORM",
+    "name": "The Calamity Form",
+    "faction": "DIV",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 6000,
+    "atk": 4200,
+    "def": 3800,
+    "mov": 3,
+    "range": 3,
+    "initiative": 12,
+    "morale": 100,
+    "capacityCost": 0,
+    "flying": true,
+    "divine": {
+      "manifestation": 3,
+      "anchors": 0,
+      "arrival": "Convergence"
     },
     "passives": [],
     "actives": [],

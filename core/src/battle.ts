@@ -1,6 +1,9 @@
 import { Battle } from "./state.js";
 import type { UnitState, PlatoonState } from "./types.js";
+import { TERRAIN_RULES } from "./types.js";
+import { terrainCostFor } from "./ranks.js";
 import type { Hex } from "./hex.js";
+import { hexDistance as _hd } from "./hex.js";
 import { hexDistance, hexNeighbors, hexKey, directionTo } from "./hex.js";
 import { resolveAttack, interceptUsed, defeat } from "./combat.js";
 import { computeStat, clearTempMods, tempMods } from "./modifiers.js";
@@ -11,7 +14,9 @@ import { tickPortal, checkCaptureInterrupt, attackPortal, captureStep, type Port
 import { commandRadiusRecovery, surroundedPenalty, moraleBand, changeMorale } from "./morale.js";
 import { doctrineState } from "./composition.js";
 import { evaluateObjective, markSynchronized, type ObjectiveDef, type ObjectiveProgress } from "./objectives.js";
-import { mountedMoveBonus, commandRadiusOf } from "./ranks.js";
+import { mountedMoveBonus, commandRadiusOf, movementTraits } from "./ranks.js";
+import { fuse as fuseUnits, tickFusions } from "./fusion.js";
+import { timedTerrain } from "./effects.js";
 
 export interface VictoryRules { sides: Record<string, ObjectiveDef[]>; roundLimit: number; roundLimitWinner?: string }
 
@@ -54,7 +59,7 @@ export class BattleController {
     if (b.activatedGroupsThisRound.has(groupId)) throw new Error(`${groupId} already activated this round`);
     const members = this.groupMembers(groupId);
     for (const u of members) {
-      u.ap = 2; u.movedThisActivation = 0; u.attackedThisActivation = false; u.defending = false;
+      u.ap = 2; u.movedThisActivation = 0; u.chargeMoved = 0; u.attackedThisActivation = false; u.defending = false; u.shadowStepped = false; u.freeMoveHexes = 0;
       if (b.hasStatus(u, "Suppressed")) { u.ap -= 1; b.removeStatus(u, "Suppressed"); }
       if (b.hasStatus(u, "Routed")) { this.routedRetreat(u); u.ap = 0; }
     }
@@ -85,7 +90,7 @@ export class BattleController {
 
   movementAllowance(u: UnitState): number {
     const d = this.b.def(u);
-    return d.mov + mountedMoveBonus(this.b, u) + tempMods(u).filter((m) => m.stat === "MOV").reduce((s, m) => s + m.value, 0);
+    return d.mov + mountedMoveBonus(this.b, u) + (movementTraits(this.b, u).bonusMov ?? 0) + tempMods(u).filter((m) => m.stat === "MOV").reduce((s, m) => s + m.value, 0);
   }
 
   /** BFS pathfinding with terrain costs, zone of control and flying rules. Returns reachable hexes with cost. */
@@ -95,8 +100,9 @@ export class BattleController {
     if (!u.pos) return out;
     const budget = this.movementAllowance(u);
     const flag = orderFlags.get(u.uid);
-    const ignoreZoc = flag === "PhaseMove";
-    const passAllies = flag === "PhaseMove" || flag === "SequencedMove" || !!d.flying;
+    const traits = movementTraits(b, u);
+    const ignoreZoc = flag === "PhaseMove" || !!traits.ignoreZoc;
+    const passAllies = flag === "PhaseMove" || flag === "SequencedMove" || !!d.flying || !!traits.passAllies;
     const frontier: Array<{ hex: Hex; cost: number }> = [{ hex: u.pos, cost: 0 }];
     const best = new Map<string, number>([[hexKey(u.pos), 0]]);
     while (frontier.length) {
@@ -105,13 +111,13 @@ export class BattleController {
       for (const n of hexNeighbors(cur.hex)) {
         if (!b.inBounds(n)) continue;
         const t = b.terrainAt(n);
-        if (t === "Water" && !d.flying) continue;
-        if (t === "AntiAir" && d.flying) continue;
         const occ = b.unitAt(n);
         if (occ && (occ.side !== u.side || !passAllies)) continue;
-        let step = 1;
-        if (!d.flying) { if (t === "Forest") step = d.roles.includes("Cavalry") ? 3 : 2; }
-        else if (t === "Forest") step = 2; // dense forest restricts flying
+        const stepCost = terrainCostFor(b, u, t);
+        if (stepCost === null) continue;
+        let step = stepCost;
+        // climbing one elevation tier costs one more point for ground units
+        if (!d.flying && b.elevationAt(n) > b.elevationAt(cur.hex) && t !== "Road") step += 1;
         // Predatory Airspace: flying enemies cannot pass through a Dragon Flight commander's radius
         if (d.flying && this.inEnemyDragonAirspace(u, n)) step = 99;
         const cost = cur.cost + step;
@@ -145,9 +151,11 @@ export class BattleController {
     const r = this.reachable(u).get(hexKey(to));
     if (!r) throw new Error(`Hex ${hexKey(to)} not reachable`);
     const zocEnemies = b.adjacentEnemies(u).filter((e) => !b.hasStatus(e, "Routed"));
-    const ignoreZoc = orderFlags.get(u.uid) === "PhaseMove";
-    if (opts.disengage) this.spend(u, 1);
-    this.spend(u, 1);
+    const traits = movementTraits(b, u);
+    const ignoreZoc = orderFlags.get(u.uid) === "PhaseMove" || !!traits.ignoreZoc || u.freeMoveHexes > 0;
+    if (u.freeMoveHexes > 0) { if (r.cost > u.freeMoveHexes) throw new Error("Beyond free move"); u.freeMoveHexes = 0; }
+    else { if (opts.disengage) this.spend(u, 1); this.spend(u, 1); }
+    u.setUp = false; // a siege piece that moves must set up again
     const from = u.pos;
     if (zocEnemies.length && !opts.disengage && !ignoreZoc) {
       const reactor = zocEnemies[0]!;
@@ -163,7 +171,10 @@ export class BattleController {
     b.place(u, to);
     u.facing = directionTo(from, to);
     u.movedThisActivation += r.cost;
+    // charge momentum: broken by rough ground, otherwise accumulates
+    u.chargeMoved = TERRAIN_RULES[b.terrainAt(to)].chargeBreaks ? 0 : u.chargeMoved + r.cost;
     if (b.hasStatus(u, "Hidden") && b.terrainAt(to) !== "Forest" && b.terrainAt(to) !== "Smoke" && b.adjacentEnemies(u).length) b.addStatus(u, "Revealed", 0, "Moved into contact");
+    if (traits.hideOnForestStop && b.terrainAt(to) === "Forest") b.addStatus(u, "Hidden", 2, "Canopy");
     b.log("Move", { uid: u.uid, from, to, cost: r.cost });
     // moving away from a ritual circle forfeits contribution (participants are recomputed each tick)
   }
@@ -175,20 +186,27 @@ export class BattleController {
     const b = this.b;
     if (u.attackedThisActivation) throw new Error("Already attacked this activation");
     if (!u.pos || !target.pos) throw new Error("Not deployed");
-    const range = b.def(u).range + (b.terrainAt(u.pos) === "HighGround" && b.def(u).range > 1 ? 1 : 0);
+    const range = b.def(u).range + (b.def(u).range > 1 ? TERRAIN_RULES[b.terrainAt(u.pos)].ranged.range : 0);
     if (hexDistance(u.pos, target.pos) > range) throw new Error("Out of range");
     if (b.hasStatus(target, "Hidden") && hexDistance(u.pos, target.pos) > 1) throw new Error("Target is Hidden");
     if (u.isClone && u.attackedThisActivation) throw new Error("Clones make one basic attack");
+    const d = b.def(u);
+    if (d.minRange && hexDistance(u.pos, target.pos) < d.minRange) throw new Error("Inside minimum range");
+    if (d.siege?.setupRequired && !u.setUp) throw new Error("Siege piece must Set Up before firing");
     this.spend(u, 1);
     u.facing = directionTo(u.pos, target.pos);
     resolveAttack(b, u, target, { ranged: range > 1 });
+    const fade = d.passives.map((id) => b.reg.ability(id)).find((a) => a.effect.kind === "FreeMoveAfterAttack");
+    if (fade) u.freeMoveHexes = (fade.effect as any).hexes;
     // attacking a ritual participant disrupts the circle
     for (const r of b.rituals.values()) if (r.side === target.side && r.participantUids.includes(target.uid)) disruptRitual(b, r, 1, u.uid);
   }
 
   attackStructure(u: UnitState, portal: Portal): void {
+    const d = this.b.def(u);
+    if (d.siege?.setupRequired && !u.setUp) throw new Error("Siege piece must Set Up before firing");
     this.spend(u, 1);
-    const atk = computeStat(this.b, u, "ATK").final;
+    const atk = computeStat(this.b, u, "ATK").final + (d.siege && d.passives.includes("ABL_BREACHING_SHOT") ? d.siege.structureAtk : 0);
     if (!attackPortal(this.b, u, portal, atk)) { u.ap += 1; throw new Error("Portal out of range"); }
   }
 
@@ -202,6 +220,32 @@ export class BattleController {
     this.spend(u, 1);
     if (!this.b.def(u).ritual || !u.pos || hexDistance(u.pos, ritual.center) > ritual.radius) { u.ap += 1; throw new Error("Not a ritualist in the circle"); }
     this.b.log("Channel", { uid: u.uid, ritual: ritual.id });
+  }
+
+  /** Kage rank: relocate up to N hexes to a Forest, Smoke or Ruins hex, ignoring everything between. Once per activation. */
+  shadowStep(u: UnitState, to: Hex): void {
+    const b = this.b; const n = movementTraits(b, u).shadowStep ?? 0;
+    if (!n) throw new Error("No Shadow Step");
+    if (u.shadowStepped) throw new Error("Already shadow-stepped this activation");
+    if (!u.pos || hexDistance(u.pos, to) > n || !b.isFree(to)) throw new Error("Invalid destination");
+    const t = b.terrainAt(to);
+    if (t !== "Forest" && t !== "Smoke" && t !== "Ruins") throw new Error("Shadow Step needs cover");
+    this.spend(u, 1);
+    const from = u.pos; b.place(u, to); u.shadowStepped = true; u.setUp = false;
+    b.addStatus(u, "Hidden", 2, "Shadow Step");
+    b.log("ShadowStep", { uid: u.uid, from, to });
+  }
+
+  /** Fusion function: merge adjacent units by recipe. Spends a Fusion charge; each input spends 1 AP. */
+  fuse(units: UnitState[], recipeId: string): UnitState { return fuseUnits(this.b, units, recipeId); }
+
+  /** Surrender: only the army leader (or any commander if the leader has fallen) may yield the field. */
+  surrender(side: string, by?: UnitState): void {
+    const b = this.b; const s = b.sides.get(side)!;
+    const leader = s.leaderUid ? b.units.get(s.leaderUid) : undefined;
+    if (leader && !leader.defeated && by && by.uid !== leader.uid) throw new Error("Only the army leader may surrender");
+    s.surrendered = true; b.log("Surrender", { side, by: by?.uid ?? null });
+    this.evaluateVictory();
   }
 
   /** Use an active/order ability. */
@@ -281,6 +325,8 @@ export class BattleController {
     }
     surroundedPenalty(b);
     for (const p of b.portals.values()) checkCaptureInterrupt(b, p);
+    for (let i = timedTerrain.length - 1; i >= 0; i--) { const t = timedTerrain[i]!; t.rounds--; if (t.rounds <= 0) { b.terrain.delete(t.key); timedTerrain.splice(i, 1); } }
+    tickFusions(b);
     this.evaluateVictory();
     if (!b.winner) { b.round++; b.phase = "Command"; }
     else b.phase = "Ended";
@@ -299,10 +345,16 @@ export class BattleController {
       b.winner = this.victory.roundLimitWinner ?? "draw";
       b.winReason = "Round limit";
     }
-    // command structure broken: a side with no living commanders or seconds and no rituals/portals loses morale war
+    // Universal win conditions, checked for every battle:
+    // 1) the opponent has no units left, 2) the opponent's army leader is killed, 3) the opponent surrenders.
     if (!b.winner) for (const side of b.sides.keys()) {
+      const other = [...b.sides.keys()].find((s) => s !== side) ?? "draw";
+      const st = b.sides.get(side)!;
       const alive = [...b.activeUnits(side)].filter((u) => !u.isClone);
-      if (alive.length === 0) { b.winner = [...b.sides.keys()].find((s) => s !== side) ?? "draw"; b.winReason = "Enemy eliminated"; }
+      if (alive.length === 0) { b.winner = other; b.winReason = "Wipeout"; break; }
+      if (st.surrendered) { b.winner = other; b.winReason = "Surrender"; break; }
+      const leader = st.leaderUid ? b.units.get(st.leaderUid) : undefined;
+      if (leader && leader.defeated && !leader.fusedFrom) { b.winner = other; b.winReason = "Leader killed"; break; }
     }
     if (b.winner) b.log("BattleEnded", { winner: b.winner, reason: b.winReason });
   }

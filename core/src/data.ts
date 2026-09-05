@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import type { UnitDef, AbilityDef, FactionDef } from "./types.js";
 import type { RankLadder } from "./ranks.js";
+import type { FusionRecipe } from "./fusion.js";
 import { existsSync } from "node:fs";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -28,9 +29,11 @@ export class Registry {
   readonly factions = new Map<string, FactionDef>();
   readonly rules: CompositionRules;
   readonly ranks = new Map<string, RankLadder>();
+  readonly fusions = new Map<string, FusionRecipe>();
 
-  constructor(units: UnitDef[], abilities: AbilityDef[], factions: Record<string, FactionDef>, rules: CompositionRules, ladders: RankLadder[] = []) {
+  constructor(units: UnitDef[], abilities: AbilityDef[], factions: Record<string, FactionDef>, rules: CompositionRules, ladders: RankLadder[] = [], fusions: FusionRecipe[] = []) {
     for (const l of ladders) this.ranks.set(l.faction, l);
+    for (const f of fusions) this.fusions.set(f.id, f);
     for (const u of units) this.units.set(u.id, u);
     for (const a of abilities) this.abilities.set(a.id, a);
     for (const f of Object.values(factions)) this.factions.set(f.id, f);
@@ -73,6 +76,7 @@ export function loadRegistry(): Registry {
     readJson<Record<string, FactionDef>>("factions/factions.json"),
     readJson<CompositionRules>("compositions/platoon.json"),
     ["SAM", "SHI", "KNI", "DRG", "RIT"].filter((f) => existsSync(resolve(DATA_ROOT, `factions/ranks/${f}.json`))).map((f) => readJson<RankLadder>(`factions/ranks/${f}.json`)),
+    readJson<FusionRecipe[]>("abilities/fusions.json"),
   );
 }
 
