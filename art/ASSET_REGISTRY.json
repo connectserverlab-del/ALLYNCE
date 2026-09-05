@@ -1,0 +1,1710 @@
+{
+  "generated": "npm run assets",
+  "total": {
+    "present": 157,
+    "missing": 25
+  },
+  "summary": {
+    "Units": {
+      "present": 120,
+      "missing": 0,
+      "derived": 0
+    },
+    "Buildings": {
+      "present": 8,
+      "missing": 25,
+      "derived": 0
+    },
+    "Side cards": {
+      "present": 7,
+      "missing": 0,
+      "derived": 4
+    },
+    "World and interface": {
+      "present": 10,
+      "missing": 0,
+      "derived": 0
+    },
+    "Icons": {
+      "present": 12,
+      "missing": 0,
+      "derived": 0
+    }
+  },
+  "assets": [
+    {
+      "group": "Units",
+      "id": "SAM_COMMANDER_EMBER-BANNER-DAIMYO",
+      "label": "Ember Banner Daimyo",
+      "kind": "concept",
+      "path": "art/samples/SAM_COMMANDER_EMBER-BANNER-DAIMYO_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "6★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_COMMANDER_EMBER-BANNER-DAIMYO",
+      "label": "Ember Banner Daimyo",
+      "kind": "cutout",
+      "path": "art/samples/SAM_COMMANDER_EMBER-BANNER-DAIMYO_CUTOUT_V01.png",
+      "status": "present",
+      "note": "6★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_SECOND_WHITE-CRANE-RETAINER",
+      "label": "White Crane Retainer",
+      "kind": "concept",
+      "path": "art/samples/SAM_SECOND_WHITE-CRANE-RETAINER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "5★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_SECOND_WHITE-CRANE-RETAINER",
+      "label": "White Crane Retainer",
+      "kind": "cutout",
+      "path": "art/samples/SAM_SECOND_WHITE-CRANE-RETAINER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "5★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_ELITE_ONI-GATE-CHAMPION",
+      "label": "Oni-Gate Champion",
+      "kind": "concept",
+      "path": "art/samples/SAM_ELITE_ONI-GATE-CHAMPION_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "7★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_ELITE_ONI-GATE-CHAMPION",
+      "label": "Oni-Gate Champion",
+      "kind": "cutout",
+      "path": "art/samples/SAM_ELITE_ONI-GATE-CHAMPION_CUTOUT_V01.png",
+      "status": "present",
+      "note": "7★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_FOOT_EMBERLINE-ASHIGARU",
+      "label": "Emberline Ashigaru",
+      "kind": "concept",
+      "path": "art/samples/SAM_FOOT_EMBERLINE-ASHIGARU_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "2★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_FOOT_EMBERLINE-ASHIGARU",
+      "label": "Emberline Ashigaru",
+      "kind": "cutout",
+      "path": "art/samples/SAM_FOOT_EMBERLINE-ASHIGARU_CUTOUT_V01.png",
+      "status": "present",
+      "note": "2★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_COMMANDER_VEILED-MOON-JONIN",
+      "label": "Veiled Moon Jōnin",
+      "kind": "concept",
+      "path": "art/samples/SHI_COMMANDER_VEILED-MOON-JONIN_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "6★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_COMMANDER_VEILED-MOON-JONIN",
+      "label": "Veiled Moon Jōnin",
+      "kind": "cutout",
+      "path": "art/samples/SHI_COMMANDER_VEILED-MOON-JONIN_CUTOUT_V01.png",
+      "status": "present",
+      "note": "6★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_SECOND_REED-SIGNAL-LIEUTENANT",
+      "label": "Reed-Signal Lieutenant",
+      "kind": "concept",
+      "path": "art/samples/SHI_SECOND_REED-SIGNAL-LIEUTENANT_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "4★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_SECOND_REED-SIGNAL-LIEUTENANT",
+      "label": "Reed-Signal Lieutenant",
+      "kind": "cutout",
+      "path": "art/samples/SHI_SECOND_REED-SIGNAL-LIEUTENANT_CUTOUT_V01.png",
+      "status": "present",
+      "note": "4★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_ELITE_MIRROR-SHADE-ADEPT",
+      "label": "Mirror Shade Adept",
+      "kind": "concept",
+      "path": "art/samples/SHI_ELITE_MIRROR-SHADE-ADEPT_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "7★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_ELITE_MIRROR-SHADE-ADEPT",
+      "label": "Mirror Shade Adept",
+      "kind": "cutout",
+      "path": "art/samples/SHI_ELITE_MIRROR-SHADE-ADEPT_CUTOUT_V01.png",
+      "status": "present",
+      "note": "7★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_FOOT_NIGHT-THREAD-OPERATIVE",
+      "label": "Night-Thread Operative",
+      "kind": "concept",
+      "path": "art/samples/SHI_FOOT_NIGHT-THREAD-OPERATIVE_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "2★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_FOOT_NIGHT-THREAD-OPERATIVE",
+      "label": "Night-Thread Operative",
+      "kind": "cutout",
+      "path": "art/samples/SHI_FOOT_NIGHT-THREAD-OPERATIVE_CUTOUT_V01.png",
+      "status": "present",
+      "note": "2★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL",
+      "label": "Solar Bastion Marshal",
+      "kind": "concept",
+      "path": "art/samples/KNI_COMMANDER_SOLAR-BASTION-MARSHAL_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "6★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL",
+      "label": "Solar Bastion Marshal",
+      "kind": "cutout",
+      "path": "art/samples/KNI_COMMANDER_SOLAR-BASTION-MARSHAL_CUTOUT_V01.png",
+      "status": "present",
+      "note": "6★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_SECOND_OATHBOUND-CASTELLAN",
+      "label": "Oathbound Castellan",
+      "kind": "concept",
+      "path": "art/samples/KNI_SECOND_OATHBOUND-CASTELLAN_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "5★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_SECOND_OATHBOUND-CASTELLAN",
+      "label": "Oathbound Castellan",
+      "kind": "cutout",
+      "path": "art/samples/KNI_SECOND_OATHBOUND-CASTELLAN_CUTOUT_V01.png",
+      "status": "present",
+      "note": "5★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_ELITE_SKY-LANCE-DRAGOON",
+      "label": "Sky-Lance Dragoon",
+      "kind": "concept",
+      "path": "art/samples/KNI_ELITE_SKY-LANCE-DRAGOON_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "7★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_ELITE_SKY-LANCE-DRAGOON",
+      "label": "Sky-Lance Dragoon",
+      "kind": "cutout",
+      "path": "art/samples/KNI_ELITE_SKY-LANCE-DRAGOON_CUTOUT_V01.png",
+      "status": "present",
+      "note": "7★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_FOOT_BASTION-MAN-AT-ARMS",
+      "label": "Bastion Man-at-Arms",
+      "kind": "concept",
+      "path": "art/samples/KNI_FOOT_BASTION-MAN-AT-ARMS_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "2★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_FOOT_BASTION-MAN-AT-ARMS",
+      "label": "Bastion Man-at-Arms",
+      "kind": "cutout",
+      "path": "art/samples/KNI_FOOT_BASTION-MAN-AT-ARMS_CUTOUT_V01.png",
+      "status": "present",
+      "note": "2★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_COMMANDER_RIFTWING-DOMINANT",
+      "label": "Riftwing Dominant",
+      "kind": "concept",
+      "path": "art/samples/DRG_COMMANDER_RIFTWING-DOMINANT_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "8★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_COMMANDER_RIFTWING-DOMINANT",
+      "label": "Riftwing Dominant",
+      "kind": "cutout",
+      "path": "art/samples/DRG_COMMANDER_RIFTWING-DOMINANT_CUTOUT_V01.png",
+      "status": "present",
+      "note": "8★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_SECOND_STORMCLAW-WINGSECOND",
+      "label": "Stormclaw Wingsecond",
+      "kind": "concept",
+      "path": "art/samples/DRG_SECOND_STORMCLAW-WINGSECOND_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "6★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_SECOND_STORMCLAW-WINGSECOND",
+      "label": "Stormclaw Wingsecond",
+      "kind": "cutout",
+      "path": "art/samples/DRG_SECOND_STORMCLAW-WINGSECOND_CUTOUT_V01.png",
+      "status": "present",
+      "note": "6★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_ELITE_OBSIDIAN-MAW",
+      "label": "Obsidian Maw",
+      "kind": "concept",
+      "path": "art/samples/DRG_ELITE_OBSIDIAN-MAW_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "8★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_ELITE_OBSIDIAN-MAW",
+      "label": "Obsidian Maw",
+      "kind": "cutout",
+      "path": "art/samples/DRG_ELITE_OBSIDIAN-MAW_CUTOUT_V01.png",
+      "status": "present",
+      "note": "8★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_FOOT_SLATEWING-DRAKE",
+      "label": "Slatewing Drake",
+      "kind": "concept",
+      "path": "art/samples/DRG_FOOT_SLATEWING-DRAKE_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "3★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_FOOT_SLATEWING-DRAKE",
+      "label": "Slatewing Drake",
+      "kind": "cutout",
+      "path": "art/samples/DRG_FOOT_SLATEWING-DRAKE_CUTOUT_V01.png",
+      "status": "present",
+      "note": "3★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "RIT_LEADER_AFFILIATED-SUMMONER",
+      "label": "Affiliated Summoner",
+      "kind": "concept",
+      "path": "art/samples/RIT_LEADER_AFFILIATED-SUMMONER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "5★ RIT"
+    },
+    {
+      "group": "Units",
+      "id": "RIT_LEADER_AFFILIATED-SUMMONER",
+      "label": "Affiliated Summoner",
+      "kind": "cutout",
+      "path": "art/samples/RIT_LEADER_AFFILIATED-SUMMONER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "5★ RIT"
+    },
+    {
+      "group": "Units",
+      "id": "RIT_FOOT_FOREIGN-RITUALIST",
+      "label": "Foreign Ritualist",
+      "kind": "concept",
+      "path": "art/samples/RIT_FOOT_FOREIGN-RITUALIST_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "3★ RIT"
+    },
+    {
+      "group": "Units",
+      "id": "RIT_FOOT_FOREIGN-RITUALIST",
+      "label": "Foreign Ritualist",
+      "kind": "cutout",
+      "path": "art/samples/RIT_FOOT_FOREIGN-RITUALIST_CUTOUT_V01.png",
+      "status": "present",
+      "note": "3★ RIT"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_SUPPORT_PORTAL-KEEPER",
+      "label": "Bastion Portal Keeper",
+      "kind": "concept",
+      "path": "art/samples/KNI_SUPPORT_PORTAL-KEEPER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "3★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_SUPPORT_PORTAL-KEEPER",
+      "label": "Bastion Portal Keeper",
+      "kind": "cutout",
+      "path": "art/samples/KNI_SUPPORT_PORTAL-KEEPER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "3★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "DIV_BOSS_SOVEREIGN-OF-MEMORY",
+      "label": "Sovereign of Memory",
+      "kind": "concept",
+      "path": "art/samples/DIV_BOSS_SOVEREIGN-OF-MEMORY_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "10★ DIV"
+    },
+    {
+      "group": "Units",
+      "id": "DIV_BOSS_SOVEREIGN-OF-MEMORY",
+      "label": "Sovereign of Memory",
+      "kind": "cutout",
+      "path": "art/samples/DIV_BOSS_SOVEREIGN-OF-MEMORY_CUTOUT_V01.png",
+      "status": "present",
+      "note": "10★ DIV"
+    },
+    {
+      "group": "Units",
+      "id": "DIV_BOSS_SOVEREIGN-OF-TORMENT",
+      "label": "Sovereign of Torment",
+      "kind": "concept",
+      "path": "art/samples/DIV_BOSS_SOVEREIGN-OF-TORMENT_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "10★ DIV"
+    },
+    {
+      "group": "Units",
+      "id": "DIV_BOSS_SOVEREIGN-OF-TORMENT",
+      "label": "Sovereign of Torment",
+      "kind": "cutout",
+      "path": "art/samples/DIV_BOSS_SOVEREIGN-OF-TORMENT_CUTOUT_V01.png",
+      "status": "present",
+      "note": "10★ DIV"
+    },
+    {
+      "group": "Units",
+      "id": "DIV_BOSS_SOVEREIGN-OF-REINCARNATION",
+      "label": "Sovereign of Reincarnation",
+      "kind": "concept",
+      "path": "art/samples/DIV_BOSS_SOVEREIGN-OF-REINCARNATION_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "10★ DIV"
+    },
+    {
+      "group": "Units",
+      "id": "DIV_BOSS_SOVEREIGN-OF-REINCARNATION",
+      "label": "Sovereign of Reincarnation",
+      "kind": "cutout",
+      "path": "art/samples/DIV_BOSS_SOVEREIGN-OF-REINCARNATION_CUTOUT_V01.png",
+      "status": "present",
+      "note": "10★ DIV"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_SIEGE_EMBER-OZUTSU-BATTERY",
+      "label": "Ember Ozutsu Battery",
+      "kind": "concept",
+      "path": "art/samples/SAM_SIEGE_EMBER-OZUTSU-BATTERY_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "5★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_SIEGE_EMBER-OZUTSU-BATTERY",
+      "label": "Ember Ozutsu Battery",
+      "kind": "cutout",
+      "path": "art/samples/SAM_SIEGE_EMBER-OZUTSU-BATTERY_CUTOUT_V01.png",
+      "status": "present",
+      "note": "5★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_CAVALRY_CRIMSON-UMAMAWARI-LANCER",
+      "label": "Crimson Umamawari Lancer",
+      "kind": "concept",
+      "path": "art/samples/SAM_CAVALRY_CRIMSON-UMAMAWARI-LANCER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "5★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_CAVALRY_CRIMSON-UMAMAWARI-LANCER",
+      "label": "Crimson Umamawari Lancer",
+      "kind": "cutout",
+      "path": "art/samples/SAM_CAVALRY_CRIMSON-UMAMAWARI-LANCER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "5★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_SIEGE_REED-SMOKE-MORTAR",
+      "label": "Reed-Smoke Mortar",
+      "kind": "concept",
+      "path": "art/samples/SHI_SIEGE_REED-SMOKE-MORTAR_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "4★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_SIEGE_REED-SMOKE-MORTAR",
+      "label": "Reed-Smoke Mortar",
+      "kind": "cutout",
+      "path": "art/samples/SHI_SIEGE_REED-SMOKE-MORTAR_CUTOUT_V01.png",
+      "status": "present",
+      "note": "4★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_CAVALRY_NIGHT-COURIER-RIDER",
+      "label": "Night Courier Rider",
+      "kind": "concept",
+      "path": "art/samples/SHI_CAVALRY_NIGHT-COURIER-RIDER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "4★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_CAVALRY_NIGHT-COURIER-RIDER",
+      "label": "Night Courier Rider",
+      "kind": "cutout",
+      "path": "art/samples/SHI_CAVALRY_NIGHT-COURIER-RIDER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "4★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_SIEGE_BASTION-BOMBARD",
+      "label": "Bastion Bombard",
+      "kind": "concept",
+      "path": "art/samples/KNI_SIEGE_BASTION-BOMBARD_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "5★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_SIEGE_BASTION-BOMBARD",
+      "label": "Bastion Bombard",
+      "kind": "cutout",
+      "path": "art/samples/KNI_SIEGE_BASTION-BOMBARD_CUTOUT_V01.png",
+      "status": "present",
+      "note": "5★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_CAVALRY_DAWN-LANCER",
+      "label": "Dawn Lancer",
+      "kind": "concept",
+      "path": "art/samples/KNI_CAVALRY_DAWN-LANCER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "5★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_CAVALRY_DAWN-LANCER",
+      "label": "Dawn Lancer",
+      "kind": "cutout",
+      "path": "art/samples/KNI_CAVALRY_DAWN-LANCER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "5★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_SIEGE_CINDERTHROAT-SIEGEWYRM",
+      "label": "Cinderthroat Siegewyrm",
+      "kind": "concept",
+      "path": "art/samples/DRG_SIEGE_CINDERTHROAT-SIEGEWYRM_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "7★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_SIEGE_CINDERTHROAT-SIEGEWYRM",
+      "label": "Cinderthroat Siegewyrm",
+      "kind": "cutout",
+      "path": "art/samples/DRG_SIEGE_CINDERTHROAT-SIEGEWYRM_CUTOUT_V01.png",
+      "status": "present",
+      "note": "7★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_CAVALRY_RIDGEBACK-RUNNER",
+      "label": "Ridgeback Runner",
+      "kind": "concept",
+      "path": "art/samples/DRG_CAVALRY_RIDGEBACK-RUNNER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "4★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_CAVALRY_RIDGEBACK-RUNNER",
+      "label": "Ridgeback Runner",
+      "kind": "cutout",
+      "path": "art/samples/DRG_CAVALRY_RIDGEBACK-RUNNER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "4★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DIV_BOSS_CALAMITY-FORM",
+      "label": "The Calamity Form",
+      "kind": "concept",
+      "path": "art/samples/DIV_BOSS_CALAMITY-FORM_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "10★ DIV"
+    },
+    {
+      "group": "Units",
+      "id": "DIV_BOSS_CALAMITY-FORM",
+      "label": "The Calamity Form",
+      "kind": "cutout",
+      "path": "art/samples/DIV_BOSS_CALAMITY-FORM_CUTOUT_V01.png",
+      "status": "present",
+      "note": "10★ DIV"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_LEVY_ASHFIELD-CONSCRIPT",
+      "label": "Ashfield Conscript",
+      "kind": "concept",
+      "path": "art/samples/SAM_LEVY_ASHFIELD-CONSCRIPT_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "1★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_LEVY_ASHFIELD-CONSCRIPT",
+      "label": "Ashfield Conscript",
+      "kind": "cutout",
+      "path": "art/samples/SAM_LEVY_ASHFIELD-CONSCRIPT_CUTOUT_V01.png",
+      "status": "present",
+      "note": "1★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_LEVY_THREAD-APPRENTICE",
+      "label": "Thread Apprentice",
+      "kind": "concept",
+      "path": "art/samples/SHI_LEVY_THREAD-APPRENTICE_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "1★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_LEVY_THREAD-APPRENTICE",
+      "label": "Thread Apprentice",
+      "kind": "cutout",
+      "path": "art/samples/SHI_LEVY_THREAD-APPRENTICE_CUTOUT_V01.png",
+      "status": "present",
+      "note": "1★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_LEVY_BASTION-SQUIRE",
+      "label": "Bastion Squire",
+      "kind": "concept",
+      "path": "art/samples/KNI_LEVY_BASTION-SQUIRE_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "1★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_LEVY_BASTION-SQUIRE",
+      "label": "Bastion Squire",
+      "kind": "cutout",
+      "path": "art/samples/KNI_LEVY_BASTION-SQUIRE_CUTOUT_V01.png",
+      "status": "present",
+      "note": "1★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_LEVY_SCREE-HATCHLING",
+      "label": "Scree Hatchling",
+      "kind": "concept",
+      "path": "art/samples/DRG_LEVY_SCREE-HATCHLING_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "1★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_LEVY_SCREE-HATCHLING",
+      "label": "Scree Hatchling",
+      "kind": "cutout",
+      "path": "art/samples/DRG_LEVY_SCREE-HATCHLING_CUTOUT_V01.png",
+      "status": "present",
+      "note": "1★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_LORD_ASHFALL-DAIMYO",
+      "label": "Ashfall Daimyo",
+      "kind": "concept",
+      "path": "art/samples/SAM_LORD_ASHFALL-DAIMYO_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "9★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_LORD_ASHFALL-DAIMYO",
+      "label": "Ashfall Daimyo",
+      "kind": "cutout",
+      "path": "art/samples/SAM_LORD_ASHFALL-DAIMYO_CUTOUT_V01.png",
+      "status": "present",
+      "note": "9★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_ELDER_HOLLOW-CROWN-ELDER",
+      "label": "Hollow Crown Elder",
+      "kind": "concept",
+      "path": "art/samples/DRG_ELDER_HOLLOW-CROWN-ELDER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "9★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_ELDER_HOLLOW-CROWN-ELDER",
+      "label": "Hollow Crown Elder",
+      "kind": "cutout",
+      "path": "art/samples/DRG_ELDER_HOLLOW-CROWN-ELDER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "9★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_KAGE_VOID-CROWN-KAGE",
+      "label": "Void Crown Kage",
+      "kind": "concept",
+      "path": "art/samples/SHI_KAGE_VOID-CROWN-KAGE_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "10★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_KAGE_VOID-CROWN-KAGE",
+      "label": "Void Crown Kage",
+      "kind": "cutout",
+      "path": "art/samples/SHI_KAGE_VOID-CROWN-KAGE_CUTOUT_V01.png",
+      "status": "present",
+      "note": "10★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_SHOGUN_IRON-TIDE-SHOGUN",
+      "label": "Iron Tide Shogun",
+      "kind": "concept",
+      "path": "art/samples/SAM_SHOGUN_IRON-TIDE-SHOGUN_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "10★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_SHOGUN_IRON-TIDE-SHOGUN",
+      "label": "Iron Tide Shogun",
+      "kind": "cutout",
+      "path": "art/samples/SAM_SHOGUN_IRON-TIDE-SHOGUN_CUTOUT_V01.png",
+      "status": "present",
+      "note": "10★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_KING_OATHBREAKER-KING",
+      "label": "Oathbreaker King",
+      "kind": "concept",
+      "path": "art/samples/KNI_KING_OATHBREAKER-KING_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "10★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_KING_OATHBREAKER-KING",
+      "label": "Oathbreaker King",
+      "kind": "cutout",
+      "path": "art/samples/KNI_KING_OATHBREAKER-KING_CUTOUT_V01.png",
+      "status": "present",
+      "note": "10★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "ARC_FOOT_COBALT-LINE-MAGE",
+      "label": "Cobalt Line Mage",
+      "kind": "concept",
+      "path": "art/samples/ARC_FOOT_COBALT-LINE-MAGE_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "3★ ARC"
+    },
+    {
+      "group": "Units",
+      "id": "ARC_FOOT_COBALT-LINE-MAGE",
+      "label": "Cobalt Line Mage",
+      "kind": "cutout",
+      "path": "art/samples/ARC_FOOT_COBALT-LINE-MAGE_CUTOUT_V01.png",
+      "status": "present",
+      "note": "3★ ARC"
+    },
+    {
+      "group": "Units",
+      "id": "ARC_SECOND_WARD-CAPTAIN",
+      "label": "Ward Captain",
+      "kind": "concept",
+      "path": "art/samples/ARC_SECOND_WARD-CAPTAIN_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "5★ ARC"
+    },
+    {
+      "group": "Units",
+      "id": "ARC_SECOND_WARD-CAPTAIN",
+      "label": "Ward Captain",
+      "kind": "cutout",
+      "path": "art/samples/ARC_SECOND_WARD-CAPTAIN_CUTOUT_V01.png",
+      "status": "present",
+      "note": "5★ ARC"
+    },
+    {
+      "group": "Units",
+      "id": "ARC_ELITE_STORMGLASS-WIZARD",
+      "label": "Stormglass Wizard",
+      "kind": "concept",
+      "path": "art/samples/ARC_ELITE_STORMGLASS-WIZARD_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "7★ ARC"
+    },
+    {
+      "group": "Units",
+      "id": "ARC_ELITE_STORMGLASS-WIZARD",
+      "label": "Stormglass Wizard",
+      "kind": "cutout",
+      "path": "art/samples/ARC_ELITE_STORMGLASS-WIZARD_CUTOUT_V01.png",
+      "status": "present",
+      "note": "7★ ARC"
+    },
+    {
+      "group": "Units",
+      "id": "ARC_COMMANDER_AZURE-SEAL-MAGISTER",
+      "label": "Azure Seal Magister",
+      "kind": "concept",
+      "path": "art/samples/ARC_COMMANDER_AZURE-SEAL-MAGISTER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "8★ ARC"
+    },
+    {
+      "group": "Units",
+      "id": "ARC_COMMANDER_AZURE-SEAL-MAGISTER",
+      "label": "Azure Seal Magister",
+      "kind": "cutout",
+      "path": "art/samples/ARC_COMMANDER_AZURE-SEAL-MAGISTER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "8★ ARC"
+    },
+    {
+      "group": "Units",
+      "id": "WIT_LEVY_VESSEL-KEEPER",
+      "label": "Vessel Keeper",
+      "kind": "concept",
+      "path": "art/samples/WIT_LEVY_VESSEL-KEEPER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "2★ WIT"
+    },
+    {
+      "group": "Units",
+      "id": "WIT_LEVY_VESSEL-KEEPER",
+      "label": "Vessel Keeper",
+      "kind": "cutout",
+      "path": "art/samples/WIT_LEVY_VESSEL-KEEPER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "2★ WIT"
+    },
+    {
+      "group": "Units",
+      "id": "WIT_FOOT_FEN-HEXER",
+      "label": "Fen Hexer",
+      "kind": "concept",
+      "path": "art/samples/WIT_FOOT_FEN-HEXER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "3★ WIT"
+    },
+    {
+      "group": "Units",
+      "id": "WIT_FOOT_FEN-HEXER",
+      "label": "Fen Hexer",
+      "kind": "cutout",
+      "path": "art/samples/WIT_FOOT_FEN-HEXER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "3★ WIT"
+    },
+    {
+      "group": "Units",
+      "id": "WIT_ELITE_PALE-BRIAR-SEER",
+      "label": "Pale-Briar Seer",
+      "kind": "concept",
+      "path": "art/samples/WIT_ELITE_PALE-BRIAR-SEER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "7★ WIT"
+    },
+    {
+      "group": "Units",
+      "id": "WIT_ELITE_PALE-BRIAR-SEER",
+      "label": "Pale-Briar Seer",
+      "kind": "cutout",
+      "path": "art/samples/WIT_ELITE_PALE-BRIAR-SEER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "7★ WIT"
+    },
+    {
+      "group": "Units",
+      "id": "WIT_COMMANDER_THORN-CIRCLE-ELDER",
+      "label": "Thorn-Circle Elder",
+      "kind": "concept",
+      "path": "art/samples/WIT_COMMANDER_THORN-CIRCLE-ELDER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "8★ WIT"
+    },
+    {
+      "group": "Units",
+      "id": "WIT_COMMANDER_THORN-CIRCLE-ELDER",
+      "label": "Thorn-Circle Elder",
+      "kind": "cutout",
+      "path": "art/samples/WIT_COMMANDER_THORN-CIRCLE-ELDER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "8★ WIT"
+    },
+    {
+      "group": "Units",
+      "id": "ROG_LEVY_ALLEY-RUNNER",
+      "label": "Alley Runner",
+      "kind": "concept",
+      "path": "art/samples/ROG_LEVY_ALLEY-RUNNER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "1★ ROG"
+    },
+    {
+      "group": "Units",
+      "id": "ROG_LEVY_ALLEY-RUNNER",
+      "label": "Alley Runner",
+      "kind": "cutout",
+      "path": "art/samples/ROG_LEVY_ALLEY-RUNNER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "1★ ROG"
+    },
+    {
+      "group": "Units",
+      "id": "ROG_SECOND_FENCE-CAPTAIN",
+      "label": "Fence-Captain",
+      "kind": "concept",
+      "path": "art/samples/ROG_SECOND_FENCE-CAPTAIN_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "4★ ROG"
+    },
+    {
+      "group": "Units",
+      "id": "ROG_SECOND_FENCE-CAPTAIN",
+      "label": "Fence-Captain",
+      "kind": "cutout",
+      "path": "art/samples/ROG_SECOND_FENCE-CAPTAIN_CUTOUT_V01.png",
+      "status": "present",
+      "note": "4★ ROG"
+    },
+    {
+      "group": "Units",
+      "id": "ROG_ELITE_GARROTE-ADEPT",
+      "label": "Garrote Adept",
+      "kind": "concept",
+      "path": "art/samples/ROG_ELITE_GARROTE-ADEPT_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "6★ ROG"
+    },
+    {
+      "group": "Units",
+      "id": "ROG_ELITE_GARROTE-ADEPT",
+      "label": "Garrote Adept",
+      "kind": "cutout",
+      "path": "art/samples/ROG_ELITE_GARROTE-ADEPT_CUTOUT_V01.png",
+      "status": "present",
+      "note": "6★ ROG"
+    },
+    {
+      "group": "Units",
+      "id": "ROG_COMMANDER_COURT-WHISPERER",
+      "label": "Court Whisperer",
+      "kind": "concept",
+      "path": "art/samples/ROG_COMMANDER_COURT-WHISPERER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "7★ ROG"
+    },
+    {
+      "group": "Units",
+      "id": "ROG_COMMANDER_COURT-WHISPERER",
+      "label": "Court Whisperer",
+      "kind": "cutout",
+      "path": "art/samples/ROG_COMMANDER_COURT-WHISPERER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "7★ ROG"
+    },
+    {
+      "group": "Units",
+      "id": "STP_CAVALRY_WINDMARCH-OUTRIDER",
+      "label": "Windmarch Outrider",
+      "kind": "concept",
+      "path": "art/samples/STP_CAVALRY_WINDMARCH-OUTRIDER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "3★ STP"
+    },
+    {
+      "group": "Units",
+      "id": "STP_CAVALRY_WINDMARCH-OUTRIDER",
+      "label": "Windmarch Outrider",
+      "kind": "cutout",
+      "path": "art/samples/STP_CAVALRY_WINDMARCH-OUTRIDER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "3★ STP"
+    },
+    {
+      "group": "Units",
+      "id": "STP_SECOND_HORN-SERJEANT",
+      "label": "Horn Serjeant",
+      "kind": "concept",
+      "path": "art/samples/STP_SECOND_HORN-SERJEANT_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "5★ STP"
+    },
+    {
+      "group": "Units",
+      "id": "STP_SECOND_HORN-SERJEANT",
+      "label": "Horn Serjeant",
+      "kind": "cutout",
+      "path": "art/samples/STP_SECOND_HORN-SERJEANT_CUTOUT_V01.png",
+      "status": "present",
+      "note": "5★ STP"
+    },
+    {
+      "group": "Units",
+      "id": "STP_ELITE_HOLLOW-BOW-MASTER",
+      "label": "Hollow-Bow Master",
+      "kind": "concept",
+      "path": "art/samples/STP_ELITE_HOLLOW-BOW-MASTER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "7★ STP"
+    },
+    {
+      "group": "Units",
+      "id": "STP_ELITE_HOLLOW-BOW-MASTER",
+      "label": "Hollow-Bow Master",
+      "kind": "cutout",
+      "path": "art/samples/STP_ELITE_HOLLOW-BOW-MASTER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "7★ STP"
+    },
+    {
+      "group": "Units",
+      "id": "STP_COMMANDER_WINDMARCH-SOVEREIGN",
+      "label": "Windmarch Sovereign",
+      "kind": "concept",
+      "path": "art/samples/STP_COMMANDER_WINDMARCH-SOVEREIGN_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "8★ STP"
+    },
+    {
+      "group": "Units",
+      "id": "STP_COMMANDER_WINDMARCH-SOVEREIGN",
+      "label": "Windmarch Sovereign",
+      "kind": "cutout",
+      "path": "art/samples/STP_COMMANDER_WINDMARCH-SOVEREIGN_CUTOUT_V01.png",
+      "status": "present",
+      "note": "8★ STP"
+    },
+    {
+      "group": "Units",
+      "id": "DUN_SECOND_GLASSROAD-GUIDE",
+      "label": "Glassroad Guide",
+      "kind": "concept",
+      "path": "art/samples/DUN_SECOND_GLASSROAD-GUIDE_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "4★ DUN"
+    },
+    {
+      "group": "Units",
+      "id": "DUN_SECOND_GLASSROAD-GUIDE",
+      "label": "Glassroad Guide",
+      "kind": "cutout",
+      "path": "art/samples/DUN_SECOND_GLASSROAD-GUIDE_CUTOUT_V01.png",
+      "status": "present",
+      "note": "4★ DUN"
+    },
+    {
+      "group": "Units",
+      "id": "DUN_FOOT_DUNEWAKE-SKIRMISHER",
+      "label": "Dunewake Skirmisher",
+      "kind": "concept",
+      "path": "art/samples/DUN_FOOT_DUNEWAKE-SKIRMISHER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "3★ DUN"
+    },
+    {
+      "group": "Units",
+      "id": "DUN_FOOT_DUNEWAKE-SKIRMISHER",
+      "label": "Dunewake Skirmisher",
+      "kind": "cutout",
+      "path": "art/samples/DUN_FOOT_DUNEWAKE-SKIRMISHER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "3★ DUN"
+    },
+    {
+      "group": "Units",
+      "id": "DUN_ELITE_SANDGLASS-DUELLIST",
+      "label": "Sandglass Duellist",
+      "kind": "concept",
+      "path": "art/samples/DUN_ELITE_SANDGLASS-DUELLIST_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "7★ DUN"
+    },
+    {
+      "group": "Units",
+      "id": "DUN_ELITE_SANDGLASS-DUELLIST",
+      "label": "Sandglass Duellist",
+      "kind": "cutout",
+      "path": "art/samples/DUN_ELITE_SANDGLASS-DUELLIST_CUTOUT_V01.png",
+      "status": "present",
+      "note": "7★ DUN"
+    },
+    {
+      "group": "Units",
+      "id": "DUN_COMMANDER_DUNEWAKE-ARBITER",
+      "label": "Dunewake Arbiter",
+      "kind": "concept",
+      "path": "art/samples/DUN_COMMANDER_DUNEWAKE-ARBITER_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": "8★ DUN"
+    },
+    {
+      "group": "Units",
+      "id": "DUN_COMMANDER_DUNEWAKE-ARBITER",
+      "label": "Dunewake Arbiter",
+      "kind": "cutout",
+      "path": "art/samples/DUN_COMMANDER_DUNEWAKE-ARBITER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "8★ DUN"
+    },
+    {
+      "group": "Buildings",
+      "id": "KEEP_T1",
+      "label": "Keep tier 1",
+      "kind": "building",
+      "path": "art/buildings/BLD_KEEP_T1_V01.jpg",
+      "status": "present",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "KEEP_T2",
+      "label": "Keep tier 2",
+      "kind": "building",
+      "path": "art/buildings/BLD_KEEP_T2_V01.jpg",
+      "status": "present",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "KEEP_T3",
+      "label": "Keep tier 3",
+      "kind": "building",
+      "path": "art/buildings/BLD_KEEP_T3_V01.jpg",
+      "status": "present",
+      "note": "levels 8-10"
+    },
+    {
+      "group": "Buildings",
+      "id": "GRANARY_T1",
+      "label": "Granary tier 1",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "GRANARY_T2",
+      "label": "Granary tier 2",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "GRANARY_T3",
+      "label": "Granary tier 3",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 8-10"
+    },
+    {
+      "group": "Buildings",
+      "id": "MINE_T1",
+      "label": "Iron Mine tier 1",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "MINE_T2",
+      "label": "Iron Mine tier 2",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "MINE_T3",
+      "label": "Iron Mine tier 3",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 8-10"
+    },
+    {
+      "group": "Buildings",
+      "id": "SAWPIT_T1",
+      "label": "Sawpit tier 1",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "SAWPIT_T2",
+      "label": "Sawpit tier 2",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "SAWPIT_T3",
+      "label": "Sawpit tier 3",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 8-10"
+    },
+    {
+      "group": "Buildings",
+      "id": "BARRACKS_T1",
+      "label": "Barracks tier 1",
+      "kind": "building",
+      "path": "art/buildings/BLD_BARRACKS_T1_V01.jpg",
+      "status": "present",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "BARRACKS_T2",
+      "label": "Barracks tier 2",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "BARRACKS_T3",
+      "label": "Barracks tier 3",
+      "kind": "building",
+      "path": "art/buildings/BLD_BARRACKS_T3_V01.jpg",
+      "status": "present",
+      "note": "levels 8-10"
+    },
+    {
+      "group": "Buildings",
+      "id": "RESEARCH_HALL_T1",
+      "label": "Research Hall tier 1",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "RESEARCH_HALL_T2",
+      "label": "Research Hall tier 2",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "RESEARCH_HALL_T3",
+      "label": "Research Hall tier 3",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 8-10"
+    },
+    {
+      "group": "Buildings",
+      "id": "RECRUITMENT_HALL_T1",
+      "label": "Recruitment Hall tier 1",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "RECRUITMENT_HALL_T2",
+      "label": "Recruitment Hall tier 2",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "RECRUITMENT_HALL_T3",
+      "label": "Recruitment Hall tier 3",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 8-10"
+    },
+    {
+      "group": "Buildings",
+      "id": "FORGE_T1",
+      "label": "Forge tier 1",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "FORGE_T2",
+      "label": "Forge tier 2",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "FORGE_T3",
+      "label": "Forge tier 3",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 8-10"
+    },
+    {
+      "group": "Buildings",
+      "id": "STABLE_T1",
+      "label": "Stable tier 1",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "STABLE_T2",
+      "label": "Stable tier 2",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "STABLE_T3",
+      "label": "Stable tier 3",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 8-10"
+    },
+    {
+      "group": "Buildings",
+      "id": "WALL_T1",
+      "label": "Curtain Wall tier 1",
+      "kind": "building",
+      "path": "art/buildings/BLD_WALL_T1_V01.jpg",
+      "status": "present",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "WALL_T2",
+      "label": "Curtain Wall tier 2",
+      "kind": "building",
+      "path": "art/buildings/BLD_WALL_T2_V01.jpg",
+      "status": "present",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "WALL_T3",
+      "label": "Curtain Wall tier 3",
+      "kind": "building",
+      "path": "art/buildings/BLD_WALL_T3_V01.jpg",
+      "status": "present",
+      "note": "levels 8-10"
+    },
+    {
+      "group": "Buildings",
+      "id": "SHRINE_T1",
+      "label": "Ritual Shrine tier 1",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "SHRINE_T2",
+      "label": "Ritual Shrine tier 2",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "SHRINE_T3",
+      "label": "Ritual Shrine tier 3",
+      "kind": "building",
+      "path": null,
+      "status": "missing",
+      "note": "levels 8-10"
+    },
+    {
+      "group": "Side cards",
+      "id": "SIDE_RIT_VOID-CORONATION",
+      "label": "The Void Coronation",
+      "kind": "card",
+      "path": "art/samples/SHI_KAGE_VOID-CROWN-KAGE_CUTOUT_V01.png",
+      "status": "present",
+      "note": "ritual result"
+    },
+    {
+      "group": "Side cards",
+      "id": "SIDE_RIT_IRON-TIDE",
+      "label": "The Iron Tide",
+      "kind": "card",
+      "path": "art/samples/SAM_SHOGUN_IRON-TIDE-SHOGUN_CUTOUT_V01.png",
+      "status": "present",
+      "note": "ritual result"
+    },
+    {
+      "group": "Side cards",
+      "id": "SIDE_RIT_BROKEN-OATH",
+      "label": "The Broken Oath",
+      "kind": "card",
+      "path": "art/samples/KNI_KING_OATHBREAKER-KING_CUTOUT_V01.png",
+      "status": "present",
+      "note": "ritual result"
+    },
+    {
+      "group": "Side cards",
+      "id": "SIDE_RIT_ELDER-ASCENT",
+      "label": "The Elder Ascent",
+      "kind": "card",
+      "path": "art/samples/DRG_ELDER_HOLLOW-CROWN-ELDER_CUTOUT_V01.png",
+      "status": "present",
+      "note": "ritual result"
+    },
+    {
+      "group": "Side cards",
+      "id": "SIDE_RIT_SOVEREIGN-MEMORY",
+      "label": "Invocation of Memory",
+      "kind": "card",
+      "path": "art/samples/DIV_BOSS_SOVEREIGN-OF-MEMORY_CUTOUT_V01.png",
+      "status": "present",
+      "note": "ritual result"
+    },
+    {
+      "group": "Side cards",
+      "id": "SIDE_RIT_SOVEREIGN-TORMENT",
+      "label": "Invocation of Torment",
+      "kind": "card",
+      "path": "art/samples/DIV_BOSS_SOVEREIGN-OF-TORMENT_CUTOUT_V01.png",
+      "status": "present",
+      "note": "ritual result"
+    },
+    {
+      "group": "Side cards",
+      "id": "SIDE_RIT_SOVEREIGN-REINCARNATION",
+      "label": "Invocation of Reincarnation",
+      "kind": "card",
+      "path": "art/samples/DIV_BOSS_SOVEREIGN-OF-REINCARNATION_CUTOUT_V01.png",
+      "status": "present",
+      "note": "ritual result"
+    },
+    {
+      "group": "Side cards",
+      "id": "SIDE_FUS_PAIRED-LINE",
+      "label": "Paired Line",
+      "kind": "card",
+      "path": null,
+      "status": "derived",
+      "note": "shows its materials' art"
+    },
+    {
+      "group": "Side cards",
+      "id": "SIDE_FUS_GATE-WARDENS",
+      "label": "Gate Wardens",
+      "kind": "card",
+      "path": null,
+      "status": "derived",
+      "note": "shows its materials' art"
+    },
+    {
+      "group": "Side cards",
+      "id": "SIDE_FUS_TWINWING",
+      "label": "Twinwing Drake",
+      "kind": "card",
+      "path": null,
+      "status": "derived",
+      "note": "shows its materials' art"
+    },
+    {
+      "group": "Side cards",
+      "id": "SIDE_FUS_CALAMITY",
+      "label": "The Calamity Form",
+      "kind": "card",
+      "path": null,
+      "status": "derived",
+      "note": "shows its materials' art"
+    },
+    {
+      "group": "World and interface",
+      "id": "MAP_WORLD",
+      "label": "Campaign map",
+      "kind": "art",
+      "path": "art/concepts/MAP_WORLD-CAMPAIGN_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "World and interface",
+      "id": "MAP_SAMURAI",
+      "label": "Samurai province map",
+      "kind": "art",
+      "path": "art/concepts/MAP_SAMURAI-PROVINCE_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "World and interface",
+      "id": "BASE_TOPDOWN",
+      "label": "Stronghold from above",
+      "kind": "art",
+      "path": "art/concepts/BASE_STRONGHOLD-TOPDOWN_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "World and interface",
+      "id": "BASE_ANGLED",
+      "label": "Stronghold at an angle",
+      "kind": "art",
+      "path": "art/concepts/BASE_STRONGHOLD-ANGLED_CONCEPT_V01.jpg",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "World and interface",
+      "id": "CARD_PAPER_PLAIN",
+      "label": "Card stock: plain linen paper (1-6 stars)",
+      "kind": "art",
+      "path": "art/ui/CARD-PAPER-PLAIN_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "World and interface",
+      "id": "CARD_PAPER_INKED",
+      "label": "Card stock: inked and taped (7-9 stars)",
+      "kind": "art",
+      "path": "art/ui/CARD-PAPER-INKED_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "World and interface",
+      "id": "CARD_PAPER_SEALED",
+      "label": "Card stock: sealed mulberry paper (10 stars and rites)",
+      "kind": "art",
+      "path": "art/ui/CARD-PAPER-SEALED_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "World and interface",
+      "id": "CARD_BACK",
+      "label": "Card back",
+      "kind": "art",
+      "path": "art/ui/CARD-BACK-PAPER_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "World and interface",
+      "id": "STAR_FILLED",
+      "label": "Star: earned",
+      "kind": "art",
+      "path": "art/ui/STAR_FILLED_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "World and interface",
+      "id": "STAR_EMPTY",
+      "label": "Star: unearned",
+      "kind": "art",
+      "path": "art/ui/STAR_EMPTY_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "RES-KOKU",
+      "label": "res koku",
+      "kind": "icon",
+      "path": "art/ui/ICON_RES-KOKU_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "RES-IRON",
+      "label": "res iron",
+      "kind": "icon",
+      "path": "art/ui/ICON_RES-IRON_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "RES-TIMBER",
+      "label": "res timber",
+      "kind": "icon",
+      "path": "art/ui/ICON_RES-TIMBER_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "RES-SILVER",
+      "label": "res silver",
+      "kind": "icon",
+      "path": "art/ui/ICON_RES-SILVER_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "BLD-FORGE",
+      "label": "bld forge",
+      "kind": "icon",
+      "path": "art/ui/ICON_BLD-FORGE_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "BLD-RESEARCH",
+      "label": "bld research",
+      "kind": "icon",
+      "path": "art/ui/ICON_BLD-RESEARCH_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "BLD-RECRUIT",
+      "label": "bld recruit",
+      "kind": "icon",
+      "path": "art/ui/ICON_BLD-RECRUIT_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "BLD-BARRACKS",
+      "label": "bld barracks",
+      "kind": "icon",
+      "path": "art/ui/ICON_BLD-BARRACKS_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "BLD-KEEP",
+      "label": "bld keep",
+      "kind": "icon",
+      "path": "art/ui/ICON_BLD-KEEP_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "UI-BANNER",
+      "label": "ui banner",
+      "kind": "icon",
+      "path": "art/ui/ICON_UI-BANNER_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "UI-DRAW",
+      "label": "ui draw",
+      "kind": "icon",
+      "path": "art/ui/ICON_UI-DRAW_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "BLD-BUILD",
+      "label": "bld build",
+      "kind": "icon",
+      "path": "art/ui/ICON_BLD-BUILD_V01.png",
+      "status": "present",
+      "note": ""
+    }
+  ]
+}

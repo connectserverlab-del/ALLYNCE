@@ -1,0 +1,152 @@
+[
+  {
+    "id": "SIDE_RIT_VOID-CORONATION",
+    "name": "The Void Coronation",
+    "kind": "ritual",
+    "stars": 10,
+    "result": "SHI_KAGE_VOID-CROWN-KAGE",
+    "starCost": 10,
+    "theme": "Shinobi",
+    "needsRitualist": false,
+    "needsRole": "Commander",
+    "copyLimit": 1,
+    "text": "Sacrifice Shinobi whose stars total 10 or more, including a commander. The shadow that outlived every name takes the field."
+  },
+  {
+    "id": "SIDE_RIT_IRON-TIDE",
+    "name": "The Iron Tide",
+    "kind": "ritual",
+    "stars": 10,
+    "result": "SAM_SHOGUN_IRON-TIDE-SHOGUN",
+    "starCost": 10,
+    "theme": "Samurai",
+    "needsRitualist": false,
+    "needsRole": "Commander",
+    "copyLimit": 1,
+    "text": "Sacrifice Samurai whose stars total 10 or more, including a commander. The banner passes to the one who never yields it."
+  },
+  {
+    "id": "SIDE_RIT_BROKEN-OATH",
+    "name": "The Broken Oath",
+    "kind": "ritual",
+    "stars": 10,
+    "result": "KNI_KING_OATHBREAKER-KING",
+    "starCost": 10,
+    "theme": "Knight",
+    "needsRitualist": false,
+    "needsRole": "Commander",
+    "copyLimit": 1,
+    "text": "Sacrifice Knights whose stars total 10 or more, including a commander. A crown taken by breaking the vow that made it."
+  },
+  {
+    "id": "SIDE_RIT_ELDER-ASCENT",
+    "name": "The Elder Ascent",
+    "kind": "ritual",
+    "stars": 9,
+    "result": "DRG_ELDER_HOLLOW-CROWN-ELDER",
+    "starCost": 9,
+    "theme": "Dragon",
+    "needsRitualist": false,
+    "copyLimit": 1,
+    "text": "Sacrifice dragons whose stars total 9 or more. The brood gives up its strongest so the oldest may wake."
+  },
+  {
+    "id": "SIDE_RIT_SOVEREIGN-MEMORY",
+    "name": "Invocation of Memory",
+    "kind": "ritual",
+    "stars": 10,
+    "result": "DIV_BOSS_SOVEREIGN-OF-MEMORY",
+    "starCost": 12,
+    "needsRitualist": true,
+    "copyLimit": 1,
+    "text": "With a ritualist channelling, sacrifice units whose stars total 12 or more. What was hidden is shown."
+  },
+  {
+    "id": "SIDE_RIT_SOVEREIGN-TORMENT",
+    "name": "Invocation of Torment",
+    "kind": "ritual",
+    "stars": 10,
+    "result": "DIV_BOSS_SOVEREIGN-OF-TORMENT",
+    "starCost": 12,
+    "needsRitualist": true,
+    "copyLimit": 1,
+    "text": "With a ritualist channelling, sacrifice units whose stars total 12 or more. Fear becomes weight on the field."
+  },
+  {
+    "id": "SIDE_RIT_SOVEREIGN-REINCARNATION",
+    "name": "Invocation of Reincarnation",
+    "kind": "ritual",
+    "stars": 10,
+    "result": "DIV_BOSS_SOVEREIGN-OF-REINCARNATION",
+    "starCost": 12,
+    "needsRitualist": true,
+    "copyLimit": 1,
+    "text": "With a ritualist channelling, sacrifice units whose stars total 12 or more. The fallen return wearing other shapes."
+  },
+  {
+    "id": "SIDE_FUS_PAIRED-LINE",
+    "name": "Paired Line",
+    "kind": "fusion",
+    "stars": 3,
+    "recipe": "FUS_PAIRED_LINE",
+    "copyLimit": 8,
+    "text": "Two foot soldiers of one theme lock into a single fighting pair. One hex, one slot, greater weight."
+  },
+  {
+    "id": "SIDE_FUS_GATE-WARDENS",
+    "name": "Gate Wardens",
+    "kind": "fusion",
+    "stars": 8,
+    "recipe": "FUS_GATE_WARDENS",
+    "copyLimit": 3,
+    "text": "The Oni-Gate Champion takes a spear-bearer into the duel line."
+  },
+  {
+    "id": "SIDE_FUS_TWINWING",
+    "name": "Twinwing Drake",
+    "kind": "fusion",
+    "stars": 6,
+    "recipe": "FUS_TWINWING",
+    "copyLimit": 3,
+    "text": "Two drakes lock talons and fly as one larger body."
+  },
+  {
+    "id": "SIDE_FUS_CALAMITY",
+    "name": "The Calamity Form",
+    "kind": "fusion",
+    "stars": 10,
+    "recipe": "FUS_CALAMITY",
+    "copyLimit": 1,
+    "text": "Only when Memory, Torment and Reincarnation stand together does the convergence become possible. It does not last."
+  },
+  {
+    "id": "SIDE_STRAT_FORCED-MARCH",
+    "name": "Forced March",
+    "kind": "stratagem",
+    "stars": 2,
+    "target": "platoon",
+    "effect": { "kind": "ForcedMarch", "mov": 3 },
+    "copyLimit": 3,
+    "text": "Target one of your platoons. It drives at forced pace for the rest of the round: +3 MOV to every member."
+  },
+  {
+    "id": "SIDE_STRAT_SMOKESCREEN",
+    "name": "Smokescreen",
+    "kind": "stratagem",
+    "stars": 3,
+    "target": "hex",
+    "effect": { "kind": "Smokescreen", "terrain": "Smoke", "duration": 2 },
+    "copyLimit": 2,
+    "text": "Target a hex. Smoke rolls across it and every hex around it for two rounds, breaking sightlines and giving anyone inside cover."
+  },
+  {
+    "id": "SIDE_STRAT_FALSE-RETREAT",
+    "name": "False Retreat",
+    "kind": "stratagem",
+    "stars": 4,
+    "target": "platoon",
+    "effect": { "kind": "FalseRetreat", "mov": 3, "atk": 100, "def": -50 },
+    "copyLimit": 2,
+    "text": "Target one of your platoons. It breaks and runs, then turns on whoever gave chase: +3 MOV and +100 ATK for the rest of the round, at -50 DEF while the ruse holds."
+  }
+]

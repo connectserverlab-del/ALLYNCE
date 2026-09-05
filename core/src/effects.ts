@@ -1,9 +1,12 @@
 import type { Battle } from "./state.js";
-import type { UnitState, AbilityDef, PlatoonState, Modifier } from "./types.js";
+import type { UnitState, AbilityDef, PlatoonState, Modifier, Terrain } from "./types.js";
+import type { Hex } from "./hex.js";
 import { hexNeighbors, hexKey } from "./hex.js";
 import { platoonMorale, platoonMembers, tempPreventRouted, changeMorale } from "./morale.js";
 import { addTempMod } from "./modifiers.js";
 import { computeStat } from "./modifiers.js";
+import { applyDamage } from "./combat.js";
+import { commandRadiusOf } from "./ranks.js";
 
 export interface EffectContext { platoon?: PlatoonState; target?: UnitState; targetHex?: { q: number; r: number } }
 
@@ -25,14 +28,14 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
       return true;
     case "PlatoonDef":
       if (!p) return false;
-      for (const uid of platoonMembers(p)) { const m = b.units.get(uid); if (m && !m.defeated) addTempMod(m, { source: ability.name, stat: "DEF", value: e.def }); }
+      applyPlatoonTempMod(b, p, "DEF", e.def, ability.name);
       return true;
     case "PlatoonMove":
       if (!p) return false;
-      for (const uid of platoonMembers(p)) { const m = b.units.get(uid); if (m && !m.defeated) addTempMod(m, { source: ability.name, stat: "MOV", value: e.mov }); }
+      applyPlatoonTempMod(b, p, "MOV", e.mov, ability.name);
       return true;
     case "PreventRouted": {
-      const radius = b.def(user).commandRadius ?? 0;
+      const radius = commandRadiusOf(b, user);
       for (const a of b.activeUnits(user.side)) if (b.distance(user, a) <= radius) { tempPreventRouted.add(a.uid); b.removeStatus(a, "Routed"); }
       b.log("Ability", { ability: ability.id, uid: user.uid });
       return true;
@@ -46,7 +49,7 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
       return n > 0;
     }
     case "ChargeBonus": {
-      if (user.movedThisActivation < e.minHexesMoved || user.usedChargeLastRound) return false;
+      if (user.chargeMoved < e.minHexesMoved || user.usedChargeLastRound) return false;
       addTempMod(user, { source: ability.name, stat: "ATK", value: e.atk });
       user.usedChargeLastRound = true;
       if (e.thenStatus) b.addStatus(user, e.thenStatus, 1, ability.name);
@@ -84,8 +87,27 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
       duels.set(user.uid, ctx.target.uid); duels.set(ctx.target.uid, user.uid);
       b.log("Ability", { ability: ability.id, uid: user.uid, target: ctx.target.uid });
       return true;
+    case "SiegeSetup":
+      user.setUp = true; b.log("SiegeSetup", { uid: user.uid }); return true;
+    case "SpawnTerrainAt": {
+      const center = ctx.targetHex ?? ctx.target?.pos; if (!center) return false;
+      const count = spawnTerrainArea(b, center, e.terrain, e.duration);
+      b.log("TerrainSpawned", { terrain: e.terrain, count, uid: user.uid, center });
+      return true;
+    }
+    case "AreaShock": {
+      const center = ctx.targetHex ?? ctx.target?.pos; if (!center) return false;
+      let hit = 0;
+      for (const h of [center, ...hexNeighbors(center)]) { const v = b.unitAt(h); if (v && v.side !== user.side) { applyDamage(b, v, e.damage, ability.name); if (!v.defeated && e.status) b.addStatus(v, e.status, 1, ability.name); hit++; } }
+      b.log("Ability", { ability: ability.id, uid: user.uid, hit });
+      return hit > 0;
+    }
+    case "Surrender": {
+      const side = b.sides.get(user.side)!; side.surrendered = true; b.log("Surrender", { side: user.side, by: user.uid }); return true;
+    }
     case "RitualChannel":
     case "PortalCall":
+    case "ShadowStep":
       return true; // handled by ritual / portal managers through the action layer
     default:
       // Passive kinds (ConditionalDef/Atk, SharedVision, Intercept, DenyFlyingMovement) are evaluated where relevant.
@@ -110,7 +132,22 @@ function spawnClones(b: Battle, user: UnitState, ability: AbilityDef, e: Record<
   return true;
 }
 
+/** Apply the same temporary modifier to every living member of a platoon. Cleared at the next Command Phase. */
+export function applyPlatoonTempMod(b: Battle, p: PlatoonState, stat: "ATK" | "DEF" | "MOV", value: number, source: string): void {
+  for (const uid of platoonMembers(p)) { const m = b.units.get(uid); if (m && !m.defeated) addTempMod(m, { source, stat, value }); }
+}
+
+/** Turn a hex and its neighbors into the named terrain for a number of rounds, skipping Water and Mountain. */
+export function spawnTerrainArea(b: Battle, center: Hex, terrain: Terrain, duration: number): number {
+  const hexes = [center, ...hexNeighbors(center)].filter((h) => b.inBounds(h) && b.terrainAt(h) !== "Water" && b.terrainAt(h) !== "Mountain");
+  let n = 0;
+  for (const h of hexes) { if (!b.terrain.has(hexKey(h)) || b.terrainAt(h) === "Open") { b.terrain.set(hexKey(h), terrain); timedTerrain.push({ key: hexKey(h), rounds: duration }); n++; } }
+  return n;
+}
+
 export const hideAfterAttack = new Set<string>();
+/** Terrain placed by abilities (smoke) with a lifetime in rounds. */
+export const timedTerrain: Array<{ key: string; rounds: number }> = [];
 export const orderFlags = new Map<string, string>();
 export const duels = new Map<string, string>();
 export function clearRoundEffectFlags(): void { hideAfterAttack.clear(); orderFlags.clear(); duels.clear(); tempPreventRouted.clear(); }

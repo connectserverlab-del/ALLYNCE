@@ -1,0 +1,23 @@
+{
+  "boardSize": 5,
+  "rotationSeconds": 3600,
+  "acceptLimit": 3,
+  "minStars": 2,
+  "maxStars": 7,
+  "captureThreshold": 0.25,
+  "escortRoundLimit": 24,
+  "tiers": [
+    { "stars": 2, "title": "Petty Warrant",    "copies": 3, "bounty": { "koku": 140, "iron": 90,  "timber": 100, "silver": 160 }, "escortStars": 14, "text": "A name shouted at a muster roll. Bring them in and the clerk will not ask twice." },
+    { "stars": 3, "title": "Standing Warrant", "copies": 2, "bounty": { "koku": 220, "iron": 150, "timber": 160, "silver": 260 }, "escortStars": 20, "text": "Trained, blooded and worth the rope. Their company will want them back." },
+    { "stars": 4, "title": "Sealed Warrant",   "copies": 2, "bounty": { "koku": 340, "iron": 240, "timber": 250, "silver": 400 }, "escortStars": 26, "text": "A specialist. Take the escort apart first; they will not surrender while it stands." },
+    { "stars": 5, "title": "Crown Warrant",    "copies": 1, "bounty": { "koku": 500, "iron": 380, "timber": 380, "silver": 620 }, "escortStars": 32, "text": "A second-in-command with a price on the head and a guard around it." },
+    { "stars": 6, "title": "Blood Warrant",    "copies": 1, "bounty": { "koku": 760, "iron": 600, "timber": 580, "silver": 940 }, "escortStars": 38, "text": "A field commander. Expect a full platoon between you and the writ." },
+    { "stars": 7, "title": "Iron Warrant",     "copies": 1, "bounty": { "koku": 1100, "iron": 900, "timber": 860, "silver": 1400 }, "escortStars": 44, "text": "A champion. The last warrant the board will ever issue, and the only one that pays like this." }
+  ],
+  "notes": {
+    "capture": "A warrant pays for a living prisoner. Break the target to a quarter of its health or rout it, then subdue it hand to hand with an adjacent unit. Kill it and the warrant closes unpaid.",
+    "ceiling": "The board never names a target above seven stars. Eight-star greater elites, nine-star lords and ten-star deities are not taken with a writ; they arrive by ritual, fusion or the recruitment hall.",
+    "duplicates": "The copies a warrant pays are physical cards. A deck may only run as many copies of a card as the holding actually owns, so warrants are how a player deepens a line rather than merely unlocking it.",
+    "bias": "The board favours targets the player is already short of for the deck they field, so the warrants read as useful rather than random."
+  }
+}

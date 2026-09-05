@@ -18,6 +18,10 @@ export interface UnitDef {
   passives: string[]; actives: string[]; slots: SlotName[];
   unique: boolean; summonOnly: boolean; ai: string; flying?: boolean;
   ritual?: RitualRatings; divine?: DivineDef;
+  factionRank?: string;
+  stars?: number;
+  minRange?: number;
+  siege?: { setupRequired: boolean; structureAtk: number };
   art?: Record<string, string>;
 }
 
@@ -38,7 +42,31 @@ export type Status =
   | "Guarded" | "Exposed" | "Suppressed" | "Hidden" | "Revealed"
   | "Silenced" | "Routed" | "Unstable";
 
-export type Terrain = "Open" | "Forest" | "HighGround" | "Fortification" | "Smoke" | "AntiAir" | "Water";
+export type Terrain =
+  | "Open" | "Forest" | "HighGround" | "Fortification" | "Smoke" | "AntiAir" | "Water"
+  | "Mountain" | "Valley" | "Trench" | "Mud" | "Road" | "Ford" | "Ruins";
+
+/** Per-terrain rules. Costs are movement points; null = impassable. All numbers live here, not in code paths. */
+export interface TerrainRule {
+  costFoot: number | null; costCavalry: number | null; costFlying: number | null;
+  def: number; concealment: boolean; blocksSight: boolean; chargeBreaks: boolean; ranged: { atk: number; range: number };
+}
+export const TERRAIN_RULES: Record<Terrain, TerrainRule> = {
+  Open:          { costFoot: 1, costCavalry: 1, costFlying: 1, def: 0,   concealment: false, blocksSight: false, chargeBreaks: false, ranged: { atk: 0, range: 0 } },
+  Road:          { costFoot: 1, costCavalry: 1, costFlying: 1, def: -50, concealment: false, blocksSight: false, chargeBreaks: false, ranged: { atk: 0, range: 0 } },
+  Forest:        { costFoot: 2, costCavalry: 3, costFlying: 2, def: 50,  concealment: true,  blocksSight: true,  chargeBreaks: true,  ranged: { atk: 0, range: 0 } },
+  HighGround:    { costFoot: 2, costCavalry: 2, costFlying: 1, def: 50,  concealment: false, blocksSight: false, chargeBreaks: false, ranged: { atk: 100, range: 1 } },
+  Mountain:      { costFoot: 5, costCavalry: 6, costFlying: 2, def: 0, concealment: false, blocksSight: true, chargeBreaks: true, ranged: { atk: 0, range: 0 } },
+  Valley:        { costFoot: 1, costCavalry: 1, costFlying: 1, def: -50, concealment: false, blocksSight: false, chargeBreaks: false, ranged: { atk: 0, range: 0 } },
+  Trench:        { costFoot: 2, costCavalry: null, costFlying: 1, def: 150, concealment: true, blocksSight: false, chargeBreaks: true, ranged: { atk: 0, range: 0 } },
+  Mud:           { costFoot: 2, costCavalry: 3, costFlying: 1, def: -50, concealment: false, blocksSight: false, chargeBreaks: true, ranged: { atk: 0, range: 0 } },
+  Fortification: { costFoot: 1, costCavalry: 2, costFlying: 1, def: 200, concealment: false, blocksSight: true, chargeBreaks: true, ranged: { atk: 0, range: 0 } },
+  Ruins:         { costFoot: 2, costCavalry: 3, costFlying: 1, def: 100, concealment: true, blocksSight: true, chargeBreaks: true, ranged: { atk: 0, range: 0 } },
+  Water:         { costFoot: null, costCavalry: null, costFlying: 1, def: 0, concealment: false, blocksSight: false, chargeBreaks: true, ranged: { atk: 0, range: 0 } },
+  Ford:          { costFoot: 2, costCavalry: 2, costFlying: 1, def: -100, concealment: false, blocksSight: false, chargeBreaks: true, ranged: { atk: 0, range: 0 } },
+  Smoke:         { costFoot: 1, costCavalry: 1, costFlying: 1, def: 0,   concealment: true,  blocksSight: true,  chargeBreaks: false, ranged: { atk: 0, range: 0 } },
+  AntiAir:       { costFoot: 1, costCavalry: 1, costFlying: null, def: 0, concealment: false, blocksSight: false, chargeBreaks: false, ranged: { atk: 0, range: 0 } },
+};
 
 export interface StatusInstance { status: Status; roundsLeft: number; stacks?: number; source: string }
 
@@ -61,10 +89,17 @@ export interface UnitState {
   defeated: boolean;
   promotedFromSecond: boolean;
   movedThisActivation: number;
+  chargeMoved: number;
   attackedThisActivation: boolean;
   overwatch: boolean;
   defending: boolean;
   usedChargeLastRound: boolean;
+  setUp: boolean;
+  shadowStepped: boolean;
+  freeMoveHexes: number;
+  captured: boolean;
+  fusedFrom?: string[];
+  fusionRoundsLeft?: number;
   divine?: { manifestation: number; anchors: number };
 }
 
