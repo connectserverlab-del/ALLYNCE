@@ -16,7 +16,13 @@
 1. Take the subject block from `UNIT_PROMPTS.md`, append the Global Style Block, swap in the faction's rim-light and accent.
 2. Generate at 2k, 1:1, text-only. Reject anything cropped, anything with a floor plane, anything glossy.
 3. Approve one result. Record the job id in the manifest.
-4. Run background removal on the job id. Store the 1024 px cutout and a 1024 px JPEG of the concept.
+4. Lift the figure off its ground with `python3 scripts/cutout.py '<incoming>/*.png' art/samples`. The script
+   seeds its flood fill from the frame's own corner colour rather than from pure white, so cream and warm-grey
+   grounds lift too, escalates tolerance until at least 28% of the frame clears, drops specks, and clears
+   background pockets the border fill cannot reach (inside a drawn bow, under a raised arm). It writes the
+   1024 px cutout and a 1024 px JPEG of the untouched concept. Higgsfield's own `remove_background` is the
+   fallback when a frame defeats it; a frame with visible brush texture in its background is not worth
+   rescuing — regenerate it with *absolutely no visible brush strokes or paint texture in the background*.
 5. Only after approval: attach the approved image as the reference and generate the construction sheet, then the action-pose sheet (suffix prompts in the engineering brief §20).
 6. Hand the cutout to the Unity prototype. `data/units/units.json` carries an `art.cutout` path per unit.
 

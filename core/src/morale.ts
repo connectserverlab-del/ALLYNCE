@@ -1,5 +1,6 @@
 import type { Battle } from "./state.js";
 import type { UnitState, PlatoonState } from "./types.js";
+import { commandRadiusOf, privileges } from "./ranks.js";
 
 export type MoraleBand = "Steady" | "Shaken" | "Disordered" | "Routed" | "Broken";
 export function moraleBand(m: number): MoraleBand {
@@ -41,8 +42,11 @@ export function commandRadiusRecovery(b: Battle): void {
     const p = b.platoon(u.platoonId);
     const leader = p.commanderUid ? b.units.get(p.commanderUid) : undefined;
     if (leader && !leader.defeated && leader.pos && leader.uid !== u.uid) {
-      const radius = b.def(leader).commandRadius ?? 0;
-      if (b.distance(leader, u) <= radius) changeMorale(b, u, 5, "Inside command radius");
+      const radius = commandRadiusOf(b, leader);
+      if (b.distance(leader, u) <= radius) {
+        changeMorale(b, u, 5, "Inside command radius");
+        if (privileges(b, leader).banner) changeMorale(b, u, 5, "Rank: banner");
+      }
     }
   }
 }

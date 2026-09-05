@@ -1,0 +1,800 @@
+<title>Ashfall Hold</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@500;700;900&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --ground:#0d0f13; --panel:#191c22; --panel-2:#22262d; --edge:#3a3f47; --edge-2:#4b5159;
+  --text:#e7e2d6; --dim:#a49d90; --faint:#6d675e;
+  --parch:#cfc3a6; --parch-ink:#241f18; --bone:#d6cbb4;
+  --ember:#c9562c; --moon:#93a3b0; --gold:#b8923f; --cyan:#7fb6c2; --marsh:#7c9a5a; --star:#d9a441;
+  --good:#7fa86a; --warn:#cf9a37; --bad:#bf4c33;
+  --t-Open:#57604a; --t-Road:#7d6c4e; --t-Valley:#48533e; --t-Mud:#5e4c36; --t-Forest:#2e3f2b;
+  --t-HighGround:#6a6650; --t-Mountain:#2f3036; --t-Trench:#3d3024; --t-Ruins:#645b4c;
+  --t-Fortification:#736b5c; --t-Water:#2f4a56; --t-Ford:#4e6b6e; --t-Smoke:#7d7d7a; --t-AntiAir:#6b5f5f;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--text);font-family:"Alegreya Sans",Georgia,serif;font-size:15px;line-height:1.36;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+h1,h2,h3,h4{margin:0;font-weight:500;text-wrap:balance}
+.sc{font-family:"Alegreya SC","Alegreya Sans",serif;letter-spacing:.045em}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.dim{color:var(--dim)}.faint{color:var(--faint)}
+:focus-visible{outline:2px solid var(--parch);outline-offset:2px}
+
+/* ---------- shell ---------- */
+.app{display:grid;grid-template-columns:74px 1fr;height:100vh;min-height:640px}
+.rail{background:linear-gradient(180deg,#1d2027,#14171c);border-right:1px solid var(--edge);display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 0;position:relative;z-index:5}
+.rail .crest{width:44px;height:44px;border-radius:2px;background:#0f1115;border:1px solid var(--edge);background-size:cover;background-position:center;margin-bottom:10px;filter:saturate(.8)}
+.rail button{width:56px;padding:9px 0 7px;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--faint);border:1px solid transparent;border-radius:2px}
+.rail button img{width:26px;height:26px;object-fit:contain;filter:grayscale(.55) brightness(.8)}
+.rail button span{font-size:10px;letter-spacing:.06em;font-family:"Alegreya SC"}
+.rail button:hover{color:var(--dim);background:rgba(255,255,255,.03)}
+.rail button.on{color:var(--text);background:linear-gradient(180deg,#2b3038,#22262d);border-color:var(--edge-2);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.rail button.on img{filter:none}
+.screen{position:relative;overflow:hidden}
+.pane{display:none;height:100%}
+.pane.on{display:block}
+
+/* ---------- shared panel ---------- */
+.panel{background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--edge);box-shadow:0 10px 30px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.045)}
+.rivet{position:relative}
+.rivet::before,.rivet::after{content:"";position:absolute;width:5px;height:5px;border-radius:50%;background:radial-gradient(circle at 35% 32%,#8d939a,#33373d);box-shadow:0 0 0 1px #101216;top:6px}
+.rivet::before{left:7px}.rivet::after{right:7px}
+.hd{font-size:12.5px;color:var(--dim);letter-spacing:.09em;text-transform:uppercase;font-family:"Alegreya SC"}
+
+/* ---------- field ---------- */
+#field-wrap{position:absolute;inset:0}
+svg.map{position:absolute;inset:0;width:100%;height:100%}
+.hex{stroke:rgba(0,0,0,.30);stroke-width:.5}
+.hexline{fill:none;stroke:rgba(232,226,213,.13);stroke-width:.55;pointer-events:none}
+.hexhit{fill:transparent;cursor:pointer}
+.hexhit:hover{fill:rgba(255,255,255,.07)}
+.reach{fill:rgba(207,195,166,.13);stroke:rgba(207,195,166,.5);stroke-width:1;stroke-dasharray:3 2.5;pointer-events:none}
+.summon{fill:rgba(184,146,63,.12);stroke:rgba(184,146,63,.55);stroke-width:1;pointer-events:none}
+.coh{stroke-width:2;stroke-linecap:round;opacity:.8;pointer-events:none}
+.unit{cursor:pointer}
+.unit .ring{fill:none;stroke-width:2.2}
+.unit.sel .ring{stroke-width:3.6}
+.unit text{font-family:"JetBrains Mono";font-size:8px;fill:var(--text);paint-order:stroke;stroke:#0a0b0e;stroke-width:2.4}
+.hud{position:absolute;pointer-events:none;z-index:3}
+.hud>*{pointer-events:auto}
+.topbar{left:14px;right:14px;top:12px;display:flex;gap:10px;align-items:flex-start}
+.round{padding:9px 14px;display:flex;gap:12px;align-items:center;min-width:250px}
+.round .dial{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,#d5cbb0 0 54%,#8a8577 55% 59%,#43464b 60% 100%);box-shadow:inset 0 0 0 2px #24272c,0 2px 5px rgba(0,0,0,.6);position:relative;flex:0 0 auto}
+.round .dial::after{content:"";position:absolute;left:50%;top:50%;width:2px;height:15px;background:#2a241c;transform-origin:50% 100%;transform:translate(-50%,-100%) rotate(115deg)}
+.steps{display:flex;gap:5px;margin-top:3px}
+.steps span{font-size:10.5px;padding:1px 6px;border:1px solid var(--edge);color:var(--faint);font-family:"Alegreya SC";letter-spacing:.05em}
+.steps span.on{color:var(--text);border-color:var(--dim);background:rgba(255,255,255,.05)}
+.sides{padding:9px 12px;display:grid;gap:3px;min-width:216px}
+.sideRow{display:flex;justify-content:space-between;gap:10px;align-items:baseline;font-size:13.5px}
+.seal{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:-1px;margin-right:6px;box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.45)}
+.wins{padding:9px 12px;min-width:214px}
+.wins li{list-style:none;display:grid;grid-template-columns:11px 1fr;gap:8px;align-items:baseline;font-size:13.5px;padding:1px 0}
+.wins ul{margin:5px 0 0;padding:0}
+.wins .k{width:8px;height:8px;border:1.5px solid var(--dim);transform:rotate(45deg);margin-top:5px}
+.leftcol{left:14px;top:96px;width:188px;display:grid;gap:8px;align-content:start;max-height:calc(100% - 300px)}
+.rightcol{right:14px;top:150px;width:200px;display:grid;gap:8px;align-content:start}
+.legend{padding:10px 12px}
+.legend .row{display:grid;grid-template-columns:13px 1fr auto;gap:8px;align-items:center;font-size:12.5px;padding:1.5px 0}
+.legend .sw{width:11px;height:11px;border:1px solid rgba(0,0,0,.5)}
+.ovl{padding:8px 10px;display:flex;flex-wrap:wrap;gap:5px}
+.ovl button{font-size:11.5px;padding:2.5px 7px;border:1px solid var(--edge);color:var(--faint);font-family:"Alegreya SC"}
+.ovl button.on{color:var(--text);border-color:var(--dim);background:rgba(255,255,255,.05)}
+.cam{padding:7px 9px;display:flex;flex-direction:column;gap:5px;align-items:stretch}
+.cam .row{display:flex;gap:4px}
+.cam button{border:1px solid var(--edge);color:var(--faint);font-family:"Alegreya SC";font-size:11.5px;padding:3px 8px;flex:1}
+.cam button.on{color:var(--text);border-color:var(--dim);background:rgba(255,255,255,.05)}
+.cam .hint{font-size:10.5px;color:var(--faint);text-align:center}
+.mini{padding:6px}
+.mini svg{display:block;width:100%;height:auto;aspect-ratio:182/120;cursor:crosshair}
+#field-wrap{cursor:grab}
+#field-wrap.drag{cursor:grabbing}
+
+/* command bar */
+.cmdwrap{left:14px;right:14px;bottom:12px}
+.cmd{display:grid;grid-template-columns:172px minmax(0,1fr) 268px minmax(0,320px);min-height:186px}
+.cmd>div{padding:11px 13px;border-right:1px solid var(--edge);min-width:0}
+.cmd>div:last-child{border-right:0}
+.port{display:flex;flex-direction:column;align-items:center;gap:7px}
+.portframe{width:112px;height:112px;position:relative;background:#12141a;border:3px solid #4a3a2a;outline:1px solid #191009;box-shadow:inset 0 0 22px rgba(0,0,0,.85)}
+.portframe img{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);object-fit:contain}
+.portframe i{position:absolute;width:12px;height:12px;background:#5d7a6a;border:1px solid #191009}
+.portframe i:nth-child(1){left:-5px;top:-5px}.portframe i:nth-child(2){right:-5px;bottom:-5px}
+.stars{display:flex;gap:1px;justify-content:center;max-width:126px}
+.stars img{width:11px;display:block}
+.stars img.off{opacity:.42}
+.star{width:9px;height:9px;background:var(--star);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);box-shadow:0 0 4px rgba(217,164,65,.4)}
+.star.off{background:#3a3d43;box-shadow:none}
+.stat{display:grid;grid-template-columns:1fr 1fr;gap:5px 16px;align-content:start;min-width:0}
+.stat .full{grid-column:1/-1}
+.kv{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;min-width:0}
+.kv span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gauge{height:9px;background:#0c0e12;border:1px solid var(--edge);position:relative;clip-path:polygon(0 50%,5px 0,calc(100% - 5px) 0,100% 50%,calc(100% - 5px) 100%,5px 100%)}
+.gauge i{position:absolute;inset:1px auto 1px 1px}
+.gauge.hp i{background:linear-gradient(90deg,#7d2c19,#c9562c)}
+.gauge.mo i{background:linear-gradient(90deg,#655c44,#cfc3a6)}
+.tags{display:flex;gap:4px;flex-wrap:wrap}
+.tag{font-size:10.5px;padding:1px 6px;border:1px solid var(--edge);color:var(--dim);font-family:"Alegreya SC";letter-spacing:.04em}
+.brk table{width:100%;border-collapse:collapse;font-size:13px}
+.brk td{padding:1.5px 0;border-bottom:1px dotted var(--edge)}
+.brk td:last-child{text-align:right}
+.brk tr.tot td{border-bottom:0;border-top:1px solid var(--faint);font-weight:600;padding-top:3px}
+.pred{margin-top:6px;font-size:12.5px;color:var(--dim)}
+.pred b{color:var(--text)}
+.hand{display:flex;gap:6px;align-items:flex-end;overflow-x:auto;padding-bottom:2px}
+.hand::-webkit-scrollbar{height:6px}.hand::-webkit-scrollbar-thumb{background:#3a3f47}
+.mini{flex:0 0 auto;width:64px;cursor:pointer;position:relative;filter:drop-shadow(0 3px 5px rgba(0,0,0,.6))}
+.mini img.fr{width:100%;display:block}
+
+.mini .mart{position:absolute;left:11.5%;top:12%;width:77%;height:53%;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.mini .mart img{max-width:100%;max-height:100%;object-fit:contain}
+.mini .mstars{position:absolute;left:7%;top:81%;width:70%;display:flex;gap:.5px;justify-content:center;flex-wrap:wrap}
+.mini .mstars img{width:8%}
+.mini .mname{position:absolute;left:7%;top:68%;width:70%;text-align:center;font-size:6.6px;line-height:1.02;overflow:hidden;max-height:14px;color:#2b2419;font-family:"Alegreya SC";font-weight:700}
+.mini .mcost{position:absolute;left:9%;bottom:4%;font-size:8px;color:#3a3227;font-family:"JetBrains Mono"}
+.mini:hover{transform:translateY(-4px)}
+.mini{transition:transform .12s}
+
+/* ---------- card grid (deck / rites) ---------- */
+.scroll{height:100%;overflow-y:auto;padding:16px 20px 28px}
+.scroll::-webkit-scrollbar{width:9px}.scroll::-webkit-scrollbar-thumb{background:#33383f}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+.head h2{font-size:23px}
+.head p{margin:2px 0 0;color:var(--dim);max-width:62ch;font-size:14px}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+.chip{font-size:12px;padding:3px 9px;border:1px solid var(--edge);color:var(--dim);font-family:"Alegreya SC";letter-spacing:.04em}
+.chip.on{color:var(--text);border-color:var(--dim);background:rgba(255,255,255,.05)}
+.curve{display:flex;align-items:flex-end;gap:3px;height:44px}
+.curve div{width:15px;background:linear-gradient(180deg,#6a5a3a,#3a3226);border:1px solid var(--edge);position:relative}
+.curve div b{position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--dim);font-family:"JetBrains Mono";font-weight:400}
+.curve div em{position:absolute;bottom:-15px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--star);font-style:normal}
+/* align-items:start keeps each card box exactly as tall as its frame image; stretched rows would
+   drop the bottom stat line off the paper and onto the page behind it */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(152px,1fr));gap:14px;align-items:start}
+.card{position:relative;cursor:pointer;filter:drop-shadow(0 5px 9px rgba(0,0,0,.55));transition:transform .13s}
+.card:hover{transform:translateY(-4px)}
+.card img.fr{width:100%;display:block}
+
+/* Card face layout, measured against the paper frame itself: a light band runs 6-17% and again
+   66-87%, with the dark art window between. The name takes the top band, the numbers the lower one. */
+.card .art{position:absolute;left:11.5%;top:18.5%;width:77%;height:46.5%;overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
+.card .art img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
+
+.card .art .none{align-self:center;font-size:10px;color:#5a5750;font-family:"Alegreya SC";letter-spacing:.08em}
+.card .pips{position:absolute;left:7%;top:80%;width:70%;display:flex;justify-content:center;gap:1%;align-items:center;flex-wrap:wrap}
+.card .pips img{width:7.6%;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+.card .pips img.off{opacity:.42}
+
+
+.card .nm{position:absolute;left:7%;top:5.5%;width:86%;height:11%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:"Alegreya SC";font-weight:700;font-size:10.5px;line-height:1.04;color:#241d13;text-shadow:0 1px 0 rgba(220,206,180,.55);overflow:hidden}
+.card .sub{position:absolute;left:7%;top:74%;width:70%;text-align:center;font-size:8.5px;color:#40382b}
+/* The paper foot is scorched almost black and the space between the name and the star row is
+   already spoken for, so the stat line rides the bottom of the art window instead, where the dark
+   backing gives it the contrast the paper never could. */
+/* ATK and DEF sit on the paper under the art in dark ink, the darkest type on the card. */
+.card .nums{position:absolute;left:9%;right:9%;top:66.5%;height:7%;display:flex;align-items:center;justify-content:space-between;padding:0 4%;
+  font-family:"JetBrains Mono";font-weight:700;font-size:9.5px;color:#1b150c}
+.card .nums .faint,.detail .big .nums .faint{color:#6a604e;font-weight:400}
+
+/* the copy badge moved to the foot: the top of the card belongs to the name now */
+.card .cnt{position:absolute;left:8%;bottom:10%;background:#12141a;border:1px solid var(--edge-2);color:var(--parch);font-family:"JetBrains Mono";font-size:10px;padding:1px 5px;box-shadow:0 2px 5px rgba(0,0,0,.6)}
+.card.locked{opacity:.55}
+.detail{position:fixed;inset:0;background:rgba(6,7,9,.78);display:none;align-items:center;justify-content:center;z-index:40;padding:24px}
+.detail.on{display:flex}
+.detail .box{max-width:760px;width:100%;display:grid;grid-template-columns:260px 1fr;gap:0}
+.detail .box>div{padding:18px 20px}
+.detail .big{position:relative}
+.detail .big img.fr{width:100%;display:block}
+
+.detail .big .art{position:absolute;left:11.5%;top:18.5%;width:77%;height:46.5%;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.detail .big .art img{max-width:100%;max-height:100%;object-fit:contain}
+.detail .big .pips{position:absolute;left:7%;top:79.5%;width:72%;display:flex;justify-content:center;gap:1%;align-items:center}
+.detail .big .pips img{width:7.4%;display:block}
+.detail .big .pips img.off{opacity:.42}
+
+.detail .big .nm{position:absolute;left:7%;top:5.5%;width:86%;height:11%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:"Alegreya SC";font-weight:700;font-size:16px;line-height:1.04;color:#241d13}
+.detail .big .sub{position:absolute;left:7%;top:73.5%;width:72%;text-align:center;font-size:12px;color:#5c5344}
+.detail .big .nums{position:absolute;left:9%;right:9%;top:66.5%;height:7%;display:flex;align-items:center;justify-content:space-between;padding:0 4%;
+  font-family:"JetBrains Mono";font-weight:700;font-size:13px;color:#1b150c}
+.detail h3{font-size:20px}
+.detail .close{position:absolute;right:14px;top:10px;font-size:22px;color:var(--dim);line-height:1}
+.abil{border-left:2px solid var(--edge-2);padding:2px 0 2px 10px;margin:9px 0}
+.abil b{font-family:"Alegreya SC";font-size:14px}
+.abil p{margin:1px 0 0;font-size:13.5px;color:var(--dim)}
+.req{background:#14171c;border:1px solid var(--edge);padding:9px 11px;margin-top:10px}
+.req .line{display:flex;justify-content:space-between;font-size:13px;padding:1.5px 0}
+
+/* ---------- hold ---------- */
+.holdgrid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(340px,.85fr);height:100%}
+.holdmap{position:relative;overflow:hidden;border-right:1px solid var(--edge)}
+.holdmap img{width:100%;height:100%;object-fit:cover;filter:saturate(.92) brightness(.9)}
+.holdmap .vig{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 45%,transparent 30%,rgba(6,7,9,.72) 100%)}
+.pin{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+.pin img{width:30px;height:30px;object-fit:contain;filter:drop-shadow(0 2px 5px rgba(0,0,0,.85))}
+.pin b{font-family:"Alegreya SC";font-size:10.5px;background:rgba(10,12,16,.82);border:1px solid var(--edge);padding:1px 6px;color:var(--bone);white-space:nowrap;letter-spacing:.04em}
+.pin .lv{position:absolute;top:-4px;right:-8px;background:#12141a;border:1px solid var(--edge-2);color:var(--star);font-family:"JetBrains Mono";font-size:9px;padding:0 3px}
+.pin:hover b{border-color:var(--dim);color:#fff}
+.pin.busy b{color:var(--warn);border-color:var(--warn)}
+.res{position:absolute;left:14px;top:12px;display:flex;gap:6px}
+.res div{display:flex;align-items:center;gap:6px;padding:5px 9px 5px 6px}
+.res img{width:22px;height:22px;object-fit:contain}
+.res b{font-family:"JetBrains Mono";font-size:13px;font-weight:400}
+.holdside{overflow-y:auto;padding:14px 16px 24px}
+.holdside::-webkit-scrollbar{width:9px}.holdside::-webkit-scrollbar-thumb{background:#33383f}
+.sec{margin-bottom:16px}
+.sec>h3{font-size:16px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:baseline}
+.bld{display:grid;grid-template-columns:30px 1fr auto;gap:9px;align-items:center;padding:7px 9px;border:1px solid var(--edge);background:#15181d;margin-bottom:5px}
+.bld img{width:26px;height:26px;object-fit:contain}
+.bld .thumb{width:44px;height:30px;object-fit:cover;border:1px solid var(--edge);background:#0d0f13}
+.tierstrip{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.tierstrip figure{margin:0;border:1px solid var(--edge);background:#14171c;padding:5px;position:relative}
+.tierstrip img{width:100%;aspect-ratio:16/11;object-fit:cover;display:block;filter:saturate(.92)}
+.tierstrip figcaption{font-size:11px;color:var(--faint);padding:4px 2px 0;font-family:"Alegreya SC";letter-spacing:.04em}
+.tierstrip .now{outline:1px solid var(--star);outline-offset:-1px}
+.tierstrip .now figcaption{color:var(--star)}
+.tierstrip .todo{display:flex;align-items:center;justify-content:center;aspect-ratio:16/11;font-size:10.5px;color:#4c4a45;font-family:"Alegreya SC";letter-spacing:.06em;background:#101318;border:1px dashed var(--edge)}
+.bld .n{font-family:"Alegreya SC";font-size:14px}
+.bld .t{font-size:12px;color:var(--faint);line-height:1.2}
+.bld .lvl{font-family:"JetBrains Mono";font-size:13px;color:var(--star)}
+.bld.q{border-color:var(--warn)}
+.bar{height:5px;background:#0c0e12;border:1px solid var(--edge);margin-top:4px;grid-column:2/-1}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#8a6a2a,#cf9a37)}
+.tree{display:grid;gap:5px}
+.node{display:grid;grid-template-columns:1fr auto;gap:8px;padding:7px 9px;border:1px solid var(--edge);background:#15181d;font-size:13px;align-items:center}
+.node.done{border-color:#44603a;background:#161c16}
+.node.active{border-color:var(--warn);background:#1c1a14}
+.node.locked{opacity:.5}
+.node b{font-family:"Alegreya SC";font-size:13.5px}
+.node p{margin:1px 0 0;color:var(--faint);font-size:12px}
+.node .st{font-family:"Alegreya SC";font-size:11px;letter-spacing:.05em}
+.banner{border:1px solid var(--edge);background:#15181d;padding:9px 11px;margin-bottom:6px}
+.banner h4{font-family:"Alegreya SC";font-size:14.5px}
+.banner p{margin:2px 0 6px;font-size:12.5px;color:var(--faint)}
+.rates{display:flex;gap:2px;align-items:flex-end;height:34px;margin-top:5px}
+.rates div{flex:1;background:linear-gradient(180deg,#6a5a3a,#332c22);border:1px solid #2a2e34;position:relative;min-height:2px}
+.rates div em{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--star);font-style:normal}
+.cost{display:flex;gap:9px;font-family:"JetBrains Mono";font-size:12px;color:var(--dim);align-items:center}
+.cost img{width:15px;height:15px;object-fit:contain;vertical-align:-2px;margin-right:2px}
+
+/* ---------- lands ---------- */
+.lands{padding:16px 20px 28px;height:100%;overflow-y:auto}
+.lands figure{margin:0 0 16px;border:1px solid var(--edge);background:#14171c;padding:8px}
+.lands img{width:100%;display:block}
+.lands figcaption{font-size:13px;color:var(--dim);padding:8px 4px 2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tip{position:fixed;pointer-events:none;background:var(--parch);color:var(--parch-ink);padding:7px 10px;font-size:12.5px;max-width:250px;border:1px solid #8b7a55;box-shadow:0 6px 18px rgba(0,0,0,.55);display:none;z-index:60;
+ clip-path:polygon(0 3px,3% 0,97% 1px,100% 4px,99% 96%,96% 100%,3% 99%,0 97%)}
+.tip b{display:block;font-family:"Alegreya SC";font-weight:700;margin-bottom:1px}
+.tip .m{font-family:"JetBrains Mono";font-size:11.5px;color:#4a4232}
+@media (max-width:1180px){.cmd{grid-template-columns:150px 1fr 250px}.cmd>div:nth-child(4){display:none}.legend,.ovl{display:none}}
+@media (max-width:900px){.holdgrid{grid-template-columns:1fr}.holdmap{display:none}.detail .box{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="app">
+  <nav class="rail" id="rail"></nav>
+  <div class="screen">
+    <section class="pane on" id="p-field">
+      <div id="field-wrap"><svg class="map" id="map" xmlns="http://www.w3.org/2000/svg"></svg></div>
+      <div class="hud topbar">
+        <div class="panel rivet round" id="roundbox"></div>
+        <div class="panel rivet sides" id="sidesbox"></div>
+        <div class="panel rivet wins" id="winsbox"></div>
+      </div>
+      <div class="hud leftcol"><div class="panel rivet legend" id="legend"></div><div class="panel ovl" id="ovl"></div></div>
+      <div class="hud rightcol"><div class="panel mini" id="minimap"></div><div class="panel rivet cam" id="cam"></div></div>
+      <div class="hud cmdwrap"><div class="panel rivet cmd" id="cmd"></div></div>
+    </section>
+    <section class="pane" id="p-deck"><div class="scroll" id="deckpane"></div></section>
+    <section class="pane" id="p-rites"><div class="scroll" id="ritespane"></div></section>
+    <section class="pane" id="p-writs"><div class="scroll" id="writspane"></div></section>
+    <section class="pane" id="p-hold"><div class="holdgrid" id="holdpane"></div></section>
+    <section class="pane" id="p-lands"><div class="lands" id="landspane"></div></section>
+  </div>
+</div>
+<div class="detail" id="detail"><div class="panel rivet box" id="detailbox"></div></div>
+<div class="tip" id="tip"></div>
+
+<script>
+const D = __DATA__, A = __ASSETS__;
+const $ = (id)=>document.getElementById(id);
+const cssv = (n)=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+// Accent per faction. New factions borrow the nearest existing hue rather than adding a new one,
+// so a deck of eleven allied banners still reads as one game.
+const FAC = {SAM:'--ember',SHI:'--moon',KNI:'--gold',DRG:'--cyan',RIT:'--marsh',DIV:'--parch',
+  ARC:'--cyan',WIT:'--marsh',ROG:'--parch',STP:'--gold',DUN:'--ember',
+  ANG:'--parch',DEM:'--ember',CHR:'--marsh',DMG:'--cyan',WEN:'--moon',SAS:'--marsh',FMC:'--gold'};
+// Short labels for the four host armies; everything else takes its name straight from the data, so
+// a faction added tomorrow shows its real name instead of "undefined".
+const SHORTNAME = {SAM:'Samurai',SHI:'Shinobi',KNI:'Knight',DRG:'Dragon Host',DIV:'Divine'};
+const FACNAME = new Proxy({}, { get: (_, id) => SHORTNAME[id] || D.factions?.[id]?.name || String(id) });
+// One card stock for the whole game: the sealed mulberry paper. Rank is carried by the stars, not the frame.
+const FRAME = ()=> A.frames.SEALED;
+const TL = {Open:'Open ground',Road:'Road',Valley:'Valley floor',Mud:'Mud',Forest:'Forest',HighGround:'High ground',Mountain:'Mountain',Trench:'Trench',Ruins:'Ruins',Fortification:'Fortification',Water:'River',Ford:'Ford',Smoke:'Smoke',AntiAir:'Anti-air'};
+const tok = (c)=> A.tokens[c.id] || A.tokens[c.defId] || null;
+const starRow=(n,all=false)=>Array.from({length:all?10:n},(_,i)=>`<img src="${i<n?A.star.on:A.star.off}" class="${i<n?'':'off'}" alt="">`).join('');
+const esc = (s)=>String(s).replace(/[&<>"]/g,(m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const secs = (s)=> s>=3600? Math.round(s/360)/10+' h' : s>=60? Math.round(s/60)+' min' : Math.round(s)+' s';
+
+/* ---------------- rail ---------------- */
+const SCREENS = [['field','Field','UI-BANNER'],['deck','Deck','UI-DRAW'],['rites','Rites','BLD-RESEARCH'],['writs','Writs','BLD-RECRUIT'],['hold','Hold','BLD-KEEP'],['lands','Lands','BLD-BUILD']];
+let screen='field';
+function renderRail(){
+  $('rail').innerHTML = `<div class="crest" style="background-image:url('${A.art.cardback}')"></div>` +
+    SCREENS.map(([id,label,icon])=>`<button data-s="${id}" class="${id===screen?'on':''}"><img src="${A.icons[icon]}" alt=""><span>${label}</span></button>`).join('');
+  $('rail').querySelectorAll('button').forEach(b=>b.onclick=()=>{screen=b.dataset.s;renderRail();document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='p-'+screen));if(screen==='field')drawMap();});
+}
+
+/* ---------------- field ---------------- */
+const SQ3=Math.sqrt(3), NS='http://www.w3.org/2000/svg';
+const el=(t,a={},p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
+const px=(h,s)=>({x:s*SQ3*(h.q+h.r/2), y:s*1.5*h.r});
+const pts=(cx,cy,s)=>{let o=[];for(let i=0;i<6;i++){const a=Math.PI/180*(60*i-30);o.push((cx+s*Math.cos(a)).toFixed(2)+','+(cy+s*Math.sin(a)).toFixed(2));}return o.join(' ');};
+let show={grid:true,relief:true,coh:true,reach:true,summon:true,sprites:true};
+let selUid = D.battle.selected.uid;
+const ZOOMS=[{s:9,n:'Whole field'},{s:15,n:'Wide'},{s:23,n:'Play'},{s:34,n:'Close'}];
+let cam={z:2,x:0,y:0,ready:false};
+const worldBox=()=>{const a=D.map.hexes.map(h=>px(h,ZOOMS[cam.z].s));
+  return {x0:Math.min(...a.map(p=>p.x)),x1:Math.max(...a.map(p=>p.x)),y0:Math.min(...a.map(p=>p.y)),y1:Math.max(...a.map(p=>p.y))};};
+function clampCam(){
+  const svg=$('map'), W=svg.clientWidth||1200, H=svg.clientHeight||800, s=ZOOMS[cam.z].s, b=worldBox(), m=s*3;
+  const availW=W-232, availH=H-300;
+  const wide=(b.x1-b.x0)+m*2, tall=(b.y1-b.y0)+m*2;
+  cam.x = wide<=availW ? b.x0-m-(availW-wide)/2 : Math.min(Math.max(cam.x, b.x0-m), b.x1+m-availW);
+  cam.y = tall<=availH ? b.y0-m-(availH-tall)/2 : Math.min(Math.max(cam.y, b.y0-m), b.y1+m-availH);
+}
+function centreOn(h){ const svg=$('map'), s=ZOOMS[cam.z].s, p=px(h,s);
+  cam.x=p.x-((svg.clientWidth||1200)-232)/2-214+214; cam.x=p.x-(((svg.clientWidth||1200)-232)/2)-0;
+  cam.y=p.y-(((svg.clientHeight||800)-300)/2); clampCam(); }
+function setZoom(z){ const svg=$('map'); const cx=cam.x+((svg.clientWidth||1200)-232)/2, cy=cam.y+((svg.clientHeight||800)-300)/2;
+  const k=ZOOMS[z].s/ZOOMS[cam.z].s; cam.z=z; cam.x=cx*k-((svg.clientWidth||1200)-232)/2; cam.y=cy*k-((svg.clientHeight||800)-300)/2; clampCam(); drawMap(); renderCam(); }
+function drawMap(){
+  const svg=$('map'), W=svg.clientWidth||1200, H=svg.clientHeight||800;
+  const M=D.map, s=ZOOMS[cam.z].s;
+  if(!cam.ready){ const sel=D.battle.units.find(u=>u.uid===selUid)||D.battle.units[0]; cam.ready=true; const p=px(sel,s); cam.x=p.x-(W-232)/2; cam.y=p.y-(H-300)/2; }
+  clampCam();
+  const OX=214, OY=100;
+  const P=(h)=>{const p=px(h,s);return{x:p.x-cam.x+OX-214+214-0,y:p.y-cam.y+OY-100+100-0};};
+  const vis=(c)=>c.x>-s*2.2&&c.x<W+s*2.2&&c.y>-s*2.2&&c.y<H+s*2.2;
+  svg.innerHTML='';
+  const defs=el('defs',{},svg);
+  const cp=el('clipPath',{id:'mask'},defs);
+  const shown=[];
+  for(const h of M.hexes){const c=P(h); if(!vis(c))continue; shown.push([h,c]); el('polygon',{points:pts(c.x,c.y,s*1.02)},cp);}
+  const blur=el('filter',{id:'halo',x:'-12%',y:'-12%',width:'124%',height:'124%'},defs);
+  el('feGaussianBlur',{stdDeviation:s*1.1},blur);
+  const gHalo=el('g',{filter:'url(#halo)'},svg);
+  for(const [h,c] of shown) el('polygon',{points:pts(c.x,c.y,s*1.3),fill:'#06070a',opacity:.95},gHalo);
+  const gClip=el('g',{'clip-path':'url(#mask)'},svg);
+  const b=worldBox();
+  // The painting is a ground texture, not the level: at play zoom we want its brushwork, not its rooftops,
+  // so it is scaled well past the field and held back behind the terrain tints.
+  const gs=2.6, gw=((b.x1-b.x0)+s*3)*gs, gh=((b.y1-b.y0)+s*3)*gs;
+  el('image',{href:A.art.ground,x:b.x0-cam.x-s*1.5-(gw-((b.x1-b.x0)+s*3))/2,y:b.y0-cam.y-s*1.5-(gh-((b.y1-b.y0)+s*3))/2,width:gw,height:gh,preserveAspectRatio:'xMidYMid slice',opacity:.5},gClip);
+  el('rect',{x:0,y:0,width:W,height:H,fill:'#10131a',opacity:.42},gClip);
+  const byKey=new Map(M.hexes.map(h=>[h.q+','+h.r,h]));
+  const N=(h)=>[[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]].map(([dq,dr])=>byKey.get((h.q+dq)+','+(h.r+dr)));
+  const gT=el('g',{'clip-path':'url(#mask)'},svg), gG=el('g',{},svg), gO=el('g',{},svg), gU=el('g',{},svg), gH=el('g',{},svg);
+  const detail = s>=15;
+  for(const [h,c] of shown){
+    el('polygon',{points:pts(c.x,c.y,s*1.0),fill:cssv('--t-'+h.terrain),opacity:h.terrain==='Open'?.55:h.terrain==='Mountain'?.86:.76,class:'hex'},gT);
+    if(show.relief){
+      if(h.elevation>=2) el('polygon',{points:pts(c.x,c.y,s),fill:'#fff',opacity:h.elevation===3?.10:.055},gT);
+      if(h.elevation===0) el('polygon',{points:pts(c.x,c.y,s),fill:'#000',opacity:.16},gT);
+      const dn=N(h)[5]; if(dn&&dn.elevation<h.elevation){const a1=Math.PI/180*150,a2=Math.PI/180*210,a3=Math.PI/180*270;
+        el('polyline',{points:[c.x+s*Math.cos(a1),c.y+s*Math.sin(a1),c.x+s*Math.cos(a2),c.y+s*Math.sin(a2),c.x+s*Math.cos(a3),c.y+s*Math.sin(a3)].join(' '),stroke:'#000',opacity:.42,'stroke-width':s*.15,fill:'none'},gT);}
+    }
+    if(h.terrain==='Mountain'){el('path',{d:`M${c.x-s*.6},${c.y+s*.42} L${c.x-s*.14},${c.y-s*.52} L${c.x+s*.08},${c.y-s*.1} L${c.x+s*.28},${c.y-s*.38} L${c.x+s*.6},${c.y+s*.42} Z`,fill:'#26262b',stroke:'#0e0f12','stroke-width':.5},gT);
+      el('path',{d:`M${c.x-s*.3},${c.y-s*.17} L${c.x-s*.14},${c.y-s*.52} L${c.x+s*.01},${c.y-s*.22} Z`,fill:'#96948b'},gT);}
+    if(!detail) continue;
+    if(h.terrain==='Forest') for(const [dx,dy,k] of [[-.3,.08,.55],[.09,-.26,.6],[.28,.26,.5],[-.04,.28,.45]])
+      el('path',{d:`M${c.x+dx*s-s*.2*k},${c.y+dy*s+s*.32*k} L${c.x+dx*s},${c.y+dy*s-s*.46*k} L${c.x+dx*s+s*.2*k},${c.y+dy*s+s*.32*k} Z`,fill:'#1a2819',stroke:'#0d150c','stroke-width':.4},gT);
+    if(h.terrain==='Trench'){const d=`M${c.x-s*.68},${c.y-s*.12} Q${c.x-s*.18},${c.y+s*.26} ${c.x+s*.2},${c.y-s*.08} T${c.x+s*.68},${c.y+s*.12}`;
+      el('path',{d,fill:'none',stroke:'#16100a','stroke-width':s*.26},gT); el('path',{d,fill:'none',stroke:'#7d6748','stroke-width':.9,'stroke-dasharray':'2 3'},gT);}
+    if(h.terrain==='Road') el('path',{d:`M${c.x-s*.86},${c.y+s*.13} Q${c.x},${c.y-s*.18} ${c.x+s*.86},${c.y+s*.09}`,fill:'none',stroke:'#8d7c5c','stroke-width':s*.2,'stroke-linecap':'round',opacity:.85},gT);
+    if(h.terrain==='Water'||h.terrain==='Ford'){el('path',{d:`M${c.x-s*.58},${c.y} q${s*.29},${-s*.17} ${s*.58},0 t${s*.58},0`,fill:'none',stroke:'rgba(168,206,214,.4)','stroke-width':1.1},gT);
+      if(h.terrain==='Ford')for(let i=-1;i<=1;i++)el('circle',{cx:c.x+i*s*.3,cy:c.y+s*.24,r:s*.085,fill:'#918b7b'},gT);}
+    if(h.terrain==='Mud')for(let i=0;i<5;i++){const a=i*1.9+h.q,r=s*(.22+.28*((i*7+h.r)%3)/3);el('ellipse',{cx:c.x+Math.cos(a)*r,cy:c.y+Math.sin(a)*r*.66,rx:s*.12,ry:s*.06,fill:'#3a2e1e',opacity:.8},gT);}
+    if(h.terrain==='Ruins')for(const [dx,dy,w,hh] of [[-.38,-.08,.24,.46],[.04,-.33,.19,.3],[.28,.05,.28,.42]])
+      el('rect',{x:c.x+dx*s,y:c.y+dy*s,width:w*s,height:hh*s,fill:'#8d8576',stroke:'#241f19','stroke-width':.5},gT);
+    if(h.terrain==='Fortification'){el('rect',{x:c.x-s*.52,y:c.y-s*.32,width:s*1.04,height:s*.64,fill:'#7d7566',stroke:'#1f1c17','stroke-width':.7},gT);
+      for(let i=0;i<4;i++)el('rect',{x:c.x-s*.52+i*s*.29,y:c.y-s*.47,width:s*.15,height:s*.15,fill:'#7d7566'},gT);}
+  }
+  if(show.grid&&detail) for(const [h,c] of shown) if(h.terrain!=='Mountain') el('polygon',{points:pts(c.x,c.y,s),class:'hexline'},gG);
+  if(show.summon) for(const h of D.battle.summonZone){const c=P(h);if(vis(c))el('polygon',{points:pts(c.x,c.y,s*.88),class:'summon'},gO);}
+  if(show.reach) for(const r of D.battle.reachable){const c=P(r);if(!vis(c))continue;
+    el('polygon',{points:pts(c.x,c.y,s*.9),class:'reach'},gO);
+    if(detail) el('text',{x:c.x,y:c.y+3,'text-anchor':'middle','font-size':s*.4,fill:'rgba(231,226,214,.66)','font-family':'JetBrains Mono'},gO).textContent=r.cost;}
+  const U=new Map(D.battle.units.map(u=>[u.uid,u]));
+  if(show.coh) for(const [a,bb] of D.battle.cohesion){const ua=U.get(a),ub=U.get(bb);if(!ua||!ub)continue;const pa=P(ua),pb=P(ub);
+    if(vis(pa)||vis(pb)) el('line',{x1:pa.x,y1:pa.y,x2:pb.x,y2:pb.y,class:'coh',stroke:cssv(FAC[ua.faction])},gO);}
+  for(const u of D.battle.units){
+    const c=P(u); if(!vis(c))continue;
+    const g=el('g',{class:'unit'+(u.uid===selUid?' sel':''),transform:`translate(${c.x},${c.y})`},gU);
+    g.dataset.uid=u.uid;
+    const col=cssv(FAC[u.faction]);
+    el('ellipse',{cx:0,cy:s*.3,rx:s*.6,ry:s*.27,fill:'rgba(8,9,12,.6)'},g);
+    const t=A.tokens[u.defId];
+    if(show.sprites&&t&&detail) el('image',{href:t,x:-s*.92,y:-s*1.5,width:s*1.84,height:s*1.84,preserveAspectRatio:'xMidYMax meet'},g);
+    else el('circle',{cx:0,cy:detail?-s*.2:0,r:s*.4,fill:col,opacity:.9},g);
+    el('ellipse',{cx:0,cy:s*.3,rx:s*.6,ry:s*.27,class:'ring',stroke:col},g);
+    if(detail){const w=s*1.05; el('rect',{x:-w/2,y:s*.58,width:w,height:s*.13,fill:'#0a0b0e'},g);
+      el('rect',{x:-w/2+1,y:s*.58+1,width:Math.max(0,(w-2)*u.hp/u.maxHp),height:s*.13-2,fill:u.hp/u.maxHp>.5?'#c9562c':'#bf4c33'},g);}
+    if(u.leader) el('path',{d:`M${-s*.17},${-s*1.58} l${s*.17},${-s*.2} l${s*.17},${s*.2} z`,fill:col},g);
+    if(detail&&(u.roles.includes('Commander')||u.roles.includes('Second'))) el('text',{x:s*.48,y:-s*.92,'text-anchor':'middle'},g).textContent=u.roles.includes('Commander')?'C':'2';
+  }
+  for(const [h,c] of shown){const p=el('polygon',{points:pts(c.x,c.y,s),class:'hexhit'},gH);p.dataset.k=h.q+','+h.r;}
+  svg.querySelectorAll('.unit').forEach(g=>g.onclick=(e)=>{e.stopPropagation();selUid=g.dataset.uid;drawMap();renderCmd();});
+  svg.querySelectorAll('.hexhit').forEach(p=>{p.onmousemove=(e)=>tipTerrain(e,byKey.get(p.dataset.k));p.onmouseleave=hideTip;});
+  drawMinimap();
+}
+function renderCam(){
+  $('cam').innerHTML=`<div class="hd" style="text-align:center">Camera</div>
+    <div class="row">${ZOOMS.map((z,i)=>`<button data-z="${i}" class="${i===cam.z?'on':''}">${i===0?'Fit':i===3?'Close':i===1?'Wide':'Play'}</button>`).join('')}</div>
+    <div class="hint">${D.map.hexes.length} hexes · drag to pan</div>`;
+  $('cam').querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>setZoom(+b.dataset.z));
+}
+function drawMinimap(){
+  const M=D.map, box=$('minimap');
+  const w=182,h=120;
+  const a=M.hexes.map(x=>px(x,1));
+  const x0=Math.min(...a.map(p=>p.x)),x1=Math.max(...a.map(p=>p.x)),y0=Math.min(...a.map(p=>p.y)),y1=Math.max(...a.map(p=>p.y));
+  const k=Math.min(w/(x1-x0+2),h/(y1-y0+2));
+  const dot=Math.max(1.2,k*1.15);
+  let out=`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg"><rect width="${w}" height="${h}" fill="#0b0d11"/>`;
+  for(const hx of M.hexes){const p=px(hx,1);
+    out+=`<rect x="${((p.x-x0)*k).toFixed(1)}" y="${((p.y-y0)*k).toFixed(1)}" width="${dot}" height="${dot}" fill="${cssv('--t-'+hx.terrain)}" opacity=".85"/>`;}
+  for(const u of D.battle.units){const p=px(u,1);
+    out+=`<circle cx="${((p.x-x0)*k+dot/2).toFixed(1)}" cy="${((p.y-y0)*k+dot/2).toFixed(1)}" r="1.7" fill="${cssv(FAC[u.faction])}"/>`;}
+  const svg=$('map'), s=ZOOMS[cam.z].s, W=(svg.clientWidth||1200), H=(svg.clientHeight||800);
+  const vx=((cam.x/s)-x0)*k, vy=((cam.y/s)-y0)*k, vw=(W/s)*k, vh=(H/s)*k;
+  out+=`<rect x="${vx.toFixed(1)}" y="${vy.toFixed(1)}" width="${vw.toFixed(1)}" height="${vh.toFixed(1)}" fill="none" stroke="#cfc3a6" stroke-width="1.2" opacity=".9"/></svg>`;
+  box.innerHTML=`<div class="hd" style="margin-bottom:4px">Field</div>`+out;
+  box.querySelector('svg').onclick=(e)=>{const r=e.currentTarget.getBoundingClientRect();
+    const fx=(e.clientX-r.left)/r.width*w, fy=(e.clientY-r.top)/r.height*h;
+    cam.x=(fx/k+x0)*s-(($('map').clientWidth||1200)/2); cam.y=(fy/k+y0)*s-(($('map').clientHeight||800)/2);
+    clampCam(); drawMap();};
+}
+(function panning(){
+  const wrap=$('field-wrap'); let on=false,sx=0,sy=0,ox=0,oy=0;
+  wrap.addEventListener('mousedown',e=>{if(e.target.closest('.unit'))return;on=true;sx=e.clientX;sy=e.clientY;ox=cam.x;oy=cam.y;wrap.classList.add('drag');});
+  addEventListener('mousemove',e=>{if(!on)return;cam.x=ox-(e.clientX-sx);cam.y=oy-(e.clientY-sy);clampCam();drawMap();});
+  addEventListener('mouseup',()=>{on=false;wrap.classList.remove('drag');});
+  wrap.addEventListener('wheel',e=>{e.preventDefault();const d=e.deltaY>0?-1:1;const z=Math.min(ZOOMS.length-1,Math.max(0,cam.z+d));if(z!==cam.z)setZoom(z);},{passive:false});
+})();
+function tipTerrain(e,h){ if(!h)return; const r=D.terrainRules[h.terrain], c=(v)=>v===null?'—':v;
+  $('tip').style.display='block'; $('tip').style.left=(e.clientX+14)+'px'; $('tip').style.top=(e.clientY+14)+'px';
+  $('tip').innerHTML=`<b>${TL[h.terrain]} · elevation ${h.elevation}</b><span class="m">foot ${c(r.costFoot)} · horse ${c(r.costCavalry)} · wing ${c(r.costFlying)}</span><br>${r.def?`DEF ${r.def>0?'+':''}${r.def}. `:''}${r.concealment?'Conceals. ':''}${r.blocksSight?'Blocks sight. ':''}${r.chargeBreaks?'Breaks charges.':''}`;}
+function hideTip(){$('tip').style.display='none';}
+
+function renderField(){
+  const B=D.battle;
+  $('roundbox').innerHTML=`<div class="dial"></div><div><div class="sc" style="font-size:15px">Round <span class="mono">${B.round}</span> · ${B.phase}</div>
+    <div class="steps"><span>Command</span><span class="on">Activation</span><span>Objective</span><span>End</span></div></div>`;
+  const m=(s)=>B.morale[s].average;
+  $('sidesbox').innerHTML=['B','A'].map(s=>`<div class="sideRow"><span><span class="seal" style="background:${cssv(s==='B'?'--ember':'--moon')}"></span>${esc(B.sideName[s])}${s===B.activeGroup[0]?'':''}</span>
+    <span class="mono dim">${B.units.filter(u=>u.side===s).length} on field · morale ${m(s)}</span></div>`).join('')
+    + `<div class="sideRow faint" style="font-size:12px;margin-top:2px">Activating ${esc(B.activeGroup)} · deck ${B.deckCounts.draw} · hand ${B.deckCounts.hand} · rites ${B.deckCounts.side}</div>`;
+  $('winsbox').innerHTML=`<div class="hd">Ways to win</div><ul>
+    <li><span class="k"></span><span>Wipe out the enemy</span></li>
+    <li><span class="k"></span><span>Kill their army leader</span></li>
+    <li><span class="k"></span><span>Force a surrender</span></li></ul>`;
+  const order=['Open','Road','Valley','Mud','Forest','HighGround','Mountain','Trench','Ruins','Fortification','Water','Ford'];
+  $('legend').innerHTML='<div class="hd">Ground</div>'+order.map(t=>{const r=D.terrainRules[t];
+    return `<div class="row"><span class="sw" style="background:${cssv('--t-'+t)}"></span><span>${TL[t]}</span><span class="mono faint">${r.costFoot===null?'✕':r.costFoot}${r.def?(r.def>0?' +':' ')+r.def:''}</span></div>`;}).join('');
+  const labels={grid:'Grid',relief:'Relief',coh:'Cohesion',reach:'Reach',summon:'Summon',sprites:'Sprites'};
+  $('ovl').innerHTML=Object.keys(show).map(k=>`<button data-k="${k}" class="${show[k]?'on':''}">${labels[k]}</button>`).join('');
+  $('ovl').querySelectorAll('button').forEach(b=>b.onclick=()=>{show[b.dataset.k]=!show[b.dataset.k];renderField();drawMap();});
+  renderCmd();
+}
+function renderCmd(){
+  const B=D.battle, u=B.units.find(x=>x.uid===selUid)||B.units[0], isSel=u.uid===B.selected.uid, S=B.selected;
+  const card=isSel?S:(D.deck.cards.find(c=>c.id===u.defId)||{stars:u.stars,roles:u.roles,atk:0,def:0,mov:0,range:0,abilities:[],tribute:0,capacityCost:0});
+  const col=cssv(FAC[u.faction]);
+  const stars=(n)=>starRow(n);
+  const bd=isSel?S.atk:null;
+  $('cmd').innerHTML=`
+   <div class="port">
+     <div class="portframe"><i></i><i></i>${A.tokens[u.defId]?`<img src="${A.tokens[u.defId]}" alt="">`:''}</div>
+     <div class="stars">${stars(u.stars)}</div>
+     <div style="text-align:center"><div class="sc" style="font-size:14px">${esc(u.name)}</div>
+     <div class="faint" style="font-size:11.5px">${u.rank?esc(u.rank)+' · ':''}${esc(u.roles.join(' · '))}</div></div>
+   </div>
+   <div class="stat">
+     <div class="full kv"><span class="sc">Hit points</span><b class="mono">${u.hp} / ${u.maxHp}</b></div>
+     <div class="full gauge hp"><i style="width:${(u.hp/u.maxHp*100).toFixed(1)}%"></i></div>
+     <div class="full kv"><span class="sc">Morale</span><b class="mono">${u.morale} <span class="dim">${u.morale>=70?'Steady':u.morale>=40?'Shaken':u.morale>=20?'Disordered':'Routed'}</span></b></div>
+     <div class="full gauge mo"><i style="width:${u.morale}%"></i></div>
+     <div class="kv"><span class="dim">Base ATK</span><b class="mono">${isSel?S.atk.base:(card.atk||'—')}</b></div>
+     <div class="kv"><span class="dim">Final ATK</span><b class="mono">${isSel?S.atk.final:'—'}</b></div>
+     <div class="kv"><span class="dim">Base DEF</span><b class="mono">${isSel?S.def.base:(card.def||'—')}</b></div>
+     <div class="kv"><span class="dim">Final DEF</span><b class="mono">${isSel?S.def.final:'—'}</b></div>
+     <div class="kv"><span class="dim">Move</span><b class="mono">${isSel?S.mov:card.mov}${u.flying?' ✦':''}</b></div>
+     <div class="kv"><span class="dim">Range</span><b class="mono">${card.range}</b></div>
+     <div class="kv"><span class="dim">Stars</span><b class="mono">${u.stars} / 10</b></div>
+     <div class="kv"><span class="dim">Tribute</span><b class="mono">${card.tribute===null?'rite only':card.tribute}</b></div>
+     <div class="full tags"><span class="tag" style="border-color:${col};color:${col}">${FACNAME[u.faction]}</span>${u.leader?'<span class="tag">Army leader</span>':''}${u.platoonId?`<span class="tag">${esc(u.platoonId)}</span>`:'<span class="tag">Independent</span>'}</div>
+   </div>
+   <div class="brk">
+     <div class="hd" style="display:flex;justify-content:space-between"><span>Attack breakdown</span><span class="faint">${isSel?'vs '+esc(S.enemyName):'select a unit'}</span></div>
+     ${bd?`<table><tr><td>Base ATK</td><td class="mono">${bd.base}</td></tr>
+       ${bd.modifiers.map(mm=>`<tr><td>${esc(mm.source)}</td><td class="mono">${mm.value>0?'+':''}${mm.value}</td></tr>`).join('')}
+       <tr class="tot"><td>Final ATK</td><td class="mono">${bd.final}</td></tr></table>
+       <div class="pred">Predicted damage: <b class="mono">${S.predicted}</b> <span class="faint">max(100, ATK − DEF)</span></div>`:'<p class="faint" style="font-size:13px">Click a unit on the field.</p>'}
+   </div>
+   <div>
+     <div class="hd" style="display:flex;justify-content:space-between"><span>Hand</span><span class="faint">${B.deckCounts.hand} of 7 · ${B.deckCounts.draw} left in deck</span></div>
+     <div class="hand" style="margin-top:7px">${B.hand.map(c=>miniCard(c)).join('')}</div>
+     <div class="hd" style="margin-top:9px">Rites ready</div>
+     ${B.playableSide.length?B.playableSide.map(p=>`<div style="font-size:12.5px;margin-top:3px"><b class="sc" style="color:var(--star)">${esc(p.name)}</b> <span class="faint">— ${esc(p.materials.join(', '))}</span></div>`).join(''):'<div class="faint" style="font-size:12.5px">None playable this turn.</div>'}
+   </div>`;
+  $('cmd').querySelectorAll('.mini').forEach(m=>m.onclick=()=>openCard(D.deck.cards.find(c=>c.id===m.dataset.id)||B.hand.find(c=>c.id===m.dataset.id)));
+}
+function miniCard(c){
+  const t=A.tokens[c.id];
+  return `<div class="mini" data-id="${c.id}" title="${esc(c.name)}"><img class="fr" src="${FRAME(c)}" alt="">
+   <div class="mstars">${Array.from({length:Math.min(c.stars,10)},()=>`<img src="${A.star.on}" alt="">`).join('')}</div>
+   <div class="mart">${t?`<img src="${t}" alt="">`:''}</div>
+   <div class="mname">${esc(c.name)}</div><div class="mcost">${c.tribute===null?'R':c.tribute}</div></div>`;
+}
+
+/* ---------------- deck ---------------- */
+let deckFilter='all', deckSort='stars';
+function renderDeck(){
+  const V=D.deck.validation, R=D.rules;
+  const cards=D.deck.cards.filter(c=> deckFilter==='all' || (deckFilter==='own'? c.faction===D.deck.faction : deckFilter===String(c.faction)))
+    .sort((a,b)=> deckSort==='stars'? a.stars-b.stars||a.name.localeCompare(b.name) : deckSort==='count'? b.count-a.count : a.name.localeCompare(b.name));
+  const curve=Object.entries(V.starCurve).sort((a,b)=>+a[0]-+b[0]);
+  const maxC=Math.max(...curve.map(c=>c[1]));
+  const factions=[...new Set(D.deck.cards.map(c=>c.faction))];
+  $('deckpane').innerHTML=`
+   <div class="head">
+     <div><h2 class="sc">${esc(D.deck.name)}</h2>
+       <p>One hundred cards, led by the ${FACNAME[D.deck.faction]}. Stars set what a card costs to bring out: up to three summon free, four to six take one tribute from the field, seven and eight take two, nine takes three, and ten never comes from this deck at all.</p>
+       <p class="faint" style="font-size:13px">Every copy sleeved here is a card the hold physically owns. The copy limit is a ceiling, not a grant: hold one and you may run one. More copies come from the recruitment bell, or off the field on a warrant.</p></div>
+     <div style="text-align:right">
+       <div class="mono" style="font-size:22px">${V.mainCount}<span class="faint" style="font-size:14px"> / ${R.mainDeckSize}</span></div>
+       <div class="faint" style="font-size:12px">${V.ok?'Legal for play':'Illegal'} · ${D.deck.cards.length} distinct · ${D.deck.main.filter(id=>true).length&&''}${(D.deck.cards.filter(c=>c.faction===D.deck.faction).reduce((s,c)=>s+c.count,0))} ${FACNAME[D.deck.faction]}</div>
+     </div>
+   </div>
+   <div style="display:flex;gap:22px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px">
+     <div><div class="hd" style="margin-bottom:16px">Star curve</div>
+       <div class="curve">${curve.map(([s,n])=>`<div style="height:${Math.max(4,n/maxC*44)}px"><b>${n}</b><em>${s}★</em></div>`).join('')}</div></div>
+     <div><div class="hd" style="margin-bottom:5px">Show</div><div class="chips">
+       <button class="chip ${deckFilter==='all'?'on':''}" data-f="all">All</button>
+       <button class="chip ${deckFilter==='own'?'on':''}" data-f="own">${FACNAME[D.deck.faction]} only</button>
+       ${factions.filter(f=>f!==D.deck.faction).map(f=>`<button class="chip ${deckFilter===f?'on':''}" data-f="${f}">${FACNAME[f]}</button>`).join('')}</div></div>
+     <div><div class="hd" style="margin-bottom:5px">Sort</div><div class="chips">
+       ${[['stars','Stars'],['count','Copies'],['name','Name']].map(([k,l])=>`<button class="chip ${deckSort===k?'on':''}" data-s="${k}">${l}</button>`).join('')}</div></div>
+   </div>
+   <div class="grid">${cards.map(cardHTML).join('')}</div>`;
+  $('deckpane').querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{deckFilter=b.dataset.f;renderDeck();});
+  $('deckpane').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{deckSort=b.dataset.s;renderDeck();});
+  $('deckpane').querySelectorAll('.card').forEach(c=>c.onclick=()=>openCard(D.deck.cards.find(x=>x.id===c.dataset.id)));
+}
+function cardHTML(c){
+  const t=A.tokens[c.id];
+  return `<div class="card" data-id="${c.id}">
+    <img class="fr" src="${FRAME(c)}" alt="">
+    <div class="pips">${starRow(c.stars)}</div>
+    <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
+    <div class="nm">${esc(c.name)}</div>
+    <div class="sub">${esc(c.roles[0])}${c.factionRank?' · '+esc(c.factionRank.replace(/_/g,' ').toLowerCase()):''}</div>
+    <div class="nums"><span>${c.atk}</span><span class="faint">${c.tribute===null?'RITE':c.tribute?('T'+c.tribute):'—'}</span><span>${c.def}</span></div>
+    ${c.count>1?`<div class="cnt">×${c.count}</div>`:''}
+  </div>`;
+}
+/** How many of this card the hold owns, so the deck screen never shows copies out of thin air. */
+const ownedOf = (id)=> (D.deck.owned||{})[id] ?? 0;
+function openCard(c){
+  if(!c)return;
+  const t=A.tokens[c.id];
+  $('detailbox').innerHTML=`<div class="big"><img class="fr" src="${FRAME(c)}" alt="">
+      <div class="pips">${starRow(c.stars,true)}</div>
+      <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
+      <div class="nm">${esc(c.name)}</div><div class="sub">${esc(c.roles.join(' · '))}</div>
+      <div class="nums"><span>${c.atk}</span><span>${c.def}</span></div></div>
+    <div style="position:relative">
+      <button class="close" aria-label="Close">×</button>
+      <h3 class="sc">${esc(c.name)}</h3>
+      <div class="faint" style="font-size:13px;margin-bottom:8px">${FACNAME[c.faction]} · ${esc(c.rank)}${c.factionRank?' · '+esc(c.factionRank.replace(/_/g,' ').toLowerCase()):''} · ${c.stars}★</div>
+      <div class="req">
+        <div class="line"><span class="dim">Summon cost</span><b>${c.tribute===null?'Ritual or fusion card only':c.tribute===0?'Free — play from hand':`Tribute ${c.tribute} of your own deployed units`}</b></div>
+        <div class="line"><span class="dim">Copies allowed</span><b class="mono">${c.limit===0?'not in main deck':c.limit}${c.unique?' (named unique)':''}</b></div>
+        <div class="line"><span class="dim">Copies held</span><b class="mono">${ownedOf(c.id)}<span class="faint"> — the deck may never run more than this</span></b></div>
+        <div class="line"><span class="dim">Army capacity</span><b class="mono">${c.capacityCost}</b></div>
+        <div class="line"><span class="dim">HP / ATK / DEF</span><b class="mono">${c.hp} · ${c.atk} · ${c.def}</b></div>
+        <div class="line"><span class="dim">Move / Range</span><b class="mono">${c.mov}${c.flying?' ✦ flying':''} · ${c.range}</b></div>
+      </div>
+      ${c.abilities.map(a=>`<div class="abil"><b>${esc(a.name)}</b> <span class="faint" style="font-size:11px">${esc(a.category)}</span><p>${esc(a.text)}</p></div>`).join('')}
+    </div>`;
+  $('detail').classList.add('on');
+  $('detailbox').querySelector('.close').onclick=()=>$('detail').classList.remove('on');
+}
+$('detail').onclick=(e)=>{if(e.target===$('detail'))$('detail').classList.remove('on');};
+addEventListener('keydown',e=>{if(e.key==='Escape')$('detail').classList.remove('on');});
+
+/* ---------------- rites (side deck) ---------------- */
+function renderRites(){
+  const side=D.deck.side, total=side.reduce((s,c)=>s+c.count,0);
+  const ready=new Set(D.battle.playableSide.map(p=>p.id));
+  $('ritespane').innerHTML=`
+   <div class="head"><div><h2 class="sc">Rites and Convergences</h2>
+     <p>Twenty cards that never enter the draw pile. They are played straight from the side deck when the field already holds what they demand: a ritual burns your own units for their star total, a fusion locks named units together into one body. Nothing here is drawn, and nothing here is free.</p></div>
+     <div style="text-align:right"><div class="mono" style="font-size:22px">${total}<span class="faint" style="font-size:14px"> / ${D.rules.sideDeckSize}</span></div>
+     <div class="faint" style="font-size:12px">${side.length} distinct · ${ready.size} playable right now</div></div></div>
+   <div class="grid">${side.map(c=>{
+     const rc=c.resultCard, t=rc?A.tokens[rc.id]:null, isReady=ready.has(c.id);
+     return `<div class="card ${isReady?'':'locked'}" data-rid="${c.id}">
+       <img class="fr" src="${A.frames.SEALED}" alt="">
+       <div class="pips">${starRow(c.stars)}</div>
+       <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
+       <div class="nm">${esc(c.name)}</div>
+       <div class="sub">${c.kind==='ritual'?'Ritual':'Fusion'}${isReady?' · ready':''}</div>
+       <div class="nums"><span>${c.kind==='ritual'?c.starCost+'★':'materials'}</span><span class="faint">${c.kind==='ritual'?(c.theme||'any'):''}</span></div>
+       ${c.count>1?`<div class="cnt">×${c.count}</div>`:''}</div>`;}).join('')}</div>`;
+  $('ritespane').querySelectorAll('[data-rid]').forEach(el2=>el2.onclick=()=>openRite(side.find(x=>x.id===el2.dataset.rid)));
+}
+function openRite(c){
+  const rc=c.resultCard, t=rc?A.tokens[rc.id]:null;
+  const ready=D.battle.playableSide.find(p=>p.id===c.id);
+  $('detailbox').innerHTML=`<div class="big"><img class="fr" src="${A.frames.SEALED}" alt="">
+      <div class="pips">${starRow(c.stars,true)}</div>
+      <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
+      <div class="nm">${esc(c.name)}</div><div class="sub">${c.kind==='ritual'?'Ritual':'Fusion'}</div></div>
+    <div style="position:relative"><button class="close">×</button>
+      <h3 class="sc">${esc(c.name)}</h3>
+      <div class="faint" style="font-size:13px;margin-bottom:8px">${c.stars}★ ${c.kind} card · ${c.count} in the side deck</div>
+      <p style="font-size:14px;color:var(--dim);margin:0 0 8px">${esc(c.text)}</p>
+      <div class="req">
+        ${c.kind==='ritual'?`
+          <div class="line"><span class="dim">Sacrifice</span><b>Your own units totalling <span class="mono">${c.starCost}★</span></b></div>
+          ${c.theme?`<div class="line"><span class="dim">Restricted to</span><b>${esc(c.theme)} units</b></div>`:''}
+          ${c.needsRole?`<div class="line"><span class="dim">Must include</span><b>a ${esc(c.needsRole)}</b></div>`:''}
+          ${c.needsRitualist?`<div class="line"><span class="dim">Also needs</span><b>a ritualist left alive to channel</b></div>`:''}`
+        :`<div class="line"><span class="dim">Materials</span><b>${esc((c.materials||[]).join(' + '))}</b></div>
+          <div class="line"><span class="dim">Placement</span><b>All materials adjacent to the first</b></div>
+          <div class="line"><span class="dim">Also spends</span><b>a Fusion charge</b></div>`}
+        <div class="line"><span class="dim">Right now</span><b style="color:${ready?'var(--good)':'var(--faint)'}">${ready?'Playable — '+esc(ready.materials.join(', ')):'Requirements not met on the field'}</b></div>
+      </div>
+      ${rc?`<div class="hd" style="margin-top:12px">Brings out</div>
+      <div class="abil"><b>${esc(rc.name)}</b> <span class="faint" style="font-size:11px">${rc.stars}★ ${esc(rc.roles.join(' · '))}</span>
+        <p class="mono" style="font-size:12.5px;color:var(--dim)">${rc.hp} HP · ${rc.atk} ATK · ${rc.def} DEF · move ${rc.mov}</p></div>
+      ${rc.abilities.map(a=>`<div class="abil"><b>${esc(a.name)}</b><p>${esc(a.text)}</p></div>`).join('')}`:''}
+    </div>`;
+  $('detail').classList.add('on');
+  $('detailbox').querySelector('.close').onclick=()=>$('detail').classList.remove('on');
+}
+
+/* ---------------- writs ---------------- */
+function renderWrits(){
+  const W=D.warrants, R=W.rules, board=W.board;
+  const gaps=D.deck.missing;
+  $('writspane').innerHTML=`
+   <div class="head"><div><h2 class="sc">The Wanted Board</h2>
+     <p>A card in your deck is a card you hold. Recruitment draws hand you what it feels like; a writ names one soldier and pays for that one. The board posts ${R.boardSize} at a time, rotates on the hour, and leans toward the cards this muster is short of. You may carry ${R.acceptLimit} at once.</p>
+     <p><b>The writ pays for a prisoner, not a body.</b> Break the target to a quarter of its health or rout it, or corner it — two of yours pressed against it and outnumbering what is left of its line — then take it hand to hand. Kill it and the warrant closes unpaid. Leaders, clones and gods are never taken alive, and the board never names anything above ${R.maxStars}★.</p></div>
+     <div style="text-align:right"><div class="mono" style="font-size:22px">${W.accepted.length}<span class="faint" style="font-size:14px"> / ${R.acceptLimit}</span></div>
+     <div class="faint" style="font-size:12px">in hand · ${board.length} posted</div></div></div>
+   <div class="grid">${board.map(c=>{
+     const t=A.tokens[c.targetId];
+     return `<div class="card ${c.taken?'':'locked'}" data-wid="${c.id}">
+       <img class="fr" src="${A.frames.SEALED}" alt="">
+       <div class="pips">${starRow(c.stars)}</div>
+       <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
+       <div class="nm">${esc(c.targetName)}</div>
+       <div class="sub">${esc(c.title)}${c.taken?' · in hand':''}</div>
+       <div class="nums"><span>${c.copies} card${c.copies===1?'':'s'}</span><span class="faint">hold ${c.owned}</span></div>
+     </div>`;}).join('')}</div>
+   <div class="hd" style="margin-top:16px">What this muster is still short of</div>
+   ${gaps.length? `<div class="req">${gaps.slice(0,8).map(g=>`<div class="line"><span class="dim">${esc(g.name)} <em class="faint">${g.stars}★</em></span><b>hold ${g.owned}, deck asks ${g.owned+g.need}</b></div>`).join('')}</div>`
+     : `<p class="faint" style="font-size:13px;max-width:640px">Nothing. Every card sleeved in the Ashfall Muster is a card the hold physically owns, straight out of the starter box. Warrants from here on buy depth: more copies of a line you already run, or the first copy of something the box never contained.</p>`}`;
+  $('writspane').querySelectorAll('[data-wid]').forEach(el2=>el2.onclick=()=>openWrit(board.find(x=>x.id===el2.dataset.wid)));
+}
+function openWrit(c){
+  const t=A.tokens[c.targetId], u=c.target;
+  const R=D.warrants.rules;
+  $('detailbox').innerHTML=`<div class="big"><img class="fr" src="${A.frames.SEALED}" alt="">
+      <div class="pips">${starRow(c.stars,true)}</div>
+      <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
+      <div class="nm">${esc(c.targetName)}</div><div class="sub">${esc(FACNAME[c.targetFaction]||c.targetFaction)}</div></div>
+    <div style="position:relative"><button class="close">×</button>
+      <h3 class="sc">${esc(c.title)}</h3>
+      <div class="faint" style="font-size:13px;margin-bottom:8px">${c.stars}★ warrant · ${c.taken?'in hand':'posted'} · you hold ${c.owned} cop${c.owned===1?'y':'ies'}</div>
+      <p style="font-size:14px;color:var(--dim);margin:0 0 8px">${esc(c.text)}</p>
+      <div class="req">
+        <div class="line"><span class="dim">Pays</span><b><span class="mono">${c.copies}</span> card${c.copies===1?'':'s'} into the collection</b></div>
+        <div class="line"><span class="dim">Bounty</span><b class="mono">${['koku','iron','timber','silver'].map(r=>c.bounty[r]).join(' · ')}</b></div>
+        <div class="line"><span class="dim">Escort</span><b>about <span class="mono">${c.escortStars}★</span> standing between you and the writ</b></div>
+        <div class="line"><span class="dim">Taken by</span><b>subduing it — broken to a quarter health, routed, or cornered</b></div>
+        <div class="line"><span class="dim">Fails if</span><b style="color:var(--bad)">the target dies</b></div>
+      </div>
+      <div class="hd" style="margin-top:12px">The target</div>
+      <div class="abil"><b>${esc(u.name)}</b> <span class="faint" style="font-size:11px">${u.stars}★ ${esc(u.roles.join(' · '))}</span>
+        <p class="mono" style="font-size:12.5px;color:var(--dim)">${u.hp} HP · ${u.atk} ATK · ${u.def} DEF · move ${u.mov} · range ${u.range}</p></div>
+      ${u.abilities.map(a=>`<div class="abil"><b>${esc(a.name)}</b><p>${esc(a.text)}</p></div>`).join('')}
+    </div>`;
+  $('detail').classList.add('on');
+  $('detailbox').querySelector('.close').onclick=()=>$('detail').classList.remove('on');
+}
+
+/* ---------------- hold ---------------- */
+const PINS={KEEP:[50,44],BARRACKS:[33,60],FORGE:[63,58],RESEARCH_HALL:[41,30],RECRUITMENT_HALL:[62,33],GRANARY:[27,44],MINE:[76,52],SAWPIT:[22,68],STABLE:[47,71],WALL:[50,86],SHRINE:[75,72]};
+const BICON={KEEP:'BLD-KEEP',BARRACKS:'BLD-BARRACKS',FORGE:'BLD-FORGE',RESEARCH_HALL:'BLD-RESEARCH',RECRUITMENT_HALL:'BLD-RECRUIT',GRANARY:'RES-KOKU',MINE:'RES-IRON',SAWPIT:'RES-TIMBER',STABLE:'UI-BANNER',WALL:'BLD-BUILD',SHRINE:'UI-DRAW'};
+const RICON={koku:'RES-KOKU',iron:'RES-IRON',timber:'RES-TIMBER',silver:'RES-SILVER'};
+function renderHold(){
+  const K=D.kingdom, st=K.state;
+  const resBar=Object.entries(RICON).map(([r,ic])=>`<div class="panel"><img src="${A.icons[ic]}" alt=""><b>${st.resources[r].toLocaleString()}</b></div>`).join('');
+  const pins=K.buildings.map(b=>{const p=PINS[b.id];if(!p)return'';
+    return `<div class="pin ${b.building?'busy':''}" style="left:${p[0]}%;top:${p[1]}%" data-b="${b.id}">
+      <img src="${A.icons[BICON[b.id]]}" alt=""><b>${esc(b.name)}${b.level?'':' <span style="color:var(--faint)">·</span>'}</b>
+      ${b.level?`<span class="lv">${b.level}</span>`:''}</div>`;}).join('');
+  const eff=K.effects;
+  $('holdpane').innerHTML=`
+   <div class="holdmap"><img src="${A.art.hold}" alt="The stronghold seen from above"><div class="vig"></div>
+     <div class="res">${resBar}</div>${pins}</div>
+   <div class="holdside">
+     <div class="sec"><h3 class="sc">${esc(st.name)} <span class="faint mono" style="font-size:12px">Keep ${st.levels.KEEP} · storage ${K.storage.toLocaleString()}</span></h3>
+       <p class="faint" style="font-size:13px;margin:0 0 8px">Everything raised here follows you onto the field. Buildings and finished study show up by name in the attack breakdown, so a battle can always be traced back to what you built.</p>
+       <div class="req"><div class="line"><span class="dim">Army capacity carried in</span><b class="mono">+${eff.armyCapacity}</b></div>
+         <div class="line"><span class="dim">Fusion charges</span><b class="mono">${eff.fusionCharges}</b></div>
+         <div class="line"><span class="dim">Ritual progress</span><b class="mono">+${eff.ritualProgress}</b></div>
+         ${eff.statMods.map(m=>`<div class="line"><span class="dim">${esc(m.source)}${m.role?' <span class="faint">('+esc(m.role)+' only)</span>':''}</span><b class="mono">${m.value>0?'+':''}${m.value} ${m.stat}</b></div>`).join('')}</div>
+     </div>
+     <div class="sec"><h3 class="sc">Works <span class="faint" style="font-size:12px">${st.buildQueue.length?'1 under way':'nothing under way'}</span></h3>
+       ${K.buildings.map(b=>`<div class="bld ${b.building?'q':''}" data-b="${b.id}">
+          ${A.tiers[b.id+'_T'+b.tier.tier]?`<img class="thumb" src="${A.tiers[b.id+'_T'+b.tier.tier]}" alt="">`:`<img src="${A.icons[BICON[b.id]]}" alt="">`}
+          <div><div class="n">${esc(b.name)} <span class="faint" style="font-size:11px">tier ${b.tier.tier}${b.nextTierAt?` · rebuilds at ${b.nextTierAt}`:''}</span></div><div class="t">${esc(b.text)}</div>
+            ${b.building?`<div class="bar"><i style="width:${(100*(1-b.building.secondsLeft/b.nextSeconds)).toFixed(0)}%"></i></div>`:''}</div>
+          <div style="text-align:right"><div class="lvl">${b.level}</div>
+            <div class="faint mono" style="font-size:10.5px">${b.building?secs(b.building.secondsLeft):'→ '+secs(b.nextSeconds)}</div></div>
+        </div>`).join('')}
+     </div>
+     <div class="sec"><h3 class="sc">Upgrade tiers <span class="faint" style="font-size:12px">Keep · levels 1-3, 4-7, 8-10</span></h3>
+       <p class="faint" style="font-size:12.5px;margin:0 0 7px">A building changes its look three times over ten levels. Where a tier has not been painted yet the previous one keeps standing, so a missing asset never leaves a hole in the map.</p>
+       <div class="tierstrip">${K.tierBands.map(band=>{const art=A.tiers['KEEP_T'+band.tier];
+         return `<figure class="${band.tier===K.buildings.find(x=>x.id==='KEEP').tier.tier?'now':''}">${art?`<img src="${art}" alt="Keep tier ${band.tier}">`:'<div class="todo">not painted</div>'}
+           <figcaption>Tier ${band.tier} · levels ${band.fromLevel}–${band.toLevel}</figcaption></figure>`;}).join('')}</div>
+       <div class="tierstrip" style="margin-top:7px">${K.tierBands.map(band=>{const art=A.tiers['WALL_T'+band.tier];
+         return `<figure class="${band.tier===K.buildings.find(x=>x.id==='WALL').tier.tier?'now':''}">${art?`<img src="${art}" alt="Wall tier ${band.tier}">`:'<div class="todo">not painted</div>'}
+           <figcaption>Wall tier ${band.tier}</figcaption></figure>`;}).join('')}</div>
+     </div>
+     <div class="sec"><h3 class="sc">Study</h3>
+       <div class="tree">${K.research.map(r=>`<div class="node ${r.done?'done':r.active?'active':r.available?'':'locked'}">
+         <div><b>${esc(r.name)}</b> <span class="faint" style="font-size:11px">tier ${r.tier}</span><p>${esc(r.text)}</p></div>
+         <div style="text-align:right"><div class="st" style="color:${r.done?'var(--good)':r.active?'var(--warn)':r.available?'var(--dim)':'var(--faint)'}">${r.done?'Complete':r.active?secs(r.activeLeft):r.available?'Ready':'Locked'}</div>
+         <div class="cost" style="justify-content:flex-end;margin-top:2px">${Object.entries(r.cost).map(([k2,v])=>`<span><img src="${A.icons[RICON[k2]]}" alt="">${v}</span>`).join('')}</div></div></div>`).join('')}</div>
+     </div>
+     <div class="sec"><h3 class="sc">Recruitment</h3>
+       ${K.banners.map(b=>{const max=Math.max(...b.rates.map(r=>r.weight));
+         return `<div class="banner"><h4>${esc(b.name)}</h4><p>${esc(b.text)}</p>
+           <div class="cost">${Object.entries(b.cost).map(([k2,v])=>`<span><img src="${A.icons[RICON[k2]]}" alt="">${v}</span>`).join('')}<span class="faint">· guarantee at ${b.pity} draws</span></div>
+           <div class="rates">${b.rates.map(r=>`<div style="height:${Math.max(3,r.weight/max*32)}px" title="${r.stars}★ ${r.weight}%"><em>${r.stars}</em></div>`).join('')}</div>
+           <div style="height:12px"></div></div>`;}).join('')}
+     </div>
+   </div>`;
+  $('holdpane').querySelectorAll('[data-b]').forEach(elm=>{
+    elm.onmousemove=(e)=>{const b=K.buildings.find(x=>x.id===elm.dataset.b);
+      $('tip').style.display='block';$('tip').style.left=(e.clientX+14)+'px';$('tip').style.top=(e.clientY+14)+'px';
+      $('tip').innerHTML=`<b>${esc(b.name)} · level ${b.level}</b>${esc(b.text)}<br><span class="m">next: ${Object.entries(b.nextCost).map(([k2,v])=>k2+' '+v).join(' · ')} · ${secs(b.nextSeconds)}</span>`;};
+    elm.onmouseleave=hideTip;});
+}
+
+/* ---------------- lands ---------------- */
+function renderLands(){
+  $('landspane').innerHTML=`
+   <div class="head"><div><h2 class="sc">The Lands</h2>
+     <p>Painted from straight above, the way a campaign map should read: coastline, ridgelines, roads and rooftops all legible at a glance, with the war written into the ground rather than drawn on top of it.</p></div></div>
+   <figure><img src="${A.art.province}" alt="Painted top-down map of a Samurai province"><figcaption><b class="sc">Samurai province</b> — flooded paddy terraces, a volcanic cone and caldera, bamboo groves, a castle on its stone base, the castle town along the river, a torii gate on the headland, fishing boats in the bay. The intended home region for the Samurai faction.</figcaption></figure>
+   <div class="two">
+     <figure><img src="${A.art.world}" alt="Painted top-down campaign map"><figcaption><b class="sc">Campaign map</b> — an irregular continent: volcanic range, pine forest, farm strips, a walled port city, mine scars, one paved highway threading the whole landmass.</figcaption></figure>
+     <figure><img src="${A.art.holdAngle}" alt="The stronghold at an angle"><figcaption><b class="sc">The Hold</b> — the same compound seen from a low angle: forge smoke, training yard, research hall, recruitment bell, a wall face under repair.</figcaption></figure>
+   </div>
+   <div class="head" style="margin-top:8px"><div><h3 class="sc" style="font-size:18px">What changed</h3>
+     <p>The earlier three-quarter battlefield paintings are gone. These are drawn straight down like the reference, with heavier grunge and readable regions, and the tactical field on the Field screen now uses a painted ground clipped to the generated shape instead of flat coloured polygons.</p></div></div>`;
+}
+
+renderRail(); renderField(); renderCam(); renderDeck(); renderRites(); renderWrits(); renderHold(); renderLands();
+requestAnimationFrame(drawMap);
+addEventListener('resize',()=>{if(screen==='field')drawMap();});
+</script>
