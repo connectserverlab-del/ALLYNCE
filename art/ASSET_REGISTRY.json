@@ -2,12 +2,12 @@
   "generated": "npm run assets",
   "total": {
     "present": 213,
-    "missing": 25
+    "missing": 33
   },
   "summary": {
     "Units": {
       "present": 176,
-      "missing": 0,
+      "missing": 8,
       "derived": 0
     },
     "Buildings": {
@@ -1132,6 +1132,24 @@
     },
     {
       "group": "Units",
+      "id": "ANG_LEVY_ASHWING-NOVICE",
+      "label": "Ashwing Novice",
+      "kind": "concept",
+      "path": "art/samples/ANG_LEVY_ASHWING-NOVICE_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "1★ ANG"
+    },
+    {
+      "group": "Units",
+      "id": "ANG_LEVY_ASHWING-NOVICE",
+      "label": "Ashwing Novice",
+      "kind": "cutout",
+      "path": "art/samples/ANG_LEVY_ASHWING-NOVICE_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "1★ ANG"
+    },
+    {
+      "group": "Units",
       "id": "ANG_SECOND_WARDING-SERAPH",
       "label": "Warding Seraph",
       "kind": "concept",
@@ -1201,6 +1219,24 @@
       "path": "art/samples/DEM_FOOT_CINDER-IMP_CUTOUT_V01.png",
       "status": "present",
       "note": "3★ DEM"
+    },
+    {
+      "group": "Units",
+      "id": "DEM_LEVY_PIT-STRAY",
+      "label": "Pit Stray",
+      "kind": "concept",
+      "path": "art/samples/DEM_LEVY_PIT-STRAY_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "1★ DEM"
+    },
+    {
+      "group": "Units",
+      "id": "DEM_LEVY_PIT-STRAY",
+      "label": "Pit Stray",
+      "kind": "cutout",
+      "path": "art/samples/DEM_LEVY_PIT-STRAY_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "1★ DEM"
     },
     {
       "group": "Units",
@@ -1417,6 +1453,42 @@
       "path": "art/samples/WEN_FOOT_STARVELING_CUTOUT_V01.png",
       "status": "present",
       "note": "3★ WEN"
+    },
+    {
+      "group": "Units",
+      "id": "WEN_LEVY_GAUNT-STRAGGLER",
+      "label": "Gaunt Straggler",
+      "kind": "concept",
+      "path": "art/samples/WEN_LEVY_GAUNT-STRAGGLER_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "1★ WEN"
+    },
+    {
+      "group": "Units",
+      "id": "WEN_LEVY_GAUNT-STRAGGLER",
+      "label": "Gaunt Straggler",
+      "kind": "cutout",
+      "path": "art/samples/WEN_LEVY_GAUNT-STRAGGLER_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "1★ WEN"
+    },
+    {
+      "group": "Units",
+      "id": "WEN_SECOND_RIME-ANTLER-WARDEN",
+      "label": "Rime-Antler Warden",
+      "kind": "concept",
+      "path": "art/samples/WEN_SECOND_RIME-ANTLER-WARDEN_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "5★ WEN"
+    },
+    {
+      "group": "Units",
+      "id": "WEN_SECOND_RIME-ANTLER-WARDEN",
+      "label": "Rime-Antler Warden",
+      "kind": "cutout",
+      "path": "art/samples/WEN_SECOND_RIME-ANTLER-WARDEN_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "5★ WEN"
     },
     {
       "group": "Units",

@@ -837,6 +837,21 @@
     "text": "Every enemy within 3 hexes loses 3 Movement for one round and is Suppressed."
   },
   {
+    "id": "ABL_STARVING_PACE",
+    "name": "Starving Pace",
+    "category": "Active",
+    "apCost": 1,
+    "range": 0,
+    "cooldown": 2,
+    "effect": {
+      "kind": "SelfHaste",
+      "mov": 3,
+      "bandWide": true,
+      "duration": 1
+    },
+    "text": "The hunger driving it forward is contagious: this unit and the allies beside it gain +3 Movement for one round."
+  },
+  {
     "id": "ABL_SPLIT_THE_SELF",
     "name": "Split the Self",
     "category": "Active",

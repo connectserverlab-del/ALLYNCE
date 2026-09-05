@@ -2365,6 +2365,38 @@
     "flying": true
   },
   {
+    "id": "ANG_LEVY_ASHWING-NOVICE",
+    "name": "Ashwing Novice",
+    "faction": "ANG",
+    "themes": [
+      "Celestial"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Levy",
+    "size": "Standard",
+    "hp": 800,
+    "atk": 950,
+    "def": 900,
+    "mov": 5,
+    "range": 1,
+    "initiative": 6,
+    "morale": 55,
+    "commandRadius": 0,
+    "capacityCost": 2,
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "formation_hold",
+    "stars": 1,
+    "flying": true
+  },
+  {
     "id": "ANG_SECOND_WARDING-SERAPH",
     "name": "Warding Seraph",
     "faction": "ANG",
@@ -2517,6 +2549,37 @@
       "cutout": "art/samples/DEM_FOOT_CINDER-IMP_CUTOUT_V01.png"
     },
     "stars": 3
+  },
+  {
+    "id": "DEM_LEVY_PIT-STRAY",
+    "name": "Pit Stray",
+    "faction": "DEM",
+    "themes": [
+      "Infernal"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Levy",
+    "size": "Standard",
+    "hp": 700,
+    "atk": 900,
+    "def": 650,
+    "mov": 5,
+    "range": 1,
+    "initiative": 7,
+    "morale": 45,
+    "commandRadius": 0,
+    "capacityCost": 2,
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider",
+    "stars": 1
   },
   {
     "id": "DEM_SECOND_FLENSING-TORMENTOR",
@@ -2974,6 +3037,72 @@
       "cutout": "art/samples/WEN_FOOT_STARVELING_CUTOUT_V01.png"
     },
     "stars": 3
+  },
+  {
+    "id": "WEN_LEVY_GAUNT-STRAGGLER",
+    "name": "Gaunt Straggler",
+    "faction": "WEN",
+    "themes": [
+      "Famine"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Levy",
+    "size": "Standard",
+    "hp": 650,
+    "atk": 1000,
+    "def": 600,
+    "mov": 6,
+    "range": 1,
+    "initiative": 8,
+    "morale": 40,
+    "commandRadius": 0,
+    "capacityCost": 2,
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider",
+    "stars": 1
+  },
+  {
+    "id": "WEN_SECOND_RIME-ANTLER-WARDEN",
+    "name": "Rime-Antler Warden",
+    "faction": "WEN",
+    "themes": [
+      "Famine"
+    ],
+    "roles": [
+      "Second",
+      "Support"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1250,
+    "atk": 1500,
+    "def": 1400,
+    "mov": 6,
+    "range": 1,
+    "initiative": 8,
+    "morale": 60,
+    "commandRadius": 2,
+    "capacityCost": 7,
+    "passives": [],
+    "actives": [
+      "ABL_STARVING_PACE"
+    ],
+    "slots": [
+      "Second",
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "stars": 5
   },
   {
     "id": "WEN_ELITE_ANTLER-WRAITH",
