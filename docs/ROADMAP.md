@@ -102,3 +102,11 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-06: Proposal — the Samurai `castle` privilege ("Rank: castle lord nearby", +100 DEF to allies holding
+  Fortification within command radius) is currently the only rank privilege that rewards holding ground, and it
+  is Samurai-only. As Knight, Dragon Host and Ritual Cult ladders land, each top tier could carry its own
+  ground-holding privilege in its own idiom rather than reusing "castle": a Knight bastion-lord extending the
+  same Fortification bonus to a keep or gatehouse, a Dragon Host aerie-lord doing it from high ground instead of
+  a wall, a Ritual Cult archon speeding channeling for ritualists inside the same radius instead of granting DEF.
+  Same mechanical shape (a named, source-tracked modifier keyed to a rank privilege and a terrain or ritual
+  condition), four different flavors, so no faction's top rank is mechanically thinner than Samurai's.
