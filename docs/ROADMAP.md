@@ -65,26 +65,34 @@ where they conflict.**
 - New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
 - Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
 
+### Done in the host roster-depth pass
+
+- Each host army (Samurai, Knight, Shinobi, Dragon Host) now fields fifteen distinct cards, up from eight or
+  nine. The new cards are three named Commander, Second and Elite cards per faction rather than one apiece,
+  which matters mechanically and not just for deck bulk: `uniqueCopiesPerArmy` caps a unique unit at one copy
+  per army, so with only one Commander card a faction could never deploy the three platoons a Company
+  organization requires. Three distinct leaders per slot make a three-platoon Company buildable for the first
+  time; `core/tests/company.test.ts` proves it for all four host factions and also proves the old one-leader
+  roster still cannot. The new cards ship data-only, no art yet, per the sample-first art pipeline.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
    retired; the new top-down direction and the card-led interface both need a verdict before scaling.
-2. **Card art for the blank cards.** Twenty-three of the forty units have no cutout yet, so their cards read
-   "no art yet". Highest value art task.
-3. **More cards per faction.** A hundred-card deck currently leans on levy and foot because each faction has
-   only eight to eleven distinct cards. Fifteen to twenty per faction would let the faction minimum rise from
-   40 back toward 60.
-4. **Old item:** Do not scale the UI until the three decisions in the sample page are
+2. **Card art for the new roster cards.** The fifteen-per-faction pass above added twenty-six cards with no
+   cutout yet, so their cards read "no art yet"; `docs/asset-registry.md` tracks them alongside the building
+   tiers still to paint. Highest value art task.
+3. **Old item:** Do not scale the UI until the three decisions in the sample page are
    answered (map look, command bar material, field size).
-2. Knight, Dragon Host and Ritual Cult rank ladders with one mechanical trait each per rank.
-3. Remaining unit art (see `pending` in `art/ASSET_MANIFEST.json`), then construction sheets for approved units.
-4. Map generator: named biomes (Ashfall, Marsh, Highland pass), scenario-authored overrides on top of generated ground,
+4. Knight, Dragon Host and Ritual Cult rank ladders with one mechanical trait each per rank.
+5. Remaining unit art (see `docs/asset-registry.md`), then construction sheets for approved units.
+6. Map generator: named biomes (Ashfall, Marsh, Highland pass), scenario-authored overrides on top of generated ground,
    deployment-zone balance check (path cost between anchors within 10 percent both ways).
-5. AI: use trenches and high ground, siege positioning behind the line, cavalry flank routing, surrender when the
+7. AI: use trenches and high ground, siege positioning behind the line, cavalry flank routing, surrender when the
    leader is dead and average morale is below 20.
-6. Army builder validation UI in the sample page (drag units into slots, live doctrine and capacity readout).
-7. Formation Sandbox mode as a page: place units, see cohesion and doctrine live.
-8. Unity port scaffolding once the owner confirms the engine target (see `docs/mechanics.md`).
+8. Army builder validation UI in the sample page (drag units into slots, live doctrine and capacity readout).
+9. Formation Sandbox mode as a page: place units, see cohesion and doctrine live.
+10. Unity port scaffolding once the owner confirms the engine target (see `docs/mechanics.md`).
 
 ## Brainstorm log
 
@@ -102,3 +110,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-06: Proposal — `organizationLevel` currently grants Company status to any three intact platoons, but
+  the Samurai ladder already marks which ranks may lead a Company (Hatamoto and above) and the new roster gives
+  every host faction three named Commander cards spanning several ranks. Require at least one deployed
+  commander whose rank can lead a Company before the Company bonus applies, so climbing the ladder — not just
+  owning three platoons — is what unlocks the higher tier of organization. Gives the rank ladders the
+  mechanical weight the brief asks for beyond the Platoon level, and gives the new alternate Commander cards a
+  reason to differ by rank rather than only by name.

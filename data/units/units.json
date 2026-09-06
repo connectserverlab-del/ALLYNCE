@@ -3388,5 +3388,871 @@
       "cutout": "art/samples/FMC_COMMANDER_HIVE-EMPRESS_CUTOUT_V01.png"
     },
     "stars": 9
+  },
+  {
+    "id": "SAM_COMMANDER_STONEGATE-WARDEN",
+    "name": "Stonegate Warden",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1550,
+    "atk": 1650,
+    "def": 1800,
+    "mov": 4,
+    "range": 1,
+    "initiative": 5,
+    "morale": 82,
+    "commandRadius": 3,
+    "capacityCost": 9,
+    "passives": [],
+    "actives": [
+      "ABL_HOLD_THE_STANDARD"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "factionRank": "GOKENIN",
+    "stars": 6
+  },
+  {
+    "id": "SAM_COMMANDER_CINDERWATCH-CAPTAIN",
+    "name": "Cinderwatch Captain",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1400,
+    "atk": 1600,
+    "def": 1550,
+    "mov": 4,
+    "range": 1,
+    "initiative": 6,
+    "morale": 78,
+    "commandRadius": 3,
+    "capacityCost": 8,
+    "passives": [],
+    "actives": [
+      "ABL_COORDINATED_CUT"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_flank",
+    "factionRank": "KOSHOGUMI_RETAINER",
+    "stars": 5
+  },
+  {
+    "id": "SAM_SECOND_IRON-SASH-LIEUTENANT",
+    "name": "Iron Sash Lieutenant",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Second"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1200,
+    "atk": 1450,
+    "def": 1500,
+    "mov": 4,
+    "range": 1,
+    "initiative": 6,
+    "morale": 72,
+    "commandRadius": 2,
+    "capacityCost": 6,
+    "passives": [],
+    "actives": [
+      "ABL_LAST_OATH"
+    ],
+    "slots": [
+      "Second"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "factionRank": "CHURO",
+    "stars": 4
+  },
+  {
+    "id": "SAM_SECOND_JADE-CREST-RETAINER",
+    "name": "Jade Crest Retainer",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Second"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1300,
+    "atk": 1550,
+    "def": 1600,
+    "mov": 4,
+    "range": 2,
+    "initiative": 6,
+    "morale": 75,
+    "commandRadius": 2,
+    "capacityCost": 7,
+    "passives": [],
+    "actives": [
+      "ABL_COORDINATED_CUT"
+    ],
+    "slots": [
+      "Second"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "factionRank": "GOKENIN",
+    "stars": 5
+  },
+  {
+    "id": "SAM_ELITE_CRIMSON-FANG-DUELIST",
+    "name": "Crimson Fang Duelist",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1750,
+    "atk": 2300,
+    "def": 1800,
+    "mov": 4,
+    "range": 1,
+    "initiative": 5,
+    "morale": 80,
+    "capacityCost": 10,
+    "passives": [],
+    "actives": [
+      "ABL_FORMAL_DUEL"
+    ],
+    "slots": [
+      "Elite"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "factionRank": "UMAMAWARI",
+    "stars": 7
+  },
+  {
+    "id": "SAM_ELITE_ASHEN-BLADE-SENTINEL",
+    "name": "Ashen Blade Sentinel",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1650,
+    "atk": 2100,
+    "def": 1750,
+    "mov": 4,
+    "range": 1,
+    "initiative": 5,
+    "morale": 78,
+    "capacityCost": 9,
+    "passives": [],
+    "actives": [
+      "ABL_FORMAL_DUEL"
+    ],
+    "slots": [
+      "Elite"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "factionRank": "UMAMAWARI",
+    "stars": 6
+  },
+  {
+    "id": "KNI_COMMANDER_IRONWALL-MARSHAL",
+    "name": "Ironwall Marshal",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1650,
+    "atk": 1600,
+    "def": 2050,
+    "mov": 3,
+    "range": 1,
+    "initiative": 4,
+    "morale": 85,
+    "commandRadius": 3,
+    "capacityCost": 9,
+    "passives": [],
+    "actives": [
+      "ABL_HOLD_THE_STANDARD"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "stars": 6
+  },
+  {
+    "id": "KNI_COMMANDER_VIGIL-BASTION-LORD",
+    "name": "Vigil Bastion Lord",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1550,
+    "atk": 1550,
+    "def": 1900,
+    "mov": 3,
+    "range": 1,
+    "initiative": 4,
+    "morale": 80,
+    "commandRadius": 3,
+    "capacityCost": 8,
+    "passives": [],
+    "actives": [
+      "ABL_INHERITED_WALL"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "stars": 5
+  },
+  {
+    "id": "KNI_SECOND_DAWNGUARD-LIEUTENANT",
+    "name": "Dawnguard Lieutenant",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "Second"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1400,
+    "atk": 1450,
+    "def": 1750,
+    "mov": 3,
+    "range": 1,
+    "initiative": 4,
+    "morale": 75,
+    "commandRadius": 2,
+    "capacityCost": 6,
+    "passives": [],
+    "actives": [
+      "ABL_HOLD_THE_STANDARD"
+    ],
+    "slots": [
+      "Second"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "stars": 4
+  },
+  {
+    "id": "KNI_SECOND_OATH-SHIELD-KNIGHT",
+    "name": "Oath Shield Knight",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "Second"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1500,
+    "atk": 1500,
+    "def": 1850,
+    "mov": 3,
+    "range": 1,
+    "initiative": 4,
+    "morale": 78,
+    "commandRadius": 2,
+    "capacityCost": 7,
+    "passives": [],
+    "actives": [
+      "ABL_INHERITED_WALL"
+    ],
+    "slots": [
+      "Second"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "stars": 5
+  },
+  {
+    "id": "KNI_ELITE_STORMBREAKER-PALADIN",
+    "name": "Stormbreaker Paladin",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1850,
+    "atk": 2350,
+    "def": 1700,
+    "mov": 4,
+    "range": 1,
+    "initiative": 5,
+    "morale": 80,
+    "capacityCost": 11,
+    "passives": [],
+    "actives": [
+      "ABL_LANCE_CHARGE"
+    ],
+    "slots": [
+      "Elite"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "stars": 7
+  },
+  {
+    "id": "KNI_ELITE_SILVER-VOW-CHAMPION",
+    "name": "Silver Vow Champion",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1750,
+    "atk": 2200,
+    "def": 1650,
+    "mov": 4,
+    "range": 1,
+    "initiative": 5,
+    "morale": 78,
+    "capacityCost": 10,
+    "passives": [],
+    "actives": [
+      "ABL_LANCE_CHARGE"
+    ],
+    "slots": [
+      "Elite"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "stars": 6
+  },
+  {
+    "id": "SHI_COMMANDER_HOLLOW-REED-JONIN",
+    "name": "Hollow Reed Jonin",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1250,
+    "atk": 1750,
+    "def": 1350,
+    "mov": 6,
+    "range": 1,
+    "initiative": 8,
+    "morale": 78,
+    "commandRadius": 4,
+    "capacityCost": 8,
+    "passives": [],
+    "actives": [
+      "ABL_SILENT_DIRECTIVE"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_flank",
+    "factionRank": "JOUNIN",
+    "stars": 6
+  },
+  {
+    "id": "SHI_COMMANDER_ASHVEIL-STRATEGIST",
+    "name": "Ashveil Strategist",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Standard",
+    "hp": 1200,
+    "atk": 1650,
+    "def": 1300,
+    "mov": 6,
+    "range": 1,
+    "initiative": 8,
+    "morale": 75,
+    "commandRadius": 3,
+    "capacityCost": 7,
+    "passives": [],
+    "actives": [
+      "ABL_SILENT_DIRECTIVE"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_flank",
+    "factionRank": "JOUNIN",
+    "stars": 5
+  },
+  {
+    "id": "SHI_SECOND_INK-STEP-LIEUTENANT",
+    "name": "Ink Step Lieutenant",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "Second"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1200,
+    "atk": 1500,
+    "def": 1350,
+    "mov": 6,
+    "range": 2,
+    "initiative": 8,
+    "morale": 72,
+    "commandRadius": 2,
+    "capacityCost": 6,
+    "passives": [],
+    "actives": [
+      "ABL_SMOKE_RELAY"
+    ],
+    "slots": [
+      "Second"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "factionRank": "CHUNIN",
+    "stars": 4
+  },
+  {
+    "id": "SHI_SECOND_SILENT-BELL-OPERATIVE",
+    "name": "Silent Bell Operative",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "Second"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1180,
+    "atk": 1520,
+    "def": 1330,
+    "mov": 6,
+    "range": 2,
+    "initiative": 8,
+    "morale": 72,
+    "commandRadius": 2,
+    "capacityCost": 6,
+    "passives": [],
+    "actives": [
+      "ABL_SMOKE_RELAY"
+    ],
+    "slots": [
+      "Second"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "factionRank": "CHUNIN",
+    "stars": 4
+  },
+  {
+    "id": "SHI_ELITE_HOLLOW-MASK-ADEPT",
+    "name": "Hollow Mask Adept",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1380,
+    "atk": 2050,
+    "def": 1320,
+    "mov": 6,
+    "range": 1,
+    "initiative": 9,
+    "morale": 78,
+    "capacityCost": 9,
+    "passives": [],
+    "actives": [
+      "ABL_TWIN_ECHO"
+    ],
+    "slots": [
+      "Elite"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "assassin",
+    "factionRank": "ANBU",
+    "stars": 7
+  },
+  {
+    "id": "SHI_ELITE_NIGHT-GLASS-ASSASSIN",
+    "name": "Night Glass Assassin",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1320,
+    "atk": 1950,
+    "def": 1280,
+    "mov": 6,
+    "range": 1,
+    "initiative": 9,
+    "morale": 76,
+    "capacityCost": 8,
+    "passives": [],
+    "actives": [
+      "ABL_TWIN_ECHO"
+    ],
+    "slots": [
+      "Elite"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "assassin",
+    "factionRank": "ANBU",
+    "stars": 6
+  },
+  {
+    "id": "SHI_FOOT_ASH-STEP-INFILTRATOR",
+    "name": "Ash Step Infiltrator",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 700,
+    "atk": 950,
+    "def": 800,
+    "mov": 5,
+    "range": 1,
+    "initiative": 7,
+    "morale": 60,
+    "capacityCost": 3,
+    "passives": [],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider",
+    "factionRank": "GENIN",
+    "stars": 2
+  },
+  {
+    "id": "DRG_COMMANDER_ASHWING-DOMINANT",
+    "name": "Ashwing Dominant",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Large",
+    "hp": 1950,
+    "atk": 1950,
+    "def": 1850,
+    "mov": 7,
+    "range": 1,
+    "initiative": 6,
+    "morale": 83,
+    "commandRadius": 4,
+    "capacityCost": 13,
+    "flying": true,
+    "passives": [],
+    "actives": [
+      "ABL_WING_ROAR"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_flank",
+    "stars": 8
+  },
+  {
+    "id": "DRG_COMMANDER_STORMSCALE-SOVEREIGN",
+    "name": "Stormscale Sovereign",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "Commander"
+    ],
+    "rank": "Commander",
+    "size": "Large",
+    "hp": 1850,
+    "atk": 1850,
+    "def": 1800,
+    "mov": 7,
+    "range": 1,
+    "initiative": 6,
+    "morale": 80,
+    "commandRadius": 3,
+    "capacityCost": 12,
+    "flying": true,
+    "passives": [],
+    "actives": [
+      "ABL_WING_ROAR"
+    ],
+    "slots": [
+      "Commander"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_hold",
+    "stars": 7
+  },
+  {
+    "id": "DRG_SECOND_EMBERCLAW-WINGSECOND",
+    "name": "Emberclaw Wingsecond",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "Second"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1550,
+    "atk": 1750,
+    "def": 1550,
+    "mov": 8,
+    "range": 1,
+    "initiative": 8,
+    "morale": 78,
+    "commandRadius": 2,
+    "capacityCost": 9,
+    "flying": true,
+    "passives": [],
+    "actives": [
+      "ABL_SLIPSTREAM"
+    ],
+    "slots": [
+      "Second"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "stars": 6
+  },
+  {
+    "id": "DRG_SECOND_DUSKWING-SECOND",
+    "name": "Duskwing Second",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "Second"
+    ],
+    "rank": "Second",
+    "size": "Standard",
+    "hp": 1500,
+    "atk": 1700,
+    "def": 1500,
+    "mov": 8,
+    "range": 1,
+    "initiative": 8,
+    "morale": 76,
+    "commandRadius": 2,
+    "capacityCost": 9,
+    "flying": true,
+    "passives": [],
+    "actives": [
+      "ABL_SLIPSTREAM"
+    ],
+    "slots": [
+      "Second"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "leader_support",
+    "stars": 5
+  },
+  {
+    "id": "DRG_ELITE_CINDERMAW-STALKER",
+    "name": "Cindermaw Stalker",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 2050,
+    "atk": 2550,
+    "def": 1750,
+    "mov": 6,
+    "range": 1,
+    "initiative": 6,
+    "morale": 78,
+    "capacityCost": 12,
+    "flying": true,
+    "passives": [],
+    "actives": [
+      "ABL_CRUSHING_DIVE"
+    ],
+    "slots": [
+      "Elite"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "stars": 8
+  },
+  {
+    "id": "DRG_ELITE_ASHFANG-RAVAGER",
+    "name": "Ashfang Ravager",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "Elite"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1950,
+    "atk": 2450,
+    "def": 1700,
+    "mov": 6,
+    "range": 1,
+    "initiative": 6,
+    "morale": 76,
+    "capacityCost": 11,
+    "flying": true,
+    "passives": [],
+    "actives": [
+      "ABL_CRUSHING_DIVE"
+    ],
+    "slots": [
+      "Elite"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "line_breaker",
+    "stars": 7
+  },
+  {
+    "id": "DRG_FOOT_ASHSCALE-DRAKE",
+    "name": "Ashscale Drake",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "FootSoldier"
+    ],
+    "rank": "Foot",
+    "size": "Standard",
+    "hp": 950,
+    "atk": 1200,
+    "def": 1050,
+    "mov": 5,
+    "range": 1,
+    "initiative": 5,
+    "morale": 65,
+    "capacityCost": 4,
+    "flying": true,
+    "passives": [
+      "ABL_PACK_WING"
+    ],
+    "actives": [],
+    "slots": [
+      "FootSoldier"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "raider",
+    "stars": 3
   }
 ]
