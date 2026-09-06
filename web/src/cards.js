@@ -17,9 +17,16 @@ function badges(u) {
   return out.slice(0, 3).join("");
 }
 
-/** Full card. `extra` is appended into the footer (quantity controls, etc). */
+/**
+ * Full card. `extra` is appended into the footer (quantity controls, etc).
+ *
+ * The card is a div with a button role rather than a real <button>: a <button> cannot
+ * legally contain another button, and the parser hoists nested controls out of it —
+ * which is precisely how the add and remove controls ended up rendered outside the card.
+ */
 export function unitCard(u, { selected = false, extra = "" } = {}) {
-  return `<button class="card${selected ? " is-selected" : ""}" data-unit="${esc(u.id)}" data-stars="${u.stars}" type="button">
+  return `<div class="card${selected ? " is-selected" : ""}" data-unit="${esc(u.id)}" data-stars="${u.stars}"
+    role="button" tabindex="0" aria-label="${esc(u.name)}, ${u.stars} stars">
     <div class="card-head">
       ${starRow(u.stars)}
       <span class="card-name">${esc(u.name)}</span>
@@ -33,16 +40,17 @@ export function unitCard(u, { selected = false, extra = "" } = {}) {
       <div><span class="k">MOV</span><span class="v">${u.mov}</span></div>
     </div>
     <div class="card-foot"><span class="cls">${esc(u.className)}</span><span class="cost">${u.capacityCost} cap</span>${extra}</div>
-  </button>`;
+  </div>`;
 }
 
-/** Compact row for lists where the art is a thumbnail. */
+/** Compact row for lists where the art is a thumbnail. Same nesting rule as the card. */
 export function unitRow(u, { qty = "", action = "" } = {}) {
-  return `<button class="row-card" data-unit="${esc(u.id)}" data-stars="${u.stars}" type="button">
+  return `<div class="row-card" data-unit="${esc(u.id)}" data-stars="${u.stars}"
+    role="button" tabindex="0" aria-label="${esc(u.name)}">
     <span class="thumb">${artFor(u, { w: 40, h: 50 })}</span>
     <span class="meta"><b>${esc(u.name)}</b><span>${u.stars}★ · ${esc(u.className)} · ${u.capacityCost} cap</span></span>
     <span class="qty">${qty}${action}</span>
-  </button>`;
+  </div>`;
 }
 
 /** Detail sheet: the full stat block, lore and ability text. */

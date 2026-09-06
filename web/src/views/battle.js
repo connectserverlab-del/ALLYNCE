@@ -191,7 +191,8 @@ export function battleView(root, { data, params, go, toast }) {
     }
     const res = game.useAbility(u, abilityId, target);
     pendingAbility = null;
-    if (!res) return toast("That ability cannot be used right now.", true);
+    if (!res) return toast(`${a.name} cannot be used right now — check action points and cooldown.`, true);
+    if (res.failed) return toast(`${a.name}: ${res.failed}`, true);
     busy = true;
     const nodes = res.hits.map((h) => pawnEl(h.unit)).filter(Boolean);
     if (u.def.stars === 10) await fx.ascend(pawnEl(u));
@@ -221,7 +222,7 @@ export function battleView(root, { data, params, go, toast }) {
           await (step.attack.ranged ? fx.shot(pawnEl(step.actor), node2) : fx.slash(node2));
           fx.float(node2, `−${step.attack.damage}`);
         }
-      } else if (step.ability) {
+      } else if (step.ability && step.ability.hits) {
         const nodes = step.ability.hits.map((h) => pawnEl(h.unit)).filter(Boolean);
         if (step.actor.def.stars === 10) await fx.ascend(pawnEl(step.actor));
         await fx.forAbility(step.ability.ability, pawnEl(step.actor), nodes);

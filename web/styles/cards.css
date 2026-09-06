@@ -98,6 +98,7 @@
 }
 .card-foot .cls { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .card-foot .cost { font-family: var(--mono); color: var(--accent); flex: none; }
+.card-foot .qty-btn { margin-left: auto; }
 
 /* -------------------------------------------------------- tier presentation */
 .card[data-stars="10"] { --tier: var(--accent); }

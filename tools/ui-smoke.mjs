@@ -81,6 +81,9 @@ try {
   const noArt = await page.$$eval(".card", (c) => c.filter((x) => !x.querySelector(".card-art svg, .card-art img")).length);
   check("every card has art", noArt === 0, `${noArt} without art`);
 
+  const columns = await page.$eval("#grid", (g) => getComputedStyle(g).gridTemplateColumns.split(" ").length);
+  check("the card grid keeps its columns", columns >= 4, `${columns} columns`);
+
   /* village: every building opens and offers a real action */
   await page.evaluate(() => { location.hash = "#/village"; });
   await page.waitForSelector(".building");
@@ -106,6 +109,12 @@ try {
   await page.waitForSelector("#auto");
   await page.click("#auto");
   await page.waitForTimeout(250);
+
+  // Controls must live inside the card they belong to: nested <button> elements get
+  // hoisted out by the parser, which is what put the add and remove buttons adrift.
+  const orphans = await page.$$eval("[data-act]", (n) =>
+    n.filter((x) => !x.closest(".card, .row-card")).length);
+  check("card controls stay inside their card", orphans === 0, `${orphans} orphaned controls`);
   const size = await page.textContent("#deck-count");
   check("auto-fill builds a deck", /[1-9]/.test(size), size);
   check("a legal deck enables deployment", (await page.getAttribute("#fight", "disabled")) === null);
@@ -122,6 +131,14 @@ try {
   check("selecting a unit shows its movement range", moves > 0, `${moves} hexes`);
   if (moves) await page.click(".hex.move");
 
+  // Watch the effects layer: attacks and abilities must actually animate.
+  await page.evaluate(() => {
+    window.__fx = new Set();
+    new MutationObserver((ms) => {
+      for (const m of ms) for (const n of m.addedNodes) if (n.className) window.__fx.add(String(n.className));
+    }).observe(document.getElementById("fx-layer"), { childList: true });
+  });
+
   await page.click("#end");
   // The enemy turn is animated one action at a time, so wait for the round counter itself.
   const advanced = await page.waitForFunction(
@@ -129,6 +146,23 @@ try {
     null, { timeout: 25000 }).then(() => true, () => false);
   const logged = await page.$$eval(".battle-log div", (n) => n.length);
   check("the enemy takes its turn and the round advances", advanced, `${logged} log entries`);
+
+  /* keep ending rounds until the two lines meet, then confirm the effects fired */
+  for (let i = 0; i < 5; i++) {
+    const seen = await page.evaluate(() => [...window.__fx]);
+    if (seen.length) break;
+    await page.click("#end").catch(() => {});
+    await page.waitForTimeout(4000);
+  }
+  const effects = await page.evaluate(() => [...window.__fx]);
+  check("attacks and abilities animate", effects.length > 0, effects.join(", ") || "no effect elements observed");
+  // Wait for the enemy to finish acting before checking for leaks: effects are created
+  // continuously while it does, so sampling mid-turn would always find some in flight.
+  await page.waitForFunction(() => /Your move/.test(document.querySelector("#phase")?.textContent ?? ""),
+    null, { timeout: 30000 }).catch(() => {});
+  await page.waitForTimeout(1600);
+  const leaked = await page.$$eval("#fx-layer .fx", (n) => n.length);
+  check("effects clean themselves up", leaked === 0, `${leaked} left behind`);
 
   check("no console errors or failed requests", consoleErrors.length === 0, consoleErrors.slice(0, 3).join(" | "));
 } finally {

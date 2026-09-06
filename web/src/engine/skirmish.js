@@ -277,7 +277,7 @@ export class Skirmish {
       }
     }
 
-    if (!hits.length) return null;
+    if (!hits.length) return { failed: "No valid target in range." };
     u.ap -= a.apCost ?? 1;
     u.cooldowns[abilityId] = a.cooldown ?? 2;
     this.note(`${u.def.name} uses ${a.name}.`);
@@ -349,7 +349,7 @@ export class Skirmish {
       const sig = actor.def.signature;
       if (sig && !(actor.cooldowns[sig] > 0) && actor.ap >= 1) {
         const r = this.useAbility(actor, sig, best);
-        if (r) return { actor, target: best, ability: r };
+        if (r && !r.failed) return { actor, target: best, ability: r };
       }
       return { actor, target: best, attack: this.attack(actor, best) };
     }

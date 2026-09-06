@@ -95,6 +95,15 @@ document.addEventListener("click", (e) => {
   if (card && !e.target.closest("[data-act]")) openSheet(card.dataset.unit);
 });
 
+// Cards are divs with a button role, so Enter and Space have to be wired up by hand.
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const card = e.target.closest?.("[data-unit][role='button']");
+  if (!card || e.target.closest("[data-act]")) return;
+  e.preventDefault();
+  openSheet(card.dataset.unit);
+});
+
 window.addEventListener("hashchange", render);
 save.subscribe(renderPurse);
 
