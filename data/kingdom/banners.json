@@ -1,0 +1,11 @@
+[
+  { "id": "BANNER_MUSTER", "name": "The Muster Call", "text": "Levy and line soldiers answer first. The cheapest way to fill a deck.",
+    "cost": { "silver": 150 }, "pity": 40, "pityFloor": 5,
+    "rates": [ { "stars": 1, "weight": 34 }, { "stars": 2, "weight": 30 }, { "stars": 3, "weight": 18 }, { "stars": 4, "weight": 10 }, { "stars": 5, "weight": 5 }, { "stars": 6, "weight": 2.2 }, { "stars": 7, "weight": 0.7 }, { "stars": 8, "weight": 0.1 } ] },
+  { "id": "BANNER_WARHOST", "name": "The Warhost Contract", "text": "Officers, riders and gun crews. Costlier, and it will not hand you a levy.",
+    "cost": { "silver": 400, "koku": 200 }, "pity": 30, "pityFloor": 6,
+    "rates": [ { "stars": 2, "weight": 20 }, { "stars": 3, "weight": 26 }, { "stars": 4, "weight": 22 }, { "stars": 5, "weight": 17 }, { "stars": 6, "weight": 9 }, { "stars": 7, "weight": 4.5 }, { "stars": 8, "weight": 1.3 }, { "stars": 9, "weight": 0.2 } ] },
+  { "id": "BANNER_OATHFIRE", "name": "The Oathfire Rite", "text": "Names worth swearing to. Guarantees a 7-star or better within thirty draws.",
+    "cost": { "silver": 1200, "iron": 300 }, "pity": 30, "pityFloor": 7,
+    "rates": [ { "stars": 4, "weight": 24 }, { "stars": 5, "weight": 28 }, { "stars": 6, "weight": 24 }, { "stars": 7, "weight": 15 }, { "stars": 8, "weight": 7 }, { "stars": 9, "weight": 2 } ] }
+]
