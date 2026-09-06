@@ -38,7 +38,9 @@ and the organizations it may lead. Other factions have no ladder yet and are unr
 | supreme | reserved for the campaign layer | none yet |
 
 Army validation now requires a platoon commander whose rank may lead a Platoon, and a second who could assume that
-command after succession.
+command after succession. An army fielding more than one platoon is a Company in the field, so it additionally
+requires at least one commander or second, in any of its platoons, whose rank may lead a Company. A faction with
+no rank ladder yet (Knight, Dragon Host) is unrestricted, as it already was for the Platoon-level check.
 
 ## Current Samurai unit assignments
 

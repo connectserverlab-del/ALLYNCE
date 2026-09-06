@@ -101,4 +101,12 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   one, giving duplicates a purpose instead of dead weight.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
+- 2026-09-06: Proposal — `composition.ts` now requires a Company-capable commander once an army fields more than
+  one platoon (rank ladders declared `canLead: [..., "Company", ...]` for exactly this, but nothing checked it
+  before). That only gates army legality; a Company-rank leader who is actually present in battle grants no
+  battlefield effect of its own beyond their personal privileges (banner, castle, and so on). A named, source-
+  tracked "Company Command" bonus — say, a small morale or command-radius bump to every platoon in the same
+  Company while its qualifying leader lives — would give the rank ladders' higher tiers the same mechanical
+  weight in play that the Platoon tier already has, and would finally give the currently-unused
+  `organizationLevel` helper in `composition.ts` a real caller.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
