@@ -3,9 +3,16 @@ import { artFor, crest } from "./art.js";
 
 export const esc = (s) => String(s ?? "").replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c]));
 
+/**
+ * One legible star mark and the rating, rather than ten pips.
+ * Ten clipped 6px shapes read as a smear of specks at card size, and the low tiers
+ * were drawn in the border colour, so a one- to four-star rating was invisible.
+ */
 function starRow(n) {
-  const pips = Array.from({ length: 10 }, (_, i) => `<i class="star${i < n ? "" : " off"}"></i>`).join("");
-  return `<div class="stars" aria-label="${n} of 10 stars">${pips}<span class="n">${n}</span></div>`;
+  return `<div class="stars" aria-label="${n} of 10 stars">
+    <svg class="star-mark" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 2.2l3 6.4 7 1-5.1 4.9 1.3 6.9L12 18.1 5.8 21.4l1.3-6.9L2 9.6l7-1z"/></svg>
+    <b>${n}</b><span class="of">/10</span></div>`;
 }
 
 function badges(u) {
@@ -48,7 +55,8 @@ export function unitRow(u, { qty = "", action = "" } = {}) {
   return `<div class="row-card" data-unit="${esc(u.id)}" data-stars="${u.stars}"
     role="button" tabindex="0" aria-label="${esc(u.name)}">
     <span class="thumb">${artFor(u, { w: 40, h: 50 })}</span>
-    <span class="meta"><b>${esc(u.name)}</b><span>${u.stars}★ · ${esc(u.className)} · ${u.capacityCost} cap</span></span>
+    <span class="meta"><b>${esc(u.name)}</b><span>${u.stars}★ · ${esc(u.className)}
+      · <span class="mono">${u.hp}</span> HP · <span class="mono">${u.atk}</span> ATK · ${u.capacityCost} cap</span></span>
     <span class="qty">${qty}${action}</span>
   </div>`;
 }

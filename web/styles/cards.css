@@ -10,7 +10,8 @@
 }
 
 .card {
-  --tier: var(--line);
+  --tier: var(--line);        /* the top border: quiet until the rating earns it */
+  --star-ink: #8892a1;        /* the star mark: always legible, never the border colour */
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   background: var(--panel);
@@ -43,10 +44,10 @@
 }
 
 /* -------------------------------------------------------------------- stars */
-.stars { display: flex; gap: 1.5px; align-items: center; height: 10px; }
-.star { width: 6px; height: 6px; background: var(--tier); clip-path: polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%); }
-.star.off { background: var(--line); }
-.stars .n { font-family: var(--mono); font-size: 9px; color: var(--text-faint); margin-left: 4px; }
+.stars { display: flex; align-items: center; gap: 4px; }
+.star-mark { width: 13px; height: 13px; flex: none; fill: var(--star-ink); }
+.stars b { font-family: var(--mono); font-size: 13px; font-weight: 600; line-height: 1; color: var(--star-ink); }
+.stars .of { font-family: var(--mono); font-size: 9.5px; color: var(--text-faint); }
 
 /* ---------------------------------------------------------------------- art */
 .card-art {
@@ -101,7 +102,7 @@
 .card-foot .qty-btn { margin-left: auto; }
 
 /* -------------------------------------------------------- tier presentation */
-.card[data-stars="10"] { --tier: var(--accent); }
+.card[data-stars="10"] { --tier: var(--accent); --star-ink: var(--accent); }
 .card[data-stars="10"] .card-name { color: #f0dcae; }
 .card[data-stars="10"]::before {          /* slow brass sweep: the tier reads as different */
   content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
@@ -110,10 +111,20 @@
   animation: ascend 5.5s linear infinite;
 }
 @keyframes ascend { from { background-position: 180% 0; } to { background-position: -80% 0; } }
-.card[data-stars="9"] { --tier: #9e86c0; }
-.card[data-stars="8"] { --tier: #6f8fb5; }
-.card[data-stars="7"] { --tier: #6a9a76; }
-.card[data-stars="6"], .card[data-stars="5"] { --tier: #86865f; }
+.card[data-stars="9"] { --tier: #9e86c0; --star-ink: #b8a3d6; }
+.card[data-stars="8"] { --tier: #6f8fb5; --star-ink: #92b2d4; }
+.card[data-stars="7"] { --tier: #6a9a76; --star-ink: #8cbd97; }
+.card[data-stars="6"], .card[data-stars="5"] { --tier: #86865f; --star-ink: #a8a87c; }
+
+/* On a phone, one auto-filled column made a card as tall as the viewport and pushed
+   the stat band — hit points included — clean off the screen. Two columns keep it visible. */
+@media (max-width: 560px) {
+  .card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .card-name { font-size: 12px; }
+  .card-sub { font-size: 8.5px; }
+  .card-stats .v { font-size: 10.5px; }
+  .card-foot { font-size: 9px; padding: 6px 8px; }
+}
 
 /* --------------------------------------------------------------- compact row */
 .row-card {
@@ -129,8 +140,12 @@
 .row-card .meta b { display: block; font-family: var(--display); font-size: 12.5px; font-weight: 500;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .row-card .meta span { font-size: 10px; color: var(--text-faint); }
+.row-card .meta span .mono { color: var(--text-dim); }
 .row-card .qty { font-family: var(--mono); font-size: 11px; color: var(--text-dim); flex: none; }
 .row-card[data-stars="10"] { --tier: var(--accent); }
+.row-card[data-stars="9"] { --tier: #9e86c0; }
+.row-card[data-stars="8"] { --tier: #6f8fb5; }
+.row-card[data-stars="7"] { --tier: #6a9a76; }
 
 /* ------------------------------------------------------------------- detail */
 .sheet-backdrop { position: fixed; inset: 0; background: rgb(6 8 11 / .74); z-index: 60; display: grid; place-items: center; padding: 20px; }
