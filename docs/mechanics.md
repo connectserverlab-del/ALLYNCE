@@ -17,7 +17,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §13 Cavalry and flying | `battle.ts` (`reachable`), `effects.ts` (`ChargeBonus`) | Anti-air, forest costs, Predatory Airspace, Diving Charge, Exposed |
 | §14 Abilities and clones | `effects.ts` | Twin Echo reference implementation |
 | §15 Objectives | `objectives.ts` | Eleven composable types |
-| §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses |
+| §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses. Reaches for Fusion (`tryFusion`) once an adjacent recipe-eligible ally, a spare Fusion charge and a nearby fight all line up, and only after an attack or a ground-gaining move has had first refusal |
 | Marching between battles | `march.ts`, `data/movement/march.json` | Continuous movement in seconds over the same hexes the battle fights on. A straight line where one works; an A* over the grid, string-pulled to a few waypoints, where it does not. Nothing crosses a field in more than 45 seconds, and a route forced the long way round hurries rather than arriving late |
 | §18 Architecture | all | Simulation is separate from presentation; every action logs a serializable event |
 
