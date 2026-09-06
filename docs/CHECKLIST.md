@@ -47,7 +47,6 @@ Three things bite:
 | Id | Item | Why it matters |
 |---|---|---|
 | `Q-1` | Second art pass on weak cutouts: any unit whose card still reads "no art yet", plus re-cuts where the flood fill left a panel edge | Blank cards are the most visible gap in the game |
-| `Q-2` | Scenario authoring on top of generated ground: let a scenario pin objectives, rituals and portals to a generated field by role rather than by fixed coordinates | Scenarios currently hard-code hexes, which breaks on a regenerated map |
 | `Q-16` | Teach the AI that splitting is a trade, not a gain: split to hold ground or bait, never against a single hard hitter, and hunt enemy copies to shrink the original | Cloning now costs the caster real weight and the AI still treats it as free presence |
 | `Q-4` | Deck editor in the sample page: move cards between main and side deck with live legality | Deck building is the core loop and is currently read-only |
 | `Q-5` | Campaign map: regions on the province map, each a scenario; a won region feeds the holding's production | Connects the battle layer to the holding layer |
@@ -90,3 +89,4 @@ Three things bite:
 | `D-23` | Marching: continuous movement in seconds, squads with formation slots, a 45-second cap scaled by distance, and hex routing round anything a straight line cannot cross |
 | `D-24` | March screen: click the ground to send a squad, drag a name onto a squad to have that unit walk over and fall in, with the real engine bundled into the page rather than a recording of it |
 | `D-25` | `scripts/audit-cutouts.py` fails a cutout that kept its background or lost its figure, so a card cannot ship as a pale slab again |
+| `D-26` | Scenario authoring by role: a scenario's deploy hexes, ritual centers, portals and `CaptureHold`/`Escort` objective hexes can be pinned relative to a generated field's own anchors and deploy zones instead of fixed coordinates, so the same scenario file replays on any regeneration of the ground; `data/scenarios/ford_crossing.json` is the worked example |

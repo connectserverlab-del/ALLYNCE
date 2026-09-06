@@ -48,6 +48,36 @@ export function attackArc(defenderPos: Hex, defenderFacing: Facing, attackerPos:
   return "flank";
 }
 
+/** Round fractional cube coordinates to the nearest hex (standard cube-rounding). */
+function hexRound(qf: number, rf: number): Hex {
+  const xf = qf, zf = rf, yf = -xf - zf;
+  let x = Math.round(xf), y = Math.round(yf), z = Math.round(zf);
+  const dx = Math.abs(x - xf), dy = Math.abs(y - yf), dz = Math.abs(z - zf);
+  if (dx > dy && dx > dz) x = -y - z; else if (dy > dz) y = -x - z; else z = -x - y;
+  return { q: x, r: z };
+}
+
+/** The hex at parameter `t` along the line from `a` to `b`. `t` outside 0..1 extrapolates past either end. */
+export function hexLerp(a: Hex, b: Hex, t: number): Hex {
+  return hexRound(a.q + (b.q - a.q) * t, a.r + (b.r - a.r) * t);
+}
+
+/**
+ * A hex placed along the line from `from` to `to`, `distance` hexes from `from` (negative or past `to`
+ * extrapolates beyond either end), then nudged `lateral` hexes to one side. Used to pin scenario features
+ * (ritual circles, portals, objective hexes) to a generated field by relationship rather than fixed coordinates.
+ */
+export function hexAlong(from: Hex, to: Hex, distance: number, lateral = 0): Hex {
+  const total = hexDistance(from, to);
+  let h = hexLerp(from, to, total === 0 ? 0 : distance / total);
+  if (lateral !== 0) {
+    const dir = directionTo(from, to);
+    const side = DIRECTIONS[(dir + (lateral > 0 ? 2 : 4)) % 6]!; // ~120 degrees off the line, this codebase's flank arc
+    for (let i = 0; i < Math.abs(lateral); i++) h = hexAdd(h, side);
+  }
+  return h;
+}
+
 export function hexRing(center: Hex, radius: number): Hex[] {
   if (radius === 0) return [center];
   const out: Hex[] = [];

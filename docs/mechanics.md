@@ -74,6 +74,29 @@ breakdown contains each named source.
    stacks. A synchronized release manifests all three Sovereigns at full Anchors; anything else weakens the summon.
 5. Defenders win by collapsing two circles or surviving twelve rounds.
 
+## Scenario authoring: role-pinned placement
+
+Threefold Invocation is hand-authored on a fixed map, so every deploy hex, ritual center and portal position is a
+literal `[q, r]` in `data/scenarios/threefold_invocation.json`. That breaks the moment a scenario wants to run on
+`generateMap`'s irregular ground instead: the anchors, deploy zones and passable hexes are different every seed.
+
+`core/src/scenario-roles.ts` adds a second way to author a position, a **role** (`FieldRole`), resolved against the
+generated field at build time instead of baked into the file:
+
+- `{ role: "anchor", side }` — that side's deployment anchor.
+- `{ role: "deployZone", side, index }` — the `index`-th hex of that side's deploy zone.
+- `{ role: "along", from, to, distance, lateral? }` — `distance` hexes from `from`'s anchor toward `to`'s anchor
+  (negative or past the far anchor extrapolates behind or beyond it), nudged `lateral` hexes to one side.
+
+Any scenario field that used to take `[q, r]` (`deploy`, a specialist's `at`, a portal's `at`, a ritual's `center`,
+and the hex on a `CaptureHold` or `Escort` objective) now takes a `Placement`: either the old literal tuple or a
+role. A scenario opts into a generated field with `"map": { "generate": { ...MapSpec minus seed } }` in place of
+the fixed `{ width, height, terrain }` block; `buildScenario` then resolves every role against that field before
+deploying anything, spiralling a role to the nearest free hex if two features would otherwise land on the same
+one. `data/scenarios/ford_crossing.json` is the worked example: the same file plays out on any seed, with its
+ritual circle, reinforcement portal and capture-hold objective always the same distance from the lines they
+belong to rather than the same two coordinates.
+
 ## Unity port guidance
 
 - `Battle` → a plain C# class owned by a `BattleRunner` MonoBehaviour; keep it free of `UnityEngine` types.

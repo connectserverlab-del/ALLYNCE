@@ -102,3 +102,9 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-06: Proposal — now that a scenario can pin its features to a generated field by role instead of fixed
+  hexes (`docs/mechanics.md`, "Scenario authoring: role-pinned placement"), the campaign map (Q-5) could generate
+  a fresh, irregular field for every region on the province map rather than reusing one hand-built one: a region
+  keeps its scenario definition (which sides, which objectives, roughly where the ritual circle or the portal
+  sits relative to the lines) while the ground itself is different, odd-shaped, every time it is fought over.
+  Matches the owner's standing intent that battlefields are never even squares or cookie-cutter.

@@ -249,6 +249,17 @@ export function applyMap(b: Battle, map: GeneratedMap): void {
   for (const h of map.hexes) { if (h.terrain !== "Open") b.terrain.set(hexKey(h), h.terrain); b.elevation.set(hexKey(h), h.elevation); }
 }
 
+/** The closest playable hex on the map to `target`, skipping terrain a placement should never land on. */
+export function nearestOpenHex(map: GeneratedMap, target: Hex, blocked: Terrain[] = ["Mountain", "Water"]): Hex {
+  let best: MapHex = map.hexes[0]!, bestD = Infinity;
+  for (const h of map.hexes) {
+    if (blocked.includes(h.terrain)) continue;
+    const d = hexDistance(h, target);
+    if (d < bestD) { bestD = d; best = h; }
+  }
+  return { q: best.q, r: best.r };
+}
+
 /** Terrain histogram for logs and tests. */
 export function terrainCounts(map: GeneratedMap): Record<string, number> {
   const out: Record<string, number> = {};
