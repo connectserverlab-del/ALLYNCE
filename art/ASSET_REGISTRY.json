@@ -2,12 +2,12 @@
   "generated": "npm run assets",
   "total": {
     "present": 213,
-    "missing": 25
+    "missing": 77
   },
   "summary": {
     "Units": {
       "present": 176,
-      "missing": 0,
+      "missing": 52,
       "derived": 0
     },
     "Buildings": {
@@ -1615,6 +1615,474 @@
       "path": "art/samples/FMC_COMMANDER_HIVE-EMPRESS_CUTOUT_V01.png",
       "status": "present",
       "note": "9★ FMC"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_COMMANDER_STONEGATE-WARDEN",
+      "label": "Stonegate Warden",
+      "kind": "concept",
+      "path": "art/samples/SAM_COMMANDER_STONEGATE-WARDEN_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "6★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_COMMANDER_STONEGATE-WARDEN",
+      "label": "Stonegate Warden",
+      "kind": "cutout",
+      "path": "art/samples/SAM_COMMANDER_STONEGATE-WARDEN_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "6★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_COMMANDER_CINDERWATCH-CAPTAIN",
+      "label": "Cinderwatch Captain",
+      "kind": "concept",
+      "path": "art/samples/SAM_COMMANDER_CINDERWATCH-CAPTAIN_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "5★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_COMMANDER_CINDERWATCH-CAPTAIN",
+      "label": "Cinderwatch Captain",
+      "kind": "cutout",
+      "path": "art/samples/SAM_COMMANDER_CINDERWATCH-CAPTAIN_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "5★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_SECOND_IRON-SASH-LIEUTENANT",
+      "label": "Iron Sash Lieutenant",
+      "kind": "concept",
+      "path": "art/samples/SAM_SECOND_IRON-SASH-LIEUTENANT_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "4★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_SECOND_IRON-SASH-LIEUTENANT",
+      "label": "Iron Sash Lieutenant",
+      "kind": "cutout",
+      "path": "art/samples/SAM_SECOND_IRON-SASH-LIEUTENANT_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "4★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_SECOND_JADE-CREST-RETAINER",
+      "label": "Jade Crest Retainer",
+      "kind": "concept",
+      "path": "art/samples/SAM_SECOND_JADE-CREST-RETAINER_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "5★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_SECOND_JADE-CREST-RETAINER",
+      "label": "Jade Crest Retainer",
+      "kind": "cutout",
+      "path": "art/samples/SAM_SECOND_JADE-CREST-RETAINER_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "5★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_ELITE_CRIMSON-FANG-DUELIST",
+      "label": "Crimson Fang Duelist",
+      "kind": "concept",
+      "path": "art/samples/SAM_ELITE_CRIMSON-FANG-DUELIST_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "7★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_ELITE_CRIMSON-FANG-DUELIST",
+      "label": "Crimson Fang Duelist",
+      "kind": "cutout",
+      "path": "art/samples/SAM_ELITE_CRIMSON-FANG-DUELIST_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "7★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_ELITE_ASHEN-BLADE-SENTINEL",
+      "label": "Ashen Blade Sentinel",
+      "kind": "concept",
+      "path": "art/samples/SAM_ELITE_ASHEN-BLADE-SENTINEL_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "6★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_ELITE_ASHEN-BLADE-SENTINEL",
+      "label": "Ashen Blade Sentinel",
+      "kind": "cutout",
+      "path": "art/samples/SAM_ELITE_ASHEN-BLADE-SENTINEL_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "6★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_COMMANDER_IRONWALL-MARSHAL",
+      "label": "Ironwall Marshal",
+      "kind": "concept",
+      "path": "art/samples/KNI_COMMANDER_IRONWALL-MARSHAL_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "6★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_COMMANDER_IRONWALL-MARSHAL",
+      "label": "Ironwall Marshal",
+      "kind": "cutout",
+      "path": "art/samples/KNI_COMMANDER_IRONWALL-MARSHAL_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "6★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_COMMANDER_VIGIL-BASTION-LORD",
+      "label": "Vigil Bastion Lord",
+      "kind": "concept",
+      "path": "art/samples/KNI_COMMANDER_VIGIL-BASTION-LORD_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "5★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_COMMANDER_VIGIL-BASTION-LORD",
+      "label": "Vigil Bastion Lord",
+      "kind": "cutout",
+      "path": "art/samples/KNI_COMMANDER_VIGIL-BASTION-LORD_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "5★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_SECOND_DAWNGUARD-LIEUTENANT",
+      "label": "Dawnguard Lieutenant",
+      "kind": "concept",
+      "path": "art/samples/KNI_SECOND_DAWNGUARD-LIEUTENANT_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "4★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_SECOND_DAWNGUARD-LIEUTENANT",
+      "label": "Dawnguard Lieutenant",
+      "kind": "cutout",
+      "path": "art/samples/KNI_SECOND_DAWNGUARD-LIEUTENANT_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "4★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_SECOND_OATH-SHIELD-KNIGHT",
+      "label": "Oath Shield Knight",
+      "kind": "concept",
+      "path": "art/samples/KNI_SECOND_OATH-SHIELD-KNIGHT_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "5★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_SECOND_OATH-SHIELD-KNIGHT",
+      "label": "Oath Shield Knight",
+      "kind": "cutout",
+      "path": "art/samples/KNI_SECOND_OATH-SHIELD-KNIGHT_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "5★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_ELITE_STORMBREAKER-PALADIN",
+      "label": "Stormbreaker Paladin",
+      "kind": "concept",
+      "path": "art/samples/KNI_ELITE_STORMBREAKER-PALADIN_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "7★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_ELITE_STORMBREAKER-PALADIN",
+      "label": "Stormbreaker Paladin",
+      "kind": "cutout",
+      "path": "art/samples/KNI_ELITE_STORMBREAKER-PALADIN_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "7★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_ELITE_SILVER-VOW-CHAMPION",
+      "label": "Silver Vow Champion",
+      "kind": "concept",
+      "path": "art/samples/KNI_ELITE_SILVER-VOW-CHAMPION_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "6★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_ELITE_SILVER-VOW-CHAMPION",
+      "label": "Silver Vow Champion",
+      "kind": "cutout",
+      "path": "art/samples/KNI_ELITE_SILVER-VOW-CHAMPION_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "6★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_COMMANDER_HOLLOW-REED-JONIN",
+      "label": "Hollow Reed Jonin",
+      "kind": "concept",
+      "path": "art/samples/SHI_COMMANDER_HOLLOW-REED-JONIN_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "6★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_COMMANDER_HOLLOW-REED-JONIN",
+      "label": "Hollow Reed Jonin",
+      "kind": "cutout",
+      "path": "art/samples/SHI_COMMANDER_HOLLOW-REED-JONIN_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "6★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_COMMANDER_ASHVEIL-STRATEGIST",
+      "label": "Ashveil Strategist",
+      "kind": "concept",
+      "path": "art/samples/SHI_COMMANDER_ASHVEIL-STRATEGIST_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "5★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_COMMANDER_ASHVEIL-STRATEGIST",
+      "label": "Ashveil Strategist",
+      "kind": "cutout",
+      "path": "art/samples/SHI_COMMANDER_ASHVEIL-STRATEGIST_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "5★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_SECOND_INK-STEP-LIEUTENANT",
+      "label": "Ink Step Lieutenant",
+      "kind": "concept",
+      "path": "art/samples/SHI_SECOND_INK-STEP-LIEUTENANT_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "4★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_SECOND_INK-STEP-LIEUTENANT",
+      "label": "Ink Step Lieutenant",
+      "kind": "cutout",
+      "path": "art/samples/SHI_SECOND_INK-STEP-LIEUTENANT_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "4★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_SECOND_SILENT-BELL-OPERATIVE",
+      "label": "Silent Bell Operative",
+      "kind": "concept",
+      "path": "art/samples/SHI_SECOND_SILENT-BELL-OPERATIVE_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "4★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_SECOND_SILENT-BELL-OPERATIVE",
+      "label": "Silent Bell Operative",
+      "kind": "cutout",
+      "path": "art/samples/SHI_SECOND_SILENT-BELL-OPERATIVE_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "4★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_ELITE_HOLLOW-MASK-ADEPT",
+      "label": "Hollow Mask Adept",
+      "kind": "concept",
+      "path": "art/samples/SHI_ELITE_HOLLOW-MASK-ADEPT_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "7★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_ELITE_HOLLOW-MASK-ADEPT",
+      "label": "Hollow Mask Adept",
+      "kind": "cutout",
+      "path": "art/samples/SHI_ELITE_HOLLOW-MASK-ADEPT_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "7★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_ELITE_NIGHT-GLASS-ASSASSIN",
+      "label": "Night Glass Assassin",
+      "kind": "concept",
+      "path": "art/samples/SHI_ELITE_NIGHT-GLASS-ASSASSIN_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "6★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_ELITE_NIGHT-GLASS-ASSASSIN",
+      "label": "Night Glass Assassin",
+      "kind": "cutout",
+      "path": "art/samples/SHI_ELITE_NIGHT-GLASS-ASSASSIN_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "6★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_FOOT_ASH-STEP-INFILTRATOR",
+      "label": "Ash Step Infiltrator",
+      "kind": "concept",
+      "path": "art/samples/SHI_FOOT_ASH-STEP-INFILTRATOR_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "2★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_FOOT_ASH-STEP-INFILTRATOR",
+      "label": "Ash Step Infiltrator",
+      "kind": "cutout",
+      "path": "art/samples/SHI_FOOT_ASH-STEP-INFILTRATOR_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "2★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_COMMANDER_ASHWING-DOMINANT",
+      "label": "Ashwing Dominant",
+      "kind": "concept",
+      "path": "art/samples/DRG_COMMANDER_ASHWING-DOMINANT_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "8★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_COMMANDER_ASHWING-DOMINANT",
+      "label": "Ashwing Dominant",
+      "kind": "cutout",
+      "path": "art/samples/DRG_COMMANDER_ASHWING-DOMINANT_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "8★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_COMMANDER_STORMSCALE-SOVEREIGN",
+      "label": "Stormscale Sovereign",
+      "kind": "concept",
+      "path": "art/samples/DRG_COMMANDER_STORMSCALE-SOVEREIGN_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "7★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_COMMANDER_STORMSCALE-SOVEREIGN",
+      "label": "Stormscale Sovereign",
+      "kind": "cutout",
+      "path": "art/samples/DRG_COMMANDER_STORMSCALE-SOVEREIGN_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "7★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_SECOND_EMBERCLAW-WINGSECOND",
+      "label": "Emberclaw Wingsecond",
+      "kind": "concept",
+      "path": "art/samples/DRG_SECOND_EMBERCLAW-WINGSECOND_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "6★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_SECOND_EMBERCLAW-WINGSECOND",
+      "label": "Emberclaw Wingsecond",
+      "kind": "cutout",
+      "path": "art/samples/DRG_SECOND_EMBERCLAW-WINGSECOND_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "6★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_SECOND_DUSKWING-SECOND",
+      "label": "Duskwing Second",
+      "kind": "concept",
+      "path": "art/samples/DRG_SECOND_DUSKWING-SECOND_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "5★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_SECOND_DUSKWING-SECOND",
+      "label": "Duskwing Second",
+      "kind": "cutout",
+      "path": "art/samples/DRG_SECOND_DUSKWING-SECOND_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "5★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_ELITE_CINDERMAW-STALKER",
+      "label": "Cindermaw Stalker",
+      "kind": "concept",
+      "path": "art/samples/DRG_ELITE_CINDERMAW-STALKER_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "8★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_ELITE_CINDERMAW-STALKER",
+      "label": "Cindermaw Stalker",
+      "kind": "cutout",
+      "path": "art/samples/DRG_ELITE_CINDERMAW-STALKER_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "8★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_ELITE_ASHFANG-RAVAGER",
+      "label": "Ashfang Ravager",
+      "kind": "concept",
+      "path": "art/samples/DRG_ELITE_ASHFANG-RAVAGER_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "7★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_ELITE_ASHFANG-RAVAGER",
+      "label": "Ashfang Ravager",
+      "kind": "cutout",
+      "path": "art/samples/DRG_ELITE_ASHFANG-RAVAGER_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "7★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_FOOT_ASHSCALE-DRAKE",
+      "label": "Ashscale Drake",
+      "kind": "concept",
+      "path": "art/samples/DRG_FOOT_ASHSCALE-DRAKE_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "3★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_FOOT_ASHSCALE-DRAKE",
+      "label": "Ashscale Drake",
+      "kind": "cutout",
+      "path": "art/samples/DRG_FOOT_ASHSCALE-DRAKE_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "3★ DRG"
     },
     {
       "group": "Buildings",
