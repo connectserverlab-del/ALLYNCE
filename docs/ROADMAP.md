@@ -102,3 +102,7 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-06: Proposal — now that the AI actually fuses, `targetScore` should weight an enemy's fused body
+  (`UnitState.fusedFrom` is set) as a priority kill the way it already weights a ritualist or an exposed elite:
+  a fused body carries the value of the two or three cards that went into it, so a smart opponent should want
+  to break it apart before it lands the first swing, not treat it as an ordinary target of the same size.

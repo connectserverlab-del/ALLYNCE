@@ -9,6 +9,7 @@ import { cohesionConnections } from "./cohesion.js";
 import { bandOf, enemiesWithin } from "./effects.js";
 import { moraleBand } from "./morale.js";
 import type { RitualCircle } from "./rituals.js";
+import { eligibleRecipes } from "./fusion.js";
 
 /**
  * Goal-oriented utility AI. Each unit scores candidate actions with weighted considerations:
@@ -36,6 +37,7 @@ const SIEGE_EXPOSURE_PENALTY = 300;   // a gun in the front rank is a gun about 
 const SIEGE_SCREEN_BONUS = 80;        // ... and a gun with friends in front of it is a gun that keeps firing
 const FLANK_ARC_WEIGHT = 100;         // per arc step around a target: rear is worth two, flank one
 const APPROACH_STEP_WEIGHT = 10;      // tie-break between equally exposed approaches: take the near one
+const FUSION_ENEMY_RANGE = 6;         // a clash close enough to be worth trading bodies for weight over
 
 /**
  * When a card skill is worth an action. All six are setup for something else, so the tests they have to
@@ -152,11 +154,48 @@ function actOnce(ctrl: BattleController, u: UnitState, profile: AiProfile): bool
   // Movement toward the highest-utility goal
   if (u.movedThisActivation === 0 || u.ap > 1) {
     const goal = chooseGoal(ctrl, u, profile);
-    if (goal) return moveToward(ctrl, u, goal, profile);
+    if (goal && moveToward(ctrl, u, goal, profile)) return true;
   }
+  // Fusion never outbids an attack or a move: it only spends an AP that would otherwise buy nothing,
+  // once a fight is close enough that the stronger single body is worth the platoon depth it costs.
+  // (A goal with no reachable hex toward it falls through to here rather than stopping the unit cold.)
+  if (tryFusion(ctrl, u)) return true;
   // Otherwise Defend
   if (u.ap > 0 && !u.defending) { ctrl.defend(u); return true; }
   return false;
+}
+
+/**
+ * Attempt to fuse this unit with one or more adjacent, same-side allies by any recipe the roster
+ * satisfies. Only considered once nothing more urgent (an attack, a move) is on offer, and only when
+ * an enemy is close enough that the trade — fewer bodies for one heavier one — is actually worth
+ * making now rather than a detour taken for its own sake.
+ */
+export function tryFusion(ctrl: BattleController, u: UnitState): boolean {
+  const b = ctrl.b;
+  if (u.isClone || u.ap < 1 || !u.pos) return false;
+  const side = b.sides.get(u.side);
+  if (!side) return false;
+  const enemy = nearestEnemy(ctrl, u);
+  if (!enemy || !enemy.pos || hexDistance(u.pos, enemy.pos) > FUSION_ENEMY_RANGE) return false;
+  const allies = b.adjacentAllies(u).filter((a) => !a.isClone && a.ap >= 1);
+  for (const r of b.reg.fusions.values()) {
+    const need = r.inputs.length - 1;
+    if (need < 1 || need > allies.length || (side.fusionCharges ?? 0) < (r.charges ?? 1)) continue;
+    for (const combo of combinations(allies, need)) {
+      const units = [u, ...combo];
+      if (!eligibleRecipes(b, units).some((x) => x.id === r.id)) continue;
+      try { ctrl.fuse(units, r.id); return true; } catch { /* another condition failed after all */ }
+    }
+  }
+  return false;
+}
+/** Every way to choose `size` distinct items out of `items`, order ignored. */
+function combinations<T>(items: T[], size: number): T[][] {
+  if (size === 0) return [[]];
+  if (items.length < size) return [];
+  const [first, ...rest] = items;
+  return [...combinations(rest, size - 1).map((c) => [first!, ...c]), ...combinations(rest, size)];
 }
 
 function targetScore(ctrl: BattleController, u: UnitState, t: UnitState, profile: AiProfile): number {
