@@ -7,7 +7,7 @@ import { changeMorale } from "./morale.js";
 export type PortalState = "Telegraph" | "Open" | "Destroyed" | "Captured";
 export interface QueuedReinforcement { defId: string; cost: number; platoonId: string | null }
 export interface Portal {
-  id: string; side: string; pos: Hex; hp: number; def: number; capacity: number; cooldown: number; cooldownLeft: number;
+  id: string; side: string; originalSide: string; pos: Hex; hp: number; def: number; capacity: number; cooldown: number; cooldownLeft: number;
   state: PortalState; telegraphLeft: number; queue: QueuedReinforcement[]; captureProgress: number; captureBy: string | null;
 }
 
@@ -17,7 +17,7 @@ export function callPortal(b: Battle, side: string, pos: Hex, opts: { id?: strin
   for (const h of hexNeighbors(pos)) { const u = b.unitAt(h); if (u && u.side !== side && !u.isClone) return null; }
   const keeperBonus = opts.keeperUid ? 1 : 0;
   const p: Portal = {
-    id: opts.id ?? b.newUid("portal"), side, pos, hp: opts.hp ?? 1200, def: opts.def ?? 1200,
+    id: opts.id ?? b.newUid("portal"), side, originalSide: side, pos, hp: opts.hp ?? 1200, def: opts.def ?? 1200,
     capacity: (opts.capacity ?? 1) + keeperBonus, cooldown: Math.max(1, (opts.cooldown ?? 2) - keeperBonus), cooldownLeft: 0,
     state: opts.telegraph === 0 ? "Open" : "Telegraph", telegraphLeft: opts.telegraph ?? 1, queue: [], captureProgress: 0, captureBy: null,
   };
