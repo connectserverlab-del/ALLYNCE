@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ALLYNCE — Field Manual</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%2314171d%22%2F%3E%3Cpath%20d%3D%22M16%204%20L27%209%20v9%20q0%208-11%2012Q5%2026%205%2018V9z%22%20fill%3D%22none%22%20stroke%3D%22%23c8a45c%22%20stroke-width%3D%222.4%22%2F%3E%3Cpath%20d%3D%22M16%2011%20l4%205-4%205-4-5z%22%20fill%3D%22%23c8a45c%22%2F%3E%3C%2Fsvg%3E">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/cards.css">
+<link rel="stylesheet" href="styles/views.css">
+<link rel="stylesheet" href="styles/battle.css">
+</head>
+<body>
+<div id="boot" class="boot">Loading army lists…</div>
+
+<header class="topbar" hidden>
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span class="brand-name">ALLYNCE</span>
+    <span class="brand-sub">Field Manual</span>
+  </div>
+  <nav class="tabs" id="tabs" aria-label="Sections"></nav>
+  <div class="purse" id="purse"></div>
+</header>
+
+<main id="view" class="view" hidden></main>
+
+<div id="fx-layer" class="fx-layer" aria-hidden="true"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
