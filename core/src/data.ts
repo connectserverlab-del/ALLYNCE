@@ -17,7 +17,12 @@ export interface CompositionRules {
     continuityRounds: number;
   };
   themeCohesion: { perAdjacentAlly: number; maxConnections: number; disorderedCap: number };
-  limits: { eliteSlotsPerPlatoon: number; uniqueCopiesPerArmy: number; bossDeityStartingDeployment: boolean; wizardsPerPlatoon: number };
+  limits: {
+    eliteSlotsPerPlatoon: number; uniqueCopiesPerArmy: number;
+    bossDeityStartingDeployment: boolean; wizardsPerPlatoon: number;
+    /** Ten-star units are army-defining; only this many may be fielded at once. */
+    ascendantsPerArmy?: number;
+  };
 }
 
 export class Registry {
@@ -61,10 +66,24 @@ function readJson<T>(rel: string): T {
   return JSON.parse(readFileSync(resolve(DATA_ROOT, rel), "utf8")) as T;
 }
 
+/**
+ * Optional data file: returns [] when the file is absent so the core roster
+ * still loads on its own.
+ */
+function readJsonIfPresent<T>(rel: string, fallback: T): T {
+  try { return readJson<T>(rel); } catch { return fallback; }
+}
+
 export function loadRegistry(): Registry {
   return new Registry(
-    readJson<UnitDef[]>("units/units.json"),
-    readJson<AbilityDef[]>("abilities/abilities.json"),
+    [
+      ...readJson<UnitDef[]>("units/units.json"),
+      ...readJsonIfPresent<UnitDef[]>("units/expansion.json", []),
+    ],
+    [
+      ...readJson<AbilityDef[]>("abilities/abilities.json"),
+      ...readJsonIfPresent<AbilityDef[]>("abilities/expansion.json", []),
+    ],
     readJson<Record<string, FactionDef>>("factions/factions.json"),
     readJson<CompositionRules>("compositions/platoon.json"),
   );

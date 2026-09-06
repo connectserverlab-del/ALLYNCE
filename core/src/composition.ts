@@ -12,7 +12,16 @@ export function validateArmy(reg: Registry, army: ArmyBlueprint): ValidationResu
   const slots = reg.rules.standardPlatoon.slots;
   let capacity = 0;
   const uniqueSeen = new Map<string, number>();
-  const count = (id: string) => { const d = reg.unit(id); capacity += d.capacityCost; if (d.unique) uniqueSeen.set(id, (uniqueSeen.get(id) ?? 0) + 1); return d; };
+  const copies = new Map<string, number>();
+  let ascendants = 0;
+  const count = (id: string) => {
+    const d = reg.unit(id);
+    capacity += d.capacityCost;
+    copies.set(id, (copies.get(id) ?? 0) + 1);
+    if (d.unique) uniqueSeen.set(id, (uniqueSeen.get(id) ?? 0) + 1);
+    if (d.stars === 10) ascendants++;
+    return d;
+  };
   const require = (d: UnitDef, slot: string, pid: string) => {
     if (!d.slots.includes(slot as any)) errors.push(`${pid}: ${d.id} cannot fill ${slot}`);
     if (d.summonOnly || d.roles.includes("Boss") || d.roles.includes("Deity")) errors.push(`${pid}: ${d.id} is summon-only/boss/deity and cannot start deployed`);
@@ -34,6 +43,13 @@ export function validateArmy(reg: Registry, army: ArmyBlueprint): ValidationResu
     if (d.summonOnly) errors.push(`${s} is summon-only`);
   }
   for (const [id, n] of uniqueSeen) if (n > reg.rules.limits.uniqueCopiesPerArmy) errors.push(`Unique unit ${id} appears ${n} times`);
+  // Per-unit copy caps: archangels, named monastic holders and every Ascendant are one-of.
+  for (const [id, n] of copies) {
+    const limit = reg.unit(id).uniqueLimit;
+    if (limit !== undefined && n > limit) errors.push(`${reg.unit(id).name} is limited to ${limit} cop${limit === 1 ? "y" : "ies"} per army (has ${n})`);
+  }
+  const ascendantCap = reg.rules.limits.ascendantsPerArmy ?? Infinity;
+  if (ascendants > ascendantCap) errors.push(`Only ${ascendantCap} Ascendant (ten-star) unit may be fielded per army; this army has ${ascendants}`);
   if (capacity > army.capacity) errors.push(`Army Capacity ${capacity} exceeds ${army.capacity}`);
   return { ok: errors.length === 0, errors, capacityUsed: capacity };
 }

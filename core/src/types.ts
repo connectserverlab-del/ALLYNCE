@@ -10,6 +10,12 @@ export type Size = "Standard" | "Large" | "Colossal";
 export interface RitualRatings { knowledge: number; language: number; affinity: number; channeling: number }
 export interface DivineDef { manifestation: number; anchors: number; arrival: string }
 
+/** Star rating, 1-10. Ten is the Ascendant tier and is deliberately off the curve. */
+export type Stars = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+
+/** A fusion unit belongs to FUS but counts as both parent themes for cohesion. */
+export interface FusionDef { of: [string, string]; label: string }
+
 export interface UnitDef {
   id: string; name: string; faction: string;
   themes: string[]; roles: Role[]; rank: string; size: Size;
@@ -19,6 +25,11 @@ export interface UnitDef {
   unique: boolean; summonOnly: boolean; ai: string; flying?: boolean;
   ritual?: RitualRatings; divine?: DivineDef;
   art?: Record<string, string>;
+  /** Expansion metadata. Optional so the hand-authored core roster stays valid. */
+  stars?: Stars; tier?: string; className?: string; lore?: string;
+  keywords?: string[]; signature?: string; fusion?: FusionDef;
+  /** Maximum copies in one army. Defaults to 1 when `unique` is set. */
+  uniqueLimit?: number;
 }
 
 export type AbilityCategory = "Active" | "Passive" | "Reaction" | "Order" | "Succession" | "Objective";
