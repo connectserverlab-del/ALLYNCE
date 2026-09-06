@@ -9,10 +9,25 @@ import { applyEffect, clearRoundEffectFlags, orderFlags } from "./effects.js";
 import { tickRitual, releaseRitual, linkedGroup, assistRitual, disruptRitual, type RitualCircle } from "./rituals.js";
 import { tickPortal, checkCaptureInterrupt, attackPortal, captureStep, type Portal } from "./portals.js";
 import { commandRadiusRecovery, surroundedPenalty, moraleBand, changeMorale } from "./morale.js";
-import { doctrineState } from "./composition.js";
+import { doctrineState, organizationLevel } from "./composition.js";
 import { evaluateObjective, markSynchronized, type ObjectiveDef, type ObjectiveProgress } from "./objectives.js";
 
-export interface VictoryRules { sides: Record<string, ObjectiveDef[]>; roundLimit: number; roundLimitWinner?: string }
+/**
+ * A side with no platoon above Broken doctrine (`organizationLevel` "None") and average morale at or below
+ * this line has nothing left to organize a fight with; it surrenders rather than being ground down further.
+ * Deep in the Broken/Routed range on purpose so this never preempts a battle that is still contested.
+ */
+export const DEFAULT_SURRENDER_MORALE = 10;
+
+export interface VictoryRules {
+  sides: Record<string, ObjectiveDef[]>;
+  roundLimit: number;
+  roundLimitWinner?: string;
+  /** Side -> uid of the unit whose death ends the battle immediately, independent of scenario objectives. */
+  armyLeaderUids?: Record<string, string>;
+  /** Overrides `DEFAULT_SURRENDER_MORALE` for this battle. */
+  surrenderMoraleThreshold?: number;
+}
 
 /**
  * Deterministic turn-state machine. Round = Command -> Alternating Activation -> Objective -> End.
@@ -287,23 +302,47 @@ export class BattleController {
 
   objectiveStatus(side: string): ObjectiveProgress[] { return (this.victory.sides[side] ?? []).map((o) => evaluateObjective(this.b, o)); }
 
+  /**
+   * Scenario objectives layer on top of three universal win conditions that apply to every battle:
+   * wipe the opponent out, kill their army leader, or force a surrender (command collapses and morale
+   * with it). Checked in that order after objectives, then the round limit decides anything still open.
+   */
   evaluateVictory(): void {
     const b = this.b;
+    const other = (side: string) => [...b.sides.keys()].find((s) => s !== side) ?? "draw";
     for (const side of Object.keys(this.victory.sides)) {
       const status = this.objectiveStatus(side);
       // all primary objectives satisfied -> win (objectives are ANDed; scenarios can encode OR by separate side entries later)
       if (status.length && status.some((s) => s.satisfied && (s.def.type !== "SurviveRounds" && s.def.type !== "DefendForRounds"))) { b.winner = side; b.winReason = status.filter((s) => s.satisfied).map((s) => s.def.type).join("+"); }
     }
+    if (!b.winner) for (const [side, uid] of Object.entries(this.victory.armyLeaderUids ?? {})) {
+      const leader = b.units.get(uid);
+      if (leader?.defeated) { b.winner = other(side); b.winReason = "ArmyLeaderKilled"; break; }
+    }
+    if (!b.winner) for (const side of b.sides.keys()) {
+      const alive = [...b.activeUnits(side)].filter((u) => !u.isClone);
+      if (alive.length === 0) { b.winner = other(side); b.winReason = "Wipeout"; break; }
+    }
+    if (!b.winner) for (const side of b.sides.keys()) {
+      const alive = [...b.activeUnits(side)].filter((u) => !u.isClone);
+      if (!alive.length || organizationLevel(b, side) !== "None") continue;
+      const avgMorale = alive.reduce((s, u) => s + u.morale, 0) / alive.length;
+      if (avgMorale <= (this.victory.surrenderMoraleThreshold ?? DEFAULT_SURRENDER_MORALE)) { b.winner = other(side); b.winReason = "Surrender"; break; }
+    }
     if (!b.winner && b.round >= this.victory.roundLimit) {
       b.winner = this.victory.roundLimitWinner ?? "draw";
       b.winReason = "Round limit";
     }
-    // command structure broken: a side with no living commanders or seconds and no rituals/portals loses morale war
-    if (!b.winner) for (const side of b.sides.keys()) {
-      const alive = [...b.activeUnits(side)].filter((u) => !u.isClone);
-      if (alive.length === 0) { b.winner = [...b.sides.keys()].find((s) => s !== side) ?? "draw"; b.winReason = "Enemy eliminated"; }
-    }
     if (b.winner) b.log("BattleEnded", { winner: b.winner, reason: b.winReason });
+  }
+
+  /** Explicit surrender, e.g. an AI or player decision that continuing is hopeless. No-op once the battle has ended. */
+  surrender(side: string): void {
+    const b = this.b;
+    if (b.winner) return;
+    b.winner = [...b.sides.keys()].find((s) => s !== side) ?? "draw";
+    b.winReason = "Surrender";
+    b.log("BattleEnded", { winner: b.winner, reason: b.winReason });
   }
 
   /** Convenience: run the fixed phases; the caller drives activations between commandPhase() and objectivePhase(). */

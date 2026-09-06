@@ -16,6 +16,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §13 Cavalry and flying | `battle.ts` (`reachable`), `effects.ts` (`ChargeBonus`) | Anti-air, forest costs, Predatory Airspace, Diving Charge, Exposed |
 | §14 Abilities and clones | `effects.ts` | Twin Echo reference implementation |
 | §15 Objectives | `objectives.ts` | Eleven composable types |
+| Victory | `battle.ts` (`evaluateVictory`, `surrender`) | Three universal win conditions layered under scenario objectives: Wipeout, Army Leader Killed (`VictoryRules.armyLeaderUids`, resolved in `scenario.ts` from a side's optional `armyLeader` def id), Surrender (`organizationLevel` at "None" plus average morale at or below `DEFAULT_SURRENDER_MORALE`, or an explicit call) |
 | §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses |
 | §18 Architecture | all | Simulation is separate from presentation; every action logs a serializable event |
 
