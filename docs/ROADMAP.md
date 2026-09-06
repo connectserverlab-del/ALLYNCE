@@ -65,6 +65,14 @@ where they conflict.**
 - New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
 - Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
 
+### Done in the Company Order pass
+
+- Company organization's battlefield effect, named in `data/compositions/platoon.json` since the vertical slice
+  but never wired up ("One army-level order per round"), is now live: a side fielding three or more non-Broken
+  platoons, with a living commander or second who may lead a Company, can spend one Company Order per round to
+  reissue its faction's signature platoon order to every platoon on the side at once (`companyLeader` in
+  `composition.ts`, `BattleController.useCompanyOrder` in `battle.ts`).
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -102,3 +110,14 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-06: Proposal — the new Company Order only fires for factions with a signature platoon order
+  (`faction.platoonOrder`), which today is Samurai, Shinobi, Knight and Dragon Host alone. The five sworn
+  companies and seven divisions have none, so once they field three platoons together their rank of Company
+  gains nothing. Giving each its own signature order, the way the standing intent already asks for a rank
+  ladder, a cannon and a cavalry unit per faction, would close the gap the same way and give the Company tier
+  the weight everywhere the rank ladders eventually reach it.
+- 2026-09-06: Proposal — Ritual Cult has no Commander/Second/Elite/FootSoldier roles at all (its two units are
+  both Specialist-slot Ritualists), so it cannot field a standard platoon and the Company Order as built does
+  not apply to it. Worth an owner decision on whether Ritual Cult ever fields fought platoons like the other
+  factions, or whether its equivalent of "one army-level order per round" should instead be an extra ritual
+  hold/instability charge once three ritual circles are active at once — its own kind of Company.

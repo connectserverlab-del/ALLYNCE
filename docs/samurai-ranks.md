@@ -40,6 +40,16 @@ and the organizations it may lead. Other factions have no ladder yet and are unr
 Army validation now requires a platoon commander whose rank may lead a Platoon, and a second who could assume that
 command after succession.
 
+`data/compositions/platoon.json` names Company organization's battlefield effect: "One army-level order per
+round." That is now live (`BattleController.useCompanyOrder`, `core/src/battle.ts`): once three or more of a
+side's platoons are in the field and not Broken, its one living commander or second who may lead a Company
+(`composition.ts`'s `companyLeader`) can spend the side's single Company Order for the round. It reissues that
+faction's own signature platoon order (`faction.platoonOrder`) to every non-Broken platoon on the side at once,
+through the same effect interpreter each platoon's own order already runs through — a Hatamoto calling Measured
+Advance, for instance, gives every fielded Samurai platoon the +100 ATK next-melee bonus in one action instead of
+one platoon at a time. A faction with no signature order (`platoonOrder: null`, most of the sworn companies and
+divisions) has nothing to reissue and cannot use the Company Order yet.
+
 ## Current Samurai unit assignments
 
 | Unit | Rank |
