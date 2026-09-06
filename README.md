@@ -24,7 +24,12 @@ npm run test:ui     # headless browser checks on the client (card layout, villag
 npm run gen:content # regenerates data/units/expansion.json from tools/content
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
+npm run check       # everything above in one pass; this is what CI runs
 ```
+
+CI runs `npm run check` on every pull request and on `main`
+(`.github/workflows/ci.yml`). A weekly routine runs the same command and only
+reports when something fails.
 
 ## The client
 
