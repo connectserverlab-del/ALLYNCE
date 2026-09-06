@@ -16,6 +16,7 @@ import { EXPANSION_ABILITIES } from "./content/abilities.mjs";
 import * as classic from "./content/roster-classic.mjs";
 import * as fresh from "./content/roster-new.mjs";
 import { FUSIONS } from "./content/roster-fusion.mjs";
+import { DIVINE } from "./content/roster-divine.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DATA = resolve(ROOT, "data");
@@ -45,6 +46,12 @@ const NEW_FACTIONS = {
     platoonOrder: "ORD_UNBROKEN_FORM", passiveDoctrine: "DOC_STILL_MIND",
     weakness: "Low unit count and several one-copy holders; loses badly to attrition it cannot answer.",
   },
+  DIV: {
+    id: "DIV", name: "Divine Entities", identity: "Summoned powers that answer a rite, not an order",
+    palette: ["dim amethyst", "bone", "cold iron"], primaryTheme: "Divine",
+    platoonOrder: null, passiveDoctrine: null,
+    weakness: "Summon-only and one copy per battle; Anchors can be broken, and a staggered entity is a liability to whoever called it.",
+  },
   FUS: {
     id: "FUS", name: "Fused Orders", identity: "Two schools carried in one line",
     palette: ["split bronze", "muted indigo", "ash"], primaryTheme: "Fusion",
@@ -58,6 +65,7 @@ const units = [
   ...classic.DRAGONS, ...classic.RITUAL, ...classic.THORN_COVEN,
   ...fresh.ANGELS, ...fresh.STORMBOUND, ...fresh.MONKS,
   ...FUSIONS,
+  ...DIVINE,
 ];
 
 /* ------------------------------------------------------------------ checks */

@@ -138,5 +138,19 @@
     "platoonOrder": null,
     "passiveDoctrine": "DOC_TWO_TRADITIONS",
     "weakness": "Expensive, few, and never a full platoon on their own; fusion units support an army, they are not one."
+  },
+  "DIV": {
+    "id": "DIV",
+    "name": "Divine Entities",
+    "identity": "Summoned powers that answer a rite, not an order",
+    "palette": [
+      "dim amethyst",
+      "bone",
+      "cold iron"
+    ],
+    "primaryTheme": "Divine",
+    "platoonOrder": null,
+    "passiveDoctrine": null,
+    "weakness": "Summon-only and one copy per battle; Anchors can be broken, and a staggered entity is a liability to whoever called it."
   }
 }

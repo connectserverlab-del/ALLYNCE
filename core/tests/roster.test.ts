@@ -69,7 +69,19 @@ describe("expansion roster", () => {
     expect(n("DRG")).toBeGreaterThanOrEqual(34); expect(ten("DRG")).toBe(3);
     expect(n("STM")).toBeGreaterThanOrEqual(20);
     expect(n("MNK")).toBeGreaterThanOrEqual(20);
-    expect(all.length).toBeGreaterThanOrEqual(250);
+    expect(all.length).toBeGreaterThanOrEqual(270);
+  });
+
+  it("divine entities are summon-only, one-copy and cost no capacity", () => {
+    const divine = all.filter((u) => u.faction === "DIV");
+    expect(divine.length).toBeGreaterThanOrEqual(15);
+    for (const d of divine) {
+      expect(d.summonOnly, d.id).toBe(true);
+      expect(d.unique, d.id).toBe(true);
+      expect(d.capacityCost, d.id).toBe(0);
+      expect(d.slots, d.id).toEqual([]);
+      expect(d.divine?.arrival, d.id).toBeTruthy();
+    }
   });
 
   it("monastic orders include one-copy holders", () => {

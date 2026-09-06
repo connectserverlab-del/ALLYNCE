@@ -19,7 +19,7 @@ This repository holds five things:
 ```bash
 npm install
 npm run web         # serves the playable client at http://localhost:5173/web/index.html
-npm test            # 47 tests: combat math, cohesion, composition, succession, clones, rituals, portals, roster, scenario
+npm test            # 48 tests: combat math, cohesion, composition, succession, clones, rituals, portals, roster, scenario
 npm run test:ui     # headless browser checks on the client (card layout, village, deck, battle)
 npm run gen:content # regenerates data/units/expansion.json from tools/content
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
@@ -43,14 +43,14 @@ npm run typecheck
   composition rules the simulation enforces.
 - **Battle** — a hex board with movement ranges, facing arcs, the full stat breakdown behind
   every number, and a roughly one-second effect for each attack and ability.
-- **Armoury** — the whole 260-unit roster, filterable, with a stat sheet per unit.
+- **Armoury** — the whole 272-unit roster, filterable, with a stat sheet per unit.
 
 Every unit has art. Ten of them have painted concepts; the rest get a deterministic generated
 heraldic portrait seeded from the unit id, so no card can render an empty art window.
 
 ## The roster
 
-260 units across ten factions, star-rated 1–10.
+272 units across eleven factions, star-rated 1–10.
 
 | Faction | Units | Ten-stars | Notes |
 |---|---:|---:|---|
@@ -64,6 +64,7 @@ heraldic portrait seeded from the unit id, so no card can render an empty art wi
 | Stormbound Clan | 26 | 2 | Warriors and stormcallers of one bloodline |
 | Monastic Orders | 20 | 2 | Several one-copy named holders |
 | Fused Orders | 35 | 7 | Seven archetypes of five |
+| Divine Entities | 15 | 3 | Summon-only, one copy per battle, no capacity cost |
 
 Fusion archetypes are Warrior-Monk, Shadow-Blade, Dragonknight, Storm-Seraph, Thornwyrm,
 Thunderstep and Ascetic Choir. A fusion unit keeps both parent themes, so it counts for Theme

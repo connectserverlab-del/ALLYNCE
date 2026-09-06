@@ -9864,5 +9864,488 @@
       "anchors": 2,
       "arrival": "Judgement is seated: enemies within 4 lose 25 morale and all allied statuses are cleansed."
     }
+  },
+  {
+    "id": "DIV_COLOSSUS_SOVEREIGN-OF-THRESHOLDS",
+    "name": "Sovereign of Thresholds",
+    "faction": "DIV",
+    "stars": 6,
+    "tier": "Exemplar",
+    "className": "Divine Entities",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 3150,
+    "atk": 2250,
+    "def": 2150,
+    "mov": 4,
+    "range": 1,
+    "initiative": 4,
+    "morale": 79,
+    "capacityCost": 0,
+    "passives": [],
+    "actives": [],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "line_breaker",
+    "lore": "Presides over doorways. Was invited through one and has not left.",
+    "keywords": [
+      "Summoned"
+    ],
+    "uniqueLimit": 1,
+    "divine": {
+      "manifestation": 2,
+      "anchors": 2,
+      "arrival": "Every portal on the field opens at once, whoever built it."
+    }
+  },
+  {
+    "id": "DIV_COLOSSUS_SOVEREIGN-OF-TALLIES",
+    "name": "Sovereign of Tallies",
+    "faction": "DIV",
+    "stars": 6,
+    "tier": "Exemplar",
+    "className": "Divine Entities",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 3150,
+    "atk": 2250,
+    "def": 2150,
+    "mov": 4,
+    "range": 1,
+    "initiative": 4,
+    "morale": 79,
+    "capacityCost": 0,
+    "passives": [],
+    "actives": [],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "line_breaker",
+    "lore": "Counts. Has never been observed to stop counting.",
+    "keywords": [
+      "Summoned"
+    ],
+    "uniqueLimit": 1,
+    "divine": {
+      "manifestation": 2,
+      "anchors": 2,
+      "arrival": "Every unit's remaining hit points are revealed to both sides permanently."
+    }
+  },
+  {
+    "id": "DIV_COLOSSUS_SOVEREIGN-OF-THE-SALT-TIDE",
+    "name": "Sovereign of the Salt Tide",
+    "faction": "DIV",
+    "stars": 7,
+    "tier": "Paragon",
+    "className": "Divine Entities",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 3900,
+    "atk": 2800,
+    "def": 2650,
+    "mov": 4,
+    "range": 1,
+    "initiative": 4,
+    "morale": 83,
+    "capacityCost": 0,
+    "passives": [],
+    "actives": [],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "line_breaker",
+    "lore": "Arrived with the water. The water has not gone back.",
+    "keywords": [
+      "Summoned"
+    ],
+    "uniqueLimit": 1,
+    "divine": {
+      "manifestation": 2,
+      "anchors": 3,
+      "arrival": "Open ground within 4 becomes Water; anything standing there is pushed clear."
+    }
+  },
+  {
+    "id": "DIV_COLOSSUS_SOVEREIGN-OF-UNFINISHED-WORK",
+    "name": "Sovereign of Unfinished Work",
+    "faction": "DIV",
+    "stars": 7,
+    "tier": "Paragon",
+    "className": "Divine Entities",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 3900,
+    "atk": 2800,
+    "def": 2650,
+    "mov": 4,
+    "range": 1,
+    "initiative": 4,
+    "morale": 83,
+    "capacityCost": 0,
+    "passives": [],
+    "actives": [],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "line_breaker",
+    "lore": "Completes things. Nobody has agreed on what completion means to it.",
+    "keywords": [
+      "Summoned"
+    ],
+    "uniqueLimit": 1,
+    "divine": {
+      "manifestation": 3,
+      "anchors": 3,
+      "arrival": "Every ritual in progress on the field advances by three."
+    }
+  },
+  {
+    "id": "DIV_COLOSSUS_SOVEREIGN-OF-THE-LONG-WINTER",
+    "name": "Sovereign of the Long Winter",
+    "faction": "DIV",
+    "stars": 8,
+    "tier": "Legend",
+    "className": "Divine Entities",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 4850,
+    "atk": 3450,
+    "def": 3300,
+    "mov": 4,
+    "range": 1,
+    "initiative": 5,
+    "morale": 87,
+    "capacityCost": 0,
+    "passives": [],
+    "actives": [],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "line_breaker",
+    "lore": "Does not fight so much as arrive and outlast.",
+    "keywords": [
+      "Summoned"
+    ],
+    "uniqueLimit": 1,
+    "divine": {
+      "manifestation": 3,
+      "anchors": 3,
+      "arrival": "All movement costs are doubled for two rounds, this entity excepted."
+    }
+  },
+  {
+    "id": "DIV_COLOSSUS_SOVEREIGN-OF-BORROWED-FACES",
+    "name": "Sovereign of Borrowed Faces",
+    "faction": "DIV",
+    "stars": 8,
+    "tier": "Legend",
+    "className": "Divine Entities",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 4850,
+    "atk": 3450,
+    "def": 3300,
+    "mov": 4,
+    "range": 1,
+    "initiative": 5,
+    "morale": 87,
+    "capacityCost": 0,
+    "passives": [],
+    "actives": [],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "line_breaker",
+    "lore": "Wears the face of whoever summoned it, and keeps wearing it after.",
+    "keywords": [
+      "Summoned"
+    ],
+    "uniqueLimit": 1,
+    "divine": {
+      "manifestation": 3,
+      "anchors": 3,
+      "arrival": "Every Hidden unit is revealed and every clone on the field expires."
+    }
+  },
+  {
+    "id": "DIV_COLOSSUS_SOVEREIGN-OF-THE-STANDING-DEBT",
+    "name": "Sovereign of the Standing Debt",
+    "faction": "DIV",
+    "stars": 9,
+    "tier": "Mythic",
+    "className": "Divine Entities",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 6000,
+    "atk": 4300,
+    "def": 4100,
+    "mov": 4,
+    "range": 1,
+    "initiative": 5,
+    "morale": 91,
+    "capacityCost": 0,
+    "passives": [],
+    "actives": [],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "line_breaker",
+    "lore": "Collects. The terms were agreed by somebody, at some point.",
+    "keywords": [
+      "Summoned"
+    ],
+    "uniqueLimit": 1,
+    "divine": {
+      "manifestation": 3,
+      "anchors": 4,
+      "arrival": "The summoning side loses 20 morale across the army. The debt is not optional."
+    }
+  },
+  {
+    "id": "DIV_COLOSSUS_SOVEREIGN-OF-HELD-BREATH",
+    "name": "Sovereign of Held Breath",
+    "faction": "DIV",
+    "stars": 9,
+    "tier": "Mythic",
+    "className": "Divine Entities",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 6000,
+    "atk": 4300,
+    "def": 4100,
+    "mov": 4,
+    "range": 1,
+    "initiative": 5,
+    "morale": 91,
+    "capacityCost": 0,
+    "passives": [],
+    "actives": [],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "line_breaker",
+    "lore": "Nothing moves while it is deciding.",
+    "keywords": [
+      "Summoned"
+    ],
+    "flying": true,
+    "uniqueLimit": 1,
+    "divine": {
+      "manifestation": 3,
+      "anchors": 4,
+      "arrival": "No unit on either side may use a Reaction for two rounds."
+    }
+  },
+  {
+    "id": "DIV_COLOSSUS_SOVEREIGN-OF-NINE-DOORS",
+    "name": "Sovereign of Nine Doors",
+    "faction": "DIV",
+    "stars": 9,
+    "tier": "Mythic",
+    "className": "Divine Entities",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 6000,
+    "atk": 4300,
+    "def": 4100,
+    "mov": 4,
+    "range": 1,
+    "initiative": 5,
+    "morale": 91,
+    "capacityCost": 0,
+    "passives": [],
+    "actives": [],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "line_breaker",
+    "lore": "Eight of them are known.",
+    "keywords": [
+      "Summoned"
+    ],
+    "flying": true,
+    "uniqueLimit": 1,
+    "divine": {
+      "manifestation": 3,
+      "anchors": 4,
+      "arrival": "Every unit on the summoning side may reposition three hexes immediately."
+    }
+  },
+  {
+    "id": "DIV_COLOSSUS_THE-SOVEREIGN-THAT-WAS-ASKED-FOR",
+    "name": "The Sovereign That Was Asked For",
+    "faction": "DIV",
+    "stars": 10,
+    "tier": "Ascendant",
+    "className": "Divine Entities",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 10700,
+    "atk": 7400,
+    "def": 7150,
+    "mov": 4,
+    "range": 1,
+    "initiative": 5,
+    "morale": 100,
+    "capacityCost": 0,
+    "passives": [],
+    "actives": [
+      "ABL_S_THRONE_OF_JUDGEMENT"
+    ],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "line_breaker",
+    "lore": "Cults spend decades naming precisely what they want. This is what answers, and it is always technically correct.",
+    "keywords": [
+      "Summoned",
+      "Ascendant"
+    ],
+    "uniqueLimit": 1,
+    "divine": {
+      "manifestation": 4,
+      "anchors": 5,
+      "arrival": "Both armies lose 30 morale. It did not come for either of them."
+    },
+    "signature": "ABL_S_THRONE_OF_JUDGEMENT"
+  },
+  {
+    "id": "DIV_COLOSSUS_THE-SOVEREIGN-OF-THE-CLOSED-BOOK",
+    "name": "The Sovereign of the Closed Book",
+    "faction": "DIV",
+    "stars": 10,
+    "tier": "Ascendant",
+    "className": "Divine Entities",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 10700,
+    "atk": 7400,
+    "def": 7150,
+    "mov": 4,
+    "range": 1,
+    "initiative": 5,
+    "morale": 100,
+    "capacityCost": 0,
+    "passives": [],
+    "actives": [
+      "ABL_S_MOONLESS_VERDICT"
+    ],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "line_breaker",
+    "lore": "Everything it has finished is finished. There is no record of it being asked twice.",
+    "keywords": [
+      "Summoned",
+      "Ascendant"
+    ],
+    "uniqueLimit": 1,
+    "divine": {
+      "manifestation": 4,
+      "anchors": 5,
+      "arrival": "Every ritual circle on the field is closed permanently, including the one that called it."
+    },
+    "signature": "ABL_S_MOONLESS_VERDICT"
+  },
+  {
+    "id": "DIV_COLOSSUS_THE-SOVEREIGN-BENEATH-THE-ANCHORS",
+    "name": "The Sovereign Beneath the Anchors",
+    "faction": "DIV",
+    "stars": 10,
+    "tier": "Ascendant",
+    "className": "Divine Entities",
+    "themes": [],
+    "roles": [
+      "Deity",
+      "Boss"
+    ],
+    "rank": "Deity",
+    "size": "Colossal",
+    "hp": 10700,
+    "atk": 7400,
+    "def": 7150,
+    "mov": 4,
+    "range": 1,
+    "initiative": 5,
+    "morale": 100,
+    "capacityCost": 0,
+    "passives": [],
+    "actives": [
+      "ABL_S_ROOT_OF_THE_WORLD"
+    ],
+    "slots": [],
+    "unique": true,
+    "summonOnly": true,
+    "ai": "line_breaker",
+    "lore": "The Anchors were not built to hold it in. They were built to hold it down.",
+    "keywords": [
+      "Summoned",
+      "Ascendant"
+    ],
+    "flying": true,
+    "uniqueLimit": 1,
+    "divine": {
+      "manifestation": 5,
+      "anchors": 6,
+      "arrival": "Every enemy within 6 is rooted for two rounds; the ground under them stops counting as terrain."
+    },
+    "signature": "ABL_S_ROOT_OF_THE_WORLD"
   }
 ]
