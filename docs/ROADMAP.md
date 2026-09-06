@@ -65,19 +65,27 @@ where they conflict.**
 - New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
 - Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
 
+### Done in the art-completeness pass
+
+- All 88 units now carry both a concept and a cutout; `npm run assets` reports 0 missing under "Units" and
+  `python3 scripts/audit-cutouts.py` finds every one of them in the approved opacity band. `core/tests/art.test.ts`
+  runs the same presence and opacity check on every `npm test`, so a blank or badly-cut card fails the build
+  instead of sitting unnoticed on the deck screen. `art/ASSET_MANIFEST.json`'s `pending` list, stale since the
+  roster was 40 units, is trimmed to the two structures (`STRUCTURE_REINFORCEMENT-PORTAL`,
+  `STRUCTURE_RITUAL-CIRCLE`) that are actually still unpainted.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
    retired; the new top-down direction and the card-led interface both need a verdict before scaling.
-2. **Card art for the blank cards.** Twenty-three of the forty units have no cutout yet, so their cards read
-   "no art yet". Highest value art task.
-3. **More cards per faction.** A hundred-card deck currently leans on levy and foot because each faction has
+2. **More cards per faction.** A hundred-card deck currently leans on levy and foot because each faction has
    only eight to eleven distinct cards. Fifteen to twenty per faction would let the faction minimum rise from
    40 back toward 60.
-4. **Old item:** Do not scale the UI until the three decisions in the sample page are
+3. **Old item:** Do not scale the UI until the three decisions in the sample page are
    answered (map look, command bar material, field size).
 2. Knight, Dragon Host and Ritual Cult rank ladders with one mechanical trait each per rank.
-3. Remaining unit art (see `pending` in `art/ASSET_MANIFEST.json`), then construction sheets for approved units.
+3. Construction sheets and action-pose sheets for the approved units (see `docs/art-pipeline.md` step 5) — no unit
+   still lacks a base cutout, so this is the remaining art debt.
 4. Map generator: named biomes (Ashfall, Marsh, Highland pass), scenario-authored overrides on top of generated ground,
    deployment-zone balance check (path cost between anchors within 10 percent both ways).
 5. AI: use trenches and high ground, siege positioning behind the line, cavalry flank routing, surrender when the
@@ -102,3 +110,9 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-06: Proposal — now that every unit has a base cutout, spend the next art pass on construction sheets
+  (multi-angle turnarounds) for the four commanders first, since a rank ladder promotion is the one moment a card's
+  art is expected to hold up at a larger size than the hand-of-cards view.
+- 2026-09-06: Proposal — an uneven battlefield could carry a named "vantage" hex per elevation band (the single
+  highest hex in a highland cluster, the driest hex in a marsh) that grants a small, source-tracked sight or
+  defence bonus, giving odd-shaped terrain a landmark worth fighting over beyond raw elevation and movement cost.
