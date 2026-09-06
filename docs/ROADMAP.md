@@ -65,6 +65,13 @@ where they conflict.**
 - New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
 - Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
 
+### Done in the map fairness pass
+
+- `deploymentBalance` (`core/src/mapgen.ts`): scores a generated field by how much harder one anchor's own
+  approach ground is to cross than the other's, and `generateMap` re-rolls deterministic derived seeds of
+  the same spec until the two sides are within 10% of each other, or a bounded number of attempts run out.
+  `core/tests/mapgen.test.ts` checks the band holds across a spread of seeds.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -78,8 +85,7 @@ where they conflict.**
    answered (map look, command bar material, field size).
 2. Knight, Dragon Host and Ritual Cult rank ladders with one mechanical trait each per rank.
 3. Remaining unit art (see `pending` in `art/ASSET_MANIFEST.json`), then construction sheets for approved units.
-4. Map generator: named biomes (Ashfall, Marsh, Highland pass), scenario-authored overrides on top of generated ground,
-   deployment-zone balance check (path cost between anchors within 10 percent both ways).
+4. Map generator: named biomes (Ashfall, Marsh, Highland pass), scenario-authored overrides on top of generated ground.
 5. AI: use trenches and high ground, siege positioning behind the line, cavalry flank routing, surrender when the
    leader is dead and average morale is below 20.
 6. Army builder validation UI in the sample page (drag units into slots, live doctrine and capacity readout).
@@ -102,3 +108,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-06: Proposal — score cavalry approach cost alongside foot in `deploymentBalance`. A field can pass the
+  foot-movement band while still handing one side a much better cavalry corridor (a trench or forest patch that
+  only cavalry treats as expensive), since Cavalry and Trench interact differently from Foot. Blending both costs,
+  or requiring both within 10%, would close that gap without touching the terrain generation itself.
+- 2026-09-06: Proposal — once regions exist for the Q-5 campaign map, run the same `deploymentBalance` check
+  per region at campaign-generation time rather than only for a single stand-alone battle, so a chain of
+  regions can't quietly hand one side an easier stretch of the whole province.
