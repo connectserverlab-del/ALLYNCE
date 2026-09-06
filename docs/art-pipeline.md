@@ -38,11 +38,21 @@ and elevated three-quarter camera while replacing its render finish with painted
 
 ## Sample gallery
 
-The nine approved samples cover one commander, one elite or one foot soldier from each faction plus both dragon tiers:
+The original nine approved samples, still the style reference (`art/prompts/STYLE_GUIDE.md` round 4), cover one
+commander, one elite or one foot soldier from each faction plus both dragon tiers:
 
 - Samurai: Ember Banner Daimyo (commander), Emberline Ashigaru (foot)
 - Shinobi: Veiled Moon Jōnin (commander), Mirror Shade Adept (elite)
 - Knight: Solar Bastion Marshal (commander), Sky-Lance Dragoon (elite dragon cavalry), Bastion Man-at-Arms (foot)
 - Dragon Host: Riftwing Dominant (commander), Slatewing Drake (foot)
 
-Twelve units and two structures remain and are listed under `pending` in the manifest.
+The roster has since grown well past these nine; `art/ASSET_MANIFEST.json` only ever tracked this original batch
+plus a handful of later samples still awaiting approval. For whether a given unit's card has art, trust
+`data/units/units.json` (`art.concept` / `art.cutout`) or `npm run assets`, not the manifest's `assets` list.
+
+All 88 units currently in `data/units/units.json` have both a concept and a cutout on disk, and every cutout
+audits clean — `npm run assets` reports 0 missing under "Units", and `python3 scripts/audit-cutouts.py` and
+`core/tests/art.test.ts` (run on every `npm test`) both check the same opacity band. Two structures,
+`STRUCTURE_REINFORCEMENT-PORTAL` and `STRUCTURE_RITUAL-CIRCLE`, remain unpainted and unused by any code path;
+they are listed under `pending` in the manifest for whoever eventually gives portals and ritual circles their
+own art.
