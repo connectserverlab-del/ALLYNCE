@@ -10,7 +10,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §6 Theme cohesion and doctrine | `cohesion.ts`, `composition.ts`, `modifiers.ts` | `doctrineState`, Continuity, layered breakdown with sources |
 | §7 Combat | `combat.ts`, `modifiers.ts` | Deterministic damage, arcs, terrain, statuses, intercession, duel |
 | §8 Morale and command | `morale.ts`, `command.ts` | Bands, sources, succession, strongest aura only, Rally |
-| §9 Faction doctrines | `data/abilities/abilities.json`, `effects.ts` | Orders and passives as data; interpreter in `applyEffect` |
+| §9 Faction doctrines | `data/abilities/abilities.json`, `effects.ts` | Orders and passives as data; interpreter in `applyEffect`. A passive whose effect isn't a stat conditional or a movement/combat rule (`ConditionalDef`/`Atk`, `Intercept`, `DenyFlyingMovement`, `SharedVision`) does nothing in `applyEffect` by design — those kinds are checked directly where they matter (`modifiers.ts`, `combat.ts`, `battle.ts`) and are covered end to end in `core/tests/doctrine.test.ts`, one per host faction, so a newly declared passive kind can't ship unwired without a failing or missing test making that obvious |
 | §11 Ritual system | `rituals.ts` | Ratings, formula, states, hold and instability, sync release |
 | §12 Reinforcement portals | `portals.ts` | Lifecycle, queue, capture, destroy refund |
 | Mountains and the labored climb | `types.ts` (TERRAIN_RULES), `battle.ts` (`reachable`, `move`) | Rock costs foot 5, cavalry 6, wings 2. A unit that cannot afford a hex may still take one adjacent hex by spending its whole activation, so a range is slow rather than sealed |

@@ -25,6 +25,10 @@ export const KNI: Omit<PlatoonBlueprint, "id" | "side"> = {
   faction: "KNI", commander: "KNI_COMMANDER_SOLAR-BASTION-MARSHAL", second: "KNI_SECOND_OATHBOUND-CASTELLAN", elite: "KNI_ELITE_SKY-LANCE-DRAGOON",
   foot: Array(5).fill("KNI_FOOT_BASTION-MAN-AT-ARMS"),
 };
+export const DRG: Omit<PlatoonBlueprint, "id" | "side"> = {
+  faction: "DRG", commander: "DRG_COMMANDER_RIFTWING-DOMINANT", second: "DRG_SECOND_STORMCLAW-WINGSECOND", elite: "DRG_ELITE_OBSIDIAN-MAW",
+  foot: Array(5).fill("DRG_FOOT_SLATEWING-DRAKE"),
+};
 
 /** A compact 8-hex blob around (q,r): leader row + foot line. */
 export function blob(q: number, r: number): Hex[] {

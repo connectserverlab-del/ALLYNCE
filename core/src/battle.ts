@@ -6,7 +6,7 @@ import type { Hex } from "./hex.js";
 import { hexDistance as _hd } from "./hex.js";
 import { hexDistance, hexNeighbors, hexKey, directionTo } from "./hex.js";
 import { resolveAttack, interceptUsed, defeat } from "./combat.js";
-import { computeStat, clearTempMods, tempMods } from "./modifiers.js";
+import { computeStat, clearTempMods, tempMods, revealsHiddenTarget } from "./modifiers.js";
 import { resolveSuccession, rally as rallyAction } from "./command.js";
 import { applyEffect, clearRoundEffectFlags, orderFlags } from "./effects.js";
 import { tickRitual, releaseRitual, linkedGroup, assistRitual, disruptRitual, type RitualCircle } from "./rituals.js";
@@ -206,7 +206,7 @@ export class BattleController {
     if (!u.pos || !target.pos) throw new Error("Not deployed");
     const range = b.def(u).range + (b.def(u).range > 1 ? TERRAIN_RULES[b.terrainAt(u.pos)].ranged.range : 0);
     if (hexDistance(u.pos, target.pos) > range) throw new Error("Out of range");
-    if (b.hasStatus(target, "Hidden") && hexDistance(u.pos, target.pos) > 1) throw new Error("Target is Hidden");
+    if (b.hasStatus(target, "Hidden") && hexDistance(u.pos, target.pos) > 1 && !revealsHiddenTarget(b, u, target)) throw new Error("Target is Hidden");
     if (u.isClone && u.attackedThisActivation) throw new Error("Clones make one basic attack");
     const d = b.def(u);
     if (d.minRange && hexDistance(u.pos, target.pos) < d.minRange) throw new Error("Inside minimum range");

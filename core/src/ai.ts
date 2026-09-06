@@ -4,7 +4,7 @@ import type { UnitState, UnitDef } from "./types.js";
 import { TERRAIN_RULES } from "./types.js";
 import type { Hex } from "./hex.js";
 import { hexDistance, hexNeighbors, attackArc } from "./hex.js";
-import { computeStat } from "./modifiers.js";
+import { computeStat, revealsHiddenTarget } from "./modifiers.js";
 import { cohesionConnections } from "./cohesion.js";
 import { bandOf, enemiesWithin } from "./effects.js";
 import { moraleBand } from "./morale.js";
@@ -141,7 +141,7 @@ function actOnce(ctrl: BattleController, u: UnitState, profile: AiProfile): bool
     if (prisoner) { try { ctrl.subdue(u, prisoner); return true; } catch { /* someone else took it */ } }
   }
   // Attack if a target is in range: prefer ritualists / exposed elites / isolated commanders
-  const targets = [...b.activeUnits()].filter((e) => e.side !== u.side && e.pos && hexDistance(u.pos!, e.pos) <= d.range && !(b.hasStatus(e, "Hidden") && hexDistance(u.pos!, e.pos) > 1));
+  const targets = [...b.activeUnits()].filter((e) => e.side !== u.side && e.pos && hexDistance(u.pos!, e.pos) <= d.range && !(b.hasStatus(e, "Hidden") && hexDistance(u.pos!, e.pos) > 1 && !revealsHiddenTarget(b, u, e)));
   if (targets.length && !u.attackedThisActivation) {
     const best = targets.map((t) => ({ t, s: targetScore(ctrl, u, t, profile) })).sort((a, c) => c.s - a.s)[0]!;
     try { ctrl.attack(u, best.t); return true; } catch { /* duel or other block */ }
