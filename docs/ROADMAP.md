@@ -102,3 +102,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-06: Proposal — tie some rituals and fusions to the ground they are cast on instead of letting them fire
+  anywhere: Gate Wardens could need ruins underfoot (echoing whatever stood there before), Calamity Form could
+  need high ground, a water-affinity ritual could need a river or ford tile. The map generator already tags roles
+  like these for anchors and deployment zones, and Q-2's scenario-authoring-by-role work is teaching the engine to
+  read those tags for objectives, rituals and portals; reusing the same role tags for fusion/ritual eligibility
+  would make an odd-shaped battlefield part of the decision to commit an already-costly play, not just scenery
+  around it, and would cost little once Q-2 lands the underlying lookup.
