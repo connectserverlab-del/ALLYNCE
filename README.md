@@ -16,7 +16,7 @@ This repository currently holds three things:
 
 ```bash
 npm install
-npm test            # 85 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
+npm test            # 157 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -47,7 +47,7 @@ npm run assets      # rebuilds the asset registry from the data and from disk
 - **Universal win conditions**: wipe out the opponent, kill their army leader, or force a surrender. Scenario objectives layer on top.
 - **Shinobi ranks**: Apprentice, Genin, Chunin, Jounin, Anbu, Kage, each with a movement trait (canopy movement through forest, hide on stopping in forest, ignore zones of control, pass allies, bonus movement, Shadow Step).
 - **Fusion**: recipe-driven merging of adjacent units into one (Paired Line, Gate Wardens, Twinwing Drake, and the Calamity Form from the three Sovereigns), paid with Fusion charges.
-- **Siege and cavalry**: cannons per faction with set-up, minimum range and breaching shots (plus smoke shells and the Siegewyrm's concussive blast); cavalry per faction with lance charges that break in rough ground, and hit-and-fade riders.
+- **Siege and cavalry**: cannons with set-up, minimum range and breaching shots (plus smoke shells and the Siegewyrm's concussive blast); cavalry with lance charges that break in rough ground, and hit-and-fade riders. The four host armies and the five sworn companies each field a themed pair; Ritual Cult and the seven divisions do not yet.
 - **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. See `docs/samurai-ranks.md`.
 
 ## Engine note
