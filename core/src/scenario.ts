@@ -25,6 +25,12 @@ export interface ScenarioFile {
 
 export function buildScenario(name: string, reg: Registry = loadRegistry(), seedOverride?: number): { ctrl: BattleController; file: ScenarioFile } {
   const file = loadScenario<ScenarioFile>(name);
+  return { ctrl: buildScenarioFromFile(file, reg, seedOverride), file };
+}
+
+/** Wires a battle, its armies, rituals and portals from an already-loaded scenario file. Split out of
+ *  `buildScenario` so tests can exercise scenario wiring against in-memory fixtures, not just files on disk. */
+export function buildScenarioFromFile(file: ScenarioFile, reg: Registry, seedOverride?: number): BattleController {
   const b = new Battle(reg, {
     seed: seedOverride ?? file.seed, width: file.map.width, height: file.map.height,
     sides: Object.entries(file.sides).map(([id, s]) => ({ id, reservePoints: s.reservePoints, armyCapacity: s.armyCapacity, morale: 100 })),
@@ -52,6 +58,5 @@ export function buildScenario(name: string, reg: Registry = loadRegistry(), seed
     const leader = s.leader ? [...b.units.values()].find((u) => u.defId === s.leader && u.side === sideId) : [...b.activeUnits(sideId)].filter((u) => b.def(u).roles.includes("Commander")).sort((x, y) => b.def(y).capacityCost - b.def(x).capacityCost)[0];
     st.leaderUid = leader?.uid ?? null;
   }
-  const ctrl = new BattleController(b, { sides: Object.fromEntries(Object.entries(file.sides).map(([id, s]) => [id, s.objectives])), roundLimit: file.roundLimit, roundLimitWinner: file.roundLimitWinner });
-  return { ctrl, file };
+  return new BattleController(b, { sides: Object.fromEntries(Object.entries(file.sides).map(([id, s]) => [id, s.objectives])), roundLimit: file.roundLimit, roundLimitWinner: file.roundLimitWinner });
 }
