@@ -225,9 +225,14 @@ export function crest(factionId, size = 22) {
 
 /** Painted concept art when the unit has one, otherwise the generated portrait. */
 export function artFor(unit, opts) {
-  const painted = unit.art?.cutout ?? unit.art?.concept;
+  // The standalone build inlines the painted plates as data URIs keyed by their path.
+  const inlined = globalThis.__ALLYNCE_ART__;
+  const painted = inlined
+    ? inlined[unit.art?.concept] ?? inlined[unit.art?.cutout]
+    : unit.art?.cutout ?? unit.art?.concept;
   if (painted) {
-    return `<img class="card-art-img" src="../${painted}" alt="${escapeAttr(unit.name)}" loading="lazy"
+    const src = painted.startsWith("data:") ? painted : `../${painted}`;
+    return `<img class="card-art-img" src="${src}" alt="${escapeAttr(unit.name)}" loading="lazy"
       onerror="this.replaceWith(document.createRange().createContextualFragment(this.dataset.fallback))"
       data-fallback="${escapeAttr(portrait(unit, opts))}">`;
   }

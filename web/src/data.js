@@ -5,7 +5,13 @@
 
 const base = new URL("../../data/", import.meta.url);
 
+/**
+ * The standalone single-file build inlines every table on `globalThis.__ALLYNCE_DATA__`,
+ * so it runs with no HTTP origin at all. Served normally, this falls through to fetch.
+ */
 async function json(path) {
+  const inlined = globalThis.__ALLYNCE_DATA__?.[path];
+  if (inlined) return inlined;
   const r = await fetch(new URL(path, base));
   if (!r.ok) throw new Error(`Could not load ${path} (${r.status})`);
   return r.json();

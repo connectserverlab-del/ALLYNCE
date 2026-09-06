@@ -25,7 +25,13 @@ npm run gen:content # regenerates data/units/expansion.json from tools/content
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run check       # everything above in one pass; this is what CI runs
+npm run build:standalone   # bundles the whole client into dist/allynce.html
 ```
+
+`build:standalone` inlines the styles, modules, game tables and painted plates into a
+single ~2 MB HTML file that opens straight from disk with no server and no network
+requests — the easiest way to hand the game to someone. Add `-- --artifact` to emit the
+same page as a body fragment for hosts that supply their own document skeleton.
 
 CI runs `npm run check` on every pull request and on `main`
 (`.github/workflows/ci.yml`). A weekly routine runs the same command and only

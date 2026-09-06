@@ -12,7 +12,8 @@
     "web": "node tools/serve.mjs",
     "gen:content": "node tools/generate-content.mjs",
     "test:ui": "node tools/ui-smoke.mjs",
-    "check": "node tools/health-check.mjs"
+    "check": "node tools/health-check.mjs",
+    "build:standalone": "node tools/build-standalone.mjs"
   },
   "repository": {
     "type": "git",
