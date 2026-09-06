@@ -65,6 +65,19 @@ where they conflict.**
 - New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
 - Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
 
+### Done in the sworn company siege and cavalry pass
+
+- The five sworn companies (Cobalt Conclave, Thorn Coven, Cutpurse Court, Windmarch Host, Dunewake Compact) each
+  fielded a Commander, Second, Elite and FootSoldier but no themed cannon or cavalry, unlike the four host armies.
+  Cobalt Conclave, Thorn Coven, Cutpurse Court and Dunewake Compact now each have both (Warded Culverin/Wardbound
+  Courser, Blight Mortar/Bramblehorn Rider, Stolen Bombard/Backstreet Courser, Glassroad Ballista/Dunewake
+  Vanguard); Windmarch Host already had cavalry through its Elite and Commander, so it only needed the Steppe
+  Falconet, a mobile gun that skips Set Up in exchange for a lighter structure-breaching hit. All nine reuse the
+  existing generic siege and cavalry mechanics (`ABL_SIEGE_SETUP`, `ABL_BREACHING_SHOT`, `ABL_LANCE_CHARGE`,
+  `ABL_HIT_AND_FADE`, `ABL_CONCUSSIVE_BLAST`) rather than adding new ones, the same way the host armies' own
+  cavalry already share `ABL_LANCE_CHARGE` unchanged. No unit has art yet; sampling that is a separate,
+  owner-led step. Ritual Cult and the seven divisions still have neither and are their own follow-on passes.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -102,3 +115,15 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-06: Proposal — the seven divisions (Choir Militant, Ashpit Legion, Spiral Warband, Half-Born Host,
+  Winter Famine, Ridge Kin, Formic Swarm) are the next gap for a themed cannon and cavalry pair, the same way the
+  sworn companies were just closed: Spiral Warband and Choir Militant already read as naturally mounted or
+  winged, so they may only need a siege piece each, while the rest need both. Ritual Cult has no Cavalry- or
+  Siege-capable roster shape at all yet (its two units are both Specialist Ritualists); whether it gets a
+  conventional pair or something built from its own idiom (a portable summoning brazier for siege, bound spirits
+  for cavalry) is worth an owner decision before building it.
+- 2026-09-06: Proposal — every new Specialist unit this pass reused an existing generic ability rather than
+  inventing one, which kept the pass small but means none of the nine has a distinct signature beyond its
+  numbers. A follow-on pass could give one or two of them a genuinely new effect (a Cobalt Conclave ward that
+  shields the whole platoon for a round, a Cutpurse Court cavalry withdrawal that hides the rider on retreat)
+  once the plain versions have been played and found wanting.
