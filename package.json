@@ -8,7 +8,12 @@
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json",
-    "sim:demo": "npx tsx core/src/demo.ts"
+    "sim:demo": "npx tsx core/src/demo.ts",
+    "web": "node tools/serve.mjs",
+    "gen:content": "node tools/generate-content.mjs",
+    "test:ui": "node tools/ui-smoke.mjs",
+    "check": "node tools/health-check.mjs",
+    "build:standalone": "node tools/build-standalone.mjs"
   },
   "repository": {
     "type": "git",
@@ -23,6 +28,7 @@
   "homepage": "https://github.com/connectserverlab-del/ALLYNCE#readme",
   "devDependencies": {
     "@types/node": "^22.20.1",
+    "playwright": "^1.49.1",
     "tsx": "^4.23.13",
     "typescript": "^5.9.3",
     "vitest": "^2.1.9"

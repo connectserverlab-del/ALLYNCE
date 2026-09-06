@@ -4,6 +4,7 @@ import type { Hex } from "./hex.js";
 import { hexDistance, hexNeighbors, hexKey, directionTo } from "./hex.js";
 import { resolveAttack, interceptUsed, defeat } from "./combat.js";
 import { computeStat, clearTempMods, tempMods } from "./modifiers.js";
+import { rooted, revealAllRounds, tickExpansionEffects } from "./effects.js";
 import { resolveSuccession, rally as rallyAction } from "./command.js";
 import { applyEffect, clearRoundEffectFlags, orderFlags } from "./effects.js";
 import { tickRitual, releaseRitual, linkedGroup, assistRitual, disruptRitual, type RitualCircle } from "./rituals.js";
@@ -141,6 +142,7 @@ export class BattleController {
   move(u: UnitState, to: Hex, opts: { disengage?: boolean } = {}): void {
     const b = this.b;
     if (!u.pos) throw new Error("Unit not deployed");
+    if (rooted.has(u.uid)) throw new Error(`${u.uid} is rooted and cannot move`);
     const r = this.reachable(u).get(hexKey(to));
     if (!r) throw new Error(`Hex ${hexKey(to)} not reachable`);
     const zocEnemies = b.adjacentEnemies(u).filter((e) => !b.hasStatus(e, "Routed"));
@@ -176,7 +178,7 @@ export class BattleController {
     if (!u.pos || !target.pos) throw new Error("Not deployed");
     const range = b.def(u).range + (b.terrainAt(u.pos) === "HighGround" && b.def(u).range > 1 ? 1 : 0);
     if (hexDistance(u.pos, target.pos) > range) throw new Error("Out of range");
-    if (b.hasStatus(target, "Hidden") && hexDistance(u.pos, target.pos) > 1) throw new Error("Target is Hidden");
+    if (b.hasStatus(target, "Hidden") && hexDistance(u.pos, target.pos) > 1 && !revealAllRounds.has(u.side)) throw new Error("Target is Hidden");
     if (u.isClone && u.attackedThisActivation) throw new Error("Clones make one basic attack");
     this.spend(u, 1);
     u.facing = directionTo(u.pos, target.pos);
@@ -279,6 +281,7 @@ export class BattleController {
       if (u.divine && u.divine.manifestation <= 0 && u.divine.anchors <= 0) defeat(b, u, "Manifestation ended");
     }
     surroundedPenalty(b);
+    tickExpansionEffects();
     for (const p of b.portals.values()) checkCaptureInterrupt(b, p);
     this.evaluateVictory();
     if (!b.winner) { b.round++; b.phase = "Command"; }

@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: typecheck, rules tests, browser checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The UI smoke test drives the client in headless Chromium.
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      # One command: generated-data drift, typecheck, rules tests, browser
+      # checks and the roster invariants. Same thing a contributor runs locally.
+      - name: npm run check
+        run: npm run check

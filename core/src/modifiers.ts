@@ -100,6 +100,9 @@ function abilityModifiers(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: Com
       if (ok) out.push({ source: a.name, stat, value: e.atk });
     }
   }
+  // Auras projected by nearby allies (Oathlight, Host Aloft, Stormbond, Two Schools)
+  out.push(...auraModifiers(b, u, stat));
+
   // Platoon-level marked target (Coordinated Cut)
   if (stat === "ATK" && u.platoonId && target) {
     const p = b.platoon(u.platoonId);
@@ -108,6 +111,30 @@ function abilityModifiers(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: Com
   // Per-unit temporary modifiers from orders / charges
   for (const m of tempMods(u)) if (m.stat === stat) out.push(m);
   return out;
+}
+
+/**
+ * AuraStat passives. The aura is read from the projecting ally, never from the
+ * receiver, so a unit never buffs itself twice and auras of the same name do not stack.
+ */
+function auraModifiers(b: Battle, u: UnitState, stat: "ATK" | "DEF"): Modifier[] {
+  const d = b.def(u);
+  const best = new Map<string, Modifier>();
+  for (const ally of b.activeUnits(u.side)) {
+    if (ally.uid === u.uid || ally.isClone) continue;
+    const ad = b.def(ally);
+    for (const id of ad.passives) {
+      const a = b.reg.ability(id);
+      const e = a.effect as Record<string, any>;
+      if (e.kind !== "AuraStat" || e.stat !== stat) continue;
+      if (b.distance(u, ally) > e.radius) continue;
+      if (e.theme && !d.themes.includes(e.theme)) continue;
+      if (e.sameFusion && !(d.fusion && ad.fusion)) continue;
+      const prev = best.get(a.name);
+      if (!prev || prev.value < e.value) best.set(a.name, { source: a.name, stat, value: e.value });
+    }
+  }
+  return [...best.values()];
 }
 
 const TEMP = new WeakMap<UnitState, Modifier[]>();

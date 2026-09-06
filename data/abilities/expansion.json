@@ -1,0 +1,963 @@
+[
+  {
+    "id": "DOC_THORN_TITHE",
+    "name": "Thorn Tithe",
+    "category": "Passive",
+    "effect": {
+      "kind": "ConditionalAtk",
+      "atk": 150,
+      "vsIsolated": true
+    },
+    "text": "+150 ATK against isolated enemies; the Coven takes what stands alone."
+  },
+  {
+    "id": "ORD_CREEPING_BRIAR",
+    "name": "Creeping Briar",
+    "category": "Order",
+    "effect": {
+      "kind": "PlatoonDef",
+      "def": 100,
+      "duration": "round"
+    },
+    "text": "The platoon roots in place: +100 DEF until the end of the round.",
+    "apCost": 1
+  },
+  {
+    "id": "DOC_HOST_ALOFT",
+    "name": "Host Aloft",
+    "category": "Passive",
+    "effect": {
+      "kind": "AuraStat",
+      "stat": "DEF",
+      "value": 100,
+      "radius": 2,
+      "theme": "Angelic"
+    },
+    "text": "Angelic allies within 2 hexes gain +100 DEF while this unit is airborne."
+  },
+  {
+    "id": "ORD_CHOIR_ASCENDANT",
+    "name": "Choir Ascendant",
+    "category": "Order",
+    "effect": {
+      "kind": "PlatoonMove",
+      "mov": 2,
+      "duration": "round"
+    },
+    "text": "The choir rises: the platoon gains +2 MOV and ignores ground terrain costs this round.",
+    "apCost": 1
+  },
+  {
+    "id": "DOC_GROUNDING_ROD",
+    "name": "Grounding Rod",
+    "category": "Passive",
+    "effect": {
+      "kind": "ConditionalDef",
+      "def": 150,
+      "vsRole": "Ritualist"
+    },
+    "text": "+150 DEF against ritualists and casters; the clan earths hostile magic."
+  },
+  {
+    "id": "ORD_STORMFRONT",
+    "name": "Stormfront",
+    "category": "Order",
+    "effect": {
+      "kind": "ChainLightning",
+      "damage": 400,
+      "jumps": 2,
+      "radius": 4
+    },
+    "text": "Call the front: 400 damage to one enemy within 4, arcing to 2 further enemies within 2 of the last.",
+    "apCost": 1,
+    "range": 4,
+    "target": "enemy"
+  },
+  {
+    "id": "DOC_STILL_MIND",
+    "name": "Still Mind",
+    "category": "Passive",
+    "effect": {
+      "kind": "ImmuneStatus",
+      "statuses": [
+        "Suppressed",
+        "Silenced"
+      ]
+    },
+    "text": "Monks cannot be Suppressed or Silenced; the breath continues regardless."
+  },
+  {
+    "id": "ORD_UNBROKEN_FORM",
+    "name": "Unbroken Form",
+    "category": "Order",
+    "effect": {
+      "kind": "PlatoonDef",
+      "def": 150,
+      "duration": "round"
+    },
+    "text": "The order sets its stance: +150 DEF and immunity to forced movement this round.",
+    "apCost": 1
+  },
+  {
+    "id": "DOC_TWO_TRADITIONS",
+    "name": "Two Traditions",
+    "category": "Passive",
+    "effect": {
+      "kind": "AuraStat",
+      "stat": "ATK",
+      "value": 100,
+      "radius": 1,
+      "sameFusion": true
+    },
+    "text": "Fusion units adjacent to another fusion unit gain +100 ATK: two schools, one line."
+  },
+  {
+    "id": "ABL_X_IRON_STANCE",
+    "name": "Iron Stance",
+    "category": "Passive",
+    "effect": {
+      "kind": "ConditionalDef",
+      "def": 100,
+      "facing": "front"
+    },
+    "text": "+100 DEF against frontal attacks."
+  },
+  {
+    "id": "ABL_X_DRAWN_ARC",
+    "name": "Drawn Arc",
+    "category": "Active",
+    "effect": {
+      "kind": "ChargeBonus",
+      "minHexesMoved": 2,
+      "atk": 250
+    },
+    "text": "After moving at least 2 hexes, the next melee attack gains +250 ATK.",
+    "apCost": 1,
+    "cooldown": 2
+  },
+  {
+    "id": "ABL_X_BANNER_CALL",
+    "name": "Banner Call",
+    "category": "Order",
+    "effect": {
+      "kind": "RallyPlatoon",
+      "morale": 10
+    },
+    "text": "Rally the platoon.",
+    "apCost": 1
+  },
+  {
+    "id": "ABL_X_SECOND_CUT",
+    "name": "Second Cut",
+    "category": "Reaction",
+    "effect": {
+      "kind": "Riposte",
+      "atkPercent": 60
+    },
+    "text": "When attacked in melee and not defeated, strike back at 60% ATK once per round."
+  },
+  {
+    "id": "ABL_X_SHADOWSTEP",
+    "name": "Shadowstep",
+    "category": "Active",
+    "effect": {
+      "kind": "Teleport",
+      "range": 3,
+      "thenStatus": "Hidden"
+    },
+    "text": "Move up to 3 hexes ignoring zone of control, then become Hidden.",
+    "apCost": 1,
+    "cooldown": 3
+  },
+  {
+    "id": "ABL_X_POISONED_EDGE",
+    "name": "Poisoned Edge",
+    "category": "Passive",
+    "effect": {
+      "kind": "Bleed",
+      "damage": 150,
+      "rounds": 2
+    },
+    "text": "Wounds inflicted by this unit deal a further 150 damage at the end of each of the next 2 rounds."
+  },
+  {
+    "id": "ABL_X_FALSE_TRAIL",
+    "name": "False Trail",
+    "category": "Active",
+    "effect": {
+      "kind": "SpawnClones",
+      "count": 1,
+      "duration": 2,
+      "atkPercent": 30,
+      "hp": 1
+    },
+    "text": "Leave one decoy for two rounds; it has 30% ATK, 1 HP, and cannot capture.",
+    "apCost": 1,
+    "cooldown": 3
+  },
+  {
+    "id": "ABL_X_THROAT_OF_NIGHT",
+    "name": "Throat of Night",
+    "category": "Passive",
+    "effect": {
+      "kind": "ConditionalAtk",
+      "atk": 250,
+      "vsIsolated": true
+    },
+    "text": "+250 ATK against an enemy with no adjacent allies."
+  },
+  {
+    "id": "ABL_X_SHIELD_LINE",
+    "name": "Shield Line",
+    "category": "Passive",
+    "effect": {
+      "kind": "ConditionalDef",
+      "def": 150,
+      "requiresAdjacentTheme": "Knight"
+    },
+    "text": "+150 DEF while adjacent to another Knight."
+  },
+  {
+    "id": "ABL_X_INTERPOSE",
+    "name": "Interpose",
+    "category": "Reaction",
+    "effect": {
+      "kind": "Intercept",
+      "once": "round"
+    },
+    "text": "Once per round, take a melee hit aimed at an adjacent ally."
+  },
+  {
+    "id": "ABL_X_COUCHED_LANCE",
+    "name": "Couched Lance",
+    "category": "Active",
+    "effect": {
+      "kind": "ChargeBonus",
+      "minHexesMoved": 3,
+      "atk": 350,
+      "thenStatus": "Exposed"
+    },
+    "text": "Charge 3+ hexes for +350 ATK; the rider is Exposed until its next activation.",
+    "apCost": 1,
+    "cooldown": 2
+  },
+  {
+    "id": "ABL_X_OATHLIGHT",
+    "name": "Oathlight",
+    "category": "Passive",
+    "effect": {
+      "kind": "AuraStat",
+      "stat": "DEF",
+      "value": 75,
+      "radius": 2
+    },
+    "text": "Allies within 2 hexes gain +75 DEF."
+  },
+  {
+    "id": "ABL_X_WINGWASH",
+    "name": "Wingwash",
+    "category": "Active",
+    "effect": {
+      "kind": "MoraleShock",
+      "morale": -10
+    },
+    "text": "Adjacent enemies lose 10 morale.",
+    "apCost": 1,
+    "cooldown": 2
+  },
+  {
+    "id": "ABL_X_SCALED_HIDE",
+    "name": "Scaled Hide",
+    "category": "Passive",
+    "effect": {
+      "kind": "DamageReduction",
+      "flat": 150
+    },
+    "text": "Reduce all incoming damage by 150, to a minimum of the floor."
+  },
+  {
+    "id": "ABL_X_STOOP",
+    "name": "Stoop",
+    "category": "Active",
+    "effect": {
+      "kind": "ChargeBonus",
+      "minHexesMoved": 4,
+      "atk": 400
+    },
+    "text": "Dive from altitude: +400 ATK after moving 4 or more hexes.",
+    "apCost": 1,
+    "cooldown": 2
+  },
+  {
+    "id": "ABL_X_BREATH_CONE",
+    "name": "Kindled Breath",
+    "category": "Active",
+    "effect": {
+      "kind": "ConeDamage",
+      "damage": 500,
+      "length": 2
+    },
+    "text": "Breathe along a two-hex cone for 500 damage.",
+    "apCost": 1,
+    "cooldown": 3,
+    "range": 2
+  },
+  {
+    "id": "ABL_X_BRIAR_SNARE",
+    "name": "Briar Snare",
+    "category": "Active",
+    "effect": {
+      "kind": "Root",
+      "rounds": 1,
+      "range": 3
+    },
+    "text": "One enemy within 3 cannot move on its next activation.",
+    "apCost": 1,
+    "cooldown": 2,
+    "range": 3,
+    "target": "enemy"
+  },
+  {
+    "id": "ABL_X_BLOOD_LOAM",
+    "name": "Blood Loam",
+    "category": "Passive",
+    "effect": {
+      "kind": "Lifesteal",
+      "percent": 25
+    },
+    "text": "Recover 25% of damage dealt as hit points."
+  },
+  {
+    "id": "ABL_X_HEX_SIGN",
+    "name": "Hex Sign",
+    "category": "Active",
+    "effect": {
+      "kind": "ApplyStatus",
+      "status": "Exposed",
+      "rounds": 2,
+      "range": 3
+    },
+    "text": "One enemy within 3 becomes Exposed for 2 rounds.",
+    "apCost": 1,
+    "cooldown": 2,
+    "range": 3,
+    "target": "enemy"
+  },
+  {
+    "id": "ABL_X_THORNWARD",
+    "name": "Thornward",
+    "category": "Passive",
+    "effect": {
+      "kind": "Thorns",
+      "damage": 200
+    },
+    "text": "Melee attackers take 200 damage."
+  },
+  {
+    "id": "ABL_X_WINGED_GUARD",
+    "name": "Winged Guard",
+    "category": "Passive",
+    "effect": {
+      "kind": "ConditionalDef",
+      "def": 150,
+      "vsRole": "Ranged"
+    },
+    "text": "+150 DEF against ranged attacks while airborne."
+  },
+  {
+    "id": "ABL_X_HERALD_CRY",
+    "name": "Herald's Cry",
+    "category": "Active",
+    "effect": {
+      "kind": "MoraleShock",
+      "morale": -15
+    },
+    "text": "Adjacent enemies lose 15 morale and cannot Rally next round.",
+    "apCost": 1,
+    "cooldown": 3
+  },
+  {
+    "id": "ABL_X_MENDING_LIGHT",
+    "name": "Mending Light",
+    "category": "Active",
+    "effect": {
+      "kind": "Heal",
+      "amount": 500,
+      "range": 2
+    },
+    "text": "Restore 500 hit points to one ally within 2.",
+    "apCost": 1,
+    "cooldown": 2,
+    "range": 2,
+    "target": "ally"
+  },
+  {
+    "id": "ABL_X_SMITE",
+    "name": "Smite",
+    "category": "Active",
+    "effect": {
+      "kind": "Smite",
+      "damage": 600,
+      "range": 3
+    },
+    "text": "Strike one enemy within 3 for 600 damage that ignores terrain cover.",
+    "apCost": 1,
+    "cooldown": 2,
+    "range": 3,
+    "target": "enemy"
+  },
+  {
+    "id": "ABL_X_CLEANSING_CHORD",
+    "name": "Cleansing Chord",
+    "category": "Active",
+    "effect": {
+      "kind": "Cleanse",
+      "radius": 2
+    },
+    "text": "Remove all negative statuses from allies within 2.",
+    "apCost": 1,
+    "cooldown": 3
+  },
+  {
+    "id": "ABL_X_ARC_STRIKE",
+    "name": "Arc Strike",
+    "category": "Active",
+    "effect": {
+      "kind": "ChainLightning",
+      "damage": 350,
+      "jumps": 1,
+      "radius": 3
+    },
+    "text": "350 damage to one enemy within 3, arcing to one further enemy within 2.",
+    "apCost": 1,
+    "cooldown": 2,
+    "range": 3,
+    "target": "enemy"
+  },
+  {
+    "id": "ABL_X_STATIC_FIELD",
+    "name": "Static Field",
+    "category": "Passive",
+    "effect": {
+      "kind": "Thorns",
+      "damage": 150
+    },
+    "text": "Melee attackers take 150 damage from discharged charge."
+  },
+  {
+    "id": "ABL_X_THUNDERSTEP",
+    "name": "Thunderstep",
+    "category": "Active",
+    "effect": {
+      "kind": "Teleport",
+      "range": 4
+    },
+    "text": "Discharge and reform up to 4 hexes away, ignoring zone of control.",
+    "apCost": 1,
+    "cooldown": 3
+  },
+  {
+    "id": "ABL_X_STORMBOND",
+    "name": "Stormbond",
+    "category": "Passive",
+    "effect": {
+      "kind": "AuraStat",
+      "stat": "ATK",
+      "value": 75,
+      "radius": 2,
+      "theme": "Storm"
+    },
+    "text": "Storm allies within 2 hexes gain +75 ATK."
+  },
+  {
+    "id": "ABL_X_SKYFALL_ROD",
+    "name": "Skyfall Rod",
+    "category": "Active",
+    "effect": {
+      "kind": "Smite",
+      "damage": 550,
+      "range": 4
+    },
+    "text": "Call a bolt onto one enemy within 4 for 550 damage.",
+    "apCost": 1,
+    "cooldown": 3,
+    "range": 4,
+    "target": "enemy"
+  },
+  {
+    "id": "ABL_X_OPEN_PALM",
+    "name": "Open Palm",
+    "category": "Active",
+    "effect": {
+      "kind": "Push",
+      "hexes": 2,
+      "damage": 250
+    },
+    "text": "Push an adjacent enemy 2 hexes and deal 250 damage.",
+    "apCost": 1,
+    "cooldown": 2,
+    "range": 1,
+    "target": "enemy"
+  },
+  {
+    "id": "ABL_X_BREATH_COUNT",
+    "name": "Breath Count",
+    "category": "Passive",
+    "effect": {
+      "kind": "Regen",
+      "amount": 200
+    },
+    "text": "Recover 200 hit points at the end of each round while not adjacent to an enemy."
+  },
+  {
+    "id": "ABL_X_FLOWING_GUARD",
+    "name": "Flowing Guard",
+    "category": "Reaction",
+    "effect": {
+      "kind": "Riposte",
+      "atkPercent": 50
+    },
+    "text": "When attacked in melee, strike back at 50% ATK once per round."
+  },
+  {
+    "id": "ABL_X_STILLPOINT",
+    "name": "Stillpoint",
+    "category": "Active",
+    "effect": {
+      "kind": "Ward",
+      "def": 400,
+      "rounds": 1
+    },
+    "text": "Take the stillpoint stance: +400 DEF until the start of the next activation.",
+    "apCost": 1,
+    "cooldown": 2
+  },
+  {
+    "id": "ABL_X_MANTRA_OF_HOLD",
+    "name": "Mantra of Holding",
+    "category": "Order",
+    "effect": {
+      "kind": "PreventRouted",
+      "scope": "commandRadius",
+      "duration": "round"
+    },
+    "text": "Allies in command radius cannot become Routed this round.",
+    "apCost": 1
+  },
+  {
+    "id": "ABL_X_LESSER_CIRCLE",
+    "name": "Lesser Circle",
+    "category": "Active",
+    "effect": {
+      "kind": "RitualChannel",
+      "rating": "channeling"
+    },
+    "text": "Channel into an adjacent ritual circle.",
+    "apCost": 1
+  },
+  {
+    "id": "ABL_X_ANCHOR_STAKE",
+    "name": "Anchor Stake",
+    "category": "Active",
+    "effect": {
+      "kind": "PortalCall",
+      "capacity": 2
+    },
+    "text": "Open a reinforcement portal with capacity 2.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_X_BORROWED_TONGUE",
+    "name": "Borrowed Tongue",
+    "category": "Passive",
+    "effect": {
+      "kind": "ConditionalAtk",
+      "atk": 200,
+      "vsRoles": [
+        "Ritualist",
+        "PortalKeeper"
+      ]
+    },
+    "text": "+200 ATK against ritualists and portal keepers."
+  },
+  {
+    "id": "ABL_X_TWO_SCHOOLS",
+    "name": "Two Schools",
+    "category": "Passive",
+    "effect": {
+      "kind": "AuraStat",
+      "stat": "ATK",
+      "value": 100,
+      "radius": 1
+    },
+    "text": "Adjacent allies gain +100 ATK; the fused form teaches while it fights."
+  },
+  {
+    "id": "ABL_X_BRIDGED_FORM",
+    "name": "Bridged Form",
+    "category": "Active",
+    "effect": {
+      "kind": "Ward",
+      "def": 300,
+      "rounds": 1
+    },
+    "text": "Hold both stances at once: +300 DEF for one round.",
+    "apCost": 1,
+    "cooldown": 3
+  },
+  {
+    "id": "ABL_S_SUNDERING_OATH",
+    "name": "Sundering Oath",
+    "category": "Active",
+    "effect": {
+      "kind": "Smite",
+      "damage": 1600,
+      "range": 2
+    },
+    "text": "Speak the oath that ends houses: 1600 damage to one enemy within 2, ignoring Fortification.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_TEN_THOUSAND_CUTS",
+    "name": "Ten Thousand Cuts",
+    "category": "Active",
+    "effect": {
+      "kind": "ConeDamage",
+      "damage": 900,
+      "length": 3
+    },
+    "text": "One draw, three hexes, nine hundred damage along the line.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_MOONLESS_VERDICT",
+    "name": "Moonless Verdict",
+    "category": "Active",
+    "effect": {
+      "kind": "Execute",
+      "threshold": 40,
+      "damage": 1200,
+      "range": 2
+    },
+    "text": "1200 damage to one enemy within 2; an enemy already below 40% hit points is removed outright.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_HUNDRED_SHADOWS",
+    "name": "Hundred Shadows",
+    "category": "Active",
+    "effect": {
+      "kind": "SpawnClones",
+      "count": 4,
+      "duration": 3,
+      "atkPercent": 60,
+      "hp": 1
+    },
+    "text": "Four shadows for three rounds at 60% ATK; they cannot capture and grant no cohesion.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_UNBREAKABLE_DAWN",
+    "name": "Unbreakable Dawn",
+    "category": "Active",
+    "effect": {
+      "kind": "Ward",
+      "def": 900,
+      "rounds": 2,
+      "radius": 2
+    },
+    "text": "The wall holds: this unit and allies within 2 gain +900 DEF for two rounds.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_LANCE_OF_THE_LAST_KING",
+    "name": "Lance of the Last King",
+    "category": "Active",
+    "effect": {
+      "kind": "ChargeBonus",
+      "minHexesMoved": 3,
+      "atk": 1500
+    },
+    "text": "Charge three hexes or more for +1500 ATK; the impact pushes survivors one hex.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_GARDEN_OF_KNIVES",
+    "name": "Garden of Knives",
+    "category": "Active",
+    "effect": {
+      "kind": "Thorns",
+      "damage": 700,
+      "radius": 2,
+      "rounds": 2
+    },
+    "text": "Briars erupt for two rounds: any enemy that attacks or ends its move within 2 takes 700 damage.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_ROOT_OF_THE_WORLD",
+    "name": "Root of the World",
+    "category": "Active",
+    "effect": {
+      "kind": "Root",
+      "rounds": 2,
+      "radius": 3
+    },
+    "text": "Every enemy within 3 is rooted for two rounds and loses 20 morale.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_SKYBREAKER",
+    "name": "Skybreaker",
+    "category": "Active",
+    "effect": {
+      "kind": "ConeDamage",
+      "damage": 1400,
+      "length": 4
+    },
+    "text": "A four-hex breath of split air for 1400 damage; flying targets take a further 300.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_TERRITORIAL_EDICT",
+    "name": "Territorial Edict",
+    "category": "Active",
+    "effect": {
+      "kind": "DenyFlyingMovement",
+      "radius": 5,
+      "rounds": 2
+    },
+    "text": "For two rounds no enemy may fly within 5 hexes, and enemies below take −200 DEF.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_WYRMFIRE_JUDGEMENT",
+    "name": "Wyrmfire Judgement",
+    "category": "Active",
+    "effect": {
+      "kind": "Smite",
+      "damage": 1800,
+      "range": 4
+    },
+    "text": "1800 damage to one enemy within 4; if it is defeated, every enemy within 2 loses 25 morale.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_THE_LONG_INVITATION",
+    "name": "The Long Invitation",
+    "category": "Active",
+    "effect": {
+      "kind": "PortalCall",
+      "capacity": 5,
+      "free": true
+    },
+    "text": "Open a portal of capacity five that costs no Reserve Points this round.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_SIX_WINGS_ONE_VOICE",
+    "name": "Six Wings, One Voice",
+    "category": "Active",
+    "effect": {
+      "kind": "Judgement",
+      "damage": 1500,
+      "radius": 3,
+      "blind": true
+    },
+    "text": "1500 damage to every enemy within 3; survivors are Exposed and cannot use Reactions next round.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_WHEELS_WITHIN_WHEELS",
+    "name": "Wheels Within Wheels",
+    "category": "Active",
+    "effect": {
+      "kind": "Teleport",
+      "range": 8,
+      "thenStatus": "Guarded",
+      "allySwap": true
+    },
+    "text": "The wheels turn: move up to 8 hexes ignoring everything, and one ally within 3 moves with you.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_THRONE_OF_JUDGEMENT",
+    "name": "Throne of Judgement",
+    "category": "Active",
+    "effect": {
+      "kind": "Judgement",
+      "damage": 1200,
+      "radius": 4,
+      "moraleShock": -30
+    },
+    "text": "1200 damage and −30 morale to every enemy within 4; allies within 4 are Cleansed.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_HERALD_OF_THE_LAST_HOUR",
+    "name": "Herald of the Last Hour",
+    "category": "Active",
+    "effect": {
+      "kind": "Resurrect",
+      "count": 2,
+      "hpPercent": 50
+    },
+    "text": "Return two fallen allies at 50% hit points adjacent to this unit.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_EYES_OF_THE_INNER_RING",
+    "name": "Eyes of the Inner Ring",
+    "category": "Active",
+    "effect": {
+      "kind": "RevealAll",
+      "radius": 99,
+      "rounds": 2
+    },
+    "text": "Nothing is Hidden for two rounds and allies gain +150 ATK against revealed targets.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_FIRST_STRIKE_OF_THE_STORM",
+    "name": "First Strike of the Storm",
+    "category": "Active",
+    "effect": {
+      "kind": "ChainLightning",
+      "damage": 1300,
+      "jumps": 4,
+      "radius": 5
+    },
+    "text": "1300 damage to one enemy within 5, arcing to four further enemies at no falloff.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_THE_SKY_ANSWERS",
+    "name": "The Sky Answers",
+    "category": "Active",
+    "effect": {
+      "kind": "Judgement",
+      "damage": 1000,
+      "radius": 3,
+      "chain": true
+    },
+    "text": "A standing column of lightning: 1000 damage in a 3-hex radius, repeating at the end of the round.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_EMPTY_HAND_EMPTY_WORLD",
+    "name": "Empty Hand, Empty World",
+    "category": "Active",
+    "effect": {
+      "kind": "Execute",
+      "threshold": 50,
+      "damage": 1400,
+      "range": 1
+    },
+    "text": "1400 damage to one adjacent enemy; below half hit points it is simply stopped.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_THE_UNMOVED",
+    "name": "The Unmoved",
+    "category": "Active",
+    "effect": {
+      "kind": "Ward",
+      "def": 1200,
+      "rounds": 3,
+      "immovable": true
+    },
+    "text": "+1200 DEF for three rounds; this unit cannot be moved, rooted, pushed or routed.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_TWO_BLADES_ONE_BREATH",
+    "name": "Two Blades, One Breath",
+    "category": "Active",
+    "effect": {
+      "kind": "MultiStrike",
+      "strikes": 3,
+      "atkPercent": 70
+    },
+    "text": "Three strikes at 70% ATK, each able to choose a different adjacent target.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_SILENT_TEMPLE",
+    "name": "Silent Temple",
+    "category": "Active",
+    "effect": {
+      "kind": "ApplyStatus",
+      "status": "Silenced",
+      "rounds": 2,
+      "radius": 3
+    },
+    "text": "Every enemy within 3 is Silenced for two rounds; rituals in the area lose all progress.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_DRAGON_AND_CROWN",
+    "name": "Dragon and Crown",
+    "category": "Active",
+    "effect": {
+      "kind": "Judgement",
+      "damage": 1100,
+      "radius": 2,
+      "mount": true
+    },
+    "text": "The wyrm and the rider strike as one: 1100 damage within 2, and the pair gains +400 DEF for a round.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_STORMCLAD_HOST",
+    "name": "Stormclad Host",
+    "category": "Active",
+    "effect": {
+      "kind": "AuraStat",
+      "stat": "ATK",
+      "value": 400,
+      "radius": 3,
+      "rounds": 2
+    },
+    "text": "For two rounds allies within 3 gain +400 ATK and their attacks arc to a second target.",
+    "apCost": 1,
+    "cooldown": 4
+  },
+  {
+    "id": "ABL_S_THORNED_ASCENT",
+    "name": "Thorned Ascent",
+    "category": "Active",
+    "effect": {
+      "kind": "Lifesteal",
+      "percent": 100,
+      "rounds": 2
+    },
+    "text": "For two rounds this unit heals for the full damage it deals and cannot be healed by anything else.",
+    "apCost": 1,
+    "cooldown": 4
+  }
+]
