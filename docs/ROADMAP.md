@@ -102,3 +102,7 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-06: Proposal — give the banner rank privilege more mechanical weight: a leader whose rank carries `banner`
+  already doubles morale recovery at the start of each round, but the manual Rally action still heals a flat 10
+  regardless of rank. Let `banner` leaders Rally for 15 instead, so climbing a faction's rank ladder keeps paying off
+  in the moment a platoon calls on its commander, not only between rounds.
