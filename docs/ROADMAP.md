@@ -102,3 +102,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-06: Proposal — right now only the Samurai ladder's Hatamoto rank carries a morale privilege (`banner`,
+  +5 Morale to the platoon in the Command Phase); Knight, Dragon Host and Ritual Cult commanders recover the base
+  +5 only and have no equivalent. When those three ladders land (see Next, item 2), give each top command rank
+  its own morale-facing privilege in the same slot Hatamoto uses, distinct in flavor per faction (a Knight banner
+  bearer rallying broken lines, a Dragon Host commander's roar steadying nearby wings, a Ritual Cult overseer
+  suppressing panic through the circle) so mechanical weight at the top of the ladder is consistent across
+  factions rather than a Samurai-only bonus.
