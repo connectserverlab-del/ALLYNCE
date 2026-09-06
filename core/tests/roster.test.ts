@@ -21,7 +21,7 @@ describe("expansion roster", () => {
     const foot = expansion
       .filter((u) => u.faction === "SAM" && u.roles.includes("FootSoldier"))
       .sort((a, b) => a.stars! - b.stars!);
-    for (let i = 1; i < foot.length; i++) expect(foot[i].atk).toBeGreaterThan(foot[i - 1].atk);
+    for (let i = 1; i < foot.length; i++) expect(foot[i]!.atk).toBeGreaterThan(foot[i - 1]!.atk);
   });
 
   it("ten-star units are off the curve, one-copy, and carry a signature ability", () => {

@@ -1,11 +1,23 @@
 import type { Battle } from "./state.js";
-import type { UnitState, AbilityDef, PlatoonState, Modifier } from "./types.js";
-import { hexNeighbors, hexKey } from "./hex.js";
+import type { UnitState, AbilityDef, PlatoonState, Modifier, Status } from "./types.js";
+import { hexNeighbors, hexKey, hexDistance } from "./hex.js";
+import { applyDamage } from "./combat.js";
 import { platoonMorale, platoonMembers, tempPreventRouted, changeMorale } from "./morale.js";
 import { addTempMod } from "./modifiers.js";
 import { computeStat } from "./modifiers.js";
 
 export interface EffectContext { platoon?: PlatoonState; target?: UnitState; targetHex?: { q: number; r: number } }
+
+/** Rooted units cannot move; the counter ticks down in the End Phase. */
+export const rooted = new Map<string, number>();
+/** While set, that side ignores Hidden entirely for the remaining rounds. */
+export const revealAllRounds = new Map<string, number>();
+
+/** End-of-round upkeep for the expansion effect kinds. */
+export function tickExpansionEffects(): void {
+  for (const [uid, n] of rooted) { if (n <= 1) rooted.delete(uid); else rooted.set(uid, n - 1); }
+  for (const [side, n] of revealAllRounds) { if (n <= 1) revealAllRounds.delete(side); else revealAllRounds.set(side, n - 1); }
+}
 
 /**
  * Generic effect interpreter. Abilities are data; each `effect.kind` maps to one handler here.
@@ -87,6 +99,147 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
     case "RitualChannel":
     case "PortalCall":
       return true; // handled by ritual / portal managers through the action layer
+
+    /* ---------------------------------------------- expansion effect kinds */
+    case "Smite": {
+      if (!ctx.target) return false;
+      applyDamage(b, ctx.target, e.damage, ability.name);
+      b.log("Ability", { ability: ability.id, uid: user.uid, target: ctx.target.uid, damage: e.damage });
+      return true;
+    }
+    case "Execute": {
+      if (!ctx.target) return false;
+      const max = b.def(ctx.target).hp;
+      const lethal = ctx.target.hp <= max * (e.threshold / 100);
+      applyDamage(b, ctx.target, lethal ? ctx.target.hp + max : e.damage, ability.name);
+      b.log("Ability", { ability: ability.id, uid: user.uid, target: ctx.target.uid, executed: lethal });
+      return true;
+    }
+    case "MultiStrike": {
+      const targets = b.adjacentEnemies(user).slice(0, e.strikes);
+      if (!targets.length) return false;
+      const atk = computeStat(b, user, "ATK", { attacker: user }).final;
+      for (let i = 0; i < e.strikes; i++) {
+        const t = targets[i % targets.length];
+        if (!t || t.defeated) continue;
+        const def = computeStat(b, t, "DEF", { attacker: user, defender: t }).final;
+        applyDamage(b, t, Math.max(100, Math.round(atk * (e.atkPercent / 100)) - def), ability.name);
+      }
+      b.log("Ability", { ability: ability.id, uid: user.uid, strikes: e.strikes });
+      return true;
+    }
+    case "ChainLightning": {
+      if (!ctx.target) return false;
+      let current = ctx.target;
+      const hit = new Set<string>();
+      applyDamage(b, current, e.damage, ability.name);
+      hit.add(current.uid);
+      for (let j = 0; j < e.jumps; j++) {
+        const next = [...b.activeUnits()].find((x) => x.side !== user.side && !hit.has(x.uid) && b.distance(current, x) <= 2);
+        if (!next) break;
+        applyDamage(b, next, e.damage, ability.name);
+        hit.add(next.uid);
+        current = next;
+      }
+      b.log("Ability", { ability: ability.id, uid: user.uid, arcs: hit.size });
+      return true;
+    }
+    case "ConeDamage": {
+      if (!user.pos) return false;
+      let n = 0;
+      for (const en of b.activeUnits()) {
+        if (en.side === user.side || !en.pos) continue;
+        if (hexDistance(user.pos, en.pos) <= e.length) { applyDamage(b, en, e.damage, ability.name); n++; }
+      }
+      b.log("Ability", { ability: ability.id, uid: user.uid, hit: n });
+      return n > 0;
+    }
+    case "Judgement": {
+      if (!user.pos) return false;
+      let n = 0;
+      for (const en of [...b.activeUnits()]) {
+        if (en.side === user.side || !en.pos) continue;
+        if (hexDistance(user.pos, en.pos) > e.radius) continue;
+        applyDamage(b, en, e.damage, ability.name);
+        if (e.moraleShock) changeMorale(b, en, e.moraleShock, ability.name);
+        if (!en.defeated && e.blind) b.addStatus(en, "Exposed", 1, ability.name);
+        n++;
+      }
+      b.log("Ability", { ability: ability.id, uid: user.uid, hit: n });
+      return n > 0;
+    }
+    case "Heal": {
+      const t = ctx.target ?? user;
+      t.hp = Math.min(b.def(t).hp, t.hp + e.amount);
+      b.log("Healed", { uid: t.uid, by: user.uid, amount: e.amount });
+      return true;
+    }
+    case "Resurrect": {
+      const fallen = [...b.units.values()].filter((x) => x.defeated && x.side === user.side && !x.isClone).slice(0, e.count);
+      if (!fallen.length || !user.pos) return false;
+      const free = hexNeighbors(user.pos).filter((h) => b.isFree(h));
+      let n = 0;
+      for (const f of fallen) {
+        const h = free[n];
+        if (!h) break;
+        f.defeated = false;
+        f.hp = Math.round(b.def(f).hp * (e.hpPercent / 100));
+        f.statuses = [];
+        b.place(f, h);
+        n++;
+      }
+      b.log("Resurrected", { by: user.uid, count: n });
+      return n > 0;
+    }
+    case "Cleanse": {
+      const bad: Status[] = ["Exposed", "Suppressed", "Silenced", "Routed", "Unstable", "Revealed"];
+      let n = 0;
+      for (const a of b.activeUnits(user.side)) {
+        if (b.distance(user, a) > (e.radius ?? 0)) continue;
+        for (const s of bad) b.removeStatus(a, s);
+        n++;
+      }
+      b.log("Ability", { ability: ability.id, uid: user.uid, cleansed: n });
+      return n > 0;
+    }
+    case "ApplyStatus": {
+      const targets = e.radius
+        ? [...b.activeUnits()].filter((x) => x.side !== user.side && b.distance(user, x) <= e.radius)
+        : ctx.target ? [ctx.target] : [];
+      for (const t of targets) b.addStatus(t, e.status as Status, e.rounds, ability.name);
+      return targets.length > 0;
+    }
+    case "Ward": {
+      const targets = e.radius
+        ? [...b.activeUnits(user.side)].filter((x) => b.distance(user, x) <= e.radius)
+        : [user];
+      for (const t of targets) addTempMod(t, { source: ability.name, stat: "DEF", value: e.def });
+      if (e.immovable) rooted.delete(user.uid);
+      b.log("Ability", { ability: ability.id, uid: user.uid, warded: targets.length });
+      return true;
+    }
+    case "Root": {
+      const targets = e.radius
+        ? [...b.activeUnits()].filter((x) => x.side !== user.side && b.distance(user, x) <= e.radius)
+        : ctx.target ? [ctx.target] : [];
+      for (const t of targets) { rooted.set(t.uid, e.rounds); changeMorale(b, t, -20, ability.name); }
+      b.log("Ability", { ability: ability.id, uid: user.uid, rooted: targets.length });
+      return targets.length > 0;
+    }
+    case "Teleport": {
+      if (!ctx.targetHex || !b.isFree(ctx.targetHex)) return false;
+      if (user.pos && hexDistance(user.pos, ctx.targetHex) > e.range) return false;
+      b.place(user, ctx.targetHex);
+      if (e.thenStatus) b.addStatus(user, e.thenStatus as Status, 2, ability.name);
+      b.log("Ability", { ability: ability.id, uid: user.uid, to: hexKey(ctx.targetHex) });
+      return true;
+    }
+    case "RevealAll": {
+      for (const en of b.activeUnits()) if (en.side !== user.side) b.removeStatus(en, "Hidden");
+      revealAllRounds.set(user.side, e.rounds);
+      b.log("Ability", { ability: ability.id, uid: user.uid });
+      return true;
+    }
     default:
       // Passive kinds (ConditionalDef/Atk, SharedVision, Intercept, DenyFlyingMovement) are evaluated where relevant.
       return true;

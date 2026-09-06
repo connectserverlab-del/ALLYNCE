@@ -27,8 +27,16 @@ export function resolveAttack(b: Battle, attacker: UnitState, target: UnitState,
   const arc = arcFor(b, attacker, defender);
   const atk = computeStat(b, attacker, "ATK", { attacker, defender, arc, ranged: opts.ranged }).final;
   const def = computeStat(b, defender, "DEF", { attacker, defender, arc, ranged: opts.ranged }).final;
-  const damage = Math.max(MIN_DAMAGE, atk - def);
+  const damage = Math.max(MIN_DAMAGE, atk - def - damageReduction(b, defender));
   const result = applyDamage(b, defender, damage, attacker.uid);
+  // Blood Loam / Thorned Ascent: the attacker heals for a share of what it dealt.
+  const steal = passiveValue(b, attacker, "Lifesteal", "percent");
+  if (steal) attacker.hp = Math.min(b.def(attacker).hp, attacker.hp + Math.round(damage * steal / 100));
+  // Thornward / Static Field: melee attackers take a fixed return hit.
+  if (!opts.ranged && !result.defeated) {
+    const thorns = passiveValue(b, defender, "Thorns", "damage");
+    if (thorns) { b.log("Thorns", { from: defender.uid, to: attacker.uid, damage: thorns }); applyDamage(b, attacker, thorns, defender.uid); }
+  }
   attacker.attackedThisActivation = true;
   attacker.overwatch = false;
   // consume one-shot melee bonuses (Measured Advance / charges)
@@ -40,6 +48,22 @@ export function resolveAttack(b: Battle, attacker: UnitState, target: UnitState,
 }
 
 export const interceptUsed = new Set<string>();
+
+/** Sum one numeric field across every passive of a given effect kind. */
+function passiveValue(b: Battle, u: UnitState, kind: string, field: string): number {
+  if (u.isClone) return 0;
+  let total = 0;
+  for (const id of b.def(u).passives) {
+    const e = b.reg.ability(id).effect as Record<string, any>;
+    if (e.kind === kind) total += Number(e[field] ?? 0);
+  }
+  return total;
+}
+
+/** Scaled Hide and similar: flat reduction applied after the ATK/DEF subtraction. */
+function damageReduction(b: Battle, u: UnitState): number {
+  return passiveValue(b, u, "DamageReduction", "flat");
+}
 
 export function applyDamage(b: Battle, u: UnitState, damage: number, source: string): { defeated: boolean; staggered?: boolean } {
   u.hp -= damage;
