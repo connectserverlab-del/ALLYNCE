@@ -4,8 +4,8 @@ import { TERRAIN_RULES } from "./types.js";
 import { themeCohesionBonus } from "./cohesion.js";
 import { doctrineState } from "./composition.js";
 import { commandBonus } from "./command.js";
-import { moraleBand } from "./morale.js";
-import { attackArc, type AttackArc } from "./hex.js";
+import { moraleBand, platoonMembers } from "./morale.js";
+import { attackArc, hexDistance, type AttackArc } from "./hex.js";
 import { privileges, commandRadiusOf } from "./ranks.js";
 import { kingdomMods } from "./kingdom.js";
 
@@ -142,6 +142,30 @@ export function clearTempMods(u: UnitState, predicate?: (m: Modifier) => boolean
 export function arcFor(b: Battle, attacker: UnitState, defender: UnitState): AttackArc {
   if (!attacker.pos || !defender.pos) return "front";
   return attackArc(defender.pos, defender.facing, attacker.pos);
+}
+
+/** Whether `u`'s own abilities or faction doctrine carry a passive of this effect kind. */
+export function hasPassiveKind(b: Battle, u: UnitState, kind: string): boolean {
+  const d = b.def(u);
+  const faction = b.reg.factions.get(d.faction);
+  const ids = [...d.passives, ...(faction?.passiveDoctrine ? [faction.passiveDoctrine] : [])];
+  return ids.some((id) => b.reg.ability(id).effect.kind === kind);
+}
+
+/**
+ * Unseen Network: a Hidden platoon-mate standing beside a Hidden enemy radios its position back, so
+ * the platoon commander can strike it despite the range-1 rule that otherwise protects anything Hidden.
+ * Only the unit actually holding the commander's slot benefits — which, after a succession, may be a
+ * longer-ranged Second rather than the platoon's original melee leader.
+ */
+export function revealsHiddenTarget(b: Battle, attacker: UnitState, target: UnitState): boolean {
+  if (!attacker.platoonId || !target.pos) return false;
+  const p = b.platoon(attacker.platoonId);
+  if (p.commanderUid !== attacker.uid || !hasPassiveKind(b, attacker, "SharedVision")) return false;
+  return platoonMembers(p).some((uid) => {
+    const m = b.units.get(uid);
+    return !!m && m.uid !== attacker.uid && !m.defeated && m.pos && b.hasStatus(m, "Hidden") && hexDistance(m.pos, target.pos!) <= 1;
+  });
 }
 
 /** A castle-holding rank on the same side whose command radius covers `u`. */
