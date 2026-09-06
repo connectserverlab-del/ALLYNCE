@@ -102,3 +102,7 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-06: Proposal — an `EliminateRank` objective: satisfied once every enemy unit holding a named faction
+  rank (a Shogun, a Jonin, a Marshal) is defeated or subdued. This gives the rank ladders a stake beyond their
+  own mechanics: a scenario could be won by unseating a specific rank rather than only the fixed army leader,
+  which matters once Knight, Dragon Host and Ritual Cult get ladders of their own.
