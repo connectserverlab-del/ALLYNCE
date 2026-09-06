@@ -12,7 +12,7 @@ import { applyEffect, clearRoundEffectFlags, orderFlags } from "./effects.js";
 import { tickRitual, releaseRitual, linkedGroup, assistRitual, disruptRitual, type RitualCircle } from "./rituals.js";
 import { tickPortal, checkCaptureInterrupt, attackPortal, captureStep, type Portal } from "./portals.js";
 import { commandRadiusRecovery, surroundedPenalty, moraleBand, changeMorale } from "./morale.js";
-import { doctrineState } from "./composition.js";
+import { doctrineState, organizationLevel, companyLeader } from "./composition.js";
 import { evaluateObjective, markSynchronized, type ObjectiveDef, type ObjectiveProgress } from "./objectives.js";
 import { mountedMoveBonus, commandRadiusOf, movementTraits } from "./ranks.js";
 import { fuse as fuseUnits, tickFusions } from "./fusion.js";
@@ -40,6 +40,7 @@ export class BattleController {
       p.markedTarget = null;
       if (p.continuityRoundsLeft > 0) p.continuityRoundsLeft--;
     }
+    for (const s of b.sides.values()) s.companyOrderUsedThisRound = false;
     for (const u of b.activeUnits()) {
       u.ap = 0; u.defending = false; u.overwatch = false;
       u.usedChargeLastRound = false;
@@ -326,6 +327,32 @@ export class BattleController {
     if (!u.platoonId) return false;
     const p = this.b.platoon(u.platoonId);
     return p.commanderUid === u.uid; // a promoted second becomes commanderUid
+  }
+
+  /**
+   * Company Order: once a side fields three or more non-Broken platoons (Company organization,
+   * see `data/compositions/platoon.json`), a living commander or second whose faction rank may
+   * lead a Company can spend the side's one army-level order per round. It reissues that faction's
+   * own signature platoon order (`faction.platoonOrder`) to every non-Broken platoon on the side at
+   * once, through the same effect interpreter each platoon's own order already uses.
+   */
+  useCompanyOrder(u: UnitState, ctx: { target?: UnitState; targetHex?: Hex } = {}): void {
+    const b = this.b;
+    const side = b.sides.get(u.side);
+    if (!side) throw new Error(`Unknown side ${u.side}`);
+    if (organizationLevel(b, u.side) !== "Company") throw new Error("Company Order requires Company organization: three or more platoons in the field");
+    if (side.companyOrderUsedThisRound) throw new Error("Company Order already used this round");
+    if (companyLeader(b, u.side) !== u) throw new Error("Only a living commander or second whose rank may lead a Company can issue the Company Order");
+    const d = b.def(u);
+    const abilityId = b.reg.factions.get(d.faction)?.platoonOrder;
+    if (!abilityId) throw new Error(`${d.faction} has no signature platoon order to issue army-wide`);
+    const a = b.reg.ability(abilityId);
+    const platoons = [...b.platoons.values()].filter((p) => p.side === u.side && doctrineState(b, p) !== "Broken");
+    if (!platoons.length) throw new Error("No platoon in the field to receive the Company Order");
+    this.spend(u, a.apCost ?? 1);
+    for (const p of platoons) applyEffect(b, u, a, { platoon: p, target: ctx.target, targetHex: ctx.targetHex });
+    side.companyOrderUsedThisRound = true;
+    b.log("CompanyOrder", { uid: u.uid, ability: abilityId, platoons: platoons.map((p) => p.id) });
   }
 
   private routedRetreat(u: UnitState): void {

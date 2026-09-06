@@ -1,5 +1,5 @@
 import type { Battle } from "./state.js";
-import type { PlatoonState, DoctrineState, UnitDef } from "./types.js";
+import type { PlatoonState, DoctrineState, UnitDef, UnitState } from "./types.js";
 import type { Registry } from "./data.js";
 import { canLead } from "./ranks.js";
 
@@ -73,4 +73,23 @@ export function organizationLevel(b: Battle, side: string): "None" | "Platoon" |
   const full = [...b.platoons.values()].filter((p) => p.side === side && doctrineState(b, p) !== "Broken").length;
   if (full >= 3) return "Company";
   return full >= 1 ? "Platoon" : "None";
+}
+
+/**
+ * The living commander or second, anywhere on the side, whose faction rank may lead a Company
+ * (same rule `validateArmy` checks at list-building time, applied here to who is actually still
+ * standing). Returns the first one found; a side either has one or it doesn't; that unit is the
+ * only one who may issue the Company Order.
+ */
+export function companyLeader(b: Battle, side: string): UnitState | null {
+  for (const p of b.platoons.values()) {
+    if (p.side !== side) continue;
+    for (const uid of [p.commanderUid, p.secondUid]) {
+      if (!live(b, uid)) continue;
+      const u = b.units.get(uid!)!;
+      const d = b.def(u);
+      if (canLead(b.reg.ranks.get(d.faction), d.factionRank, "Company")) return u;
+    }
+  }
+  return null;
 }

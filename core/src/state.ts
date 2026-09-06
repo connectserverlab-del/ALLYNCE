@@ -10,7 +10,7 @@ import type { KingdomEffects } from "./kingdom.js";
 
 export type Phase = "Command" | "Activation" | "Objective" | "End" | "Ended";
 
-export interface SideState { id: string; reservePoints: number; armyCapacity: number; morale: number; leaderUid?: string | null; surrendered?: boolean; fusionCharges?: number }
+export interface SideState { id: string; reservePoints: number; armyCapacity: number; morale: number; leaderUid?: string | null; surrendered?: boolean; fusionCharges?: number; companyOrderUsedThisRound?: boolean }
 
 /** One enemy taken alive off the field. A kill leaves no card behind; only a subdual does. */
 export interface Capture { defId: string; uid: string; from: string; by: string; byUid: string; round: number }
