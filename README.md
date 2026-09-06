@@ -16,7 +16,7 @@ This repository currently holds three things:
 
 ```bash
 npm install
-npm test            # 85 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
+npm test            # combat math, cohesion, composition, succession, clones, rituals, portals, cards, the holding, marching, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -49,6 +49,8 @@ npm run assets      # rebuilds the asset registry from the data and from disk
 - **Fusion**: recipe-driven merging of adjacent units into one (Paired Line, Gate Wardens, Twinwing Drake, and the Calamity Form from the three Sovereigns), paid with Fusion charges.
 - **Siege and cavalry**: cannons per faction with set-up, minimum range and breaching shots (plus smoke shells and the Siegewyrm's concussive blast); cavalry per faction with lance charges that break in rough ground, and hit-and-fade riders.
 - **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. See `docs/samurai-ranks.md`.
+- **The wanted board**: rotating warrants that pay in cards and bounty for a target taken alive rather than killed, either broken to a quarter health or cornered by two or more units. See `docs/cards-and-kingdom.md`.
+- **Marching between battles**: continuous, seconds-based movement over the same generated hexes the battle fights on, squads at their slowest member's pace, routed around anything a straight line cannot cross, capped at 45 seconds. See `core/src/march.ts`.
 
 ## Engine note
 
