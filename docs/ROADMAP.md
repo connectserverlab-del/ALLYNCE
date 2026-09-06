@@ -102,3 +102,11 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-06: Proposal — the standing intent asks every faction for a themed cannon and a themed cavalry unit, but
+  the roster only carries one of each for the four host armies (Samurai, Shinobi, Knight, Dragon Host); Ritual
+  Cult, the five sworn companies and the seven divisions have neither (the Windmarch steppe archers and the Choir
+  Militant have a cavalry-flagged unit each, everyone else has zero). A themed pair per remaining faction —
+  a Ritual Cult siege idea could be a portable summoning brazier that fires a delayed Unstable pulse instead of a
+  shot, and Wendigo-kin cavalry could be antlered pack-runners rather than mounted riders — would close that gap
+  the same way the rank ladders are being closed faction by faction. Card art for whatever gets picked stays a
+  separate, owner-sampled step.
