@@ -102,3 +102,8 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — now that `DefendForRounds` actually checks whether its named `uidOrPortal` survives instead
+  of only the round clock, let a scenario name that target by role (a platoon's commander, a portal's scenario
+  role) instead of a raw runtime uid, the same way scenario authoring already names hexes by role on a regenerated
+  field. A hand-picked uid breaks the moment the same scenario redeploys on a different generated battlefield or a
+  different army composition; a role reference would not.

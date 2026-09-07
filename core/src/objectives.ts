@@ -20,13 +20,25 @@ export interface ObjectiveProgress { def: ObjectiveDef; satisfied: boolean; deta
 const holdCounters = new WeakMap<Battle, Map<string, number>>();
 function counters(b: Battle): Map<string, number> { let m = holdCounters.get(b); if (!m) { m = new Map(); holdCounters.set(b, m); } return m; }
 
+/** True while the named unit is undefeated, or the named portal is neither Destroyed nor Captured. */
+function isDefended(b: Battle, uidOrPortal: string): boolean {
+  const u = b.units.get(uidOrPortal);
+  if (u) return !u.defeated;
+  const p = b.portals.get(uidOrPortal);
+  if (p) return p.state !== "Destroyed" && p.state !== "Captured";
+  return false;
+}
+
 export function evaluateObjective(b: Battle, o: ObjectiveDef): ObjectiveProgress {
   switch (o.type) {
     case "EliminateLeader": {
       const t = [...b.units.values()].find((u) => u.defId === o.targetDefId && u.side !== o.side);
       return { def: o, satisfied: !!t && t.defeated, detail: t ? `${b.def(t).name} ${t.defeated ? "defeated" : `HP ${t.hp}`}` : "target not present" };
     }
-    case "DefendForRounds":
+    case "DefendForRounds": {
+      const defended = !o.uidOrPortal || isDefended(b, o.uidOrPortal);
+      return { def: o, satisfied: defended && b.round > o.rounds, detail: defended ? `Round ${b.round}/${o.rounds}` : "defended target lost" };
+    }
     case "SurviveRounds":
       return { def: o, satisfied: b.round > o.rounds, detail: `Round ${b.round}/${o.rounds}` };
     case "CompleteRituals": {
