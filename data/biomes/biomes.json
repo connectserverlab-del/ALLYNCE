@@ -1,0 +1,20 @@
+{
+  "ASHFALL": {
+    "id": "ASHFALL",
+    "name": "Ashfall",
+    "text": "Ash-blackened highland scored by old eruptions: broken ground, thin scrub, and the ruins the hold takes its name from.",
+    "spec": { "forest": 0.04, "rugged": 0.5, "river": false, "trenches": true, "ruins": true, "wetness": 0.35 }
+  },
+  "MARSH": {
+    "id": "MARSH",
+    "name": "Marsh",
+    "text": "Low wet ground threaded by slow water: reed flats, sucking mud, and a river that never quite finds a bank.",
+    "spec": { "forest": 0.08, "rugged": 0.12, "river": true, "trenches": false, "ruins": false, "wetness": 0.9 }
+  },
+  "HIGHLAND_PASS": {
+    "id": "HIGHLAND_PASS",
+    "name": "Highland Pass",
+    "text": "A narrow shoulder of mountain country: steep ranges either side of the only ground an army can cross.",
+    "spec": { "forest": 0.1, "rugged": 0.62, "river": true, "trenches": true, "ruins": false, "wetness": 0.3 }
+  }
+}

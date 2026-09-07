@@ -15,6 +15,7 @@ import type { DeckRules, SideCard } from "./cards.js";
 import type { KingdomData, ResearchDef, BannerDef } from "./kingdom.js";
 import type { WantedRules } from "./wanted.js";
 import type { MarchRules } from "./march.js";
+import type { BiomeDef } from "./mapgen.js";
 import { Registry, type CompositionRules } from "./registry.js";
 
 export { Registry } from "./registry.js";
@@ -47,4 +48,8 @@ export function loadRegistry(): Registry {
 
 export function loadScenario<T = unknown>(name: string): T {
   return readJson<T>(`scenarios/${name}.json`);
+}
+
+export function loadBiomes(): Record<string, BiomeDef> {
+  return readJson<Record<string, BiomeDef>>("biomes/biomes.json");
 }

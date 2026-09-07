@@ -65,6 +65,12 @@ where they conflict.**
 - New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
 - Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
 
+### Done in the biome pass
+
+- Three named biomes (Ashfall, Marsh, Highland Pass) as data-defined presets over the battlefield generator's
+  existing knobs, plus a `wetness` knob so a wet or dry region reads that way in the mud it gets. Per-battle
+  overrides still win over the preset.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -78,8 +84,8 @@ where they conflict.**
    answered (map look, command bar material, field size).
 2. Knight, Dragon Host and Ritual Cult rank ladders with one mechanical trait each per rank.
 3. Remaining unit art (see `pending` in `art/ASSET_MANIFEST.json`), then construction sheets for approved units.
-4. Map generator: named biomes (Ashfall, Marsh, Highland pass), scenario-authored overrides on top of generated ground,
-   deployment-zone balance check (path cost between anchors within 10 percent both ways).
+4. Map generator: scenario-authored overrides on top of generated ground, deployment-zone balance check (path cost
+   between anchors within 10 percent both ways).
 5. AI: use trenches and high ground, siege positioning behind the line, cavalry flank routing, surrender when the
    leader is dead and average morale is below 20.
 6. Army builder validation UI in the sample page (drag units into slots, live doctrine and capacity readout).
@@ -102,3 +108,6 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — let a scenario name a biome (`"biome": "MARSH"`) instead of raw generator knobs, so scenario
+  authoring reads as regional intent ("defend the ford at Marsh") rather than tuned noise numbers, with the
+  scenario's own overrides still layered on top of the preset.
