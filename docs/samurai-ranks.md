@@ -1,7 +1,8 @@
 # Samurai rank ladder
 
 Source of truth: `data/factions/ranks/SAM.json`. Nineteen ranks ordered low to high, each with mechanical privileges
-and the organizations it may lead. Other factions have no ladder yet and are unrestricted.
+and the organizations it may lead. See `docs/knight-ranks.md` for the Knight ladder; Dragon Host and Ritual Cult
+have no ladder yet and are unrestricted.
 
 | Tier | Rank | Privileges | May lead |
 |---:|---|---|---|

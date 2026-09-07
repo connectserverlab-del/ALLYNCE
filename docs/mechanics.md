@@ -7,6 +7,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §3 Battlefield and turn structure | `battle.ts`, `hex.ts`, `state.ts` | Command / Activation / Objective / End phases, 2 AP, standard actions |
 | §4 Unit statistics | `types.ts`, `data.ts`, `data/units/units.json` | All required fields; registry validates references on load |
 | §5 Army construction | `composition.ts` | `validateArmy`, slot rules, unique and boss limits, capacity |
+| Faction rank ladders | `ranks.ts`, `data/factions/ranks/*.json` | Per-faction tiers: privileges, movement traits, `canLead`. See `docs/samurai-ranks.md`, `docs/knight-ranks.md` |
 | §6 Theme cohesion and doctrine | `cohesion.ts`, `composition.ts`, `modifiers.ts` | `doctrineState`, Continuity, layered breakdown with sources |
 | §7 Combat | `combat.ts`, `modifiers.ts` | Deterministic damage, arcs, terrain, statuses, intercession, duel |
 | §8 Morale and command | `morale.ts`, `command.ts` | Bands, sources, succession, strongest aura only, Rally |
