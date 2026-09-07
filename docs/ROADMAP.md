@@ -102,3 +102,9 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — now that the Deck screen sleeves and pulls live, let it write the edited list back
+  into the holding as the deck the next match actually plays, instead of a build the sample page throws
+  away on reload. Ties the "beyond match-to-match battles" holding straight to the "100-card deck" it is
+  supposed to own, and gives a rank ladder's privileges somewhere to land: a ladder could raise what a
+  faction's own leadership lets a mixed deck field, rather than every deck answering to the same flat
+  40-card primary-faction minimum regardless of who leads it.

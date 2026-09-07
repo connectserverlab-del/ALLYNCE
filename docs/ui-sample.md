@@ -17,7 +17,8 @@ Three steps, each its own file so any of them can be run or read alone:
 | 1 | `scripts/pack-sample-assets.py` | Reads the art off disk, downscales each class of asset to the size the page actually draws it at, and encodes it as data URIs. Cutouts go out as WebP, which carries the alpha a card face needs at roughly a sixth of PNG's weight. |
 | 2 | `web/sample/data.mts` | Drives the real engine — a holding with buildings and research, a battle paused mid-activation, a hundred-card deck built against a collection, a warrant board — and writes the state as JSON. |
 | 2b | `scripts/bundle-march.mjs` | Compiles the march engine for the browser through esbuild. |
-| 3 | `scripts/build-sample.mjs` | Substitutes all three into `web/sample/template.html` and writes `docs/samples/ashfall-hold.html`. |
+| 2c | `scripts/bundle-cards.mjs` | Compiles the deck rules (`validateDeck`, `effectiveCopyLimit`) for the browser through esbuild. |
+| 3 | `scripts/build-sample.mjs` | Substitutes all four into `web/sample/template.html` and writes `docs/samples/ashfall-hold.html`. |
 
 The March screen is the one screen that cannot be a snapshot. Every other screen shows a state the engine
 had already reached when the page was built, which is fine for a battle paused mid-activation; but a march
@@ -29,6 +30,13 @@ a disk, and `core/src/data.ts` owns the file reading: the class has to be reacha
 node:fs in behind it. No arrival time on that screen is computed by the template; they all come back from
 `travelSeconds`.
 
+The Deck and Rites screens are the same idea applied to legality instead of movement. Sleeving or pulling a
+card is a choice the person looking at the page makes, so `web/sample/cards-boot.mts` bundles the real
+`validateDeck` and `effectiveCopyLimit` from `core/src/cards.ts` under `window.CARDS`, and every add or
+remove re-runs the deck through it. The two screens edit their own in-page copy of `main`/`side` (seeded
+from the baked starter deck) against the full card catalogue in `D.deck.pool` / `D.deck.sidePool`; nothing
+about a copy limit, an ownership cap or the primary-faction minimum is recomputed by hand in the template.
+
 The page has to open from a bare `file://` path with nothing beside it, so everything travels inside the HTML.
 That is why it is tens of megabytes and why the packer downscales as hard as it does.
 
@@ -38,8 +46,8 @@ That is why it is tens of megabytes and why the packer downscales as hard as it 
 |---|---|
 | **Field** | The generated battlefield, painted ground clipped to the irregular shape, pan and zoom with a minimap. Round and phase, both sides' morale bands, cohesion links, the selected unit's reach and the summon zone, and a command bar carrying the engine's own ATK and DEF breakdowns term by term. |
 | **March** | Movement between battles, running live. Two squads and a few loose units stand on the generated ground; click anywhere to send the selected squad and they walk there, at the pace of their slowest member. Drag a name from the roster onto a squad and that unit walks over and falls in when it gets close. The clock reads elapsed time, who is still walking and the longest arrival, against the 45-second cap. |
-| **Deck** | All hundred cards on paper stock, filterable by faction and sortable by star, copies or name. The name runs across the top band of the paper, LIFE, ATK and DEF sit under the art in dark ink, and the star row and wax seal close the foot. The detail panel adds the role, the summon cost and how many copies the hold physically owns, because the copy limit is a ceiling and not a grant. |
-| **Rites** | The twenty-card side deck. Rituals name a star total to sacrifice; fusions name exact adjacent materials. Cards playable on the current field are lit; the rest are dimmed with their requirements spelled out. |
+| **Deck** | Editable. Every card the hold could sleeve, on paper stock, filterable by faction and sortable by star, copies or name; a stepper on each face sleeves or pulls a copy, never past what the hold owns, a card's star limit or a hundred cards. The header count and an error list re-run `validateDeck` after every change, so a deck can be pulled down to nothing and the page will say exactly why that is illegal rather than pretending it is fine. The detail panel adds the role, the summon cost and how many copies the hold physically owns, because the copy limit is a ceiling and not a grant. |
+| **Rites** | Editable the same way, over the eleven ritual and fusion cards rather than the hundred-unit pool: a stepper sleeves or pulls a copy of the twenty-card side deck, capped at each card's own copy limit and the twenty-card size. Rituals name a star total to sacrifice; fusions name exact adjacent materials. Cards playable on the current field are lit; the rest are dimmed with their requirements spelled out. |
 | **Writs** | The wanted board: five warrants posted, what each pays in cards and bounty, the escort standing in the way, and how the target is taken alive. Below it, every card the current deck asks for that the hold cannot cover. |
 | **Hold** | The stronghold seen from above with a pin per building, each at its real level and tier art, plus the research tree and the recruitment banners. |
 | **Lands** | The world and province paintings, and the art-direction notes behind them. |
