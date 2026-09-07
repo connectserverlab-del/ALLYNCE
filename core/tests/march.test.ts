@@ -24,7 +24,9 @@ function testField(paint?: (q: number, r: number) => Terrain | undefined): March
   for (let r = 0; r < H; r++) for (let q = -Math.floor(r / 2); q < W - Math.floor(r / 2); q++) hexes.push({ q, r, terrain: paint?.(q, r) ?? "Open", elevation: 1 });
   const map: GeneratedMap = {
     name: "Proving Ground", seed: 1, width: W, height: H, hexes,
-    deployZones: { A: [], B: [] }, anchors: { A: { q: 0, r: 0 }, B: { q: 0, r: 0 } }, features: [],
+    deployZones: { A: [], B: [] }, anchors: { A: { q: 0, r: 0 }, B: { q: 0, r: 0 } },
+    landmarks: { midpoint: { q: 0, r: 0 }, trenchA: [], trenchB: [], ruins: [], fortification: [], ford: [], road: [] },
+    features: [],
   };
   return newMarchField(reg, map);
 }

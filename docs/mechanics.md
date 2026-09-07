@@ -17,6 +17,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §13 Cavalry and flying | `battle.ts` (`reachable`), `effects.ts` (`ChargeBonus`) | Anti-air, forest costs, Predatory Airspace, Diving Charge, Exposed |
 | §14 Abilities and clones | `effects.ts` | Twin Echo reference implementation |
 | §15 Objectives | `objectives.ts` | Eleven composable types |
+| Irregular battlefields, generated | `mapgen.ts` (`Landmarks`), `placement.ts`, `scenario.ts` | A scenario built on `mapSpec` pins rituals, portals, deploy hexes and the two hex-bearing objectives (`CaptureHold`, `Escort`) to a role — anchor, deploy zone, midpoint, trench, ruins, fortification, ford, road — instead of a fixed [q, r] pair. A role that did not generate on a given seed falls back to the midpoint rather than failing the build. See `data/scenarios/contested_ford.json` |
 | §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses |
 | Marching between battles | `march.ts`, `data/movement/march.json` | Continuous movement in seconds over the same hexes the battle fights on. A straight line where one works; an A* over the grid, string-pulled to a few waypoints, where it does not. Nothing crosses a field in more than 45 seconds, and a route forced the long way round hurries rather than arriving late |
 | §18 Architecture | all | Simulation is separate from presentation; every action logs a serializable event |

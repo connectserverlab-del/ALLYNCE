@@ -102,3 +102,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — once the generator names biomes (Ashfall, Marsh, Highland pass), let a scenario's
+  role placements take a biome-scoped variant ("ford in the marsh reach" rather than just "ford"), so a
+  scenario can ask for a specific kind of ground within a larger generated field instead of only the nearest
+  instance of a feature.
+- 2026-09-07: Proposal — a "flank" role pair (the passable hex on each side of the road, offset from the
+  midpoint) so a scenario can pin an ambush or a flanking reinforcement point without hand-picking a hex,
+  the same way rituals and portals now pin to the ruins or the ford.
