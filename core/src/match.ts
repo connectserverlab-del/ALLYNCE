@@ -109,8 +109,6 @@ export function runMatch(spec: MatchSpec): MatchResult {
 /** Run an already-set-up battle to a decision. Wanted missions dress the field first, then call this. */
 export function playOut(ctrl: BattleController, map: GeneratedMap, spec: MatchSpec): MatchResult {
   const b = ctrl.b;
-  const startStars: Record<string, number> = { A: 0, B: 0 };
-  for (const s of ["A", "B"]) startStars[s] = [...b.activeUnits(s)].reduce((t, u) => t + starOf(b.reg, u.defId), 0);
   const limit = spec.roundLimit ?? 20;
 
   while (!b.winner && b.round <= limit) {
@@ -129,11 +127,11 @@ export function playOut(ctrl: BattleController, map: GeneratedMap, spec: MatchSp
   }
   if (!b.winner) { b.winner = "draw"; b.winReason = "Round limit"; }
 
-  const survivors: Record<string, number> = {}, starsLost: Record<string, number> = {};
-  for (const s of ["A", "B"]) {
-    survivors[s] = [...b.activeUnits(s)].filter((u) => !u.isClone).length;
-    starsLost[s] = startStars[s]! - [...b.activeUnits(s)].reduce((t, u) => t + starOf(b.reg, u.defId), 0);
-  }
+  const survivors: Record<string, number> = {}, starsLost: Record<string, number> = { A: 0, B: 0 };
+  for (const s of ["A", "B"]) survivors[s] = [...b.activeUnits(s)].filter((u) => !u.isClone).length;
+  // Stars actually broken, not the net change in standing roster value: a side that summons
+  // reinforcements mid-battle must never look, to its opponent's purse, like it lost ground.
+  for (const u of b.units.values()) if (u.defeated && !u.isClone) starsLost[u.side] = (starsLost[u.side] ?? 0) + starOf(b.reg, u.defId);
   const reward: Record<string, Reward> = {};
   for (const s of ["A", "B"]) reward[s] = spoils(b, s, b.winner === s, starsLost[s === "A" ? "B" : "A"]!, b.round);
   return { winner: b.winner, reason: b.winReason, rounds: b.round, survivors, starsLost, reward, map, battle: b };
@@ -164,7 +162,7 @@ export type { Hex, UnitState };
 // ---------------------------------------------------------------- wanted missions
 
 /** Armies that can actually field a host of their own. The sworn companies fight under one of these. */
-const HOST_FACTIONS = ["SAM", "SHI", "KNI", "DRG"];
+export const HOST_FACTIONS = ["SAM", "SHI", "KNI", "DRG"];
 
 export interface WantedMissionSpec {
   reg: Registry; seed: number;
