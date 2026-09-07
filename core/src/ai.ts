@@ -1,5 +1,6 @@
 import type { BattleController } from "./battle.js";
 import { isBroken, canBeTaken, canBeSubdued, CAPTURE_THRESHOLD } from "./battle.js";
+import type { Battle } from "./state.js";
 import type { UnitState, UnitDef } from "./types.js";
 import { TERRAIN_RULES } from "./types.js";
 import type { Hex } from "./hex.js";
@@ -44,6 +45,7 @@ const APPROACH_STEP_WEIGHT = 10;      // tie-break between equally exposed appro
 const AREA_SKILL_MIN_TARGETS = 2;     // a radius debuff earns its action once it catches a second enemy
 const BAND_SWING_MIN = 2;             // a team buff wants a band about to swing, not one soldier in the open
 const SACRIFICE_HP_FLOOR = 0.5;       // never bleed past half: the trade is reach, not a funeral
+const PORTAL_KEEPER_MIN_GAP = 6;      // hexes a new portal must clear from an existing one: presence, not a cluster
 
 export interface ReleasePolicy { (ctrl: BattleController, side: string): Record<string, boolean> }
 
@@ -107,7 +109,9 @@ function actOnce(ctrl: BattleController, u: UnitState, profile: AiProfile): bool
     if (target) return moveToward(ctrl, u, target.center);
     return false;
   }
-  // Portal keepers: open a portal if reserve allows, else defend
+  // Portal keepers: feed Reserve into whatever of ours is already open before betting any of it on
+  // ground that has not opened yet, and only call a new portal once nothing of ours is up nearby.
+  if (d.roles.includes("PortalKeeper") && runPortalKeeper(ctrl, u)) return true;
   // Abilities with immediate value
   for (const id of d.actives) {
     const a = b.reg.ability(id);
@@ -336,6 +340,39 @@ function shouldSurrender(ctrl: BattleController, side: string): boolean {
   if ([...b.activeUnits(side)].some((u) => !u.isClone && b.def(u).roles.includes("Commander"))) return false;
   const band = moraleBand(ctrl.moraleSummary(side).average);
   return band === "Routed" || band === "Broken";
+}
+
+/**
+ * A Support Portal Keeper has exactly one job beyond staying alive: keep the reinforcement stream
+ * flowing. Reserve already spent on a queue is Reserve that is on its way, so feeding an open portal
+ * always comes before betting any of it on ground that has not opened yet — and a second portal is
+ * only worth calling once nothing of ours is already up within reach.
+ */
+function runPortalKeeper(ctrl: BattleController, u: UnitState): boolean {
+  const b = ctrl.b; const d = b.def(u);
+  if (!u.pos || u.ap <= 0) return false;
+  const ownPortals = [...b.portals.values()].filter((p) => p.side === u.side && p.state !== "Destroyed" && p.state !== "Captured");
+  const feedable = ownPortals.find((p) => p.state === "Open" && hexDistance(u.pos!, p.pos) <= 1);
+  if (feedable) {
+    const defId = cheapestReinforcement(b, u.side, d.faction);
+    if (defId) { try { ctrl.queueReinforcement(u, feedable, defId); return true; } catch { /* Reserve moved under us */ } }
+  }
+  const openAbility = d.actives.find((id) => b.reg.ability(id).effect.kind === "PortalCall");
+  if (openAbility && (u.cooldowns[openAbility] ?? 0) <= 0 && !ownPortals.some((p) => hexDistance(u.pos!, p.pos) <= PORTAL_KEEPER_MIN_GAP)) {
+    for (const h of hexNeighbors(u.pos)) {
+      if (!b.inBounds(h)) continue;
+      try { ctrl.openPortal(u, h); return true; } catch { /* that ground will not take a portal; try the next */ }
+    }
+  }
+  return false;
+}
+
+/** The best-value unit a side's Reserve can currently afford: the highest star count under the point cap. */
+function cheapestReinforcement(b: Battle, side: string, faction: string): string | null {
+  const reserve = b.sides.get(side)?.reservePoints ?? 0;
+  const pool = [...b.reg.units.values()].filter((c) => c.faction === faction && !c.summonOnly && !c.unique && c.capacityCost <= reserve);
+  if (!pool.length) return null;
+  return pool.sort((x, y) => (y.stars ?? 1) - (x.stars ?? 1))[0]!.id;
 }
 
 export function nearestEnemy(ctrl: BattleController, u: UnitState): UnitState | null {
