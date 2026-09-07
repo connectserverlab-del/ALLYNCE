@@ -654,6 +654,200 @@
     "ai": "portal_keeper"
   },
   {
+    "id": "SAM_SIEGE_CINDERTHROAT-BATTERY",
+    "name": "Cinderthroat Battery",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Siege"
+    ],
+    "rank": "Specialist",
+    "size": "Standard",
+    "hp": 900,
+    "atk": 2000,
+    "def": 900,
+    "mov": 2,
+    "range": 3,
+    "minRange": 2,
+    "initiative": 3,
+    "morale": 65,
+    "capacityCost": 8,
+    "passives": [
+      "ABL_BREACHING_VOLLEY"
+    ],
+    "actives": [],
+    "slots": [
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "siege_support"
+  },
+  {
+    "id": "SHI_SIEGE_HOLLOW-REED-MORTAR",
+    "name": "Hollow Reed Mortar",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "Siege"
+    ],
+    "rank": "Specialist",
+    "size": "Standard",
+    "hp": 850,
+    "atk": 1900,
+    "def": 850,
+    "mov": 2,
+    "range": 3,
+    "minRange": 2,
+    "initiative": 4,
+    "morale": 65,
+    "capacityCost": 8,
+    "passives": [
+      "ABL_BREACHING_VOLLEY"
+    ],
+    "actives": [
+      "ABL_SMOKE_BATTERY"
+    ],
+    "slots": [
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "siege_support"
+  },
+  {
+    "id": "KNI_SIEGE_WARDENS-BOMBARD",
+    "name": "Warden's Bombard",
+    "faction": "KNI",
+    "themes": [
+      "Knight"
+    ],
+    "roles": [
+      "Siege"
+    ],
+    "rank": "Specialist",
+    "size": "Standard",
+    "hp": 950,
+    "atk": 2050,
+    "def": 1000,
+    "mov": 2,
+    "range": 3,
+    "minRange": 2,
+    "initiative": 3,
+    "morale": 68,
+    "capacityCost": 9,
+    "passives": [
+      "ABL_BREACHING_VOLLEY"
+    ],
+    "actives": [],
+    "slots": [
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "siege_support"
+  },
+  {
+    "id": "DRG_SIEGE_BONEFORGE-BALLISTA",
+    "name": "Boneforge Ballista",
+    "faction": "DRG",
+    "themes": [
+      "Dragon"
+    ],
+    "roles": [
+      "Siege"
+    ],
+    "rank": "Specialist",
+    "size": "Standard",
+    "hp": 900,
+    "atk": 2000,
+    "def": 900,
+    "mov": 2,
+    "range": 3,
+    "minRange": 2,
+    "initiative": 3,
+    "morale": 65,
+    "capacityCost": 8,
+    "passives": [
+      "ABL_BREACHING_VOLLEY"
+    ],
+    "actives": [],
+    "slots": [
+      "Specialist"
+    ],
+    "unique": false,
+    "summonOnly": false,
+    "ai": "siege_support"
+  },
+  {
+    "id": "SAM_CAVALRY_CHARWIND-LANCERS",
+    "name": "Charwind Lancers",
+    "faction": "SAM",
+    "themes": [
+      "Samurai"
+    ],
+    "roles": [
+      "Elite",
+      "Cavalry"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1750,
+    "atk": 2300,
+    "def": 1550,
+    "mov": 6,
+    "range": 1,
+    "initiative": 6,
+    "morale": 78,
+    "capacityCost": 11,
+    "passives": [],
+    "actives": [
+      "ABL_LANCE_CHARGE"
+    ],
+    "slots": [
+      "Elite"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "cavalry_raid"
+  },
+  {
+    "id": "SHI_CAVALRY_REED-MARSH-OUTRIDERS",
+    "name": "Reed Marsh Outriders",
+    "faction": "SHI",
+    "themes": [
+      "Shinobi"
+    ],
+    "roles": [
+      "Elite",
+      "Cavalry"
+    ],
+    "rank": "Elite",
+    "size": "Standard",
+    "hp": 1600,
+    "atk": 2250,
+    "def": 1400,
+    "mov": 7,
+    "range": 1,
+    "initiative": 8,
+    "morale": 75,
+    "capacityCost": 11,
+    "passives": [],
+    "actives": [
+      "ABL_FLEET_STRIKE"
+    ],
+    "slots": [
+      "Elite"
+    ],
+    "unique": true,
+    "summonOnly": false,
+    "ai": "cavalry_raid"
+  },
+  {
     "id": "DIV_BOSS_SOVEREIGN-OF-MEMORY",
     "name": "Sovereign of Memory",
     "faction": "DIV",

@@ -13,7 +13,7 @@ export interface DivineDef { manifestation: number; anchors: number; arrival: st
 export interface UnitDef {
   id: string; name: string; faction: string;
   themes: string[]; roles: Role[]; rank: string; size: Size;
-  hp: number; atk: number; def: number; mov: number; range: number;
+  hp: number; atk: number; def: number; mov: number; range: number; minRange?: number;
   initiative: number; morale: number; commandRadius?: number; capacityCost: number;
   passives: string[]; actives: string[]; slots: SlotName[];
   unique: boolean; summonOnly: boolean; ai: string; flying?: boolean;

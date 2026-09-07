@@ -13,11 +13,32 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §9 Faction doctrines | `data/abilities/abilities.json`, `effects.ts` | Orders and passives as data; interpreter in `applyEffect` |
 | §11 Ritual system | `rituals.ts` | Ratings, formula, states, hold and instability, sync release |
 | §12 Reinforcement portals | `portals.ts` | Lifecycle, queue, capture, destroy refund |
-| §13 Cavalry and flying | `battle.ts` (`reachable`), `effects.ts` (`ChargeBonus`) | Anti-air, forest costs, Predatory Airspace, Diving Charge, Exposed |
+| §13 Cavalry and flying | `battle.ts` (`reachable`, `attack`), `effects.ts` (`ChargeBonus`) | Anti-air, forest costs, Predatory Airspace, Diving Charge, Exposed, minimum range for siege pieces |
 | §14 Abilities and clones | `effects.ts` | Twin Echo reference implementation |
 | §15 Objectives | `objectives.ts` | Eleven composable types |
 | §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses |
 | §18 Architecture | all | Simulation is separate from presentation; every action logs a serializable event |
+
+## Siege and cavalry roster
+
+Each of the four combat factions (Samurai, Shinobi, Knight, Dragon Host) now fields one Siege-role specialist
+and, where it did not already have one, one Cavalry-role Elite alternative:
+
+- **Siege** (`Role: "Siege"`, `data/units/units.json`): deployed as an army specialist (`slots: ["Specialist"]`),
+  like the existing Portal Keeper. Slow (`mov: 2`) and fragile, but hits hard at range with a new `minRange`
+  field on `UnitDef` — `attack()` in `battle.ts` now rejects a target closer than `minRange` in addition to the
+  existing maximum-range check, so a siege piece cannot be fired point-blank. All four carry the shared
+  `ABL_BREACHING_VOLLEY` passive (`ConditionalAtk` with a new `vsTerrain` condition in `modifiers.ts`): +200 ATK
+  against a defender standing on Fortification terrain. The Shinobi battery additionally carries
+  `ABL_SMOKE_BATTERY`, reusing the existing `SpawnTerrain` effect to lay smoke around itself.
+- **Cavalry** (`Role: "Cavalry"`, `slots: ["Elite"]`): the Knight faction already had one (Sky-Lance Dragoon).
+  Samurai and Shinobi each gain an alternative Elite with a `ChargeBonus` ability (the same effect kind that
+  powers Dragon Host's Diving Charge and Crushing Dive) — Lance Charge (higher bonus, requires more movement,
+  forces Exposed) for Samurai and Fleet Strike (smaller bonus, triggers sooner, no Exposed penalty) for Shinobi.
+  Dragon Host's own roster is already all-flying and is treated as fulfilling its faction's mobility niche
+  without a dedicated ground Cavalry unit; see the roadmap brainstorm log for that as an open question.
+- The AI's target filter (`ai.ts`) now also respects `minRange` so a siege unit does not attempt (and fail) a
+  point-blank shot before falling back to repositioning.
 
 ## Worked example (from the brief §7)
 

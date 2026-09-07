@@ -16,7 +16,7 @@ This repository currently holds three things:
 
 ```bash
 npm install
-npm test            # 34 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
+npm test            # 40 tests: combat math, cohesion, composition, succession, clones, rituals, portals, siege/cavalry, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 ```
@@ -29,6 +29,7 @@ npm run typecheck
 - **Composition**: army validator (slots, five foot soldiers, one elite per platoon, unique limit, boss/deity exclusion, specialist limits, capacity). Doctrine states Full / Reduced / Broken with Continuity after a commander falls.
 - **Command**: strongest-aura-only rule, succession in the Command Phase, promoted second inherits orders and keeps its own ability, Succession-category abilities fire (Last Oath, Smoke Relay, Inherited Wall, Slipstream).
 - **Combat**: `max(100, ATK − DEF)`, flank −10% / rear −25% DEF, Defend +150, Fortification +200, high ground for ranged, Oath of Intercession, Formal Duel lockout, reaction attacks, Overwatch, Disengage.
+- **Siege and cavalry**: every combat faction (Samurai, Shinobi, Knight, Dragon Host) has a themed Siege specialist with a `minRange` that keeps it from firing point-blank and a shared Breaching Volley bonus against Fortification terrain, plus a Cavalry Elite option with a `ChargeBonus`-driven charge ability. See `docs/mechanics.md`.
 - **Morale**: 0–100 with Steady / Shaken / Disordered / Routed / Broken bands, all brief-listed loss and recovery sources, AI-controlled routed retreat.
 - **Effects framework**: one data-driven interpreter for orders, passives, succession, clones, charges, terrain spawns and status grants. Twin Echo is the reference clone implementation (two clones, 1 HP, 40% ATK, no cohesion, no composition, expire after two rounds).
 - **Rituals**: four ratings per ritualist, explicit progress formula, seven states, Held rituals gain Unstable stacks that damage participants and amplify disruption, synchronized release only when every linked circle releases in the same Objective Phase, weakened summons otherwise.

@@ -175,7 +175,9 @@ export class BattleController {
     if (u.attackedThisActivation) throw new Error("Already attacked this activation");
     if (!u.pos || !target.pos) throw new Error("Not deployed");
     const range = b.def(u).range + (b.terrainAt(u.pos) === "HighGround" && b.def(u).range > 1 ? 1 : 0);
-    if (hexDistance(u.pos, target.pos) > range) throw new Error("Out of range");
+    const dist = hexDistance(u.pos, target.pos);
+    if (dist > range) throw new Error("Out of range");
+    if (dist < (b.def(u).minRange ?? 0)) throw new Error("Target is inside minimum range");
     if (b.hasStatus(target, "Hidden") && hexDistance(u.pos, target.pos) > 1) throw new Error("Target is Hidden");
     if (u.isClone && u.attackedThisActivation) throw new Error("Clones make one basic attack");
     this.spend(u, 1);

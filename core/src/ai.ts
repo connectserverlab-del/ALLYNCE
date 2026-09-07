@@ -86,7 +86,7 @@ function actOnce(ctrl: BattleController, u: UnitState, profile: AiProfile): bool
     if (a.effect.kind === "Duel" && enemy && b.distance(u, enemy) === 1 && b.def(enemy).roles.some((r) => r === "Elite" || r === "Commander")) { try { ctrl.useAbility(u, id, { target: enemy }); } catch { /* skip */ } }
   }
   // Attack if a target is in range: prefer ritualists / exposed elites / isolated commanders
-  const targets = [...b.activeUnits()].filter((e) => e.side !== u.side && e.pos && hexDistance(u.pos!, e.pos) <= d.range && !(b.hasStatus(e, "Hidden") && hexDistance(u.pos!, e.pos) > 1));
+  const targets = [...b.activeUnits()].filter((e) => e.side !== u.side && e.pos && hexDistance(u.pos!, e.pos) <= d.range && hexDistance(u.pos!, e.pos) >= (d.minRange ?? 0) && !(b.hasStatus(e, "Hidden") && hexDistance(u.pos!, e.pos) > 1));
   if (targets.length && !u.attackedThisActivation) {
     const best = targets.map((t) => ({ t, s: targetScore(ctrl, u, t, profile) })).sort((a, c) => c.s - a.s)[0]!;
     try { ctrl.attack(u, best.t); return true; } catch { /* duel or other block */ }
