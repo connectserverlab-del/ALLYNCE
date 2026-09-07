@@ -102,3 +102,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — field promotion as a holding-tracked commendation. Today a unit's `factionRank` is fixed
+  in `data/units/units.json`; every rank ladder gives mechanical weight in a single battle but none of it carries
+  forward. If a Second survives a won battle while acting commander under Broken doctrine (no succession candidate
+  left to promote further), record a one-tier field promotion against that card in the holding, capped at the
+  rank its role is allowed to hold. This gives campaign wins the same mechanical weight on the rank ladder that a
+  won region is meant to give the holding's production, without touching the battle-time privilege tables
+  (`data/factions/ranks/*.json`) that already carry the source-tracked bonuses.

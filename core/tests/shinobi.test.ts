@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { newBattle, reg } from "./helpers.js";
-import { rankOf } from "../src/ranks.js";
+import { rankOf, commandRadiusOf } from "../src/ranks.js";
+import { computeStat } from "../src/modifiers.js";
+import { resolveAttack } from "../src/combat.js";
 
 describe("Shinobi ranks and movement traits", () => {
   it("has six ranks with escalating movement traits", () => {
@@ -44,5 +46,20 @@ describe("Shinobi ranks and movement traits", () => {
     expect(b.hasStatus(kage, "Hidden")).toBe(true);
     expect(() => ctrl.shadowStep(kage, { q: 8, r: 5 })).toThrow();
     b.reg.units.get("SHI_COMMANDER_VEILED-MOON-JONIN")!.factionRank = "JOUNIN";
+  });
+
+  it("Kage strikes harder on reaction attacks only, and extends command radius by 2", () => {
+    const { b } = newBattle();
+    const kage = b.spawn("SHI_KAGE_VOID-CROWN-KAGE", "A", { q: 5, r: 5 });
+    expect(rankOf(b, kage)?.title).toBe("Kage");
+    const enemy = b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 6, r: 5 });
+    const normal = computeStat(b, kage, "ATK", { attacker: kage, defender: enemy }).final;
+    const reaction = resolveAttack(b, kage, enemy, { reaction: true });
+    expect(reaction.atk).toBe(normal + 50);
+    expect(commandRadiusOf(b, kage)).toBe((b.def(kage).commandRadius ?? 0) + 2);
+    const jounin = b.spawn("SHI_COMMANDER_VEILED-MOON-JONIN", "A", { q: 10, r: 10 });
+    const jouninEnemy = b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 11, r: 10 });
+    const jouninNormal = computeStat(b, jounin, "ATK", { attacker: jounin, defender: jouninEnemy }).final;
+    expect(resolveAttack(b, jounin, jouninEnemy, { reaction: true }).atk).toBe(jouninNormal); // no two swords below Kage
   });
 });
