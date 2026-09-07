@@ -16,7 +16,7 @@ This repository currently holds three things:
 
 ```bash
 npm install
-npm test            # 85 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
+npm test            # 151 tests: combat math, cohesion, composition, succession, clones, rituals, portals, marching, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -48,7 +48,12 @@ npm run assets      # rebuilds the asset registry from the data and from disk
 - **Shinobi ranks**: Apprentice, Genin, Chunin, Jounin, Anbu, Kage, each with a movement trait (canopy movement through forest, hide on stopping in forest, ignore zones of control, pass allies, bonus movement, Shadow Step).
 - **Fusion**: recipe-driven merging of adjacent units into one (Paired Line, Gate Wardens, Twinwing Drake, and the Calamity Form from the three Sovereigns), paid with Fusion charges.
 - **Siege and cavalry**: cannons per faction with set-up, minimum range and breaching shots (plus smoke shells and the Siegewyrm's concussive blast); cavalry per faction with lance charges that break in rough ground, and hit-and-fade riders.
-- **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. See `docs/samurai-ranks.md`.
+- **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. Shinobi ranks carry the movement traits above. See `docs/samurai-ranks.md`.
+- **Card ownership and the wanted board**: a deck may only run the copies a holding actually owns, opened by a starter box into a legal hundred; a rotating board of warrants up to seven stars pays subdued (not killed) targets into the collection. See `docs/cards-and-kingdom.md`.
+- **Card skills**: every card at four stars and above carries one usable ability, drawn from six data-defined kinds, enforced by a registry-wide test so the roster cannot grow a silent card. See `docs/mechanics.md`.
+- **Sworn companies and themed divisions**: five sworn companies (Cobalt Conclave, Thorn Coven, Cutpurse Court, Windmarch Host, Dunewake Compact) and seven themed divisions (angels, demons, chaos riders, demigods, wendigo-kin, sasquatch, ant-creature myrmidons) add 48 painted cards beyond the four host armies.
+- **Marching**: continuous, seconds-based movement over the same hexes and terrain costs the battle fights on — a straight line where one is clear, an A* route pulled to a few waypoints where it is not, squads that hold formation slots around a leader, capped at 45 seconds for the longest crossing. See `docs/mechanics.md` and `core/src/march.ts`.
+- **Asset integrity**: `scripts/audit-cutouts.py` fails a cutout that kept its background or lost its figure, so a card cannot ship as a blank slab.
 
 ## Engine note
 

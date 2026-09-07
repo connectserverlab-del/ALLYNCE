@@ -32,59 +32,25 @@ where they conflict.**
 - The stronghold's buildings and walls are upgradable and change their look as they rise, which means a growing
   asset list that has to be tracked.
 
-## Done
+## Done, and what's next
 
-- Rules engine (TypeScript reference, 54 tests): hex grid, terrain rules table, elevation, modifier pipeline, cohesion,
-  doctrine, succession, combat, morale, effects, clones, rituals, divine entities, portals, objectives, utility AI.
-- Irregular map generator with mountains, valleys, trenches, mud, rivers, fords, roads, ruins, fortifications.
-- Win conditions (wipeout, leader killed, surrender), army leaders per side.
-- Samurai and Shinobi rank ladders with privileges and movement traits, Shadow Step.
-- Fusion (Paired Line, Gate Wardens, Twinwing Drake, Calamity Form). Siege pieces (set up, minimum range, breaching
-  shot, smoke shell, concussive blast). Cavalry (lance charge, hit and fade).
-- 17 unit concepts with cutouts, 2 battlefield paintings, 1 HUD material sheet.
-- Interactive map + HUD sample (see `docs/ui-sample.md`).
+`docs/CHECKLIST.md` is the single source of truth for finished work (its `Done` table) and the live work queue
+(its `Queue` table, claimed via open PRs and `agent/*` branches — see that file's claim protocol). Keeping a
+second, hand-maintained done/next list here let the two drift apart, so this file no longer carries one; check
+`docs/CHECKLIST.md` for what is built and what is queued next, and come back here for the owner's standing
+intent below and the brainstorm log.
 
-### Done in the scale and tier pass
+### Pass note — 2026-09-07
 
-- Battlefields raised from ~300 to ~950 hexes, with anchors and deployment zones chosen for open room so a
-  deployed line no longer walls itself in.
-- Camera with four zoom levels, drag panning, wheel zoom, viewport culling and a clickable minimap.
-- Mountains crossable at five times the cost (six for cavalry, two on the wing) plus the labored climb: a unit
-  that cannot afford a hex may still take one, at the price of its whole activation.
-- Building tier bands with art per tier and a fallback to the nearest painted tier.
-- `npm run assets` regenerates a full asset registry from the data tables and from what is on disk.
-- Cards reprinted on paper stock with a separate painted star asset; the metal frames are retired.
-
-### Done in the card and holding pass
-
-- Star scale 1-10 across all 40 units, with levy, named lords and 10-star sovereigns for each mortal faction.
-- 100-card main deck and 20-card side deck: validation, copy limits, faction leadership, shuffle, draw, hand cap.
-- Tribute summoning, ritual summoning by star total, fusion summoning by named materials, playable-card detection.
-- The holding: eleven buildings with Keep gating and timers, resource production with storage, twelve-node
-  research tree, three recruitment banners with pity, and carry-over into battle as named modifiers.
-- New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
-- Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
-
-## Next, in priority order
-
-1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
-   retired; the new top-down direction and the card-led interface both need a verdict before scaling.
-2. **Card art for the blank cards.** Twenty-three of the forty units have no cutout yet, so their cards read
-   "no art yet". Highest value art task.
-3. **More cards per faction.** A hundred-card deck currently leans on levy and foot because each faction has
-   only eight to eleven distinct cards. Fifteen to twenty per faction would let the faction minimum rise from
-   40 back toward 60.
-4. **Old item:** Do not scale the UI until the three decisions in the sample page are
-   answered (map look, command bar material, field size).
-2. Knight, Dragon Host and Ritual Cult rank ladders with one mechanical trait each per rank.
-3. Remaining unit art (see `pending` in `art/ASSET_MANIFEST.json`), then construction sheets for approved units.
-4. Map generator: named biomes (Ashfall, Marsh, Highland pass), scenario-authored overrides on top of generated ground,
-   deployment-zone balance check (path cost between anchors within 10 percent both ways).
-5. AI: use trenches and high ground, siege positioning behind the line, cavalry flank routing, surrender when the
-   leader is dead and average morale is below 20.
-6. Army builder validation UI in the sample page (drag units into slots, live doctrine and capacity readout).
-7. Formation Sandbox mode as a page: place units, see cohesion and doctrine live.
-8. Unity port scaffolding once the owner confirms the engine target (see `docs/mechanics.md`).
+Audited `docs/CHECKLIST.md`'s Queue against open pull requests and `agent/*` branches: every one of the
+fourteen open items (`Q-1` through `Q-16`, skipping the ones already merged) has a matching open PR title or a
+still-existing claim branch, several dating back to `2026-09-05` and never merged. Per this file's own claim
+protocol, that means the queue is fully claimed; this pass did not start a new Queue item, and instead refreshed
+this file and `README.md` (stale test count, an implemented-features list that had fallen behind
+`docs/CHECKLIST.md`'s `Done` table) and added the brainstorm entry below. **Decision for the owner:** there are
+now 60+ open draft pull requests against this repository, the great majority never merged. Until some of that
+backlog is reviewed and merged (or closed), the Queue effectively cannot free up new claims for future passes —
+worth a look when time allows.
 
 ## Brainstorm log
 
@@ -102,3 +68,12 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — a twelfth objective type, `AnchorsBroken`, scoring a scenario loss when a summoned
+  Divine Entity's anchors reach zero before its ritual can be repeated. Anchors currently only shrink the
+  entity's own combat stats; this would let a scenario built around protecting one big summon risk the whole
+  battle on it, as a scenario-authored objective layered on top of the three universal win conditions rather
+  than a change to them.
+- 2026-09-07: Proposal — once the Dragon Host rank ladder lands, a senior "Wing Rank" privilege that lets its
+  riders cross Mountains at a rider's normal cost rather than the sixfold penalty cavalry pay elsewhere, the way
+  Shinobi already outrun Knights through Forest. Gives the faction's themed cavalry a rank-gated answer to the
+  terrain system rather than a flat stat bonus.
