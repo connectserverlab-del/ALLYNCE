@@ -219,11 +219,13 @@
     "name": "Open Reinforcement Portal",
     "category": "Objective",
     "apCost": 2,
+    "range": 1,
+    "cooldown": 4,
     "effect": {
       "kind": "PortalCall",
       "telegraphRounds": 1
     },
-    "text": "Call a reinforcement portal at a valid controlled hex; it opens after a one-round telegraph."
+    "text": "Call a reinforcement portal on an adjacent, uncontested hex; it opens after a one-round telegraph. Four rounds before the keeper can call another."
   },
   {
     "id": "ORD_MEASURED_ADVANCE",

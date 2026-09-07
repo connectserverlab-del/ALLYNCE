@@ -101,4 +101,11 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   one, giving duplicates a purpose instead of dead weight.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
+- 2026-09-07: Proposal — only Knight fields a Portal Keeper today (`KNI_SUPPORT_PORTAL-KEEPER`, now that Open
+  Reinforcement Portal and Reserve-fed queueing actually run). The other three host factions get the same bar
+  already met for rank ladders, cannons and cavalry: a themed keeper apiece, one hex of reach on the call so the
+  ground it opens on still reads as chosen rather than automatic — a Samurai signal-drum bearer, a Shinobi
+  dead-drop handler who calls in from cover rather than the open, and a Dragon Host clutch-warden whose portal
+  hatches wyrmlings instead of marching in foot. Same numbers, different name and cutout, so the mechanic reads as
+  four factions fighting the same war rather than one faction with a rule the others lack.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
