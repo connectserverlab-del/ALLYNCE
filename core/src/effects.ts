@@ -1,7 +1,7 @@
 import type { Battle } from "./state.js";
 import type { UnitState, AbilityDef, PlatoonState, Modifier } from "./types.js";
 import { hexNeighbors, hexKey, hexDistance } from "./hex.js";
-import { platoonMorale, platoonMembers, tempPreventRouted, changeMorale } from "./morale.js";
+import { platoonMorale, platoonMembers, changeMorale } from "./morale.js";
 import { addTempMod } from "./modifiers.js";
 import { computeStat } from "./modifiers.js";
 import { applyDamage } from "./combat.js";
@@ -35,7 +35,7 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
       return true;
     case "PreventRouted": {
       const radius = commandRadiusOf(b, user);
-      for (const a of b.activeUnits(user.side)) if (b.distance(user, a) <= radius) { tempPreventRouted.add(a.uid); b.removeStatus(a, "Routed"); }
+      for (const a of b.activeUnits(user.side)) if (b.distance(user, a) <= radius) { b.tempPreventRouted.add(a.uid); b.removeStatus(a, "Routed"); }
       b.log("Ability", { ability: ability.id, uid: user.uid });
       return true;
     }
@@ -61,7 +61,7 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
     case "GrantHideAfterAttack":
       if (!ctx.target) return false;
       addTempMod(ctx.target, { source: ability.name, stat: "RANGE", value: 0 }); // marker; consumed by combat
-      hideAfterAttack.add(ctx.target.uid);
+      b.hideAfterAttack.add(ctx.target.uid);
       return true;
     case "GrantStatusAdjacent": {
       const theme = b.reg.factions.get(b.def(user).faction)?.primaryTheme;
@@ -77,13 +77,13 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
     case "PhaseMove":
     case "SequencedMove":
       if (!p) return false;
-      for (const uid of platoonMembers(p)) { const m = b.units.get(uid); if (m && !m.defeated) orderFlags.set(m.uid, e.kind); }
+      for (const uid of platoonMembers(p)) { const m = b.units.get(uid); if (m && !m.defeated) b.orderFlags.set(m.uid, e.kind); }
       if (e.atkVsIsolatedGround) for (const uid of platoonMembers(p)) { const m = b.units.get(uid); if (m && !m.defeated) addTempMod(m, { source: ability.name, stat: "ATK", value: e.atkVsIsolatedGround }); }
       b.log("Ability", { ability: ability.id, uid: user.uid });
       return true;
     case "Duel":
       if (!ctx.target) return false;
-      duels.set(user.uid, ctx.target.uid); duels.set(ctx.target.uid, user.uid);
+      b.duels.set(user.uid, ctx.target.uid); b.duels.set(ctx.target.uid, user.uid);
       b.log("Ability", { ability: ability.id, uid: user.uid, target: ctx.target.uid });
       return true;
     case "SiegeSetup":
@@ -91,7 +91,7 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
     case "SpawnTerrainAt": {
       const center = ctx.targetHex ?? ctx.target?.pos; if (!center) return false;
       const hexes = [center, ...hexNeighbors(center)].filter((h) => b.inBounds(h) && b.terrainAt(h) !== "Water" && b.terrainAt(h) !== "Mountain");
-      for (const h of hexes) { if (!b.terrain.has(hexKey(h)) || b.terrainAt(h) === "Open") { b.terrain.set(hexKey(h), e.terrain); timedTerrain.push({ key: hexKey(h), rounds: e.duration }); } }
+      for (const h of hexes) { if (!b.terrain.has(hexKey(h)) || b.terrainAt(h) === "Open") { b.terrain.set(hexKey(h), e.terrain); b.timedTerrain.push({ key: hexKey(h), rounds: e.duration }); } }
       b.log("TerrainSpawned", { terrain: e.terrain, count: hexes.length, uid: user.uid, center });
       return true;
     }
@@ -195,10 +195,9 @@ function spawnClones(b: Battle, user: UnitState, ability: AbilityDef, e: Record<
   return true;
 }
 
-export const hideAfterAttack = new Set<string>();
-/** Terrain placed by abilities (smoke) with a lifetime in rounds. */
-export const timedTerrain: Array<{ key: string; rounds: number }> = [];
-export const orderFlags = new Map<string, string>();
-export const duels = new Map<string, string>();
-export function clearRoundEffectFlags(): void { hideAfterAttack.clear(); orderFlags.clear(); duels.clear(); tempPreventRouted.clear(); }
+/** Reset one battle's per-round effect flags. Each battle owns its own copies (see `state.ts`), so this
+ *  never reaches into any other battle running in the same process. */
+export function clearRoundEffectFlags(b: Battle): void {
+  b.hideAfterAttack.clear(); b.orderFlags.clear(); b.duels.clear(); b.tempPreventRouted.clear();
+}
 export type { Modifier };
