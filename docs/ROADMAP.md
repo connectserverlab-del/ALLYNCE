@@ -102,3 +102,9 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — now that a banner draw's roll cannot repeat itself for lack of a changed seed, let a
+  faction's own rank ladder lean on the same Recruitment Hall a player already levels: the apex rank of a
+  ladder could shave a fixed number of draws off that faction's own banner's pity counter once earned, so
+  reaching the top of a ladder pays into the economy loop and not only into battle. Ties rank ladders'
+  "mechanical weight" to the holding the same way Company-tier leadership already ties it to the battlefield,
+  without touching any banner's published odds table.

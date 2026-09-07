@@ -76,6 +76,24 @@ describe("the holding", () => {
     expect(Math.max(...long.cards.map((c) => c.stars))).toBeGreaterThanOrEqual(7);
   });
 
+  it("does not get stuck repeating the same card once duplicates stop growing the collection", () => {
+    // drawFromBanner used to reseed its roll from k.elapsed and the collection's own size. Once a run of
+    // draws all land on cards already owned, neither of those changes between calls, so a fresh call with
+    // no other state change would reseed identically and hand back the exact same card every time - not
+    // just often, but forever, since nothing ever perturbs the seed again. Pulling one at a time (rather
+    // than the batch draws above, which share one Rng instance across the whole batch and never hit this)
+    // is what exposes it.
+    const k = newKingdom(reg, "SAM", { seed: 42 });
+    startUpgrade(reg, k, "RECRUITMENT_HALL"); tick(reg, k, 100000);
+    k.resources = { koku: 1e9, iron: 1e9, timber: 1e9, silver: 1e9 };
+    const cards: string[] = [];
+    for (let i = 0; i < 80; i++) cards.push(drawFromBanner(reg, k, "BANNER_MUSTER", 1).cards[0]!.unitId);
+    let longestRun = 1, run = 1;
+    for (let i = 1; i < cards.length; i++) { run = cards[i] === cards[i - 1] ? run + 1 : 1; longestRun = Math.max(longestRun, run); }
+    expect(longestRun).toBeLessThan(5);
+    expect(k.draws).toBe(80);
+  });
+
   it("carries buildings and research into a battle as named, source-tracked modifiers", () => {
     const { b } = newBattle();
     const p = deploy(b, "K", "A", KNI, blob(5, 5));
