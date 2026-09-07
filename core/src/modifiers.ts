@@ -1,12 +1,15 @@
 import type { Battle } from "./state.js";
 import type { UnitState, Modifier, StatBreakdown, DoctrineState } from "./types.js";
+import { TERRAIN_RULES } from "./types.js";
 import { themeCohesionBonus } from "./cohesion.js";
 import { doctrineState } from "./composition.js";
 import { commandBonus } from "./command.js";
 import { moraleBand } from "./morale.js";
 import { attackArc, type AttackArc } from "./hex.js";
+import { privileges, commandRadiusOf } from "./ranks.js";
+import { kingdomMods } from "./kingdom.js";
 
-export interface CombatContext { attacker?: UnitState; defender?: UnitState; arc?: AttackArc; ranged?: boolean }
+export interface CombatContext { attacker?: UnitState; defender?: UnitState; arc?: AttackArc; ranged?: boolean; reaction?: boolean }
 
 /**
  * Modifier pipeline. Every contribution records its source so the UI can show the breakdown
@@ -16,7 +19,9 @@ export function computeStat(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: C
   const d = b.def(u);
   const mods: Modifier[] = [];
   const isDivine = !!d.divine;
-  const base = stat === "ATK" ? (u.isClone ? (u.cloneAtk ?? 0) : d.atk) : d.def;
+  // Copies are not free strength. A body that has split shares its attack and defence out across
+  // itself and every living copy, so three of a thing hit for what one of it used to.
+  const base = Math.floor((stat === "ATK" ? d.atk : d.def) / Math.max(1, u.splitBodies ?? 1));
 
   if (!u.isClone && !isDivine) {
     // 1. Theme Cohesion (capped at +100 when Disordered)
@@ -47,15 +52,32 @@ export function computeStat(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: C
     if (b.hasStatus(u, "Exposed")) mods.push({ source: "Status: Exposed", stat, value: -150 });
   }
 
-  // 6. Terrain
+  // 6. Terrain (from the rules table) and elevation
   if (u.pos && !d.flying) {
-    const t = b.terrainAt(u.pos);
-    if (stat === "DEF" && t === "Fortification") mods.push({ source: "Terrain: Fortification", stat, value: 200 });
-    if (stat === "ATK" && t === "HighGround" && ctx.ranged) mods.push({ source: "Terrain: High Ground", stat, value: 100 });
+    const t = b.terrainAt(u.pos); const rule = TERRAIN_RULES[t];
+    if (stat === "DEF" && rule.def) mods.push({ source: `Terrain: ${t}`, stat, value: rule.def });
+    if (stat === "ATK" && ctx.ranged && rule.ranged.atk) mods.push({ source: `Terrain: ${t}`, stat, value: rule.ranged.atk });
   }
+  if (stat === "ATK" && ctx.attacker === u && ctx.defender?.pos && u.pos && !d.flying && b.elevationAt(u.pos) > b.elevationAt(ctx.defender.pos)) mods.push({ source: "Elevation advantage", stat, value: 50 });
 
   // 7. Ability conditionals and platoon orders (data-driven)
   if (!u.isClone) mods.push(...abilityModifiers(b, u, stat, ctx));
+
+  // 8. Siege: breaching shot against fortified targets
+  if (stat === "ATK" && ctx.attacker === u && d.siege && ctx.defender?.pos && d.passives.includes("ABL_BREACHING_SHOT")) {
+    const t = b.terrainAt(ctx.defender.pos);
+    if (t === "Fortification" || t === "Ruins" || t === "Trench") mods.push({ source: "Breaching Shot", stat, value: d.siege.structureAtk });
+  }
+
+  // 9. Holding: buildings and completed research
+  if (!u.isClone && !isDivine) mods.push(...kingdomMods(b, u.side, d.roles, stat));
+
+  // 10. Faction rank privileges
+  if (!u.isClone && !isDivine) {
+    const pv = privileges(b, u);
+    if (stat === "ATK" && ctx.reaction && pv.twoSwords) mods.push({ source: "Rank: two swords (reaction)", stat, value: 50 });
+    if (stat === "DEF" && u.pos && b.terrainAt(u.pos) === "Fortification" && castleLordNearby(b, u)) mods.push({ source: "Rank: castle lord nearby", stat, value: 100 });
+  }
 
   // Divine entities' stats scale down with lost anchors
   let final = base + mods.reduce((s, m) => s + m.value, 0);
@@ -120,4 +142,10 @@ export function clearTempMods(u: UnitState, predicate?: (m: Modifier) => boolean
 export function arcFor(b: Battle, attacker: UnitState, defender: UnitState): AttackArc {
   if (!attacker.pos || !defender.pos) return "front";
   return attackArc(defender.pos, defender.facing, attacker.pos);
+}
+
+/** A castle-holding rank on the same side whose command radius covers `u`. */
+function castleLordNearby(b: Battle, u: UnitState): boolean {
+  for (const l of b.activeUnits(u.side)) if (l.uid !== u.uid && privileges(b, l).castle && b.distance(l, u) <= commandRadiusOf(b, l)) return true;
+  return false;
 }

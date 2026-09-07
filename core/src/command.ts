@@ -2,6 +2,7 @@ import type { Battle } from "./state.js";
 import type { UnitState, PlatoonState, Modifier } from "./types.js";
 import { platoonMorale, platoonMembers, changeMorale } from "./morale.js";
 import { applyEffect } from "./effects.js";
+import { commandRadiusOf } from "./ranks.js";
 
 /** Aura value by rank: commanders +100, seconds +50 (smaller aura while commander is active). Strongest eligible aura only. */
 export function commandBonus(b: Battle, u: UnitState, stat: "ATK" | "DEF"): Modifier | null {
@@ -12,7 +13,7 @@ export function commandBonus(b: Battle, u: UnitState, stat: "ATK" | "DEF"): Modi
     if (!uid || uid === u.uid) return;
     const l = b.units.get(uid);
     if (!l || l.defeated || !l.pos) return;
-    const radius = b.def(l).commandRadius ?? 0;
+    const radius = commandRadiusOf(b, l);
     if (b.distance(l, u) <= radius) candidates.push({ src: `${label} aura (${b.def(l).name})`, v });
   };
   consider(p.commanderUid, 100, "Commander");
@@ -71,10 +72,7 @@ export function resolveSuccession(b: Battle, p: PlatoonState): boolean {
 }
 
 /** Promoted seconds gain the commander's radius for aura purposes. */
-export function effectiveCommandRadius(b: Battle, u: UnitState): number {
-  const d = b.def(u);
-  return d.commandRadius ?? 0;
-}
+export function effectiveCommandRadius(b: Battle, u: UnitState): number { return commandRadiusOf(b, u); }
 
 /** Rally action: +10 morale to allies within 2 hexes (requires Commander/Second/Support role). */
 export function rally(b: Battle, u: UnitState): boolean {

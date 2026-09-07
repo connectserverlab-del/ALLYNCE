@@ -2,3 +2,6 @@ node_modules/
 dist/
 *.log
 .DS_Store
+
+# agent worktrees: each is its own checkout, never part of this one
+.claude/worktrees/
