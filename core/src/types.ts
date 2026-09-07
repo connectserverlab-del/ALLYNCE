@@ -95,6 +95,7 @@ export interface UnitState {
   promotedFromSecond: boolean;
   movedThisActivation: number;
   chargeMoved: number;
+  altitudeDropped: number;
   attackedThisActivation: boolean;
   overwatch: boolean;
   defending: boolean;

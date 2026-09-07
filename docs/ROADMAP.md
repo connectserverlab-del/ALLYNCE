@@ -65,6 +65,16 @@ where they conflict.**
 - New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
 - Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
 
+### Done in the rank ladder pass
+
+- Dragon Host rank ladder (9 ranks, Hatchling to Elder Sovereign): reuses `mounted`, `commandRadiusBonus`,
+  `banner` and `supreme` from the Samurai ladder, and adds wing dive, an ATK privilege keyed to altitude lost
+  this activation rather than hexes moved — a faction that fights from the air gets nothing from a ground
+  charge. See `docs/dragon-ranks.md`.
+- Ritual Cult rank ladder (5 ranks, Affiliated to Grand Ritualist): grants no `canLead` privilege at any tier,
+  matching the faction's "specialist teams only" identity, and instead keys rank to ritual mastery (a Progress
+  bonus) and a higher instability ceiling on a held ritual. See `docs/ritual-ranks.md`.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -76,7 +86,9 @@ where they conflict.**
    40 back toward 60.
 4. **Old item:** Do not scale the UI until the three decisions in the sample page are
    answered (map look, command bar material, field size).
-2. Knight, Dragon Host and Ritual Cult rank ladders with one mechanical trait each per rank.
+2. Knight rank ladder with its own mechanical trait per rank. Dragon Host (wing dive, keyed to altitude lost
+   rather than hexes moved — see `docs/dragon-ranks.md`) and Ritual Cult (ritual mastery and instability
+   ceiling, no leadership privilege — see `docs/ritual-ranks.md`) are done.
 3. Remaining unit art (see `pending` in `art/ASSET_MANIFEST.json`), then construction sheets for approved units.
 4. Map generator: named biomes (Ashfall, Marsh, Highland pass), scenario-authored overrides on top of generated ground,
    deployment-zone balance check (path cost between anchors within 10 percent both ways).
@@ -102,3 +114,13 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — wing dive could read the irregular battlefield generator's own terrain rather than
+  only elevation: a bonus (or a reduced `DIVE_BONUS_MIN_DROP`) when the diving Dragon Host unit's landing hex
+  is Ruins or Trench, rewarding a flier that picks broken ground to strike into rather than open ground. Ties
+  the new rank privilege to the map generator's own variety instead of leaving the two systems unaware of
+  each other.
+- 2026-09-07: Proposal — a Grand Ritualist could let its own circle count as two toward a linked group's
+  synchronized release requirement (so a two-ritualist Ritual Cult team could still attempt a three-circle
+  scenario like Threefold Invocation without needing a third body). Ritual Cult now has a ladder to hang this
+  on, but it needs a scenario author's read before implementation: `linkedGroup` and `releaseRitual` currently
+  assume one circle per linked entry, and this would be the first exception.

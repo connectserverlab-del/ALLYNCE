@@ -4,6 +4,7 @@ import type { Hex } from "./hex.js";
 import { hexDistance } from "./hex.js";
 import { applyDamage } from "./combat.js";
 import { changeMorale } from "./morale.js";
+import { ritualInstabilityCeiling, ritualMasteryBonus } from "./ranks.js";
 
 export type RitualState = "Inactive" | "Preparing" | "Channeling" | "CompletedReleased" | "CompletedHeld" | "Disrupted" | "Collapsed";
 
@@ -16,7 +17,7 @@ export interface RitualCircle {
   damagedThisRound: Set<string>; disruption: number; assistBonus: number;
   lastCalc?: RitualCalc;
 }
-export interface RitualCalc { channeling: number; leaderKnowledge: number; leaderLanguage: number; teamAffinity: number; assist: number; disruption: number; total: number; participants: string[] }
+export interface RitualCalc { channeling: number; leaderKnowledge: number; leaderLanguage: number; teamAffinity: number; rankMastery: number; assist: number; disruption: number; total: number; participants: string[] }
 
 export function createRitual(b: Battle, r: Omit<RitualCircle, "progress" | "state" | "heldRounds" | "unstableStacks" | "damagedThisRound" | "disruption" | "assistBonus" | "participantUids">): RitualCircle {
   const circle: RitualCircle = { ...r, progress: 0, state: "Inactive", heldRounds: 0, unstableStacks: 0, damagedThisRound: new Set(), disruption: 0, assistBonus: 0, participantUids: [] };
@@ -56,9 +57,10 @@ export function computeRitualProgress(b: Battle, r: RitualCircle): RitualCalc {
   teamAffinity = parts.length ? Math.floor(teamAffinity / parts.length) : 0;
   const leaderKnowledge = leader ? b.def(leader).ritual!.knowledge : 0;
   const leaderLanguage = leader ? b.def(leader).ritual!.language : 0;
+  const rankMastery = ritualMasteryBonus(b, parts); // Rank: ritual mastery, source-tracked apart from the base ritual stats
   const disruption = r.disruption + r.unstableStacks; // instability raises the effect of enemy disruption
-  const total = parts.length ? Math.max(0, channeling + leaderKnowledge + leaderLanguage + teamAffinity + r.assistBonus - disruption) : 0;
-  return { channeling, leaderKnowledge, leaderLanguage, teamAffinity, assist: r.assistBonus, disruption, total, participants: parts.map((p) => p.uid) };
+  const total = parts.length ? Math.max(0, channeling + leaderKnowledge + leaderLanguage + teamAffinity + rankMastery + r.assistBonus - disruption) : 0;
+  return { channeling, leaderKnowledge, leaderLanguage, teamAffinity, rankMastery, assist: r.assistBonus, disruption, total, participants: parts.map((p) => p.uid) };
 }
 
 /** Objective Phase tick for one ritual. */
@@ -108,8 +110,9 @@ export function collapse(b: Battle, r: RitualCircle, reason: string): void {
 export function disruptRitual(b: Battle, r: RitualCircle, amount: number, by: string): void {
   r.disruption += amount;
   b.log("RitualDisruption", { ritual: r.id, amount, by });
-  // A held, unstable ritual collapses when disruption reaches its instability
-  if (r.state === "CompletedHeld" && r.unstableStacks >= 3 && r.disruption >= r.unstableStacks) collapse(b, r, "Disruption overwhelmed unstable hold");
+  // A held, unstable ritual collapses once disruption reaches its instability ceiling (Rank: higher instability ceiling raises it)
+  const ceiling = ritualInstabilityCeiling(b, ritualParticipants(b, r));
+  if (r.state === "CompletedHeld" && r.unstableStacks >= ceiling && r.disruption >= r.unstableStacks) collapse(b, r, "Disruption overwhelmed unstable hold");
 }
 
 /** Assist action by a non-ritualist adjacent ally: +1 progress this round. */

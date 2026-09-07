@@ -484,7 +484,8 @@
       "concept": "art/samples/DRG_COMMANDER_RIFTWING-DOMINANT_CONCEPT_V01.jpg",
       "cutout": "art/samples/DRG_COMMANDER_RIFTWING-DOMINANT_CUTOUT_V01.png"
     },
-    "stars": 8
+    "stars": 8,
+    "factionRank": "DOMINANT"
   },
   {
     "id": "DRG_SECOND_STORMCLAW-WINGSECOND",
@@ -522,7 +523,8 @@
     "art": {
       "concept": "art/samples/DRG_SECOND_STORMCLAW-WINGSECOND_CONCEPT_V01.jpg",
       "cutout": "art/samples/DRG_SECOND_STORMCLAW-WINGSECOND_CUTOUT_V01.png"
-    }
+    },
+    "factionRank": "WING_SECOND"
   },
   {
     "id": "DRG_ELITE_OBSIDIAN-MAW",
@@ -559,7 +561,8 @@
     "art": {
       "concept": "art/samples/DRG_ELITE_OBSIDIAN-MAW_CONCEPT_V01.jpg",
       "cutout": "art/samples/DRG_ELITE_OBSIDIAN-MAW_CUTOUT_V01.png"
-    }
+    },
+    "factionRank": "WINGBREAKER"
   },
   {
     "id": "DRG_FOOT_SLATEWING-DRAKE",
@@ -596,7 +599,8 @@
       "concept": "art/samples/DRG_FOOT_SLATEWING-DRAKE_CONCEPT_V01.jpg",
       "cutout": "art/samples/DRG_FOOT_SLATEWING-DRAKE_CUTOUT_V01.png"
     },
-    "stars": 3
+    "stars": 3,
+    "factionRank": "SKYRIDER"
   },
   {
     "id": "RIT_LEADER_AFFILIATED-SUMMONER",
@@ -639,7 +643,8 @@
     "art": {
       "concept": "art/samples/RIT_LEADER_AFFILIATED-SUMMONER_CONCEPT_V01.jpg",
       "cutout": "art/samples/RIT_LEADER_AFFILIATED-SUMMONER_CUTOUT_V01.png"
-    }
+    },
+    "factionRank": "AFFILIATED"
   },
   {
     "id": "RIT_FOOT_FOREIGN-RITUALIST",
@@ -681,7 +686,8 @@
     "art": {
       "concept": "art/samples/RIT_FOOT_FOREIGN-RITUALIST_CONCEPT_V01.jpg",
       "cutout": "art/samples/RIT_FOOT_FOREIGN-RITUALIST_CUTOUT_V01.png"
-    }
+    },
+    "factionRank": "AFFILIATED"
   },
   {
     "id": "KNI_SUPPORT_PORTAL-KEEPER",
@@ -1121,7 +1127,8 @@
       "concept": "art/samples/DRG_SIEGE_CINDERTHROAT-SIEGEWYRM_CONCEPT_V01.jpg",
       "cutout": "art/samples/DRG_SIEGE_CINDERTHROAT-SIEGEWYRM_CUTOUT_V01.png"
     },
-    "stars": 7
+    "stars": 7,
+    "factionRank": "CINDER_WARDEN"
   },
   {
     "id": "DRG_CAVALRY_RIDGEBACK-RUNNER",
@@ -1159,7 +1166,8 @@
       "concept": "art/samples/DRG_CAVALRY_RIDGEBACK-RUNNER_CONCEPT_V01.jpg",
       "cutout": "art/samples/DRG_CAVALRY_RIDGEBACK-RUNNER_CUTOUT_V01.png"
     },
-    "stars": 4
+    "stars": 4,
+    "factionRank": "RIDGEBACK_WARDEN"
   },
   {
     "id": "DIV_BOSS_CALAMITY-FORM",
@@ -1337,7 +1345,8 @@
     "art": {
       "concept": "art/samples/DRG_LEVY_SCREE-HATCHLING_CONCEPT_V01.jpg",
       "cutout": "art/samples/DRG_LEVY_SCREE-HATCHLING_CUTOUT_V01.png"
-    }
+    },
+    "factionRank": "HATCHLING"
   },
   {
     "id": "SAM_LORD_ASHFALL-DAIMYO",
@@ -1417,7 +1426,8 @@
     "art": {
       "concept": "art/samples/DRG_ELDER_HOLLOW-CROWN-ELDER_CONCEPT_V01.jpg",
       "cutout": "art/samples/DRG_ELDER_HOLLOW-CROWN-ELDER_CUTOUT_V01.png"
-    }
+    },
+    "factionRank": "ELDER_SOVEREIGN"
   },
   {
     "id": "SHI_KAGE_VOID-CROWN-KAGE",

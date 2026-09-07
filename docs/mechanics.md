@@ -11,6 +11,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §7 Combat | `combat.ts`, `modifiers.ts` | Deterministic damage, arcs, terrain, statuses, intercession, duel |
 | §8 Morale and command | `morale.ts`, `command.ts` | Bands, sources, succession, strongest aura only, Rally |
 | §9 Faction doctrines | `data/abilities/abilities.json`, `effects.ts` | Orders and passives as data; interpreter in `applyEffect` |
+| Faction rank ladders | `ranks.ts`, `data/factions/ranks/*.json` | Samurai and Shinobi (`docs/samurai-ranks.md`), Dragon Host (`docs/dragon-ranks.md`), Ritual Cult (`docs/ritual-ranks.md`); Knight and the seven divisions have none yet |
 | §11 Ritual system | `rituals.ts` | Ratings, formula, states, hold and instability, sync release |
 | §12 Reinforcement portals | `portals.ts` | Lifecycle, queue, capture, destroy refund |
 | Mountains and the labored climb | `types.ts` (TERRAIN_RULES), `battle.ts` (`reachable`, `move`) | Rock costs foot 5, cavalry 6, wings 2. A unit that cannot afford a hex may still take one adjacent hex by spending its whole activation, so a range is slow rather than sealed |

@@ -60,7 +60,7 @@ export class BattleController {
     if (b.activatedGroupsThisRound.has(groupId)) throw new Error(`${groupId} already activated this round`);
     const members = this.groupMembers(groupId);
     for (const u of members) {
-      u.ap = 2; u.movedThisActivation = 0; u.chargeMoved = 0; u.attackedThisActivation = false; u.defending = false; u.shadowStepped = false; u.freeMoveHexes = 0;
+      u.ap = 2; u.movedThisActivation = 0; u.chargeMoved = 0; u.altitudeDropped = 0; u.attackedThisActivation = false; u.defending = false; u.shadowStepped = false; u.freeMoveHexes = 0;
       if (b.hasStatus(u, "Suppressed")) { u.ap -= 1; b.removeStatus(u, "Suppressed"); }
       if (b.hasStatus(u, "Routed")) { this.routedRetreat(u); u.ap = 0; }
     }
@@ -190,6 +190,11 @@ export class BattleController {
     u.movedThisActivation += r.cost;
     // charge momentum: broken by rough ground, otherwise accumulates
     u.chargeMoved = TERRAIN_RULES[b.terrainAt(to)].chargeBreaks ? 0 : u.chargeMoved + r.cost;
+    // diving momentum: a flier accumulates net altitude lost this activation; climbing back up breaks the dive
+    if (b.def(u).flying) {
+      const drop = b.elevationAt(from) - b.elevationAt(to);
+      u.altitudeDropped = drop > 0 ? u.altitudeDropped + drop : 0;
+    }
     if (r.labored) b.log("LaboredClimb", { uid: u.uid, to, terrain: b.terrainAt(to), cost: r.cost });
     if (b.hasStatus(u, "Hidden") && b.terrainAt(to) !== "Forest" && b.terrainAt(to) !== "Smoke" && b.adjacentEnemies(u).length) b.addStatus(u, "Revealed", 0, "Moved into contact");
     if (traits.hideOnForestStop && b.terrainAt(to) === "Forest") b.addStatus(u, "Hidden", 2, "Canopy");
