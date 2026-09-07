@@ -24,6 +24,52 @@ describe("fusion", () => {
     expect(b.sides.get("A")!.fusionCharges).toBe(0);
     expect(() => ctrl.fuse([b.unit(p.footUids[1]!), b.unit(p.footUids[2]!)], "FUS_PAIRED_LINE")).toThrow(/Fusion charge/);
   });
+  it.each([
+    ["elite first", (elite: string, foot: string) => [elite, foot]],
+    ["foot first", (elite: string, foot: string) => [foot, elite]],
+  ])("Gate Wardens fuses the Elite and a foot soldier into one Elite, regardless of input order (%s)", (_label, order) => {
+    const { b, ctrl } = newBattle();
+    const p = deploy(b, "S", "A", SAM, blob(5, 5));
+    b.sides.get("A")!.fusionCharges = 1;
+    ctrl.commandPhase(); ctrl.beginActivation("S");
+    const elite = b.unit(p.eliteUid!);
+    const foot = b.adjacentUnits(elite).find((u) => p.footUids.includes(u.uid))!;
+    expect(b.distance(elite, foot)).toBe(1);
+    const hpBefore = elite.hp + foot.hp;
+    const footUid = foot.uid;
+    const uids = order(elite.uid, foot.uid).map((uid) => b.unit(uid));
+    const fused = ctrl.fuse(uids, "FUS_GATE_WARDENS");
+    const d = b.def(fused);
+    expect(d.name).toBe("Gate Wardens");
+    expect(d.roles).toEqual(["Elite"]);
+    expect(d.passives).toContain("ABL_SPEAR_WALL");
+    expect(d.hp).toBe(hpBefore);
+    // the fused Elite must actually occupy the Elite slot, not be left stranded among the foot soldiers
+    expect(p.eliteUid).toBe(fused.uid);
+    expect(p.footUids).not.toContain(fused.uid);
+    expect(p.footUids).not.toContain(footUid);
+    expect(p.footUids).toHaveLength(4);
+    // Reduced, not Broken: fusing away one foot soldier costs a body, but the Elite slot survives
+    expect(doctrineState(b, p)).toBe("Reduced");
+  });
+  it("Twinwing Drake pairs two Slatewing Drakes into one large flying body", () => {
+    const { b, ctrl } = newBattle();
+    b.sides.get("A")!.fusionCharges = 1;
+    const a = b.spawn("DRG_FOOT_SLATEWING-DRAKE", "A", { q: 5, r: 5 });
+    const c = b.spawn("DRG_FOOT_SLATEWING-DRAKE", "A", { q: 6, r: 5 });
+    a.ap = 1; c.ap = 1;
+    const hpBefore = a.hp + c.hp;
+    const atkA = b.def(a).atk, atkC = b.def(c).atk;
+    const recipes = eligibleRecipes(b, [a, c]).map((r) => r.id);
+    expect(recipes).toContain("FUS_TWINWING");
+    const fused = ctrl.fuse([a, c], "FUS_TWINWING");
+    const d = b.def(fused);
+    expect(d.name).toBe("Twinwing Drake");
+    expect(d.size).toBe("Large");
+    expect(d.roles).toEqual(["FootSoldier", "Cavalry"]);
+    expect(d.hp).toBe(hpBefore);
+    expect(d.atk).toBe(Math.round(Math.max(atkA, atkC) + Math.min(atkA, atkC) * 0.3));
+  });
   it("the Calamity Form needs all three Sovereigns adjacent and dissolves after three rounds", () => {
     const { b, ctrl } = newBattle();
     b.sides.get("A")!.fusionCharges = 2;

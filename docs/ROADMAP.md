@@ -102,3 +102,13 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Direct test coverage for `fuse()` on the two recipes nothing exercised yet, Gate Wardens and Twinwing
+  Drake, found a real bug: platoon-slot bookkeeping put the fused unit back into whichever slot the *first* input
+  happened to occupy, rather than the slot the recipe names. Paired Line never exposed it because both inputs are
+  always foot soldiers, but Gate Wardens fuses an Elite with a foot soldier, and the caller (a player click order
+  or a future AI) can pass either one first. Passing the foot soldier first left the fused Elite stranded in
+  `footUids` with `eliteUid` nulled, misreporting a healthy platoon as Doctrine Broken. Fixed by clearing every
+  input from whatever slot it held and placing the fused unit by the recipe's declared `result.slot` instead.
+  Proposal — a fusion invariant test that runs every recipe in `data/abilities/fusions.json` through both input
+  orders (all permutations, for a three-body recipe) and asserts identical slot placement and result stats no
+  matter which unit is named the anchor, so an asymmetric-role recipe can't reintroduce this class of bug.

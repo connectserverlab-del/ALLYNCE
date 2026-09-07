@@ -53,7 +53,7 @@ export function fuse(b: Battle, units: UnitState[], recipeId: string): UnitState
   const r = b.reg.fusions.get(recipeId);
   if (!r) throw new Error(`Unknown fusion ${recipeId}`);
   if (!eligibleRecipes(b, units).some((x) => x.id === recipeId)) throw new Error("Units do not satisfy the recipe");
-  const [anchor, ...others] = units;
+  const [anchor] = units;
   if (!anchor || !anchor.pos) throw new Error("Anchor not deployed");
   const side = b.sides.get(anchor.side)!;
   for (const u of units) {
@@ -93,19 +93,27 @@ export function fuse(b: Battle, units: UnitState[], recipeId: string): UnitState
   const morale = Math.max(...units.map((u) => u.morale));
   for (const u of units) { b.remove(u); u.defeated = true; u.hp = 0; }
   const fused = b.spawn(def.id, anchor.side, null, { platoonId, facing: anchor.facing, uidPrefix: "fused" });
-  fused.hp = r.result.defId ? def.hp : def.hp; // derived def.hp already holds the summed current HP for mortal fusions
+  fused.hp = def.hp; // for a named result def.hp is its max HP; for a derived one it already holds the summed current HP
   fused.morale = b.def(fused).divine ? 100 : morale;
   fused.ap = Math.min(...units.map((u) => u.ap)) - 1;
   fused.fusedFrom = units.map((u) => u.uid);
   if (r.result.rounds) fused.fusionRoundsLeft = r.result.rounds;
   b.place(fused, pos);
-  // platoon bookkeeping: the fused unit takes the anchor's slot; other inputs leave the roster
+  // Platoon bookkeeping: every input leaves whichever slot it held, and the fused unit takes the
+  // slot the recipe names (not just the anchor's own former slot, which need not match: Gate
+  // Wardens fuses an Elite with a FootSoldier, and either could be passed as the anchor).
   if (platoonId) {
     const p = b.platoon(platoonId);
-    const swap = (uid: string | null) => (uid === anchor.uid ? fused.uid : uid);
-    p.commanderUid = swap(p.commanderUid); p.secondUid = swap(p.secondUid); p.eliteUid = swap(p.eliteUid);
-    p.footUids = p.footUids.map((x) => (x === anchor.uid ? fused.uid : x)).filter((x) => !others.some((o) => o.uid === x));
-    for (const o of others) { if (p.commanderUid === o.uid) p.commanderUid = null; if (p.secondUid === o.uid) p.secondUid = null; if (p.eliteUid === o.uid) p.eliteUid = null; }
+    const inputUids = new Set(units.map((u) => u.uid));
+    if (inputUids.has(p.commanderUid ?? "")) p.commanderUid = null;
+    if (inputUids.has(p.secondUid ?? "")) p.secondUid = null;
+    if (inputUids.has(p.eliteUid ?? "")) p.eliteUid = null;
+    p.footUids = p.footUids.filter((x) => !inputUids.has(x));
+    const targetSlot = r.result.slot ?? b.def(anchor).slots[0];
+    if (targetSlot === "Commander") p.commanderUid = fused.uid;
+    else if (targetSlot === "Second") p.secondUid = fused.uid;
+    else if (targetSlot === "Elite") p.eliteUid = fused.uid;
+    else p.footUids.push(fused.uid);
     if (side.leaderUid && units.some((u) => u.uid === side.leaderUid)) side.leaderUid = fused.uid;
   }
   b.log("Fusion", { recipe: r.id, inputs: units.map((u) => u.uid), result: fused.uid, name: def.name, hp: fused.hp, atk: def.atk, def: def.def });
