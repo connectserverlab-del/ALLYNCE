@@ -1,7 +1,7 @@
 import { Battle } from "./state.js";
 import type { Registry } from "./data.js";
 import type { UnitState, PlatoonState, Terrain, GameEvent } from "./types.js";
-import type { KingdomState } from "./kingdom.js";
+import type { KingdomState, KingdomEffects } from "./kingdom.js";
 import type { DeckList } from "./cards.js";
 import { DeckState } from "./cards.js";
 import { Rng } from "./rng.js";
@@ -9,7 +9,7 @@ import type { RitualCircle } from "./rituals.js";
 import type { Portal } from "./portals.js";
 import type { Capture } from "./state.js";
 
-export const SAVE_VERSION = 5;
+export const SAVE_VERSION = 6;
 
 export interface BattleSave {
   version: number; seed: number; round: number; phase: string;
@@ -20,6 +20,7 @@ export interface BattleSave {
   rituals: Array<Omit<RitualCircle, "damagedThisRound"> & { damagedThisRound: string[] }>;
   portals: Portal[];
   decks: Array<{ side: string; list: DeckList; drawPile: string[]; hand: string[]; graveyard: string[]; sideDeck: string[]; usedSide: string[] }>;
+  kingdomEffects: Array<[string, KingdomEffects]>;
   activatedGroups: string[]; activeSide: string;
   winner: string | null; winReason: string | null;
   events: GameEvent[];
@@ -40,6 +41,7 @@ export function saveBattle(b: Battle): BattleSave {
     rituals: [...b.rituals.values()].map((r) => ({ ...r, damagedThisRound: [...r.damagedThisRound], participantUids: [...r.participantUids] })),
     portals: [...b.portals.values()].map((p) => ({ ...p, queue: p.queue.map((q) => ({ ...q })) })),
     decks: [...b.decks.entries()].map(([side, d]) => ({ side, list: d.list, drawPile: [...d.drawPile], hand: [...d.hand], graveyard: [...d.graveyard], sideDeck: [...d.side], usedSide: [...d.usedSide] })),
+    kingdomEffects: [...b.kingdomEffects.entries()].map(([side, e]) => [side, { ...e, statMods: e.statMods.map((m) => ({ ...m })) }]),
     activatedGroups: [...b.activatedGroupsThisRound], activeSide: b.activeSide,
     winner: b.winner, winReason: b.winReason, events: b.events.map((e) => ({ ...e })),
     captures: b.captures.map((c) => ({ ...c })),
@@ -72,6 +74,7 @@ export function loadBattle(reg: Registry, save: BattleSave): Battle {
     deck.side = [...d.sideDeck]; deck.usedSide = [...d.usedSide];
     b.decks.set(d.side, deck);
   }
+  for (const [side, e] of save.kingdomEffects ?? []) b.kingdomEffects.set(side, { ...e, statMods: e.statMods.map((m) => ({ ...m })) });
   for (const g of save.activatedGroups) b.activatedGroupsThisRound.add(g);
   b.activeSide = save.activeSide; b.winner = save.winner; b.winReason = save.winReason;
   b.events.push(...save.events);

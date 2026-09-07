@@ -102,3 +102,11 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — a registry-wide "round-trip completeness" test that builds one battle exercising the
+  holding, a mid-channel ritual, a queued portal and an in-progress march all at once, then asserts every stat a
+  unit can compute and every side-level number reads identically before and after a save/load cycle. This pass
+  found `Battle.kingdomEffects` missing from `BattleSave` entirely: a saved and reloaded battle silently dropped
+  every "Research: …" and building-level ATK/DEF bonus, plus the kingdom's movement and command-radius grants,
+  because nothing re-ran `applyKingdom` after `loadBattle`. A single completeness test across every carry-over
+  system at once would have caught that the day it was introduced instead of needing a dedicated hunt, and would
+  catch the next one the same way.
