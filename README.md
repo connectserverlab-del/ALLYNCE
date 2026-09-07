@@ -16,7 +16,7 @@ This repository currently holds three things:
 
 ```bash
 npm install
-npm test            # 85 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
+npm test            # 160 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -48,7 +48,7 @@ npm run assets      # rebuilds the asset registry from the data and from disk
 - **Shinobi ranks**: Apprentice, Genin, Chunin, Jounin, Anbu, Kage, each with a movement trait (canopy movement through forest, hide on stopping in forest, ignore zones of control, pass allies, bonus movement, Shadow Step).
 - **Fusion**: recipe-driven merging of adjacent units into one (Paired Line, Gate Wardens, Twinwing Drake, and the Calamity Form from the three Sovereigns), paid with Fusion charges.
 - **Siege and cavalry**: cannons per faction with set-up, minimum range and breaching shots (plus smoke shells and the Siegewyrm's concussive blast); cavalry per faction with lance charges that break in rough ground, and hit-and-fade riders.
-- **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. See `docs/samurai-ranks.md`.
+- **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. See `docs/samurai-ranks.md`. The Dragon Host ladder (nine ranks, Hatchling to Elder Sovereign) reuses those same privileges and adds its own: wing dive, an ATK bonus keyed to altitude lost this activation rather than hexes moved. See `docs/dragon-ranks.md`. The Ritual Cult ladder (five ranks, Affiliated to Grand Ritualist) grants no leadership privilege at all — specialist teams cannot unlock a commander or elite — and instead keys rank to ritual mastery: a Progress bonus and a higher instability ceiling on a held ritual. See `docs/ritual-ranks.md`.
 
 ## Engine note
 
