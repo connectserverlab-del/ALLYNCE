@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { newBattle, deploy, KNI, blob, reg } from "./helpers.js";
+import { newBattle, deploy, KNI, blob, reg, kingdomWithResearch } from "./helpers.js";
 import { newKingdom, startUpgrade, upgradeCost, upgradeSeconds, tick, startResearch, researchable, drawFromBanner, kingdomEffects, applyKingdom, storageCap } from "../src/kingdom.js";
 import { computeStat } from "../src/modifiers.js";
 
@@ -98,6 +98,20 @@ describe("the holding", () => {
     expect(sources).not.toContain("Stable 1");
     const lancer = b.spawn("KNI_CAVALRY_DAWN-LANCER", "A", { q: 12, r: 12 });
     expect(computeStat(b, lancer, "ATK").modifiers.map((m) => m.source)).toContain("Stable 1");
+  });
+
+  it("carries a morale research into battle the same honest way as a stat bonus: logged, with its source named", () => {
+    const { b } = newBattle();
+    const p = deploy(b, "K", "A", KNI, blob(5, 5));
+    const foot = b.unit(p.footUids[0]!);
+    const before = foot.morale;
+    const k = kingdomWithResearch("KNI", ["RES_DRILL_YARD", "RES_BANNER_DISCIPLINE", "RES_SUCCESSION_DOCTRINE", "RES_HEARTHFIRE"]);
+    const e = kingdomEffects(reg, k);
+    expect(e.moraleMods).toEqual([{ source: "Research: Hearthfire", value: 10 }]);
+    applyKingdom(b, "A", k);
+    expect(foot.morale).toBe(Math.min(100, before + 10));
+    const entry = b.events.find((ev) => ev.type === "Morale" && ev.data.uid === foot.uid && ev.data.reason === "Research: Hearthfire");
+    expect(entry).toBeTruthy();
   });
 });
 

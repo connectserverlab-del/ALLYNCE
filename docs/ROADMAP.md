@@ -102,3 +102,8 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — `BuildingDef.effect` already carries `atk`, `def` and `cavalryAtk`, but no building grants
+  morale the way the Hearthfire research does; only a study can. A Shrine-flavoured morale line (a chaplain's
+  blessing before the march, say) would let the holding's morale contribution grow steadily with a building level
+  the way its other stats do, instead of waiting on one late-tier study. Proposal only; no building data changed
+  here.

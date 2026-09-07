@@ -4,6 +4,7 @@ import { loadRegistry } from "../src/data.js";
 import { deployPlatoon } from "../src/deploy.js";
 import type { PlatoonBlueprint } from "../src/composition.js";
 import type { Hex } from "../src/hex.js";
+import { newKingdom, startUpgrade, startResearch, tick, type KingdomState } from "../src/kingdom.js";
 
 export const reg = loadRegistry();
 
@@ -33,4 +34,20 @@ export function blob(q: number, r: number): Hex[] {
 
 export function deploy(b: Battle, id: string, side: string, bp: Omit<PlatoonBlueprint, "id" | "side">, hexes: Hex[], facing: 0 | 1 | 2 | 3 | 4 | 5 = 0) {
   return deployPlatoon(b, { id, side, ...bp }, hexes, facing);
+}
+
+/** A holding with unlimited resources, a Research Hall tall enough for `researchIds`' highest tier, and every id in the chain completed in order. */
+export function kingdomWithResearch(faction: string, researchIds: string[]): KingdomState {
+  const k = newKingdom(reg, faction);
+  k.resources = { koku: 9999999, iron: 9999999, timber: 9999999, silver: 9999999 };
+  for (let i = 0; i < 7; i++) {
+    startUpgrade(reg, k, "KEEP"); tick(reg, k, 1000000);
+    startUpgrade(reg, k, "RESEARCH_HALL"); tick(reg, k, 1000000);
+  }
+  for (const id of researchIds) {
+    const started = startResearch(reg, k, id);
+    if (!started.ok) throw new Error(`${id}: ${started.reason}`);
+    tick(reg, k, 1000000);
+  }
+  return k;
 }
