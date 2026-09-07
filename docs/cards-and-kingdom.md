@@ -151,4 +151,8 @@ A warrant runs the same circle through `runWantedMission`, and settles with `res
 battle's `captures` rather than its casualties.
 
 `saveBattle` and `loadBattle` round-trip a match in progress, including decks, hands and the uid counter, so a
-restored battle keeps issuing fresh unit ids instead of colliding with saved ones.
+restored battle keeps issuing fresh unit ids instead of colliding with saved ones. The save also carries the
+handful of per-round effect flags that live outside the `Battle` object itself — Formal Duel pairings, PhaseMove
+and SequencedMove orders, Silent Directive's hide-after-attack mark, Oath of Intercession's once-per-round use,
+Hold the Standard's rout immunity, and any smoke or other timed terrain still ticking down — so a battle saved
+mid-duel or under unexpired smoke plays on exactly as it would have without the save (`SAVE_VERSION` 6).

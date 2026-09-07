@@ -102,3 +102,15 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — now that a battle's Formal Duel pairings, orders and timed terrain survive a save
+  (this pass; see `core/src/save.ts`), a scenario could seed timed terrain directly at setup instead of only
+  through a mid-battle ability: a bog or smoke bank baked into an uneven battlefield's opening state, placed
+  by role the same way `Q-2` pins objectives, rituals and portals to the generated ground. That would give
+  scenario authors one more tool for the "no even squares" battlefield intent that does not depend on either
+  side rolling the right ability.
+- 2026-09-07: Proposal — Formal Duel currently lets any elite or leader challenge any enemy elite or leader
+  regardless of rank, which sits oddly next to how much mechanical weight the rank ladders already carry
+  elsewhere (command radius, two-sword reactions, castle defense, who may lead a platoon). A low-rank elite
+  challenging an enemy Kage or Shogun to a Formal Duel could cost morale to both sides on issue, or simply be
+  disallowed below a faction-specific rank floor, so the ladders get a say in this mechanic too instead of it
+  being the one privilege-adjacent ability rank never touches.
