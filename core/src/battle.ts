@@ -12,7 +12,11 @@ import { commandRadiusRecovery, surroundedPenalty, moraleBand, changeMorale } fr
 import { doctrineState } from "./composition.js";
 import { evaluateObjective, markSynchronized, type ObjectiveDef, type ObjectiveProgress } from "./objectives.js";
 
-export interface VictoryRules { sides: Record<string, ObjectiveDef[]>; roundLimit: number; roundLimitWinner?: string }
+export interface VictoryRules {
+  sides: Record<string, ObjectiveDef[]>; roundLimit: number; roundLimitWinner?: string;
+  /** Army leader per side: unit def id whose defeat ends the battle immediately, one of the three universal win conditions. */
+  leaders?: Record<string, string>;
+}
 
 /**
  * Deterministic turn-state machine. Round = Command -> Alternating Activation -> Objective -> End.
@@ -191,6 +195,19 @@ export class BattleController {
     if (!attackPortal(this.b, u, portal, atk)) { u.ap += 1; throw new Error("Portal out of range"); }
   }
 
+  /**
+   * Force a surrender: one of the three universal win conditions (wipeout, army leader killed, surrender).
+   * Available to either side at any point, not gated on morale — callers (AI or a human player) decide when.
+   */
+  surrender(side: string): void {
+    const b = this.b;
+    if (b.winner) throw new Error("Battle already ended");
+    if (!b.sides.has(side)) throw new Error(`Unknown side ${side}`);
+    b.winner = [...b.sides.keys()].find((s) => s !== side) ?? "draw";
+    b.winReason = "Surrender";
+    b.log("BattleEnded", { winner: b.winner, reason: b.winReason, surrendered: side });
+  }
+
   defend(u: UnitState): void { this.spend(u, 1); u.defending = true; this.b.log("Defend", { uid: u.uid }); }
   overwatch(u: UnitState): void { this.spend(u, 1); u.overwatch = true; this.b.log("Overwatch", { uid: u.uid }); }
   rally(u: UnitState): void { this.spend(u, 1); if (!rallyAction(this.b, u)) { u.ap += 1; throw new Error("Unit cannot Rally"); } }
@@ -289,19 +306,29 @@ export class BattleController {
 
   evaluateVictory(): void {
     const b = this.b;
+    if (b.winner) return; // already decided outside this pass (e.g. a surrender)
     for (const side of Object.keys(this.victory.sides)) {
       const status = this.objectiveStatus(side);
       // all primary objectives satisfied -> win (objectives are ANDed; scenarios can encode OR by separate side entries later)
       if (status.length && status.some((s) => s.satisfied && (s.def.type !== "SurviveRounds" && s.def.type !== "DefendForRounds"))) { b.winner = side; b.winReason = status.filter((s) => s.satisfied).map((s) => s.def.type).join("+"); }
     }
+    // Universal win condition: the army leader is killed. Scenario objectives above take priority when both land the same round.
+    if (!b.winner) for (const [side, leaderDefId] of Object.entries(this.victory.leaders ?? {})) {
+      const instances = [...b.units.values()].filter((u) => u.defId === leaderDefId && u.side === side);
+      if (instances.length && instances.every((u) => u.defeated)) {
+        b.winner = [...b.sides.keys()].find((s) => s !== side) ?? "draw";
+        b.winReason = "Leader killed";
+        break;
+      }
+    }
     if (!b.winner && b.round >= this.victory.roundLimit) {
       b.winner = this.victory.roundLimitWinner ?? "draw";
       b.winReason = "Round limit";
     }
-    // command structure broken: a side with no living commanders or seconds and no rituals/portals loses morale war
+    // Universal win condition: wipeout. A side with nothing left standing loses outright.
     if (!b.winner) for (const side of b.sides.keys()) {
       const alive = [...b.activeUnits(side)].filter((u) => !u.isClone);
-      if (alive.length === 0) { b.winner = [...b.sides.keys()].find((s) => s !== side) ?? "draw"; b.winReason = "Enemy eliminated"; }
+      if (alive.length === 0) { b.winner = [...b.sides.keys()].find((s) => s !== side) ?? "draw"; b.winReason = "Enemy eliminated"; break; }
     }
     if (b.winner) b.log("BattleEnded", { winner: b.winner, reason: b.winReason });
   }

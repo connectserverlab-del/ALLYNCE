@@ -103,8 +103,11 @@ describe("Threefold Invocation scenario", () => {
       ctrl.endPhase();
     }
     expect(["A", "B"]).toContain(b.winner);
+    // Leader killed and Surrender are universal win conditions on top of scenario objectives, so a run can end
+    // decisively long before the round limit; command-succession coverage lives in succession.test.ts instead.
+    expect(typeof b.winReason).toBe("string");
     const types = new Set(b.events.map((e) => e.type));
-    for (const t of ["RitualProgress", "ReinforcementArrived", "Attack", "Move", "Succession", "ClonesSpawned"]) expect(types.has(t), t).toBe(true);
+    for (const t of ["RitualProgress", "ReinforcementArrived", "Attack", "Move", "CommanderFallen", "ClonesSpawned"]) expect(types.has(t), t).toBe(true);
     // rituals progressed at different rates
     const first = b.events.filter((e) => e.type === "RitualProgress" && e.round === 1);
     const fast = first.find((e) => e.data["ritual"] === "circle-fast")!.data["total"] as number;

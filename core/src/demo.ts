@@ -1,5 +1,5 @@
 import { buildScenario } from "./scenario.js";
-import { runAiActivation, holdForSyncPolicy, DIFFICULTY } from "./ai.js";
+import { runAiActivation, holdForSyncPolicy, maybeSurrender, DIFFICULTY } from "./ai.js";
 
 /** Runs Threefold Invocation with AI on both sides and prints a readable log. */
 const { ctrl, file } = buildScenario("threefold_invocation");
@@ -8,6 +8,7 @@ console.log(`# ${file.title}\n${file.briefing}\n`);
 
 while (!b.winner && b.round <= file.roundLimit + 1) {
   ctrl.commandPhase();
+  if (maybeSurrender(ctrl, "A") || maybeSurrender(ctrl, "B")) break;
   const sides = ["A", "B"];
   let turn = b.round % 2 === 1 ? 0 : 1;
   for (let guard = 0; guard < 20; guard++) {

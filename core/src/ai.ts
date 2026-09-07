@@ -1,9 +1,10 @@
 import type { BattleController } from "./battle.js";
 import type { UnitState } from "./types.js";
 import type { Hex } from "./hex.js";
-import { hexDistance } from "./hex.js";
+import { hexDistance, attackArc } from "./hex.js";
 import { computeStat } from "./modifiers.js";
 import { cohesionConnections } from "./cohesion.js";
+import { hasCommandStructure } from "./command.js";
 import type { RitualCircle } from "./rituals.js";
 
 /**
@@ -147,30 +148,54 @@ function chooseGoal(ctrl: BattleController, u: UnitState, profile: AiProfile): H
 
 /** Move to the reachable hex closest to the goal that best preserves theme cohesion and avoids isolation. */
 function moveToward(ctrl: BattleController, u: UnitState, goal: Hex, profile: AiProfile = DIFFICULTY.normal!): boolean {
-  const b = ctrl.b;
+  const b = ctrl.b; const d = b.def(u);
   if (u.ap <= 0 || !u.pos) return false;
   const reach = [...ctrl.reachable(u).values()];
   if (!reach.length) return false;
-  const currentDist = hexDistance(u.pos, goal);
+  const targetUnit = b.unitAt(goal);
+  const isEnemyTarget = !!targetUnit && targetUnit.side !== u.side;
+  // Ranged units (including siege, once fielded) hold at their maximum range instead of closing to melee.
+  const ranged = isEnemyTarget && d.range > 1;
+  const effDist = (h: Hex) => { const dist = hexDistance(h, goal); return ranged ? Math.abs(dist - d.range) : dist; };
+  const currentEff = effDist(u.pos);
   const before = cohesionConnections(b, u).length;
   let best: { hex: Hex; score: number } | null = null;
   for (const r of reach) {
-    const dist = hexDistance(r.hex, goal);
-    if (dist >= currentDist) continue;
+    const eff = effDist(r.hex);
+    if (eff >= currentEff) continue;
     // simulate cohesion at destination
     const theme = b.def(u).themes[0];
     const after = theme ? b.adjacentUnits({ ...u, pos: r.hex } as UnitState).filter((a) => a.side === u.side && !a.isClone && b.def(a).themes[0] === theme && a.uid !== u.uid).length : 0;
     const enemiesAdj = b.adjacentUnits({ ...u, pos: r.hex } as UnitState).filter((a) => a.side !== u.side).length;
-    let score = (currentDist - dist) * 100;
+    let score = (currentEff - eff) * 100;
     score += (after - before) * 60 * (1 - profile.risk);
     if (after === 0 && before > 0) score -= 120 * (1 - profile.risk);   // isolation risk
     if (enemiesAdj >= 2) score -= 80 * (1 - profile.risk);
     if (b.terrainAt(r.hex) === "Fortification") score += 40;
+    if (ranged && b.terrainAt(r.hex) === "HighGround") score += 60; // High Ground only pays off for a ranged attack
+    if (isEnemyTarget && d.roles.includes("Cavalry") && targetUnit!.pos) {
+      if (attackArc(targetUnit!.pos, targetUnit!.facing, r.hex) !== "front") score += 70; // flank/rear routing
+    }
     if (!best || score > best.score) best = { hex: r.hex, score };
   }
   if (!best) return false;
   const disengage = b.adjacentEnemies(u).length > 0 && u.ap >= 2;
   try { ctrl.move(u, best.hex, { disengage }); return true; } catch { return false; }
+}
+
+/**
+ * Universal win condition: force a surrender. Command structure gone (no living Commander or Second in any
+ * platoon) and average morale collapsed below the Disordered/Routed line means the fight is already lost —
+ * concede rather than grind to a wipeout. Independent of the "army leader killed" win condition, which a
+ * scenario may or may not define; this reads the whole chain of command instead of one designated unit.
+ */
+export function maybeSurrender(ctrl: BattleController, side: string, moraleThreshold = 20): boolean {
+  const b = ctrl.b;
+  if (b.winner) return false;
+  if (hasCommandStructure(b, side)) return false;
+  if (ctrl.moraleSummary(side).average >= moraleThreshold) return false;
+  ctrl.surrender(side);
+  return true;
 }
 
 export function nearestEnemy(ctrl: BattleController, u: UnitState): UnitState | null {

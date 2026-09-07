@@ -14,6 +14,8 @@ export interface ScenarioFile {
   map: { width: number; height: number; terrain: Array<{ type: Terrain; hexes: [number, number][] }> };
   sides: Record<string, {
     name: string; reservePoints: number; armyCapacity: number;
+    /** Unit def id of this side's overall army leader. Its defeat is a universal win condition for the other side. */
+    leader?: string;
     platoons: Array<{ id: string; faction: string; commander: string; second: string; elite: string; foot: string[]; deploy: [number, number][]; facing?: number }>;
     specialists: Array<{ def: string; at: [number, number] }>;
     portals?: Array<{ id: string; at: [number, number]; capacity: number; cooldown: number }>;
@@ -46,6 +48,11 @@ export function buildScenario(name: string, reg: Registry = loadRegistry(), seed
     for (const p of s.portals ?? []) callPortal(b, sideId, { q: p.at[0], r: p.at[1] }, { id: p.id, capacity: p.capacity, cooldown: p.cooldown, telegraph: 0 });
     for (const q of s.reinforcementQueue ?? []) { const portal = b.portals.get(q.portal); if (portal) queueReinforcement(b, portal, q.def, q.platoon); }
   }
-  const ctrl = new BattleController(b, { sides: Object.fromEntries(Object.entries(file.sides).map(([id, s]) => [id, s.objectives])), roundLimit: file.roundLimit, roundLimitWinner: file.roundLimitWinner });
+  const leaders = Object.fromEntries(Object.entries(file.sides).filter(([, s]) => s.leader).map(([id, s]) => [id, s.leader!]));
+  const ctrl = new BattleController(b, {
+    sides: Object.fromEntries(Object.entries(file.sides).map(([id, s]) => [id, s.objectives])),
+    roundLimit: file.roundLimit, roundLimitWinner: file.roundLimitWinner,
+    leaders: Object.keys(leaders).length ? leaders : undefined,
+  });
   return { ctrl, file };
 }

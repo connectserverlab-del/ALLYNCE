@@ -76,6 +76,17 @@ export function effectiveCommandRadius(b: Battle, u: UnitState): number {
   return d.commandRadius ?? 0;
 }
 
+/** True if any platoon on this side still has a living commander or second-in-command. */
+export function hasCommandStructure(b: Battle, side: string): boolean {
+  for (const p of b.platoons.values()) {
+    if (p.side !== side) continue;
+    const commander = p.commanderUid ? b.units.get(p.commanderUid) : undefined;
+    const second = p.secondUid ? b.units.get(p.secondUid) : undefined;
+    if ((commander && !commander.defeated) || (second && !second.defeated)) return true;
+  }
+  return false;
+}
+
 /** Rally action: +10 morale to allies within 2 hexes (requires Commander/Second/Support role). */
 export function rally(b: Battle, u: UnitState): boolean {
   const d = b.def(u);
