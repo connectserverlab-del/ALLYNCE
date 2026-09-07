@@ -8,8 +8,11 @@ import { Rng } from "./rng.js";
 import type { RitualCircle } from "./rituals.js";
 import type { Portal } from "./portals.js";
 import type { Capture } from "./state.js";
+import { duels, orderFlags, hideAfterAttack, timedTerrain } from "./effects.js";
+import { interceptUsed } from "./combat.js";
+import { tempPreventRouted } from "./morale.js";
 
-export const SAVE_VERSION = 5;
+export const SAVE_VERSION = 6;
 
 export interface BattleSave {
   version: number; seed: number; round: number; phase: string;
@@ -25,6 +28,17 @@ export interface BattleSave {
   events: GameEvent[];
   captures: Capture[];
   wanted: Array<[string, string[]]>;
+  /**
+   * Per-round effect flags (Formal Duel pairings, PhaseMove/SequencedMove orders, Silent Directive's
+   * hide-after-attack mark, Oath of Intercession's once-per-round use, Hold the Standard's rout immunity,
+   * and any smoke or briar snare still ticking down) live as process-wide state in `effects.ts`,
+   * `combat.ts` and `morale.ts` rather than on the Battle instance. A save must capture and restore them
+   * explicitly or a battle saved mid-duel, mid-order or under unexpired smoke forgets all of it silently
+   * on load, same as a battle saved mid-ritual or mid-portal-capture would without `rituals`/`portals`.
+   */
+  duels: Array<[string, string]>; orderFlags: Array<[string, string]>;
+  hideAfterAttack: string[]; interceptUsed: string[]; tempPreventRouted: string[];
+  timedTerrain: Array<{ key: string; rounds: number }>;
 }
 export interface GameSave { version: number; battle: BattleSave | null; kingdom: KingdomState | null; savedAt: string }
 
@@ -44,6 +58,9 @@ export function saveBattle(b: Battle): BattleSave {
     winner: b.winner, winReason: b.winReason, events: b.events.map((e) => ({ ...e })),
     captures: b.captures.map((c) => ({ ...c })),
     wanted: [...b.wanted.entries()].map(([side, ids]) => [side, [...ids]] as [string, string[]]),
+    duels: [...duels.entries()], orderFlags: [...orderFlags.entries()],
+    hideAfterAttack: [...hideAfterAttack], interceptUsed: [...interceptUsed], tempPreventRouted: [...tempPreventRouted],
+    timedTerrain: timedTerrain.map((t) => ({ ...t })),
   };
 }
 
@@ -77,6 +94,15 @@ export function loadBattle(reg: Registry, save: BattleSave): Battle {
   b.events.push(...save.events);
   b.captures.push(...(save.captures ?? []).map((c) => ({ ...c })));
   for (const [side, ids] of save.wanted ?? []) b.wanted.set(side, new Set(ids));
+  // These flags are process-wide (see the field comments on BattleSave above), so a load replaces
+  // whatever the process currently holds with exactly what was saved, the same as it does for `b`'s own
+  // maps above. That is correct for the one-battle-per-process case every current caller relies on.
+  duels.clear(); for (const [k, v] of save.duels ?? []) duels.set(k, v);
+  orderFlags.clear(); for (const [k, v] of save.orderFlags ?? []) orderFlags.set(k, v);
+  hideAfterAttack.clear(); for (const uid of save.hideAfterAttack ?? []) hideAfterAttack.add(uid);
+  interceptUsed.clear(); for (const uid of save.interceptUsed ?? []) interceptUsed.add(uid);
+  tempPreventRouted.clear(); for (const uid of save.tempPreventRouted ?? []) tempPreventRouted.add(uid);
+  timedTerrain.length = 0; for (const t of save.timedTerrain ?? []) timedTerrain.push({ ...t });
   return b;
 }
 
