@@ -102,3 +102,11 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — field promotion: defeating an enemy that holds a named rank (Samurai, Shinobi, Knight,
+  Dragon Host or Ritual Cult) grants the unit that lands the killing blow a one-step, battle-only privilege from
+  its own faction's next rank up (e.g. a Samurai Ashigaru that kills a ranked officer fights the rest of that
+  battle as if promoted one rung, then reverts after). It gives the rank ladders mechanical weight in the moment
+  a kill happens rather than only between battles, costs nothing to add per faction since it reads the existing
+  ladder data, and stays a temporary in-battle modifier so it cannot be confused with the holding's own
+  permanent advancement. Needs an owner call on whether the promotion should be visible to the enemy (a bright
+  tell versus a quiet buff) and whether a Deity kill should grant more than one step.
