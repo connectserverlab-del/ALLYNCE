@@ -12,7 +12,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §8 Morale and command | `morale.ts`, `command.ts` | Bands, sources, succession, strongest aura only, Rally |
 | §9 Faction doctrines | `data/abilities/abilities.json`, `effects.ts` | Orders and passives as data; interpreter in `applyEffect` |
 | §11 Ritual system | `rituals.ts` | Ratings, formula, states, hold and instability, sync release |
-| §12 Reinforcement portals | `portals.ts` | Lifecycle, queue, capture, destroy refund |
+| §12 Reinforcement portals | `portals.ts`, `battle.ts` (`attackStructure`) | Lifecycle, queue, capture, destroy refund; firing on a structure runs through the same source-tracked modifier pipeline as any other attack, so a siege piece's Breaching Shot bonus is a named modifier rather than a hidden add-on |
 | Mountains and the labored climb | `types.ts` (TERRAIN_RULES), `battle.ts` (`reachable`, `move`) | Rock costs foot 5, cavalry 6, wings 2. A unit that cannot afford a hex may still take one adjacent hex by spending its whole activation, so a range is slow rather than sealed |
 | §13 Cavalry and flying | `battle.ts` (`reachable`), `effects.ts` (`ChargeBonus`) | Anti-air, forest costs, Predatory Airspace, Diving Charge, Exposed |
 | §14 Abilities and clones | `effects.ts` | Twin Echo reference implementation |

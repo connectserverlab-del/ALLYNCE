@@ -102,3 +102,8 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — `PortalAttacked` only logs the final damage a siege piece does to a structure, unlike unit
+  combat which logs a full modifier breakdown. Now that firing on a structure runs through the same modifier
+  pipeline as any other attack (see the `attackStructure` fix in this pass), the breakdown is available for free;
+  carrying it onto the event would let a future siege UI show a player why a shot did what it did, the same way
+  the attack log already does for unit-on-unit combat.

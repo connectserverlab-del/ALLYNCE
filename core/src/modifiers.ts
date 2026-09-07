@@ -9,7 +9,7 @@ import { attackArc, type AttackArc } from "./hex.js";
 import { privileges, commandRadiusOf } from "./ranks.js";
 import { kingdomMods } from "./kingdom.js";
 
-export interface CombatContext { attacker?: UnitState; defender?: UnitState; arc?: AttackArc; ranged?: boolean; reaction?: boolean }
+export interface CombatContext { attacker?: UnitState; defender?: UnitState; arc?: AttackArc; ranged?: boolean; reaction?: boolean; structureTarget?: boolean }
 
 /**
  * Modifier pipeline. Every contribution records its source so the UI can show the breakdown
@@ -63,10 +63,14 @@ export function computeStat(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: C
   // 7. Ability conditionals and platoon orders (data-driven)
   if (!u.isClone) mods.push(...abilityModifiers(b, u, stat, ctx));
 
-  // 8. Siege: breaching shot against fortified targets
-  if (stat === "ATK" && ctx.attacker === u && d.siege && ctx.defender?.pos && d.passives.includes("ABL_BREACHING_SHOT")) {
-    const t = b.terrainAt(ctx.defender.pos);
-    if (t === "Fortification" || t === "Ruins" || t === "Trench") mods.push({ source: "Breaching Shot", stat, value: d.siege.structureAtk });
+  // 8. Siege: breaching shot against fortified targets, or against a structure (portal) itself
+  if (stat === "ATK" && ctx.attacker === u && d.siege && d.passives.includes("ABL_BREACHING_SHOT")) {
+    if (ctx.structureTarget) {
+      mods.push({ source: "Breaching Shot", stat, value: d.siege.structureAtk });
+    } else if (ctx.defender?.pos) {
+      const t = b.terrainAt(ctx.defender.pos);
+      if (t === "Fortification" || t === "Ruins" || t === "Trench") mods.push({ source: "Breaching Shot", stat, value: d.siege.structureAtk });
+    }
   }
 
   // 9. Holding: buildings and completed research
