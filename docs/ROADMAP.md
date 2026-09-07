@@ -102,3 +102,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — now that a battle's duels, order flags, hidden-after-attack marks, intercept use and
+  timed terrain live on the `Battle` instance instead of as module-level state (this pass; see `core/src/state.ts`),
+  `core/src/save.ts` could carry them into `BattleSave` too. Right now a save mid-Formal-Duel, mid-Silent-Directive
+  or with unexpired smoke on the field round-trips clean but silently forgets all four: `saveBattle`/`loadBattle`
+  never mention any of them. A single save-format bump could close all four gaps at once rather than hunting
+  them one at a time, the same way a save/load round-trip has already turned up at least one other silently
+  dropped field on this project.

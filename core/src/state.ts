@@ -36,6 +36,19 @@ export class Battle {
   readonly captures: Capture[] = [];
   /** Per side, the unit definitions its warrants name. Subduing one of these is worth a card. */
   readonly wanted = new Map<string, Set<string>>();
+  /**
+   * Per-round effect flags, all keyed by unit uid rather than by object reference. Uids are only unique
+   * within one Battle (a fresh counter per instance), so these must live here rather than as module-level
+   * state shared by every Battle in the process — two battles that ever coexist, sequentially or not,
+   * would otherwise read and clear each other's duels, order flags and hidden-after-attack marks.
+   */
+  readonly duels = new Map<string, string>();
+  readonly orderFlags = new Map<string, string>();
+  readonly hideAfterAttack = new Set<string>();
+  readonly interceptUsed = new Set<string>();
+  readonly tempPreventRouted = new Set<string>();
+  /** Terrain placed by abilities (smoke, briar snare) with a lifetime in rounds, this battle's own. */
+  readonly timedTerrain: Array<{ key: string; rounds: number }> = [];
   readonly rng: Rng;
   width: number; height: number;
   activeSide = "A";
