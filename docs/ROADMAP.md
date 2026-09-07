@@ -102,3 +102,9 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — tie the Surrender win condition to rank instead of leaving it a free choice: a side may
+  only offer surrender while a unit of at least Company-leading rank (per its own faction's ladder) is standing,
+  and once the army leader is dead and no such rank survives, surrender should fire automatically rather than
+  waiting on a decision nobody left on the field can make. This gives the rank ladders — already mechanically
+  load-bearing in combat — a say in which of the three universal win conditions actually ends a battle, instead
+  of leaving Surrender as the one win condition rank never touches.
