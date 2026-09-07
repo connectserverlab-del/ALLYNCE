@@ -6,7 +6,7 @@ import { doctrineState } from "./composition.js";
 import { commandBonus } from "./command.js";
 import { moraleBand } from "./morale.js";
 import { attackArc, type AttackArc } from "./hex.js";
-import { privileges, commandRadiusOf } from "./ranks.js";
+import { privileges, commandRadiusOf, CHARGE_BONUS_MIN_HEXES } from "./ranks.js";
 import { kingdomMods } from "./kingdom.js";
 
 export interface CombatContext { attacker?: UnitState; defender?: UnitState; arc?: AttackArc; ranged?: boolean; reaction?: boolean }
@@ -77,6 +77,7 @@ export function computeStat(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: C
     const pv = privileges(b, u);
     if (stat === "ATK" && ctx.reaction && pv.twoSwords) mods.push({ source: "Rank: two swords (reaction)", stat, value: 50 });
     if (stat === "DEF" && u.pos && b.terrainAt(u.pos) === "Fortification" && castleLordNearby(b, u)) mods.push({ source: "Rank: castle lord nearby", stat, value: 100 });
+    if (stat === "ATK" && pv.chargeBonus && u.chargeMoved >= CHARGE_BONUS_MIN_HEXES) mods.push({ source: "Rank: lance charge", stat, value: pv.chargeBonus });
   }
 
   // Divine entities' stats scale down with lost anchors

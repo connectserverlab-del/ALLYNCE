@@ -38,7 +38,8 @@ where they conflict.**
   doctrine, succession, combat, morale, effects, clones, rituals, divine entities, portals, objectives, utility AI.
 - Irregular map generator with mountains, valleys, trenches, mud, rivers, fords, roads, ruins, fortifications.
 - Win conditions (wipeout, leader killed, surrender), army leaders per side.
-- Samurai and Shinobi rank ladders with privileges and movement traits, Shadow Step.
+- Samurai and Shinobi rank ladders with privileges and movement traits, Shadow Step. Knight rank ladder (14
+  ranks, Page to King) with its own lance-charge ATK privilege. See `docs/knight-ranks.md`.
 - Fusion (Paired Line, Gate Wardens, Twinwing Drake, Calamity Form). Siege pieces (set up, minimum range, breaching
   shot, smoke shell, concussive blast). Cavalry (lance charge, hit and fade).
 - 17 unit concepts with cutouts, 2 battlefield paintings, 1 HUD material sheet.
@@ -76,7 +77,8 @@ where they conflict.**
    40 back toward 60.
 4. **Old item:** Do not scale the UI until the three decisions in the sample page are
    answered (map look, command bar material, field size).
-2. Knight, Dragon Host and Ritual Cult rank ladders with one mechanical trait each per rank.
+2. Dragon Host and Ritual Cult rank ladders with one mechanical trait each per rank. (Knight ladder is done —
+   see Done, above.)
 3. Remaining unit art (see `pending` in `art/ASSET_MANIFEST.json`), then construction sheets for approved units.
 4. Map generator: named biomes (Ashfall, Marsh, Highland pass), scenario-authored overrides on top of generated ground,
    deployment-zone balance check (path cost between anchors within 10 percent both ways).
@@ -102,3 +104,11 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — Dragon Host's rank ladder should carry its own aerial trait the way Knight now carries
+  lance charge: a "diving charge" ATK bonus keyed to altitude lost this activation (flying from HighGround down
+  onto the target) rather than hexes moved, so the ladder rewards the dive itself and not just distance covered.
+- 2026-09-07: Proposal — Ritual Cult cannot unlock extra commanders or elites (specialist teams only), so its
+  ladder should not gate `canLead` the way the three army ladders do. Instead, key its ranks to ritual mastery:
+  faster Progress accrual, a higher Instability ceiling before a hold turns dangerous, or an extra linked circle
+  a synchronized release can reach. Same data shape (`RankLadder`, `RankPrivileges`), a different mechanical
+  axis to match a faction that fields teams, not armies.
