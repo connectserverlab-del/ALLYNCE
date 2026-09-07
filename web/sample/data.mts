@@ -94,6 +94,17 @@ const sideGroup = (ids: string[]) => { const m = new Map<string, number>(); for 
 const board = rollBoard(reg, k, deckList);
 acceptContract(reg, k, board.find((c) => c.stars >= 5)?.id ?? board[0]!.id, deckList);
 
+/**
+ * The full catalogue behind the Deck and Rites screens: every card that could be sleeved, not only the
+ * ones the starter deck happened to pick. The screens edit `main`/`side` in the browser and re-run the
+ * bundled `validateDeck` against this pool, so it has to carry everything a legality check needs —
+ * `limit` and `ownedN` for a unit card, `copyLimit` for a side card — rather than the page inventing it.
+ */
+const pool = [...reg.units.values()].filter((d) => copyLimit(reg, d.id) > 0)
+  .map((d) => ({ ...unitCard(d.id), ownedN: k.collection[d.id] ?? 0 }))
+  .sort((a, c) => a.stars - c.stars || a.name.localeCompare(c.name));
+const sidePool = sideGroup([...reg.sideCards.keys()]);
+
 const out = {
   map, terrainRules: TERRAIN_RULES,
   battle: {
@@ -110,8 +121,8 @@ const out = {
     playableSide: playableSideCards(b, "B").map((x) => ({ id: x.card.id, name: x.card.name, materials: x.materials.map((m) => b.def(m).name) })),
     morale: { A: ctrl.moraleSummary("A"), B: ctrl.moraleSummary("B") },
   },
-  deck: { ...deckList, cards: group(deckList.main), side: sideGroup(deckList.side), validation: validateDeck(reg, deckList, { collection: k.collection }), curve: STARTER_CURVE,
-    owned: Object.fromEntries(deckList.main.map((id) => [id, k.collection[id] ?? 0])),
+  deck: { ...deckList, cards: group(deckList.main), side: sideGroup(deckList.side), sideIds: deckList.side, pool, sidePool,
+    collection: k.collection, validation: validateDeck(reg, deckList, { collection: k.collection }), curve: STARTER_CURVE,
     missing: missingForDeck(reg, deckList, k.collection) },
   warrants: {
     rules: reg.wanted,
