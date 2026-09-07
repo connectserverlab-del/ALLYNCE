@@ -102,3 +102,7 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — a rank privilege that reads the battlefield's own shape rather than a flat bonus: a
+  unit that has held the same trench or high-ground hex for two full rounds gets a "dug in" arc widening
+  (its rear arc shrinks, front widens) so odd-shaped ground rewards patience, not just position. Would sit
+  next to the existing rank ladders as one more mechanically weighty privilege rather than a new system.
