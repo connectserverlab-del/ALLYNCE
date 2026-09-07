@@ -102,3 +102,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — a generic fusion recipe (no named result unit) currently builds its stat block from
+  `{ ...strongest, ... }` in `fusion.ts`, where "strongest" means the higher ATK+DEF input. That silently carries
+  the `rank` field along for the ride: fuse a ranked commander beside a plain foot soldier with a bigger stat
+  total and the fused body inherits the foot soldier's rank, quietly dropping whatever command radius, mounted
+  movement or banner-morale privilege the commander's rank carried. Rank ladders are meant to have mechanical
+  weight; a fusion shouldn't be a way to launder it away by accident. A generic recipe could instead keep the
+  higher-ranked input's rank explicitly (by ladder position, not by raw stats) unless the recipe names otherwise.

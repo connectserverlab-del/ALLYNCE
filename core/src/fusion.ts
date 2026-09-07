@@ -99,6 +99,8 @@ export function fuse(b: Battle, units: UnitState[], recipeId: string): UnitState
   fused.fusedFrom = units.map((u) => u.uid);
   if (r.result.rounds) fused.fusionRoundsLeft = r.result.rounds;
   b.place(fused, pos);
+  // the army leader may be fused whether or not it belongs to a platoon; keep leaderUid pointing at a live unit
+  if (side.leaderUid && units.some((u) => u.uid === side.leaderUid)) side.leaderUid = fused.uid;
   // platoon bookkeeping: the fused unit takes the anchor's slot; other inputs leave the roster
   if (platoonId) {
     const p = b.platoon(platoonId);
@@ -106,7 +108,6 @@ export function fuse(b: Battle, units: UnitState[], recipeId: string): UnitState
     p.commanderUid = swap(p.commanderUid); p.secondUid = swap(p.secondUid); p.eliteUid = swap(p.eliteUid);
     p.footUids = p.footUids.map((x) => (x === anchor.uid ? fused.uid : x)).filter((x) => !others.some((o) => o.uid === x));
     for (const o of others) { if (p.commanderUid === o.uid) p.commanderUid = null; if (p.secondUid === o.uid) p.secondUid = null; if (p.eliteUid === o.uid) p.eliteUid = null; }
-    if (side.leaderUid && units.some((u) => u.uid === side.leaderUid)) side.leaderUid = fused.uid;
   }
   b.log("Fusion", { recipe: r.id, inputs: units.map((u) => u.uid), result: fused.uid, name: def.name, hp: fused.hp, atk: def.atk, def: def.def });
   return fused;
