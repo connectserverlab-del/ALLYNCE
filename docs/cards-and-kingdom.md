@@ -109,7 +109,9 @@ A permanent base that persists between battles.
 
 Everything the holding grants arrives in battle as a **named, source-tracked modifier**. "Forge 2" and
 "Research: Forged Edge" appear as their own lines in the attack breakdown, so any number on the field can be
-traced back to something you built.
+traced back to something you built. A study that grants morale instead of a stat, such as Hearthfire, reaches
+each unit through the same event log every other morale change uses, named "Research: Hearthfire" rather than a
+silent number change.
 
 | Building | What it carries into battle |
 |---|---|

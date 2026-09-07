@@ -3,6 +3,7 @@ import type { Role, Modifier } from "./types.js";
 import type { Battle } from "./state.js";
 import { Rng } from "./rng.js";
 import { newWantedState, type WantedState } from "./wanted.js";
+import { changeMorale } from "./morale.js";
 
 export type ResourceId = "koku" | "iron" | "timber" | "silver";
 export type Resources = Partial<Record<ResourceId, number>>;
@@ -234,13 +235,14 @@ function pickStars(rng: Rng, banner: BannerDef, floorBonus: number): number {
 
 export interface KingdomEffects {
   armyCapacity: number; fusionCharges: number; ritualProgress: number; continuityRounds: number;
-  movement: number; commandRadius: number; morale: number;
+  movement: number; commandRadius: number;
+  moraleMods: Array<{ source: string; value: number }>;
   statMods: Array<{ source: string; stat: "ATK" | "DEF"; value: number; role?: Role }>;
 }
 
 /** Everything the holding contributes to a battle, each entry named so it shows up in the modifier breakdown. */
 export function kingdomEffects(reg: Registry, k: KingdomState): KingdomEffects {
-  const e: KingdomEffects = { armyCapacity: 0, fusionCharges: 1, ritualProgress: 0, continuityRounds: 0, movement: 0, commandRadius: 0, morale: 0, statMods: [] };
+  const e: KingdomEffects = { armyCapacity: 0, fusionCharges: 1, ritualProgress: 0, continuityRounds: 0, movement: 0, commandRadius: 0, moraleMods: [], statMods: [] };
   for (const b of BUILDING_IDS) {
     const lvl = k.levels[b]; if (!lvl) continue;
     const def = reg.kingdom.buildings[b]; const eff = def.effect; if (!eff) continue;
@@ -263,7 +265,7 @@ export function kingdomEffects(reg: Registry, k: KingdomState): KingdomEffects {
       case "ContinuityRounds": e.continuityRounds += eff.value; break;
       case "RitualProgress": e.ritualProgress += eff.value; break;
       case "FusionCharges": e.fusionCharges += eff.value; break;
-      case "Morale": e.morale += eff.value; break;
+      case "Morale": e.moraleMods.push({ source: `Research: ${r.name}`, value: eff.value }); break;
     }
   }
   return e;
@@ -275,7 +277,7 @@ export function applyKingdom(b: Battle, side: string, k: KingdomState): KingdomE
   b.kingdomEffects.set(side, e);
   const s = b.sides.get(side);
   if (s) { s.armyCapacity += e.armyCapacity; s.fusionCharges = e.fusionCharges; }
-  for (const u of b.activeUnits(side)) u.morale = Math.min(100, u.morale + e.morale);
+  for (const u of b.activeUnits(side)) for (const m of e.moraleMods) changeMorale(b, u, m.value, m.source);
   b.log("KingdomApplied", { side, holding: k.name, armyCapacity: e.armyCapacity, fusionCharges: e.fusionCharges, research: k.research.done.length });
   return e;
 }
