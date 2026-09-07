@@ -21,9 +21,21 @@ export interface MapSpec {
   river?: boolean; trenches?: boolean; ruins?: boolean; name?: string;
 }
 export interface MapHex { q: number; r: number; terrain: Terrain; elevation: number }
+/**
+ * Named ground, so a scenario can pin a ritual, portal or objective to "the ruins" or "the road's
+ * midpoint" instead of a fixed [q, r] pair that only makes sense on one generated seed. A feature that
+ * did not generate on a given seed (no river, no ruins) resolves as an empty array; `resolvePlacement`
+ * in `placement.ts` falls back to `midpoint` when that happens.
+ */
+export interface Landmarks {
+  midpoint: Hex;
+  trenchA: Hex[]; trenchB: Hex[];
+  ruins: Hex[]; fortification: Hex[]; ford: Hex[]; road: Hex[];
+}
 export interface GeneratedMap {
   name: string; seed: number; width: number; height: number;
   hexes: MapHex[]; deployZones: { A: Hex[]; B: Hex[] }; anchors: { A: Hex; B: Hex };
+  landmarks: Landmarks;
   features: string[];
 }
 
@@ -169,41 +181,61 @@ export function generateMap(spec: MapSpec): GeneratedMap {
 
   // --- 6. Road: cheapest path between anchors; crossing water becomes a ford ---
   const road = cheapestPath(A, B, (h) => inMask(h) && terrain.get(hexKey(h)) !== "Mountain", (h) => { const t = terrain.get(hexKey(h))!; return t === "Water" ? 6 : t === "Forest" ? 3 : t === "Mud" ? 3 : t === "HighGround" ? 2 : 1; });
+  const ford: Hex[] = [];
   for (const h of road) {
     const k = hexKey(h); const t = terrain.get(k)!;
-    if (t === "Water") terrain.set(k, "Ford");
+    if (t === "Water") { terrain.set(k, "Ford"); ford.push(h); }
     else if (t === "Open" || t === "Valley" || t === "Mud") terrain.set(k, "Road");
   }
   if (road.length) features.push(`road of ${road.length} hexes`);
 
   // --- 7. Trenches dug in front of each deployment zone, facing the enemy ---
+  const trenchA: Hex[] = [], trenchB: Hex[] = [];
   if (spec.trenches !== false) {
-    for (const [mine, theirs] of [[A, B], [B, A]] as Array<[Hex, Hex]>) {
+    for (const [mine, theirs, into] of [[A, B, trenchA], [B, A, trenchB]] as Array<[Hex, Hex, Hex[]]>) {
       const front = passHexes.filter((h) => hexDistance(h, mine) >= 7 && hexDistance(h, mine) <= 9 && hexDistance(h, theirs) < hexDistance(mine, theirs) && ["Open", "Valley", "Mud"].includes(terrain.get(hexKey(h))!));
       front.sort((x, y) => hexDistance(x, theirs) - hexDistance(y, theirs));
       let n = 0;
-      for (const h of front) { if (n >= 7) break; if (!road.some((rd) => hexKey(rd) === hexKey(h))) { terrain.set(hexKey(h), "Trench"); n++; } }
+      for (const h of front) { if (n >= 7) break; if (!road.some((rd) => hexKey(rd) === hexKey(h))) { terrain.set(hexKey(h), "Trench"); into.push(h); n++; } }
       if (n) features.push(`${n} trench hexes near ${hexKey(mine)}`);
     }
   }
 
   // --- 8. Ruins on a mid-map rise; a fortification near the defender ---
+  const ruins: Hex[] = [];
   if (spec.ruins !== false) {
     const mid = passHexes.filter((h) => Math.abs(hexDistance(h, A) - hexDistance(h, B)) <= 2 && terrain.get(hexKey(h)) === "HighGround");
-    if (mid.length) { const c = mid[rng.int(mid.length)]!; for (const h of [c, ...hexNeighbors(c)]) if (inMask(h) && ["HighGround", "Open", "Forest"].includes(terrain.get(hexKey(h))!)) terrain.set(hexKey(h), "Ruins"); features.push(`ruins at ${hexKey(c)}`); }
+    if (mid.length) {
+      const c = mid[rng.int(mid.length)]!;
+      for (const h of [c, ...hexNeighbors(c)]) if (inMask(h) && ["HighGround", "Open", "Forest"].includes(terrain.get(hexKey(h))!)) { terrain.set(hexKey(h), "Ruins"); ruins.push(h); }
+      features.push(`ruins at ${hexKey(c)}`);
+    }
   }
   const fortSpots = passHexes.filter((h) => hexDistance(h, B) >= 2 && hexDistance(h, B) <= 3 && ["Open", "HighGround"].includes(terrain.get(hexKey(h))!));
-  for (const h of fortSpots.slice(0, 2)) terrain.set(hexKey(h), "Fortification");
+  const fortification = fortSpots.slice(0, 2);
+  for (const h of fortification) terrain.set(hexKey(h), "Fortification");
 
   // Deployment zones must stay standable
   for (const z of [...deployZones.A, ...deployZones.B]) { const k = hexKey(z); if (["Water", "Mountain", "Trench"].includes(terrain.get(k)!)) terrain.set(k, "Open"); }
 
+  // A neutral hex roughly between the two armies: the middle of the road where one was cut, otherwise
+  // the passable hex closest to the geometric midpoint. Always resolvable, so it doubles as the fallback
+  // for a feature that did not generate on this seed.
+  const midpoint = road.length ? road[Math.floor(road.length / 2)]! : (() => {
+    const mid = { x: (hexToPixel(A).x + hexToPixel(B).x) / 2, y: (hexToPixel(A).y + hexToPixel(B).y) / 2 };
+    return passHexes.slice().sort((x, y) => hexDist2(hexToPixel(x), mid) - hexDist2(hexToPixel(y), mid))[0]!;
+  })();
+
   return {
     name: spec.name ?? `Field ${spec.seed}`, seed: spec.seed, width: W, height: H,
     hexes: hexes.map((h) => ({ q: h.q, r: h.r, terrain: terrain.get(hexKey(h))!, elevation: tier.get(hexKey(h))! })),
-    deployZones, anchors: { A, B }, features,
+    deployZones, anchors: { A, B },
+    landmarks: { midpoint, trenchA, trenchB, ruins, fortification, ford, road },
+    features,
   };
 }
+
+function hexDist2(p: { x: number; y: number }, q: { x: number; y: number }): number { const dx = p.x - q.x, dy = p.y - q.y; return dx * dx + dy * dy; }
 
 function largestComponent(cells: Set<string>): Set<string> {
   const seen = new Set<string>(); let best = new Set<string>();
