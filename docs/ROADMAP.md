@@ -102,3 +102,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-07: Proposal — `CaptureHold` targets one fixed hex, but an odd-shaped map usually has two chokepoints
+  worth holding (both fords on a river map, both passes on a highland map), and a defender's real objective is
+  "hold them together", not either alone. A composite `CaptureHoldAll` that lists several hexes and is satisfied
+  only once every one of them individually reaches its own round count would express a pincer defense without a
+  new mechanic: it reads the same per-hex counters `CaptureHold` already keeps, just several of them at once.
+  Would need each named `Escort` and `CaptureHold` win state to log which of its component hexes is still
+  contested, the way a multi-part objective ought to explain itself on the HUD.
