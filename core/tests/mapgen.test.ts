@@ -53,7 +53,7 @@ describe("irregular battlefield generator", () => {
     expect(rf.get("5,4")?.cost).toBe(1);
     const rc = ctrl.reachable(cav);
     expect(rc.has("13,12")).toBe(false);           // a trench is closed to horses outright, not merely slow
-    expect(rc.get("12,13")?.cost).toBe(3);
+    expect(rc.get("12,13")?.cost).toBe(1);         // Knight-Errant rank: surefoot, mud costs 1 instead of 3
   });
 
   it("charges break in rough ground and elevation gives attackers an edge", async () => {

@@ -45,7 +45,7 @@ export function terrainCostFor(b: Battle, u: UnitState, t: Terrain): number | nu
   if (t === "Forest" && traits.canopy && cost !== null) cost = 1;               // tree to tree
   if (t === "Mud" && traits.surefoot && cost !== null) cost = Math.min(cost, 1);
   if ((t === "Water" || t === "Ford") && traits.waterwalk) cost = 1;
-  if (t === "Mountain" && traits.climber) cost = 3;
+  if (t === "Mountain" && traits.climber && cost !== null) cost = Math.min(cost, 3);
   return cost;
 }
 

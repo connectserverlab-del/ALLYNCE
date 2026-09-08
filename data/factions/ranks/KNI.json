@@ -1,0 +1,23 @@
+{
+  "faction": "KNI",
+  "notes": "Eight ranks, ordered low to high. Each tier adds one new mechanical trait on top of the last, the same escalating shape as the Samurai and Shinobi ladders. Surefoot (drilled marching order that does not bog down in Mud) is the Knight Army's signature movement trait, matching its defensive, disciplined identity.",
+  "ranks": [
+    { "id": "SQUIRE", "title": "Squire", "tier": 0, "description": "Levy attendant, unarmored for war.", "privileges": {}, "movement": {}, "canLead": [] },
+    { "id": "MAN_AT_ARMS", "title": "Man-at-Arms", "tier": 1, "description": "Line infantry of the Bastion host.", "privileges": {}, "movement": {}, "canLead": [] },
+    { "id": "SERGEANT_AT_ARMS", "title": "Sergeant-at-Arms", "tier": 2, "description": "Veteran of the wall: siege crew and portal wardens. Drilled marching order that never breaks step in the mud.", "privileges": {}, "movement": { "surefoot": true }, "canLead": ["Patrol"] },
+    { "id": "KNIGHT_ERRANT", "title": "Knight-Errant", "tier": 3, "description": "Mounted lancer, rides to war on a warhorse trained to the charge.", "privileges": { "mounted": "war" }, "movement": { "surefoot": true }, "canLead": ["Patrol", "Platoon"] },
+    { "id": "KNIGHT_BANNERET", "title": "Knight-Banneret", "tier": 4, "description": "Sworn champion, always mounted, and strikes back hard when set upon.", "privileges": { "mounted": "always", "twoSwords": true, "commandRadiusBonus": 1 }, "movement": { "surefoot": true }, "canLead": ["Patrol", "Platoon"] },
+    { "id": "CASTELLAN", "title": "Castellan", "tier": 5, "description": "Keeper of a Bastion hold; garrisons under a castellan's watch defend it better.", "privileges": { "mounted": "always", "twoSwords": true, "commandRadiusBonus": 1, "castle": true }, "movement": { "surefoot": true }, "canLead": ["Patrol", "Platoon"] },
+    { "id": "MARSHAL", "title": "Marshal", "tier": 6, "description": "Field commander of the Bastion host, banner raised for the whole line to see.", "privileges": { "mounted": "always", "twoSwords": true, "commandRadiusBonus": 2, "castle": true, "banner": true }, "movement": { "surefoot": true }, "canLead": ["Platoon", "Company", "Battalion"] },
+    { "id": "OATHBREAKER_KING", "title": "King", "tier": 7, "description": "Crowned sovereign of the Knight Army, oath and banner both.", "privileges": { "mounted": "always", "twoSwords": true, "commandRadiusBonus": 3, "castle": true, "banner": true, "supreme": true }, "movement": { "surefoot": true }, "canLead": ["Army"] }
+  ],
+  "privilegeRules": {
+    "surefoot": "Mud costs 1 Movement instead of 2 for Foot, 3 for Cavalry.",
+    "twoSwords": "+50 ATK on reaction attacks (zone-of-control and Overwatch strikes).",
+    "mounted": "'war' grants +1 Movement while any enemy is within 6 hexes; 'always' grants +1 Movement unconditionally.",
+    "commandRadiusBonus": "Added to the unit's command radius for auras and morale recovery.",
+    "banner": "Platoon members inside command radius recover +5 additional Morale in the Command Phase.",
+    "castle": "Allies inside command radius standing on Fortification gain a further +100 DEF.",
+    "supreme": "Reserved for campaign scale; not used in the vertical slice."
+  }
+}
