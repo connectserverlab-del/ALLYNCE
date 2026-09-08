@@ -54,6 +54,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | Weather and time of day | `weather.ts`, `data/rules/weather.json` | Round modifiers rolled once per battle from the match seed; Rain reshapes terrain at setup, Fog and Night are named, source-tracked combat modifiers (see below) |
 
 | Replay | `replay.ts` | `Replay` steps a cursor through `Battle.events` one at a time (or jumps by round/index); `describeEvent` narrates each entry by name, resolved from `Battle.units` |
+| Commands (`Q-21`) | `commands.ts` | `Command`, a serialisable record of every mutating `BattleController` entry point and card play; `applyCommand` is the single funnel, and `Battle.commands` is the resulting log. See "Commands" under Determinism below |
 
 | Irregular battlefields | `mapgen.ts` | Seeded playable-mask carve, elevation, rivers with fords, trenches, mud, roads, ruins and fortifications; fourteen terrain types |
 | Cards and decks | `cards.ts`, `data/cards/` | 100-card main deck, 20-card ritual/fusion side deck, star scale, tribute/ritual/fusion summoning; see `docs/cards-and-kingdom.md` |
@@ -291,6 +292,29 @@ later when it finally changes what someone does. A detector that names the wrong
 than none. Hashing only the state misses two different paths that happen to land on the same board.
 `core/tests/determinism.test.ts` pins this: ten separate corruptions of unlogged state each move the
 digest while leaving the event log byte-identical.
+
+### Commands
+
+`core/src/commands.ts` exports a `Command` type — a plain, serialisable record of every mutating
+`BattleController` entry point (`move`, `attack`, `useAbility`, `channel`, `surrender`, the phase
+transitions, and the card-play functions in `cards.ts`: `summonFromHand`, `ritualSummon`,
+`fusionSummon`, `playStratagem`) — and `applyCommand(ctl, cmd)`, the single funnel that resolves a
+command's uid references to live units, portals and rituals and calls the one method that already
+owns that mutation. `Battle.commands` is the resulting log: every command `applyCommand` has actually
+applied, in order. A command that throws is never appended, since it never mutated the battle.
+
+This is `Q-21`, the netcode line's foundation: lockstep sends commands, not state, so a command has to
+survive `JSON.stringify`/`parse` and a network hop unchanged, which is why every field is a uid string
+or a plain `Hex`, never a live object reference. `applyCommand` does not replace the named
+`BattleController` methods — they stay the implementation and every existing caller (the AI, the match
+runner) keeps calling them directly — it is the layer a network client or a replay drives instead, so
+the two paths can never validate a move differently. `core/tests/commands.test.ts` proves the funnel:
+for every command kind, applying it through `applyCommand` on one battle reaches the same event log
+(by `hashEvents`) as calling the direct method on an identical forked battle, and a command that fails
+its own validation is never logged as if it had applied.
+
+`Q-22` (rebuild a battle from its command log alone) and `Q-23` (a pure `isLegal` pre-check) build on
+this directly; neither is in scope here.
 
 ## Worked example (from the brief §7)
 

@@ -810,3 +810,14 @@ passes; this one doesn't resolve it either.
   migration that quietly drops something fails loudly the same way `Q-20` already fails a battle that reaches
   for `Math.random()`. Proposal only; both are their own queue items and this only shapes how their tests get
   written once taken.
+- 2026-09-08 proposal: `Q-21` landed — `core/src/commands.ts` funnels every mutation through `applyCommand`,
+  but the AI (`ai.ts`) and the match runner (`match.ts`) still call `BattleController` methods directly, which
+  is correct for `Q-21`'s own scope (it had to prove the funnel matches the existing methods before anything
+  should route through it exclusively). Once `Q-22` (replay-from-commands) and `Q-23` (`isLegal`) both land,
+  a natural follow-on is switching the AI's own action selection to *emit* `Command` values instead of calling
+  `ctrl.move`/`ctrl.attack`/etc. directly, with a thin adapter that still applies them via `applyCommand`. That
+  would make `runMatch`'s output a command log by construction rather than something `Q-22` has to reconstruct
+  after the fact, and it means the AI's decisions are already in the exact shape a remote peer or a replay
+  file needs, with no second code path to keep in sync. Proposal only — depends on `Q-22`/`Q-23` first, and on
+  a decision that the AI should be the thing generating commands rather than a UI layer that does not exist
+  yet (see `OWN-4`).

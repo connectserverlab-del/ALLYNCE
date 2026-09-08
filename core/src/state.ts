@@ -7,6 +7,7 @@ import type { Portal } from "./portals.js";
 import type { DeckState } from "./cards.js";
 import type { KingdomEffects } from "./kingdom.js";
 import type { WeatherId, TimeOfDayId } from "./weather.js";
+import type { Command } from "./commands.js";
 
 export type Phase = "Command" | "Activation" | "Objective" | "End" | "Ended";
 
@@ -32,6 +33,8 @@ export class Battle {
   readonly decks = new Map<string, DeckState>();
   readonly kingdomEffects = new Map<string, KingdomEffects>();
   readonly events: GameEvent[] = [];
+  /** Every command `applyCommand` (`commands.ts`) has successfully applied, in order — the replayable record a client sends over the network instead of state. A command that threw is never appended: it never mutated the battle. */
+  readonly commands: Command[] = [];
   /** Enemies subdued rather than killed, in the order they were taken. Wanted contracts read this. */
   readonly captures: Capture[] = [];
   /** Per side, the unit definitions its warrants name. Subduing one of these is worth a card. */
