@@ -257,6 +257,17 @@ grants still shows up as a named, sourced entry in `computeStat`'s breakdown:
 
 | Battlefield generation | `mapgen.ts`, `data/terrain/terrain.json` | Irregular playable outline, rough terrain scatter, river/ford/road; terrain move cost and DEF bonus tables |
 
+## Randomness
+
+There is no shared battle-level RNG. `Battle` exposes a public `seed: number` and nothing else; every subsystem
+that needs randomness (`DeckState.shuffle`, `mapgen.ts`, `match.ts`'s AI turn order and post-match banner pull,
+`kingdom.ts` recruitment, `wanted.ts` warrant generation) builds its own short-lived `Rng` from that seed plus a
+fixed offset for its own concern (`b.seed + side.charCodeAt(0) + rounds`, `spec.seed ^ 0x5eed`, and so on). That
+keeps one subsystem's random draws from shifting another's: adding an AI decision never reshuffles a deck that
+draws from a different derived seed. An earlier `Battle.rng` field followed the seed but was never read by
+anything and has been removed; if a future subsystem wants battle-scoped randomness it should derive its own
+`Rng` from `seed` the same way the others do, not resurrect a shared instance.
+
 ## Worked example (from the brief §7)
 
 Foot soldier 1,500 base ATK, two matching neighbours (+100), full Doctrine (+100), commander order (+150) = 1,850.
