@@ -73,3 +73,11 @@ export function loadRegistry(): Registry {
 export function loadScenario<T = unknown>(name: string): T {
   return readJson<T>(`scenarios/${name}.json`);
 }
+
+/** The three universal win conditions (wipe out, kill the army leader, force a surrender) read their
+ *  numeric thresholds from here so no battle math is hardcoded in `battle.ts`. */
+export interface VictoryRulesConfig { surrenderMoraleThreshold: number; surrenderSustainedRounds: number }
+
+export function loadVictoryRules(): VictoryRulesConfig {
+  return readJson<VictoryRulesConfig>("rules/victory.json");
+}

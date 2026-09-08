@@ -12,7 +12,22 @@ import { commandRadiusRecovery, surroundedPenalty, moraleBand, changeMorale } fr
 import { doctrineState } from "./composition.js";
 import { evaluateObjective, markSynchronized, type ObjectiveDef, type ObjectiveProgress } from "./objectives.js";
 
-export interface VictoryRules { sides: Record<string, ObjectiveDef[]>; roundLimit: number; roundLimitWinner?: string }
+/** Consecutive End Phases a side has spent at or below the surrender threshold; one bad round shouldn't end a war. */
+const surrenderStreaks = new WeakMap<Battle, Map<string, number>>();
+function lowMoraleStreak(b: Battle): Map<string, number> {
+  let m = surrenderStreaks.get(b);
+  if (!m) { m = new Map(); surrenderStreaks.set(b, m); }
+  return m;
+}
+
+export interface VictoryRules {
+  sides: Record<string, ObjectiveDef[]>; roundLimit: number; roundLimitWinner?: string;
+  /** The three universal win conditions, on top of any scenario objectives above. All optional so
+   *  low-level tests that build a bare Battle keep their existing behavior unless they opt in. */
+  armyLeaderUid?: Record<string, string | null>;
+  surrenderMoraleThreshold?: number;
+  surrenderSustainedRounds?: number;
+}
 
 /**
  * Deterministic turn-state machine. Round = Command -> Alternating Activation -> Objective -> End.
@@ -294,14 +309,26 @@ export class BattleController {
       // all primary objectives satisfied -> win (objectives are ANDed; scenarios can encode OR by separate side entries later)
       if (status.length && status.some((s) => s.satisfied && (s.def.type !== "SurviveRounds" && s.def.type !== "DefendForRounds"))) { b.winner = side; b.winReason = status.filter((s) => s.satisfied).map((s) => s.def.type).join("+"); }
     }
+    // The three universal win conditions sit under any scenario objectives above: Wipeout, LeaderKilled, Surrender.
+    if (!b.winner) for (const side of b.sides.keys()) {
+      const other = [...b.sides.keys()].find((s) => s !== side);
+      if (!other) continue;
+      const living = [...b.activeUnits(side)].filter((u) => !u.isClone);
+      if (living.length === 0) { b.winner = other; b.winReason = "Wipeout"; break; }
+      const leaderUid = this.victory.armyLeaderUid?.[side];
+      if (leaderUid && b.units.get(leaderUid)?.defeated) { b.winner = other; b.winReason = "LeaderKilled"; break; }
+      const threshold = this.victory.surrenderMoraleThreshold;
+      if (threshold != null) {
+        const avg = Math.floor(living.reduce((s, u) => s + u.morale, 0) / living.length);
+        const streak = lowMoraleStreak(b);
+        const run = avg <= threshold ? (streak.get(side) ?? 0) + 1 : 0;
+        streak.set(side, run);
+        if (run >= (this.victory.surrenderSustainedRounds ?? 1)) { b.winner = other; b.winReason = "Surrender"; break; }
+      }
+    }
     if (!b.winner && b.round >= this.victory.roundLimit) {
       b.winner = this.victory.roundLimitWinner ?? "draw";
       b.winReason = "Round limit";
-    }
-    // command structure broken: a side with no living commanders or seconds and no rituals/portals loses morale war
-    if (!b.winner) for (const side of b.sides.keys()) {
-      const alive = [...b.activeUnits(side)].filter((u) => !u.isClone);
-      if (alive.length === 0) { b.winner = [...b.sides.keys()].find((s) => s !== side) ?? "draw"; b.winReason = "Enemy eliminated"; }
     }
     if (b.winner) b.log("BattleEnded", { winner: b.winner, reason: b.winReason });
   }

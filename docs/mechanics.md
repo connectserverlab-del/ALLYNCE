@@ -16,6 +16,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §13 Cavalry and flying | `battle.ts` (`reachable`), `effects.ts` (`ChargeBonus`) | Anti-air, forest costs, Predatory Airspace, Diving Charge, Exposed |
 | §14 Abilities and clones | `effects.ts` | Twin Echo reference implementation |
 | §15 Objectives | `objectives.ts` | Eleven composable types |
+| Universal win conditions | `battle.ts` (`evaluateVictory`), `data/rules/victory.json` | Wipeout, LeaderKilled, Surrender — always evaluated under any scenario objectives |
 | §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses |
 | §18 Architecture | all | Simulation is separate from presentation; every action logs a serializable event |
 
@@ -35,6 +36,29 @@ breakdown contains each named source.
 4. The attacker AI releases only when every live circle is Held (synchronized) or when instability reaches three
    stacks. A synchronized release manifests all three Sovereigns at full Anchors; anything else weakens the summon.
 5. Defenders win by collapsing two circles or surviving twelve rounds.
+
+## Universal win conditions
+
+Every battle is decided by one of three ways, on top of whatever objectives the scenario layers in:
+
+1. **Wipeout** — a side has no living, un-cloned units left on the field.
+2. **LeaderKilled** — a side's designated Army Leader is defeated. A scenario opts a side in by setting
+   `armyLeaderDefId` on that side in its scenario file; `buildScenario` resolves it to the deployed unit's
+   runtime id. Left unset, the condition stays inactive for that side — there is no default. **An Army Leader is
+   not a platoon Commander.** Platoon Commanders already have a Second and a succession line
+   (`command.ts`); wiring `LeaderKilled` to one would end the battle before succession ever fires, which is why
+   `Threefold Invocation` does not set this field yet — its Commanders are platoon-level, not army-level. The
+   roster has no King/Shogun/Kage-tier unique unit to point this at until one exists (see the brainstorm log).
+3. **Surrender** — a side's average morale among living, un-cloned units falls at or below
+   `surrenderMoraleThreshold` and stays there for `surrenderSustainedRounds` consecutive End Phases, both read
+   from `data/rules/victory.json`. The sustained window exists so one bad round of combat can't end a war outright;
+   morale climbing back above the threshold resets the streak.
+
+`BattleController.evaluateVictory()` checks scenario objectives first, then these three (Wipeout, LeaderKilled,
+Surrender, in that order per side), then the round limit as a last resort. `core/tests/victory.test.ts` exercises
+all three in isolation with bare battles; `core/tests/battle.test.ts` confirms the full Threefold Invocation
+scenario still runs its full objective/ritual/portal/succession sequence with Wipeout and Surrender both live and
+LeaderKilled correctly inactive.
 
 ## Unity port guidance
 
