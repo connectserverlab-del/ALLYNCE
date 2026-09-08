@@ -49,6 +49,8 @@ npm run assets      # rebuilds the asset registry from the data and from disk
 - **Fusion**: recipe-driven merging of adjacent units into one (Paired Line, Gate Wardens, Twinwing Drake, and the Calamity Form from the three Sovereigns), paid with Fusion charges.
 - **Siege and cavalry**: cannons per faction with set-up, minimum range and breaching shots (plus smoke shells and the Siegewyrm's concussive blast); cavalry per faction with lance charges that break in rough ground, and hit-and-fade riders.
 - **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. See `docs/samurai-ranks.md`.
+- **Marching**: a continuous, real-time layer over the same ground the hex rules fight on. A dragged order walks a squad at its slowest member's pace, forming up in ring slots around the leader; a straight line is routed over the hex grid and pulled tight into a few waypoints wherever it is blocked, and every walk is capped at 45 seconds scaled by distance. Deterministic: no clock, no randomness, same field and orders land on the same positions. See `core/src/march.ts`.
+- **Wanted board**: rotating warrants up to seven stars, weighted toward whatever the holding is actually short of; a subdue-not-kill capture in battle pays the writ and the copy into the collection instead of the kill.
 
 ## Engine note
 
