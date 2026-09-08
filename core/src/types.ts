@@ -38,7 +38,9 @@ export type Status =
   | "Guarded" | "Exposed" | "Suppressed" | "Hidden" | "Revealed"
   | "Silenced" | "Routed" | "Unstable";
 
-export type Terrain = "Open" | "Forest" | "HighGround" | "Fortification" | "Smoke" | "AntiAir" | "Water";
+export type Terrain =
+  | "Open" | "Forest" | "HighGround" | "Fortification" | "Smoke" | "AntiAir" | "Water"
+  | "Mountain" | "Mud" | "Trench" | "Ruins" | "Road" | "Ford";
 
 export interface StatusInstance { status: Status; roundsLeft: number; stacks?: number; source: string }
 

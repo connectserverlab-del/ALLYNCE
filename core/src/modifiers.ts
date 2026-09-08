@@ -50,8 +50,11 @@ export function computeStat(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: C
   // 6. Terrain
   if (u.pos && !d.flying) {
     const t = b.terrainAt(u.pos);
-    if (stat === "DEF" && t === "Fortification") mods.push({ source: "Terrain: Fortification", stat, value: 200 });
-    if (stat === "ATK" && t === "HighGround" && ctx.ranged) mods.push({ source: "Terrain: High Ground", stat, value: 100 });
+    if (stat === "DEF") {
+      const bonus = b.reg.terrainRules.defBonus[t];
+      if (bonus) mods.push({ source: `Terrain: ${t}`, stat, value: bonus });
+    }
+    if (stat === "ATK" && t === "HighGround" && ctx.ranged) mods.push({ source: "Terrain: High Ground", stat, value: b.reg.terrainRules.highGroundRangedAtk });
   }
 
   // 7. Ability conditionals and platoon orders (data-driven)

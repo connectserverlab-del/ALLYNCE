@@ -20,17 +20,26 @@ export interface CompositionRules {
   limits: { eliteSlotsPerPlatoon: number; uniqueCopiesPerArmy: number; bossDeityStartingDeployment: boolean; wizardsPerPlatoon: number };
 }
 
+/** Movement cost and defensive value of each rough-terrain kind. Every number here is a named modifier source. */
+export interface TerrainRules {
+  moveCost: Record<string, { default: number; cavalry?: number; flying?: number }>;
+  defBonus: Record<string, number>;
+  highGroundRangedAtk: number;
+}
+
 export class Registry {
   readonly units = new Map<string, UnitDef>();
   readonly abilities = new Map<string, AbilityDef>();
   readonly factions = new Map<string, FactionDef>();
   readonly rules: CompositionRules;
+  readonly terrainRules: TerrainRules;
 
-  constructor(units: UnitDef[], abilities: AbilityDef[], factions: Record<string, FactionDef>, rules: CompositionRules) {
+  constructor(units: UnitDef[], abilities: AbilityDef[], factions: Record<string, FactionDef>, rules: CompositionRules, terrainRules: TerrainRules) {
     for (const u of units) this.units.set(u.id, u);
     for (const a of abilities) this.abilities.set(a.id, a);
     for (const f of Object.values(factions)) this.factions.set(f.id, f);
     this.rules = rules;
+    this.terrainRules = terrainRules;
     this.validate();
   }
 
@@ -67,6 +76,7 @@ export function loadRegistry(): Registry {
     readJson<AbilityDef[]>("abilities/abilities.json"),
     readJson<Record<string, FactionDef>>("factions/factions.json"),
     readJson<CompositionRules>("compositions/platoon.json"),
+    readJson<TerrainRules>("terrain/terrain.json"),
   );
 }
 

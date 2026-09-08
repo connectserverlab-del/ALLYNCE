@@ -1,0 +1,11 @@
+{
+  "moveCost": {
+    "Forest": { "default": 2, "cavalry": 3, "flying": 2 },
+    "Mountain": { "default": 5 },
+    "Mud": { "default": 2 },
+    "Trench": { "default": 2 },
+    "Ford": { "default": 2 }
+  },
+  "defBonus": { "Fortification": 200, "Trench": 100, "Ruins": 50 },
+  "highGroundRangedAtk": 100
+}

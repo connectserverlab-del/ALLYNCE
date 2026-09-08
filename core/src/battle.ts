@@ -109,8 +109,8 @@ export class BattleController {
         const occ = b.unitAt(n);
         if (occ && (occ.side !== u.side || !passAllies)) continue;
         let step = 1;
-        if (!d.flying) { if (t === "Forest") step = d.roles.includes("Cavalry") ? 3 : 2; }
-        else if (t === "Forest") step = 2; // dense forest restricts flying
+        const mc = b.reg.terrainRules.moveCost[t];
+        if (mc) step = d.flying ? (mc.flying ?? 1) : (d.roles.includes("Cavalry") && mc.cavalry !== undefined ? mc.cavalry : mc.default);
         // Predatory Airspace: flying enemies cannot pass through a Dragon Flight commander's radius
         if (d.flying && this.inEnemyDragonAirspace(u, n)) step = 99;
         const cost = cur.cost + step;
