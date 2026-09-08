@@ -16,6 +16,7 @@ import type { KingdomData, ResearchDef, BannerDef } from "./kingdom.js";
 import type { WantedRules } from "./wanted.js";
 import type { MarchRules } from "./march.js";
 import type { WeatherRules } from "./weather.js";
+import type { BiomeDef } from "./mapgen.js";
 import { Registry, type CompositionRules } from "./registry.js";
 
 export { Registry } from "./registry.js";
@@ -58,4 +59,8 @@ export function loadScenario<T = unknown>(name: string): T {
 
 export function loadCampaign<T = unknown>(name: string): T {
   return readJson<T>(`campaign/${name}.json`);
+}
+
+export function loadBiomes(): Record<string, BiomeDef> {
+  return readJson<Record<string, BiomeDef>>("biomes/biomes.json");
 }

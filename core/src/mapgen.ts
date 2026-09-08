@@ -18,7 +18,23 @@ export interface MapSpec {
   forest?: number;
   /** 0..1 how rugged (mountain share). */
   rugged?: number;
+  /** 0..1 how much low ground turns to mud away from the river. Defaults to 0.5, matching the plain generator. */
+  wetness?: number;
   river?: boolean; trenches?: boolean; ruins?: boolean; name?: string;
+}
+
+/**
+ * A named region preset: a fixed bundle of `MapSpec` knobs so a scenario can ask for "Marsh" instead of
+ * hand-tuning noise parameters. The owner named three: Ashfall, Marsh, Highland Pass.
+ */
+export interface BiomeDef {
+  id: string; name: string; text: string;
+  spec: Partial<Pick<MapSpec, "forest" | "rugged" | "wetness" | "river" | "trenches" | "ruins">>;
+}
+
+/** Merge a biome preset with a seed and any per-battle overrides (overrides win). */
+export function biomeMapSpec(biome: BiomeDef, seed: number, overrides: Partial<MapSpec> = {}): MapSpec {
+  return { seed, name: biome.name, ...biome.spec, ...overrides };
 }
 export interface MapHex { q: number; r: number; terrain: Terrain; elevation: number }
 export interface GeneratedMap {
@@ -166,6 +182,11 @@ function buildMap(spec: MapSpec, seed: number): GeneratedMap {
     .slice(0, 30);
   const deployZones = { A: zone(A, B), B: zone(B, A) };
 
+  // River-adjacent and low-ground mud both loosen as `wetness` rises above its 0.5 default, and tighten below it.
+  const wetness = spec.wetness ?? 0.5;
+  const riverWetCut = 0.4 - 0.4 * (wetness - 0.5);
+  const lowGroundWetCut = 0.62 - 0.5 * (wetness - 0.5);
+
   // --- 4. River: from the highest passable source, greedy descent with a little wander; stops at the edge once long enough ---
   if (spec.river !== false) {
     const sources = passHexes.filter((h) => hexDistance(h, A) > 4 && hexDistance(h, B) > 4).sort((x, y) => elev.get(hexKey(y))! - elev.get(hexKey(x))!).slice(0, 12);
@@ -184,7 +205,7 @@ function buildMap(spec: MapSpec, seed: number): GeneratedMap {
         for (const h of path) if (!inZone(h)) terrain.set(hexKey(h), "Water");
         for (const h of path) for (const n of hexNeighbors(h)) {
           const k = hexKey(n);
-          if (inMask(n) && (terrain.get(k) === "Valley" || terrain.get(k) === "Open") && tier.get(k)! <= 1 && wetN.value(n.q * 0.7, n.r * 0.7) > 0.4) terrain.set(k, "Mud");
+          if (inMask(n) && (terrain.get(k) === "Valley" || terrain.get(k) === "Open") && tier.get(k)! <= 1 && wetN.value(n.q * 0.7, n.r * 0.7) > riverWetCut) terrain.set(k, "Mud");
         }
         features.push(`river of ${path.length} hexes`);
       }
@@ -192,7 +213,7 @@ function buildMap(spec: MapSpec, seed: number): GeneratedMap {
   }
   // Low wet ground away from the river is mud too
   let mud = 0;
-  for (const h of hexes) { const k = hexKey(h); if (terrain.get(k) === "Valley" && wetN.fractal(h.q * 0.35, h.r * 0.35, 2) > 0.62) { terrain.set(k, "Mud"); mud++; } }
+  for (const h of hexes) { const k = hexKey(h); if (terrain.get(k) === "Valley" && wetN.fractal(h.q * 0.35, h.r * 0.35, 2) > lowGroundWetCut) { terrain.set(k, "Mud"); mud++; } }
   features.push(`${mud} marsh mud hexes`);
 
   // --- 5. Forest: noise clusters on non-mountain, non-water ground ---

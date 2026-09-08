@@ -222,6 +222,12 @@ where they conflict.**
   time; `core/tests/company.test.ts` proves it for all four host factions and also proves the old one-leader
   roster still cannot. The new cards ship data-only, no art yet, per the sample-first art pipeline.
 
+### Done in the biome pass
+
+- Three named biomes (Ashfall, Marsh, Highland Pass) as data-defined presets over the battlefield generator's
+  existing knobs, plus a `wetness` knob so a wet or dry region reads that way in the mud it gets. Per-battle
+  overrides still win over the preset.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -240,6 +246,9 @@ where they conflict.**
    deployment-zone balance check (path cost between anchors within 10 percent both ways).
 
 4. Map generator: named biomes (Ashfall, Marsh, Highland pass), scenario-authored overrides on top of generated ground.
+
+4. Map generator: scenario-authored overrides on top of generated ground, deployment-zone balance check (path cost
+   between anchors within 10 percent both ways).
 5. AI: use trenches and high ground, siege positioning behind the line, cavalry flank routing, surrender when the
    leader is dead and average morale is below 20.
 6. Army builder validation UI in the sample page (drag units into slots, live doctrine and capacity readout).
@@ -662,3 +671,7 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   keeps its scenario definition (which sides, which objectives, roughly where the ritual circle or the portal
   sits relative to the lines) while the ground itself is different, odd-shaped, every time it is fought over.
   Matches the owner's standing intent that battlefields are never even squares or cookie-cutter.
+
+- 2026-09-07: Proposal — let a scenario name a biome (`"biome": "MARSH"`) instead of raw generator knobs, so scenario
+  authoring reads as regional intent ("defend the ford at Marsh") rather than tuned noise numbers, with the
+  scenario's own overrides still layered on top of the preset.
