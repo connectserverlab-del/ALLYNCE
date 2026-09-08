@@ -119,10 +119,12 @@ export class DeckState {
   graveyard: string[] = [];
   side: string[] = [];
   usedSide: string[] = [];
-  constructor(public readonly list: DeckList, private rng: Rng, private rules: DeckRules) {
+  /** `shuffle` defaults on for a fresh deck; pass `false` when restoring a save, whose pile order
+   *  and RNG state are being reconstructed from stored data rather than drawn fresh. */
+  constructor(public readonly list: DeckList, private rng: Rng, private rules: DeckRules, shuffle = true) {
     this.drawPile = [...list.main];
     this.side = [...list.side];
-    this.shuffle();
+    if (shuffle) this.shuffle();
   }
   shuffle(): void {
     for (let i = this.drawPile.length - 1; i > 0; i--) { const j = this.rng.int(i + 1); [this.drawPile[i], this.drawPile[j]] = [this.drawPile[j]!, this.drawPile[i]!]; }
