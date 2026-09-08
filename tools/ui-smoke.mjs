@@ -10,8 +10,9 @@
  * start. Exits non-zero on the first failure.
  */
 import { spawn } from "node:child_process";
+import { readdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PORT = Number(process.env.PORT ?? 5199);
@@ -165,6 +166,47 @@ try {
   check("effects clean themselves up", leaked === 0, `${leaked} left behind`);
 
   check("no console errors or failed requests", consoleErrors.length === 0, consoleErrors.slice(0, 3).join(" | "));
+
+  /* ------------------------------------------------------------ sample pages
+   * The generated sample pages are the build most people actually open, and nothing checked them.
+   * They boot their own bundled registry rather than the client's, so a data file missing from that
+   * bundle throws at load, the field never draws, and only the static panels around it survive —
+   * which is exactly how a page shipped with two of five rank ladders and no expansion roster.
+   * Each page opens from file:// with nothing beside it, so it is loaded the same way here. */
+  for (const sample of readdirSync(resolve(ROOT, "docs/samples")).filter((f) => f.endsWith(".html"))) {
+    const sampleErrors = [];
+    const sp = await browser.newPage({ viewport: { width: 1600, height: 950 } });
+    sp.on("pageerror", (e) => sampleErrors.push(e.message));
+    // A failed subresource fetch is not a script error: these pages are opened offline here, and
+    // the template still pulls its webfonts from the network (see `Q-37`). Filter that class out so
+    // this check keeps meaning "the page's own code threw".
+    sp.on("console", (m) => {
+      if (m.type() === "error" && !/Failed to load resource/.test(m.text())) sampleErrors.push(m.text());
+    });
+    try {
+      await sp.goto(pathToFileURL(resolve(ROOT, "docs/samples", sample)).href, { waitUntil: "load" });
+      await sp.waitForTimeout(1500);
+      // Declared, or the browser reads these UTF-8 bytes as windows-1252 and every separator,
+      // dash and bullet on the page renders as mojibake.
+      check(`${sample}: declares its charset`,
+        (await sp.evaluate(() => document.characterSet)) === "UTF-8");
+      // A page that throws at load keeps its static panels and loses everything the engine draws,
+      // which reads as "the game is missing" rather than as an error. Network failures are not
+      // that: these pages are opened offline here on purpose.
+      check(`${sample}: loads without a script error`, sampleErrors.length === 0,
+        sampleErrors.slice(0, 3).join(" | "));
+      // The field is drawn by the bundled engine, so an empty one is the visible symptom of the
+      // failure above. Only the pages that have a field are asked for it.
+      const hasField = await sp.$("#map") !== null;
+      if (hasField) {
+        const units = await sp.$$eval("#map .unit", (n) => n.length).catch(() => 0);
+        check(`${sample}: draws units on the field`, units > 0, `${units} unit tokens`);
+      }
+    } finally {
+      await sp.close();
+    }
+  }
+
 } finally {
   await browser.close();
   server.kill();

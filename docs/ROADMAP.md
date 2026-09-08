@@ -833,3 +833,16 @@ passes; this one doesn't resolve it either.
   inside `core/tests/match.test.ts`'s existing "is deterministic for a seed" test, giving `Q-22`'s guarantee
   end-to-end coverage over a real, AI-played battle rather than only a scripted one. Proposal only; depends on
   the AI-emits-commands follow-on above.
+
+- 2026-09-08 proposal: the sample page had been shipping dead — a registry the browser bundle built from a
+  hand-copied list of data files that had drifted from `loadRegistry` on three axes at once, throwing at load
+  and leaving the static panels standing around an empty field. The repair was to delete the copy rather than
+  correct it, so the bundle and the loader read the same files. The pattern is worth generalising: every place
+  a browser bundle needs something `node:fs` gives the engine is a candidate for the same silent divergence,
+  and the March, Writs and Deck screens were only the ones that existed to drift. Proposal: before any further
+  screen is bundled for the page, `scripts/gamedata-plugin.mjs` becomes the only route from `data/` into a
+  bundle, and `core/tests/gamedata.test.ts` grows an assertion per new data file rather than a new list.
+  Related, and the sharper lesson: `npm run check` was green through all of it, because nothing opened the
+  page the check was supposed to be protecting. A build artefact nobody loads is not tested by the suite that
+  produced it — `tools/ui-smoke.mjs` now opens every page under `docs/samples/`, and the same question is
+  owed to `dist/allynce.html` and the published artifact, which are still checked by nothing.
