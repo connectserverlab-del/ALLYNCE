@@ -18,6 +18,7 @@
  */
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve, dirname, relative } from "node:path";
+import { buildThumbnails } from "./art-thumbs.mjs";
 import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -109,16 +110,15 @@ const data = Object.fromEntries(DATA_FILES.map((f) =>
   [f, JSON.parse(readFileSync(resolve(ROOT, "data", f), "utf8"))]));
 
 /* Painted plates, as data URIs. Concepts rather than cutouts: the cutouts are five
-   times the bytes for a difference the card's art window crops away anyway. */
+   times the bytes for a difference the card's art window crops away anyway, and the
+   concepts themselves are re-encoded at card resolution — see tools/art-thumbs.mjs. */
 const units = [...data["units/units.json"], ...data["units/expansion.json"]];
-const art = {};
-for (const u of units) {
-  const p = u.art?.concept;
-  if (!p || art[p]) continue;
-  try {
-    art[p] = `data:image/jpeg;base64,${readFileSync(resolve(ROOT, p)).toString("base64")}`;
-  } catch { /* a plate that is not on disk simply falls back to generated art */ }
-}
+const plates = [...new Set(units.map((u) => u.art?.concept).filter(Boolean))]
+  .filter((p) => { try { readFileSync(resolve(ROOT, p)); return true; } catch { return false; } });
+
+const art = await buildThumbnails(plates, { log: console.log })
+  ?? Object.fromEntries(plates.map((p) =>
+    [p, `data:image/jpeg;base64,${readFileSync(resolve(ROOT, p)).toString("base64")}`]));
 
 /* ---------------------------------------------------------------- assemble */
 const html = readFileSync(resolve(WEB, "index.html"), "utf8");
@@ -153,3 +153,7 @@ writeFileSync(target, out);
 
 console.log(`${relative(ROOT, target)}  ${(out.length / 1_048_576).toFixed(2)} MB`);
 console.log(`  ${ordered.length} modules, ${units.length} units, ${Object.keys(art).length} painted plates`);
+if (out.length > 16 * 1_048_576) {
+  console.error("  ! over the 16 MB single-page budget — the plates need a smaller thumbnail size");
+  process.exit(1);
+}
