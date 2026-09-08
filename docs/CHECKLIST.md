@@ -11,8 +11,10 @@ branch. Passes that checked out `main` saw a nearly-empty project — `main` has
 reimplemented finished features from scratch. `Q-2` was built four separate times that way; the three
 universal win conditions three times; the rank ladders twice.
 
-That is resolved. All eighty-five branches are merged into **`claude/merge-85-prs-ec3ca0`, pull request #88**,
-and that branch is now where work happens.
+That is resolved. All eighty-five branches were merged into `claude/merge-85-prs-ec3ca0`, which shipped as
+pull request #88 on 2026-09-08 — carrying the eighty-seven branches, the AAA retarget, and `Q-19` to `Q-21`
+of the netcode line. The branch was then restarted from `main` and is now **pull request #90**, where work
+continues. The branch name is reused on purpose: every routine pushes to it, so a merge does not rewire them.
 
 **Every pass branches from, and pushes to, `claude/merge-85-prs-ec3ca0`. No pass opens a new pull request.**
 See `docs/AGENT_BRIEF.md` for the mechanics. Consolidating those branches cost more than the features in them
