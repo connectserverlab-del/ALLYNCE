@@ -103,3 +103,4 @@ Three things bite:
 | `D-48` | Scenario authoring by role: a scenario's deploy hexes, ritual centers, portals and `CaptureHold`/`Escort` objective hexes can be pinned relative to a generated field's own anchors and deploy zones instead of fixed coordinates, so the same scenario file replays on any regeneration of the ground; `data/scenarios/ford_crossing.json` is the worked example |
 | `D-49` | Named biomes (Ashfall, Marsh, Highland Pass) as data-defined presets over the battlefield generator, with a `wetness` knob and per-battle overrides |
 | `D-50` | Knight rank ladder (14 ranks, Page to King), with its own lance-charge ATK privilege alongside mounted movement, banner and castle; Dragon Host and Ritual Cult ladders remain |
+| `D-51` | Dragon Host rank ladder (9 ranks, wing dive keyed to altitude lost) and Ritual Cult rank ladder (5 ranks, ritual mastery and instability ceiling, no leadership privilege) |

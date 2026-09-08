@@ -38,6 +38,8 @@ npm test            # 160 tests: combat math, cohesion, composition, succession,
 npm test            # combat math, cohesion, composition, succession, clones, rituals, portals, cards, the holding, marching, full scenario
 
 npm test            # 155 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
+
+npm test            # 160 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -168,6 +170,8 @@ hundreds of units stay reviewable and the curves stay consistent. The hand-autho
 `units.json` is never rewritten — the registry merges both files.
 
 - **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. The Knight ladder (fourteen ranks, Page to King) reuses that same engine and adds a lance-charge ATK bonus of its own. See `docs/samurai-ranks.md` and `docs/knight-ranks.md`; Dragon Host and Ritual Cult ladders are next.
+
+- **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. See `docs/samurai-ranks.md`. The Dragon Host ladder (nine ranks, Hatchling to Elder Sovereign) reuses those same privileges and adds its own: wing dive, an ATK bonus keyed to altitude lost this activation rather than hexes moved. See `docs/dragon-ranks.md`. The Ritual Cult ladder (five ranks, Affiliated to Grand Ritualist) grants no leadership privilege at all — specialist teams cannot unlock a commander or elite — and instead keys rank to ritual mastery: a Progress bonus and a higher instability ceiling on a held ritual. See `docs/ritual-ranks.md`.
 
 ## Engine note
 

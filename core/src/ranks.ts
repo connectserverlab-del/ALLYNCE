@@ -3,7 +3,17 @@ import type { UnitState, Terrain } from "./types.js";
 import { TERRAIN_RULES } from "./types.js";
 
 export type Organization = "Patrol" | "Platoon" | "Company" | "Battalion" | "Army";
-export interface RankPrivileges { twoSwords?: boolean; mounted?: "war" | "always"; commandRadiusBonus?: number; banner?: boolean; castle?: boolean; chargeBonus?: number; supreme?: boolean }
+export interface RankPrivileges {
+  twoSwords?: boolean; mounted?: "war" | "always"; commandRadiusBonus?: number; banner?: boolean; castle?: boolean; supreme?: boolean;
+  /** Knight: flat ATK bonus once a rider has advanced far enough this activation. */
+  chargeBonus?: number;
+  /** Dragon Host: flat ATK bonus once a flier has dropped enough altitude this activation without climbing back up. */
+  divingCharge?: number;
+  /** Ritual Cult: flat bonus this ritualist adds to its circle's Progress each Objective Phase tick. */
+  ritualMastery?: number;
+  /** Ritual Cult: raises a held ritual's instability ceiling (see RITUAL_INSTABILITY_BASE) above the baseline. */
+  instabilityCeiling?: number;
+}
 export interface RankDef { id: string; title: string; tier: number; description: string; koku?: [number, number | null]; privileges: RankPrivileges; canLead: Organization[]; movement?: MovementTraits }
 export interface RankLadder { faction: string; notes?: string; ranks: RankDef[]; privilegeRules: Record<string, string> }
 
@@ -28,6 +38,22 @@ export function mountedMoveBonus(b: Battle, u: UnitState): number {
   if (m === "always") return 1;
   for (const e of b.activeUnits()) if (e.side !== u.side && b.distance(u, e) <= 6) return 1;
   return 0;
+}
+
+/** Hexes of net altitude a flier must have lost this activation, without climbing back up, for a rank's divingCharge to apply. */
+export const DIVE_BONUS_MIN_DROP = 1;
+
+/** Baseline instability ceiling for a held ritual (see rituals.ts's disruptRitual) before any rank raises it. */
+export const RITUAL_INSTABILITY_BASE = 3;
+
+/** Highest instabilityCeiling privilege among a ritual's current participants, or the baseline if none holds one. */
+export function ritualInstabilityCeiling(b: Battle, participants: UnitState[]): number {
+  return participants.reduce((max, p) => Math.max(max, privileges(b, p).instabilityCeiling ?? RITUAL_INSTABILITY_BASE), RITUAL_INSTABILITY_BASE);
+}
+
+/** Sum of ritualMastery privileges across a ritual's current participants. Source-tracked as its own Progress term. */
+export function ritualMasteryBonus(b: Battle, participants: UnitState[]): number {
+  return participants.reduce((sum, p) => sum + (privileges(b, p).ritualMastery ?? 0), 0);
 }
 
 /** Whether a unit's rank permits leading the given organization. Units without a ladder are unrestricted. */

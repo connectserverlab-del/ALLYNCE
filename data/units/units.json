@@ -454,7 +454,7 @@
   },
   {
     "id": "DRG_COMMANDER_RIFTWING-DOMINANT",
-    "factionRank": "WING_DOMINANT",
+    "factionRank": "DOMINANT",
     "name": "Riftwing Dominant",
     "faction": "DRG",
     "themes": [
@@ -493,7 +493,7 @@
   },
   {
     "id": "DRG_SECOND_STORMCLAW-WINGSECOND",
-    "factionRank": "WINGSECOND",
+    "factionRank": "WING_SECOND",
     "name": "Stormclaw Wingsecond",
     "faction": "DRG",
     "themes": [
@@ -532,7 +532,7 @@
   },
   {
     "id": "DRG_ELITE_OBSIDIAN-MAW",
-    "factionRank": "WING_ADEPT",
+    "factionRank": "WINGBREAKER",
     "name": "Obsidian Maw",
     "faction": "DRG",
     "themes": [
@@ -570,7 +570,7 @@
   },
   {
     "id": "DRG_FOOT_SLATEWING-DRAKE",
-    "factionRank": "WINGLING",
+    "factionRank": "SKYRIDER",
     "name": "Slatewing Drake",
     "faction": "DRG",
     "themes": [
@@ -608,7 +608,7 @@
   },
   {
     "id": "RIT_LEADER_AFFILIATED-SUMMONER",
-    "factionRank": "VOICE_OF_THE_RITE",
+    "factionRank": "AFFILIATED",
     "name": "Affiliated Summoner",
     "faction": "RIT",
     "themes": [
@@ -652,7 +652,7 @@
   },
   {
     "id": "RIT_FOOT_FOREIGN-RITUALIST",
-    "factionRank": "INITIATE",
+    "factionRank": "AFFILIATED",
     "name": "Foreign Ritualist",
     "faction": "RIT",
     "themes": [
@@ -1095,7 +1095,7 @@
   },
   {
     "id": "DRG_SIEGE_CINDERTHROAT-SIEGEWYRM",
-    "factionRank": "WYRMKIN",
+    "factionRank": "CINDER_WARDEN",
     "name": "Cinderthroat Siegewyrm",
     "faction": "DRG",
     "themes": [
@@ -1139,7 +1139,7 @@
   },
   {
     "id": "DRG_CAVALRY_RIDGEBACK-RUNNER",
-    "factionRank": "WYRMKIN",
+    "factionRank": "RIDGEBACK_WARDEN",
     "name": "Ridgeback Runner",
     "faction": "DRG",
     "themes": [
@@ -1397,7 +1397,7 @@
   },
   {
     "id": "DRG_ELDER_HOLLOW-CROWN-ELDER",
-    "factionRank": "ELDER",
+    "factionRank": "ELDER_SOVEREIGN",
     "name": "Hollow Crown Elder",
     "faction": "DRG",
     "themes": [
@@ -4532,7 +4532,7 @@
     "summonOnly": false,
     "ai": "leader_flank",
     "stars": 8,
-    "factionRank": "WING_DOMINANT"
+    "factionRank": "DOMINANT"
   },
   {
     "id": "DRG_COMMANDER_STORMSCALE-SOVEREIGN",
@@ -4567,7 +4567,7 @@
     "summonOnly": false,
     "ai": "leader_hold",
     "stars": 7,
-    "factionRank": "WING_DOMINANT"
+    "factionRank": "DOMINANT"
   },
   {
     "id": "DRG_SECOND_EMBERCLAW-WINGSECOND",
@@ -4602,7 +4602,7 @@
     "summonOnly": false,
     "ai": "leader_support",
     "stars": 6,
-    "factionRank": "WINGSECOND"
+    "factionRank": "WING_SECOND"
   },
   {
     "id": "DRG_SECOND_DUSKWING-SECOND",
@@ -4637,7 +4637,7 @@
     "summonOnly": false,
     "ai": "leader_support",
     "stars": 5,
-    "factionRank": "WINGSECOND"
+    "factionRank": "WING_SECOND"
   },
   {
     "id": "DRG_ELITE_CINDERMAW-STALKER",

@@ -13,6 +13,9 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §7 Combat | `combat.ts`, `modifiers.ts` | Deterministic damage, arcs, terrain, statuses, intercession, duel |
 | §8 Morale and command | `morale.ts`, `command.ts` | Bands, sources, succession, strongest aura only, Rally |
 | §9 Faction doctrines | `data/abilities/abilities.json`, `effects.ts` | Orders and passives as data; interpreter in `applyEffect`. A passive whose effect isn't a stat conditional or a movement/combat rule (`ConditionalDef`/`Atk`, `Intercept`, `DenyFlyingMovement`, `SharedVision`) does nothing in `applyEffect` by design — those kinds are checked directly where they matter (`modifiers.ts`, `combat.ts`, `battle.ts`) and are covered end to end in `core/tests/doctrine.test.ts`, one per host faction, so a newly declared passive kind can't ship unwired without a failing or missing test making that obvious |
+
+| §9 Faction doctrines | `data/abilities/abilities.json`, `effects.ts` | Orders and passives as data; interpreter in `applyEffect` |
+| Faction rank ladders | `ranks.ts`, `data/factions/ranks/*.json` | Samurai and Shinobi (`docs/samurai-ranks.md`), Dragon Host (`docs/dragon-ranks.md`), Ritual Cult (`docs/ritual-ranks.md`); Knight and the seven divisions have none yet |
 | §11 Ritual system | `rituals.ts` | Ratings, formula, states, hold and instability, sync release |
 | §12 Reinforcement portals | `portals.ts`, `battle.ts` (`openPortal`, `queueReinforcement`) | Lifecycle, queue, capture, destroy refund. A PortalKeeper's Open Reinforcement Portal calls one on an adjacent, uncontested hex; any of its side standing beside an Open portal can spend Reserve Points to queue into it |
 

@@ -2790,7 +2790,7 @@
       "Airborne"
     ],
     "commandRadius": 2,
-    "factionRank": "WINGSECOND"
+    "factionRank": "WING_SECOND"
   },
   {
     "id": "DRG_WING_ASH-WAKE-WYRM",
@@ -2870,7 +2870,7 @@
     ],
     "commandRadius": 3,
     "flying": true,
-    "factionRank": "WING_DOMINANT"
+    "factionRank": "DOMINANT"
   },
   {
     "id": "DRG_COLOSSUS_BASALT-RIDGEBACK",
@@ -3069,7 +3069,7 @@
     ],
     "commandRadius": 3,
     "flying": true,
-    "factionRank": "WING_DOMINANT"
+    "factionRank": "DOMINANT"
   },
   {
     "id": "DRG_COLOSSUS_OBSIDIAN-BROOD-MOTHER",
@@ -3270,7 +3270,7 @@
     ],
     "commandRadius": 4,
     "flying": true,
-    "factionRank": "WING_DOMINANT"
+    "factionRank": "DOMINANT"
   },
   {
     "id": "DRG_MAGE_THE-SKY-BOUND-ARCHON",
@@ -3410,7 +3410,7 @@
       "anchors": 2,
       "arrival": "The edict is spoken: no enemy may fly for two rounds and allied Dragons gain +2 MOV."
     },
-    "factionRank": "WING_DOMINANT"
+    "factionRank": "DOMINANT"
   },
   {
     "id": "DRG_MAGE_KAETHYRRA-THE-WYRMFIRE-JUDGEMENT",
@@ -3891,7 +3891,7 @@
       "Channeling"
     ],
     "commandRadius": 2,
-    "factionRank": "HIEROPHANT"
+    "factionRank": "GRAND_RITUALIST"
   },
   {
     "id": "RIT_SUPPORT_HOLLOW-CHOIR",
@@ -4093,7 +4093,7 @@
       "affinity": 5,
       "channeling": 6
     },
-    "factionRank": "HIEROPHANT"
+    "factionRank": "GRAND_RITUALIST"
   },
   {
     "id": "RIT_MAGE_THE-UNFINISHED-SENTENCE",
