@@ -102,3 +102,11 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-08: Proposal — give Fusion and Ritual, already first-class functions of the engine, a payoff on the rank
+  ladders the same way combat stats already get one: gate one Fusion recipe or Ritual anchor per faction behind
+  that faction's own top rank (a Shogun-only fusion partner for the Samurai, a Kage-exclusive ritual anchor for
+  the Shinobi, and the same slot reserved for Knight, Dragon Host and Ritual Cult once those ladders land). The
+  cost is a single rank check against a field the ranks system already records per unit, so it adds nothing new
+  to the modifier pipeline and needs no new art or renamed units — only one new recipe or anchor entry per
+  faction in `data/abilities/fusions.json` or the ritual data, each still summon-limited and source-tracked like
+  every other one.
