@@ -590,3 +590,11 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   scenario meant). Give platoons and rituals an optional unit-instance reference — the platoon's own id, e.g.
   `leaderPlatoon: "A-1"` meaning "that platoon's commander" — so a scenario keeps pointing at the intended unit
   once the deck-ownership system lets an army run more than one copy of its own leader.
+
+- 2026-09-06: Proposal — `data/compositions/platoon.json`'s `wizardsPerPlatoon` limit is currently unenforceable:
+  `validateArmy` counts it by `rank === "Wizard"`, but no unit in `data/units/units.json` carries that rank (the
+  enum is Commander/Second/Elite/Foot/Cavalry/Specialist/Levy/Lord/Kage/Shogun/King/Elder/Deity), including the
+  one unit whose name says otherwise, `ARC_ELITE_STORMGLASS-WIZARD` (rank `Elite`). Since Ritual Cult and its
+  Arcanist theme are where spellcasters actually live, the limit could instead count the `Ritualist` role (already
+  on the books for ritual-casting units) rather than a rank that was never wired up. Left as a proposal rather than
+  a silent fix, since deciding which units count as a "wizard" for this cap is a rules call, not a test-file fix.
