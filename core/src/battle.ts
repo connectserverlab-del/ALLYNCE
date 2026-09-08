@@ -11,7 +11,7 @@ import { rooted, revealAllRounds, tickExpansionEffects } from "./effects.js";
 import { resolveSuccession, rally as rallyAction } from "./command.js";
 import { applyEffect, clearRoundEffectFlags, orderFlags } from "./effects.js";
 import { tickRitual, releaseRitual, linkedGroup, assistRitual, disruptRitual, type RitualCircle } from "./rituals.js";
-import { tickPortal, checkCaptureInterrupt, attackPortal, captureStep, type Portal } from "./portals.js";
+import { tickPortal, checkCaptureInterrupt, attackPortal, captureStep, callPortal, queueReinforcement as enqueueReinforcement, type Portal } from "./portals.js";
 import { commandRadiusRecovery, surroundedPenalty, moraleBand, changeMorale } from "./morale.js";
 import { doctrineState, organizationLevel, companyLeader } from "./composition.js";
 import { evaluateObjective, markSynchronized, type ObjectiveDef, type ObjectiveProgress } from "./objectives.js";
@@ -270,6 +270,33 @@ export class BattleController {
   rally(u: UnitState): void { this.spend(u, 1); if (!rallyAction(this.b, u)) { u.ap += 1; throw new Error("Unit cannot Rally"); } }
   assist(u: UnitState, ritual: RitualCircle): void { this.spend(u, 1); if (!assistRitual(this.b, ritual, u)) { u.ap += 1; throw new Error("Cannot assist"); } }
   capture(u: UnitState, portal: Portal): void { this.spend(u, 1); if (!captureStep(this.b, u, portal)) { u.ap += 1; throw new Error("Cannot capture"); } }
+
+  /** A PortalKeeper's Open Reinforcement Portal: call one at a hex within the ability's reach, no Reserve spent yet. */
+  openPortal(u: UnitState, pos: Hex): Portal {
+    const b = this.b; const d = b.def(u);
+    const abilityId = d.actives.find((id) => b.reg.ability(id).effect.kind === "PortalCall");
+    if (!abilityId) throw new Error(`${u.uid} cannot call a portal`);
+    const a = b.reg.ability(abilityId);
+    if (!u.pos) throw new Error("Not deployed");
+    if ((u.cooldowns[abilityId] ?? 0) > 0) throw new Error("On cooldown");
+    if (b.hasStatus(u, "Silenced")) throw new Error("Silenced");
+    if (hexDistance(u.pos, pos) > (a.range ?? 1)) throw new Error("Out of range");
+    this.spend(u, a.apCost ?? 1);
+    const p = callPortal(b, u.side, pos, { keeperUid: u.uid, telegraph: (a.effect as { telegraphRounds?: number }).telegraphRounds ?? 1 });
+    if (!p) { u.ap += a.apCost ?? 1; throw new Error("Cannot open a portal there"); }
+    if (a.cooldown) u.cooldowns[abilityId] = a.cooldown;
+    b.log("AbilityUsed", { uid: u.uid, ability: abilityId, targetHex: pos });
+    return p;
+  }
+
+  /** Feed reserve points into a portal of your own that has already opened. Any unit stationed beside it can call it in. */
+  queueReinforcement(u: UnitState, portal: Portal, defId: string): void {
+    const b = this.b;
+    if (!u.pos || u.side !== portal.side || hexDistance(u.pos, portal.pos) > 1) throw new Error("Not beside that portal");
+    this.spend(u, 1);
+    if (!enqueueReinforcement(b, portal, defId)) { u.ap += 1; throw new Error("Cannot queue that reinforcement"); }
+  }
+
   channel(u: UnitState, ritual: RitualCircle): void {
     // Channeling is implicit for eligible participants inside the circle; the action spends AP to stay committed and marks intent.
     this.spend(u, 1);

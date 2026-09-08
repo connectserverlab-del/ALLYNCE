@@ -13,7 +13,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §8 Morale and command | `morale.ts`, `command.ts` | Bands, sources, succession, strongest aura only, Rally |
 | §9 Faction doctrines | `data/abilities/abilities.json`, `effects.ts` | Orders and passives as data; interpreter in `applyEffect`. A passive whose effect isn't a stat conditional or a movement/combat rule (`ConditionalDef`/`Atk`, `Intercept`, `DenyFlyingMovement`, `SharedVision`) does nothing in `applyEffect` by design — those kinds are checked directly where they matter (`modifiers.ts`, `combat.ts`, `battle.ts`) and are covered end to end in `core/tests/doctrine.test.ts`, one per host faction, so a newly declared passive kind can't ship unwired without a failing or missing test making that obvious |
 | §11 Ritual system | `rituals.ts` | Ratings, formula, states, hold and instability, sync release |
-| §12 Reinforcement portals | `portals.ts` | Lifecycle, queue, capture, destroy refund |
+| §12 Reinforcement portals | `portals.ts`, `battle.ts` (`openPortal`, `queueReinforcement`) | Lifecycle, queue, capture, destroy refund. A PortalKeeper's Open Reinforcement Portal calls one on an adjacent, uncontested hex; any of its side standing beside an Open portal can spend Reserve Points to queue into it |
 | Mountains and the labored climb | `types.ts` (TERRAIN_RULES), `battle.ts` (`reachable`, `move`) | Rock costs foot 5, cavalry 6, wings 2. A unit that cannot afford a hex may still take one adjacent hex by spending its whole activation, so a range is slow rather than sealed |
 | §13 Cavalry and flying | `battle.ts` (`reachable`), `effects.ts` (`ChargeBonus`) | Anti-air, forest costs, Predatory Airspace, Diving Charge, Exposed |
 | §14 Abilities and clones | `effects.ts` | Twin Echo reference implementation |
@@ -21,6 +21,8 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §16 AI | `ai.ts` | Utility scoring, release policy, surrender policy, difficulty without stat bonuses |
 
 | §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses. Reaches for Fusion (`tryFusion`) once an adjacent recipe-eligible ally, a spare Fusion charge and a nearby fight all line up, and only after an attack or a ground-gaining move has had first refusal |
+
+| §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses. A PortalKeeper feeds Reserve into a portal of its own that has already opened before it risks any on one that has not, and only calls a new one once nothing of its own is up within six hexes |
 | Marching between battles | `march.ts`, `data/movement/march.json` | Continuous movement in seconds over the same hexes the battle fights on. A straight line where one works; an A* over the grid, string-pulled to a few waypoints, where it does not. Nothing crosses a field in more than 45 seconds, and a route forced the long way round hurries rather than arriving late |
 
 | Victory | `battle.ts` (`evaluateVictory`, `surrender`) | Three universal win conditions layered under scenario objectives: Wipeout, Army Leader Killed (`VictoryRules.armyLeaderUids`, resolved in `scenario.ts` from a side's optional `armyLeader` def id), Surrender (`organizationLevel` at "None" plus average morale at or below `DEFAULT_SURRENDER_MORALE`, or an explicit call) |
