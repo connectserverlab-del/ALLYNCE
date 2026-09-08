@@ -37,7 +37,7 @@ npm run assets      # rebuilds the asset registry from the data and from disk
 - **Portals**: telegraph, open, capacity and cooldown, Reserve Points, queued units held when blocked, half refund on destruction, two-action capture by specialists, no opening in enemy zone of control.
 - **Objectives**: eleven composable objective types, evaluated per side every End Phase.
 - **Turn machine**: Command → alternating Activation (2 AP per unit) → Objective → End, seeded RNG, serializable event log for save, replay and tests.
-- **AI**: goal-oriented utility scoring (objective urgency, kill potential, formation gain or loss, isolation risk, commander caution), a release policy that holds for synchronization until instability forces a decision, and difficulty profiles that change risk and planning depth only.
+- **AI**: goal-oriented utility scoring (objective urgency, kill potential, formation gain or loss, isolation risk, commander caution), terrain-seeking movement toward trenches and high ground, siege pieces that hold off outside their own minimum range and set up rather than advance, cavalry that routes to a flank or rear hex instead of the front arc, a release policy that holds for synchronization until instability forces a decision, a surrender policy for a side that is both leaderless and morale-broken, and difficulty profiles that change risk and planning depth only.
 - **Scenario**: `Threefold Invocation` fully data-defined and playable start to finish. Scenarios can also run on a
   generated field: `data/scenarios/ashfall_crossing.json` pins objectives, rituals and portals by role (deployment
   anchor, a point between two positions, a ring around one) instead of fixed coordinates, so the same file plays

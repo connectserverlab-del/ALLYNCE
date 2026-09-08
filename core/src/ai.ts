@@ -107,6 +107,14 @@ function actOnce(ctrl: BattleController, u: UnitState, profile: AiProfile): bool
     if (target) return moveToward(ctrl, u, target.center);
     return false;
   }
+  // Siege: never stand at the front. An enemy inside the minimum range blinds the gun, so give ground
+  // first and let the next activation emplace once the firing band is clear again.
+  if (isSiege(d)) {
+    const closest = nearestEnemy(ctrl, u);
+    if (closest && closest.pos && b.distance(u, closest) <= (d.minRange ?? 0)) {
+      if (retreatFrom(ctrl, u, closest.pos)) return true;
+    }
+  }
   // Portal keepers: open a portal if reserve allows, else defend
   // Abilities with immediate value
   for (const id of d.actives) {
@@ -271,6 +279,20 @@ function moveToward(ctrl: BattleController, u: UnitState, goal: Hex, profile: Ai
  * cover it can shoot from, height it can shoot down from, and — for cavalry — ground a charge survives.
  * A flier is carrying none of this, and the modifier pipeline agrees, so its ground is worth nothing.
  */
+/** Move away from `threat`, to the reachable hex that gains the most distance. Keeps siege pieces off the front line. */
+function retreatFrom(ctrl: BattleController, u: UnitState, threat: Hex): boolean {
+  if (u.ap <= 0 || !u.pos) return false;
+  const currentDist = hexDistance(u.pos, threat);
+  let best: { hex: Hex; dist: number } | null = null;
+  for (const r of ctrl.reachable(u).values()) {
+    const dist = hexDistance(r.hex, threat);
+    if (dist <= currentDist) continue;
+    if (!best || dist > best.dist) best = { hex: r.hex, dist };
+  }
+  if (!best) return false;
+  try { ctrl.move(u, best.hex); return true; } catch { return false; }
+}
+
 function groundScore(ctrl: BattleController, u: UnitState, h: Hex): number {
   const b = ctrl.b; const d = b.def(u);
   if (d.flying) return 0;
@@ -327,7 +349,7 @@ function bandAboutToSwing(ctrl: BattleController, u: UnitState): number {
  * army leader is dead, no commander has stepped into the gap, and average morale has fallen into the
  * routing bands. Past that point every further round only feeds the other side's spoils.
  */
-function shouldSurrender(ctrl: BattleController, side: string): boolean {
+export function shouldSurrender(ctrl: BattleController, side: string): boolean {
   const b = ctrl.b;
   const state = b.sides.get(side);
   if (!state || state.surrendered || b.winner) return false;
@@ -336,6 +358,17 @@ function shouldSurrender(ctrl: BattleController, side: string): boolean {
   if ([...b.activeUnits(side)].some((u) => !u.isClone && b.def(u).roles.includes("Commander"))) return false;
   const band = moraleBand(ctrl.moraleSummary(side).average);
   return band === "Routed" || band === "Broken";
+}
+
+/** Yield the field on `side`'s behalf if the fight is lost per `shouldSurrender`. Returns whether it surrendered. */
+export function maybeSurrender(ctrl: BattleController, side: string): boolean {
+  if (!shouldSurrender(ctrl, side)) return false;
+  const b = ctrl.b;
+  const s = b.sides.get(side)!;
+  const leader = s.leaderUid ? b.units.get(s.leaderUid) : undefined;
+  const by = leader && !leader.defeated ? leader : [...b.activeUnits(side)].find((u) => b.def(u).roles.includes("Commander"));
+  try { ctrl.surrender(side, by); } catch { return false; }
+  return true;
 }
 
 export function nearestEnemy(ctrl: BattleController, u: UnitState): UnitState | null {

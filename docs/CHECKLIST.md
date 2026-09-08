@@ -41,6 +41,7 @@ Three things bite:
 |---|---|---|
 | `OWN-1` | Scale the remaining building tier art (25 paintings) | Confirmation that building portraits stay at a low angle rather than strictly top-down |
 | `OWN-2` | Raise the deck faction minimum from 40 toward 60 | Needs 15-20 distinct cards per faction, which is a content decision |
+| `OWN-3` | Let a side's designated army leader pass to a successor (update `leaderUid` in `resolveSuccession`), and delay the "army leader killed" win check until Continuity's succession attempt has actually run, instead of ending the match at the End Phase of the same round the leader fell | Changes when a match can end and how much the succession/Continuity system actually protects an army; also decides whether the new AI surrender policy (`Q-3`) ever gets a chance to fire in a standard match, since it is currently always shadowed by the instant leader-killed check |
 
 ## Queue
 
@@ -78,15 +79,16 @@ Three things bite:
 | `D-12` | Paper card stock and the painted star asset |
 | `D-13` | Full match runner, card-playing AI, spoils paid into the holding, save and load |
 | `D-14` | Unit art for all 40 cards |
-| `D-15` | Five sworn companies: Cobalt Conclave mages, Thorn Coven hexers, Cutpurse Court rogues, Windmarch Host steppe archers, Dunewake Compact caravaneers — 20 cards, painted |
-| `D-16` | Card ownership: a deck may only run the copies the holding actually owns, with a starter box that opens a legal hundred |
-| `D-17` | Wanted board: rotating warrants up to 7 stars, subdue-not-kill capture, copies paid into the collection |
-| `D-18` | Seven themed divisions: angels, demons, chaos riders, demigods, wendigo-kin, sasquatch, ant creatures with humanoid myrmidons — 28 cards, painted |
-| `D-19` | A usable skill on every card at four stars and above: six kinds, all data-defined, enforced by a registry-wide test |
-| `D-20` | Card face: name across the top band, ATK and DEF in dark ink on the paper, copy badge moved to the foot |
-| `D-21` | Cloning splits attack and defence across the original and its copies instead of duplicating them, and the original reclaims each share as a copy falls |
-| `D-22` | AI spends the six card skills on their own terms, fights the ground it stands on (terrain, elevation, siege screening, cavalry flanking) and yields a lost field |
-| `D-23` | Marching: continuous movement in seconds, squads with formation slots, a 45-second cap scaled by distance, and hex routing round anything a straight line cannot cross |
-| `D-24` | March screen: click the ground to send a squad, drag a name onto a squad to have that unit walk over and fall in, with the real engine bundled into the page rather than a recording of it |
-| `D-25` | `scripts/audit-cutouts.py` fails a cutout that kept its background or lost its figure, so a card cannot ship as a pale slab again |
-| `D-26` | Scenario authoring on generated ground: position roles (anchor, deployZone, lerp, near, ritualCenter) so a scenario's objectives, rituals and portals pin to a generated field instead of fixed coordinates; `data/scenarios/ashfall_crossing.json` as the reference scenario |
+| `D-15` | Scenario authoring on generated ground: position roles (anchor, deployZone, lerp, near, ritualCenter) so a scenario's objectives, rituals and portals pin to a generated field instead of fixed coordinates; `data/scenarios/ashfall_crossing.json` as the reference scenario |
+| `D-16` | Five sworn companies: Cobalt Conclave mages, Thorn Coven hexers, Cutpurse Court rogues, Windmarch Host steppe archers, Dunewake Compact caravaneers — 20 cards, painted |
+| `D-17` | Card ownership: a deck may only run the copies the holding actually owns, with a starter box that opens a legal hundred |
+| `D-18` | Wanted board: rotating warrants up to 7 stars, subdue-not-kill capture, copies paid into the collection |
+| `D-19` | Seven themed divisions: angels, demons, chaos riders, demigods, wendigo-kin, sasquatch, ant creatures with humanoid myrmidons — 28 cards, painted |
+| `D-20` | A usable skill on every card at four stars and above: six kinds, all data-defined, enforced by a registry-wide test |
+| `D-21` | Card face: name across the top band, ATK and DEF in dark ink on the paper, copy badge moved to the foot |
+| `D-22` | Cloning splits attack and defence across the original and its copies instead of duplicating them, and the original reclaims each share as a copy falls |
+| `D-23` | AI spends the six card skills on their own terms, fights the ground it stands on (terrain, elevation, siege screening, cavalry flanking) and yields a lost field |
+| `D-24` | Marching: continuous movement in seconds, squads with formation slots, a 45-second cap scaled by distance, and hex routing round anything a straight line cannot cross |
+| `D-25` | March screen: click the ground to send a squad, drag a name onto a squad to have that unit walk over and fall in, with the real engine bundled into the page rather than a recording of it |
+| `D-26` | `scripts/audit-cutouts.py` fails a cutout that kept its background or lost its figure, so a card cannot ship as a pale slab again |
+| `D-27` | AI: seeks trenches and high ground when moving, keeps siege pieces out of their own minimum range and sets them up once in their firing band, routes cavalry to a flank or rear hex instead of the front arc, and surrenders once a side is both leaderless (Doctrine `"None"`) and morale-broken |
