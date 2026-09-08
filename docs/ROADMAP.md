@@ -614,6 +614,21 @@ brief where they conflict.**
 
 Append dated notes here. Ideas are proposals until the owner approves them.
 
+- 2026-09-08 (process, not a game-design idea — see `docs/CHECKLIST.md` for the full note): ~75 pull requests
+  are open and none have merged, including the trunk PR itself. Recommend the owner triage and merge a batch,
+  starting with PR #2, before more automated passes run.
+- 2026-09-08 proposal: give pikes and set siege pieces a real answer to cavalry, tying "themed cavalry" and
+  uneven-ground intent together. Today a lance charge is a flat attack bonus with no counterplay named in
+  `docs/mechanics.md`. Historically, cavalry that charges a braced spear or pike line balks rather than
+  breaking it. Proposal: a "braced" stance (any Set siege piece, or a foot unit with a pike-family skill,
+  that did not move this round) that, when charged, cancels the attacker's lance-charge bonus for that attack
+  and applies a small morale hit to the charging unit instead of to the braced one — so cavalry stays the
+  answer to unbraced lines and open ground, and braced infantry becomes the answer to cavalry, rather than
+  either side just trading flat numbers. Would read as a new modifier source on the combat side (each faction
+  keeps its own cavalry and siege art and stats; nothing about existing units changes by default) and a status
+  flag for "did not move, and chose to brace" set during the order phase. Proposal only, not implemented —
+  needs an owner call on which unit skills carry the pike-family tag before any rank ladder or card leans on
+  it.
 - 2026-09-05: Weather as a round modifier (rain turns Open to Mud along rivers, fog reduces ranged range by 1).
 - 2026-09-05: Siege pieces could target hexes for suppressive fire, laying a temporary "Shelled" terrain (−50 DEF,
   breaks charges) for one round.

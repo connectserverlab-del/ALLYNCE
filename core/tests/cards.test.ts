@@ -60,6 +60,15 @@ describe("deck construction", () => {
     expect(a.hand).toHaveLength(7);
     expect(a.graveyard.length).toBeGreaterThan(0);
   });
+  it("skips the shuffle, and leaves the RNG untouched, when restoring a save", () => {
+    const list = buildStarterDeck(reg, "KNI");
+    const rng = new Rng(7);
+    const restored = new DeckState(list, rng, reg.deckRules, false);
+    expect(restored.drawPile).toEqual(list.main);
+    // the RNG passed to a restored deck should still produce the same first value a fresh RNG would:
+    // a restore that quietly burned draws on a throwaway shuffle would desync any later use of it.
+    expect(rng.next()).toBe(new Rng(7).next());
+  });
 });
 
 describe("editing a deck list card by card", () => {
