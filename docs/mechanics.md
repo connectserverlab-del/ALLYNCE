@@ -22,6 +22,9 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §12 Reinforcement portals | `portals.ts`, `battle.ts` (`attackStructure`) | Lifecycle, queue, capture, destroy refund; firing on a structure runs through the same source-tracked modifier pipeline as any other attack, so a siege piece's Breaching Shot bonus is a named modifier rather than a hidden add-on |
 | Mountains and the labored climb | `types.ts` (TERRAIN_RULES), `battle.ts` (`reachable`, `move`) | Rock costs foot 5, cavalry 6, wings 2. A unit that cannot afford a hex may still take one adjacent hex by spending its whole activation, so a range is slow rather than sealed |
 | §13 Cavalry and flying | `battle.ts` (`reachable`), `effects.ts` (`ChargeBonus`) | Anti-air, forest costs, Predatory Airspace, Diving Charge, Exposed |
+
+| §12 Reinforcement portals | `portals.ts` | Lifecycle, queue, capture, destroy refund |
+| §13 Cavalry and flying | `battle.ts` (`reachable`, `attack`), `effects.ts` (`ChargeBonus`) | Anti-air, forest costs, Predatory Airspace, Diving Charge, Exposed, minimum range for siege pieces |
 | §14 Abilities and clones | `effects.ts` | Twin Echo reference implementation |
 | §15 Objectives | `objectives.ts` | Eleven composable types |
 | §16 AI | `ai.ts` | Utility scoring, release policy, surrender policy, difficulty without stat bonuses |
@@ -146,6 +149,27 @@ ratio of the easier side to the harder one. `generateMap` re-rolls the same spec
 seeds (still exactly reproducible for a given input seed) until that ratio is at least 0.9, i.e. within 10%
 both ways, or a bounded number of attempts run out, in which case it ships the least lopsided attempt rather
 than looping forever. `core/tests/mapgen.test.ts` asserts the 10% band holds across a spread of seeds.
+
+## Siege and cavalry roster
+
+Each of the four combat factions (Samurai, Shinobi, Knight, Dragon Host) now fields one Siege-role specialist
+and, where it did not already have one, one Cavalry-role Elite alternative:
+
+- **Siege** (`Role: "Siege"`, `data/units/units.json`): deployed as an army specialist (`slots: ["Specialist"]`),
+  like the existing Portal Keeper. Slow (`mov: 2`) and fragile, but hits hard at range with a new `minRange`
+  field on `UnitDef` — `attack()` in `battle.ts` now rejects a target closer than `minRange` in addition to the
+  existing maximum-range check, so a siege piece cannot be fired point-blank. All four carry the shared
+  `ABL_BREACHING_VOLLEY` passive (`ConditionalAtk` with a new `vsTerrain` condition in `modifiers.ts`): +200 ATK
+  against a defender standing on Fortification terrain. The Shinobi battery additionally carries
+  `ABL_SMOKE_BATTERY`, reusing the existing `SpawnTerrain` effect to lay smoke around itself.
+- **Cavalry** (`Role: "Cavalry"`, `slots: ["Elite"]`): the Knight faction already had one (Sky-Lance Dragoon).
+  Samurai and Shinobi each gain an alternative Elite with a `ChargeBonus` ability (the same effect kind that
+  powers Dragon Host's Diving Charge and Crushing Dive) — Lance Charge (higher bonus, requires more movement,
+  forces Exposed) for Samurai and Fleet Strike (smaller bonus, triggers sooner, no Exposed penalty) for Shinobi.
+  Dragon Host's own roster is already all-flying and is treated as fulfilling its faction's mobility niche
+  without a dedicated ground Cavalry unit; see the roadmap brainstorm log for that as an open question.
+- The AI's target filter (`ai.ts`) now also respects `minRange` so a siege unit does not attempt (and fail) a
+  point-blank shot before falling back to repositioning.
 
 ## Worked example (from the brief §7)
 

@@ -132,6 +132,7 @@ function abilityModifiers(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: Com
       let ok = true;
       if (e.vsRoles) ok = ok && (e.vsRoles as string[]).some((r) => b.def(target).roles.includes(r as any));
       if (e.vsIsolated) ok = ok && b.isIsolated(target);
+      if (e.vsTerrain) ok = ok && !!target.pos && b.terrainAt(target.pos) === e.vsTerrain;
       if (ok) out.push({ source: a.name, stat, value: e.atk });
     }
   }

@@ -866,7 +866,7 @@
       "duration": 2,
       "hp": 1
     },
-    "text": "Two copies step out of the same body, and the body's attack and defence divide evenly across all three \u2014 a third each. They last two rounds and fall to a single hit; kill one and the original takes its share back."
+    "text": "Two copies step out of the same body, and the body's attack and defence divide evenly across all three — a third each. They last two rounds and fall to a single hit; kill one and the original takes its share back."
   },
   {
     "id": "ABL_SWARM_SPLIT",
@@ -881,7 +881,7 @@
       "duration": 2,
       "hp": 1
     },
-    "text": "The body divides into four, sharing its attack and defence evenly \u2014 a quarter each \u2014 for two rounds. A single hit ends any of them, and every one that falls returns its share to the original."
+    "text": "The body divides into four, sharing its attack and defence evenly — a quarter each — for two rounds. A single hit ends any of them, and every one that falls returns its share to the original."
   },
   {
     "id": "ABL_SOVEREIGN_DECREE",
@@ -970,7 +970,11 @@
     "effect": {
       "kind": "ConditionalAtk",
       "atk": 90,
-      "vsRoles": ["Commander", "Second", "Elite"]
+      "vsRoles": [
+        "Commander",
+        "Second",
+        "Elite"
+      ]
     },
     "text": "Every strike against something worth killing is already paid for: +90 ATK against enemy leaders and elites."
   },
@@ -1042,7 +1046,9 @@
     "effect": {
       "kind": "ConditionalAtk",
       "atk": 90,
-      "vsRoles": ["FootSoldier"]
+      "vsRoles": [
+        "FootSoldier"
+      ]
     },
     "text": "Hunger does not test its bite on the strong first: +90 ATK against foot soldiers and levy."
   },
@@ -1097,5 +1103,43 @@
       "requiresAdjacentCount": 2
     },
     "text": "Three chitin backs are stronger than one: +40 DEF with two or more Swarm allies adjacent."
+  },
+  {
+    "id": "ABL_BREACHING_VOLLEY",
+    "name": "Breaching Volley",
+    "category": "Passive",
+    "effect": {
+      "kind": "ConditionalAtk",
+      "atk": 200,
+      "vsTerrain": "Fortification"
+    },
+    "text": "+200 ATK against a defender standing on Fortification terrain."
+  },
+  {
+    "id": "ABL_SMOKE_BATTERY",
+    "name": "Smoke Battery",
+    "category": "Active",
+    "apCost": 1,
+    "cooldown": 3,
+    "effect": {
+      "kind": "SpawnTerrain",
+      "terrain": "Smoke",
+      "hexes": 2,
+      "duration": 2
+    },
+    "text": "Lay smoke around the battery: up to two hexes of Smoke terrain for two rounds."
+  },
+  {
+    "id": "ABL_FLEET_STRIKE",
+    "name": "Fleet Strike",
+    "category": "Active",
+    "apCost": 0,
+    "cooldown": 2,
+    "effect": {
+      "kind": "ChargeBonus",
+      "atk": 150,
+      "minHexesMoved": 2
+    },
+    "text": "After moving at least two hexes, gain +150 ATK; no Exposed penalty, but the bonus is smaller than a full charge."
   }
 ]

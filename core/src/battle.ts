@@ -215,8 +215,11 @@ export class BattleController {
     if (u.attackedThisActivation) throw new Error("Already attacked this activation");
     if (!u.pos || !target.pos) throw new Error("Not deployed");
     const range = effectiveRange(b, u) + (b.def(u).range > 1 ? TERRAIN_RULES[b.terrainAt(u.pos)].ranged.range : 0);
-    if (hexDistance(u.pos, target.pos) > range) throw new Error("Out of range");
-    if (b.hasStatus(target, "Hidden") && hexDistance(u.pos, target.pos) > 1 && !revealsHiddenTarget(b, u, target) && !revealAllRounds.has(u.side)) throw new Error("Target is Hidden");
+    const dist = hexDistance(u.pos, target.pos);
+    if (dist > range) throw new Error("Out of range");
+    // A gun cannot depress far enough to hit what has already closed on it.
+    if (dist < (b.def(u).minRange ?? 0)) throw new Error("Target is inside minimum range");
+    if (b.hasStatus(target, "Hidden") && dist > 1 && !revealsHiddenTarget(b, u, target) && !revealAllRounds.has(u.side)) throw new Error("Target is Hidden");
     if (u.isClone && u.attackedThisActivation) throw new Error("Clones make one basic attack");
     const d = b.def(u);
     if (d.minRange && hexDistance(u.pos, target.pos) < d.minRange) throw new Error("Inside minimum range");
