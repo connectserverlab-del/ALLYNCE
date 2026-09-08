@@ -102,3 +102,9 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-08: Proposal — now that a unit's temporary modifiers (from Orders, charges and card skills) persist
+  through a save/load round trip instead of vanishing by object identity, the `AbilityUsed` event log entry
+  could carry the exact modifier it granted (source, stat, value) alongside the ability id. That would give
+  anything that reads the event log later — an after-action report, a future step-through viewer — the same
+  source-tracked honesty the live stat breakdown already has, instead of re-deriving it from the ability
+  definition after the fact.
