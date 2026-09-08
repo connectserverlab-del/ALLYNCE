@@ -43,7 +43,12 @@ export function evaluateObjective(b: Battle, o: ObjectiveDef): ObjectiveProgress
       return { def: o, satisfied: n >= o.count, detail: `${n}/${o.count} collapsed` };
     }
     case "DestroyPortals": {
-      const n = [...b.portals.values()].filter((p) => p.side !== o.side && (p.state === "Destroyed" || p.state === "Captured")).length;
+      // Capturing a portal (see portals.ts captureStep) flips it to the capturer's own side rather than
+      // leaving it in state "Captured", so it must be counted by ownership, not by a state value that is
+      // never actually set.
+      const destroyed = [...b.portals.values()].filter((p) => p.side !== o.side && p.state === "Destroyed").length;
+      const captured = [...b.portals.values()].filter((p) => p.side === o.side && b.events.some((e) => e.type === "PortalCaptured" && e.data.portal === p.id && e.data.newSide === o.side)).length;
+      const n = destroyed + captured;
       return { def: o, satisfied: n >= o.count, detail: `${n}/${o.count} destroyed or captured` };
     }
     case "MaintainPortals": {
