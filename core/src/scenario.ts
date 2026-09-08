@@ -6,7 +6,7 @@ import { deployPlatoon } from "./deploy.js";
 import { createRitual } from "./rituals.js";
 import { callPortal, queueReinforcement } from "./portals.js";
 import type { Hex } from "./hex.js";
-import { hexKey, hexRing, DIRECTIONS, directionTo } from "./hex.js";
+import { hexKey, hexRing, hexDistance, DIRECTIONS, directionTo } from "./hex.js";
 import { generateMap, applyMap, type MapSpec, type GeneratedMap, type MapHex } from "./mapgen.js";
 import type { ObjectiveDef } from "./objectives.js";
 import type { Terrain } from "./types.js";
@@ -23,6 +23,10 @@ export type PositionSpec =
   /** A point on the line between two positions, 0 = `from`, 1 = `to`, snapped to the nearest standable hex.
    *  `lateral` steps the point sideways, perpendicular to the line, by that many hexes. */
   | { role: "lerp"; from: PositionSpec; to: PositionSpec; frac: number; lateral?: number }
+  /** A point a fixed number of hexes along the line from one side's anchor toward the other's, rather
+   *  than a fraction of it: a negative `distance` steps back from `from`, away from `to`. Useful when a
+   *  scenario wants "six hexes off the ford" whatever separation the generator happened to produce. */
+  | { role: "along"; from: string; to: string; distance: number; lateral?: number }
   /** The `index`-th standable hex (deterministic, wraps) on the ring at `ring` distance from `from`. */
   | { role: "near"; from: PositionSpec; ring: number; index: number }
   /** The already-resolved center of the ritual with this id. Rituals resolve their center before anything
@@ -90,6 +94,18 @@ export function resolvePosition(ctx: MapCtx, used: Set<string>, spec: PositionSp
     case "lerp": {
       const a = resolvePosition(ctx, used, spec.from), b = resolvePosition(ctx, used, spec.to);
       let point: Hex = { q: Math.round(a.q + (b.q - a.q) * spec.frac), r: Math.round(a.r + (b.r - a.r) * spec.frac) };
+      if (spec.lateral) {
+        const perp = DIRECTIONS[(directionTo(a, b) + 2) % 6]!;
+        point = { q: point.q + perp.q * spec.lateral, r: point.r + perp.r * spec.lateral };
+      }
+      return nearestPlayable(ctx, point, used);
+    }
+    case "along": {
+      const a = resolvePosition(ctx, used, { role: "anchor", side: spec.from });
+      const b = resolvePosition(ctx, used, { role: "anchor", side: spec.to });
+      const span = Math.max(1, hexDistance(a, b));
+      const frac = spec.distance / span;
+      let point: Hex = { q: Math.round(a.q + (b.q - a.q) * frac), r: Math.round(a.r + (b.r - a.r) * frac) };
       if (spec.lateral) {
         const perp = DIRECTIONS[(directionTo(a, b) + 2) % 6]!;
         point = { q: point.q + perp.q * spec.lateral, r: point.r + perp.r * spec.lateral };

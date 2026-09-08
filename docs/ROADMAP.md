@@ -647,3 +647,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   existing average-morale surrender condition. Capturing a portal already flips it permanently rather than merely
   disabling it, so this would give capture a payoff beyond the reinforcement stream it steals, and it reads as a
   natural escalation on a battlefield built from trenches and mud rather than an even square.
+
+- 2026-09-06: Proposal — now that a scenario can pin its features to a generated field by role instead of fixed
+  hexes (`docs/mechanics.md`, "Scenario authoring: role-pinned placement"), the campaign map (Q-5) could generate
+  a fresh, irregular field for every region on the province map rather than reusing one hand-built one: a region
+  keeps its scenario definition (which sides, which objectives, roughly where the ritual circle or the portal
+  sits relative to the lines) while the ground itself is different, odd-shaped, every time it is fought over.
+  Matches the owner's standing intent that battlefields are never even squares or cookie-cutter.
