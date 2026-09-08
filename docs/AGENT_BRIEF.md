@@ -28,8 +28,9 @@ So:
 - Branch from `claude/merge-85-prs-ec3ca0`, not from `main`.
 - Push your commits to `claude/merge-85-prs-ec3ca0`. Pull first (`git pull --rebase=false origin
   claude/merge-85-prs-ec3ca0`) so a concurrent pass is merged rather than clobbered.
-- **Do not open a new pull request.** Your work appears in #88. Never force-push it: other passes and
-  the owner's review are on that history.
+- **Do not open a new pull request.** Your work appears in whichever pull request the branch currently
+  tracks (named at the top of this section). Never force-push it: other passes and the owner's review
+  are on that history.
 - If the branch is red when you arrive, fixing it *is* your item for the pass.
 
 When the current pull request merges, the branch has done its job for that cycle: restart it from
