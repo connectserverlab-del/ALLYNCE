@@ -1,6 +1,7 @@
 import type { Battle } from "./state.js";
-import type { PlatoonState, DoctrineState, UnitDef } from "./types.js";
+import type { PlatoonState, DoctrineState, UnitDef, UnitState } from "./types.js";
 import type { Registry } from "./data.js";
+import { canLead } from "./ranks.js";
 
 export interface PlatoonBlueprint { id: string; side: string; faction: string; commander: string; second: string; elite: string; foot: string[] }
 export interface ArmyBlueprint { side: string; capacity: number; platoons: PlatoonBlueprint[]; specialists: string[] }
@@ -11,8 +12,18 @@ export function validateArmy(reg: Registry, army: ArmyBlueprint): ValidationResu
   const errors: string[] = [];
   const slots = reg.rules.standardPlatoon.slots;
   let capacity = 0;
+  let hasCompanyLeader = false;
   const uniqueSeen = new Map<string, number>();
-  const count = (id: string) => { const d = reg.unit(id); capacity += d.capacityCost; if (d.unique) uniqueSeen.set(id, (uniqueSeen.get(id) ?? 0) + 1); return d; };
+  const copies = new Map<string, number>();
+  let ascendants = 0;
+  const count = (id: string) => {
+    const d = reg.unit(id);
+    capacity += d.capacityCost;
+    copies.set(id, (copies.get(id) ?? 0) + 1);
+    if (d.unique) uniqueSeen.set(id, (uniqueSeen.get(id) ?? 0) + 1);
+    if (d.stars === 10) ascendants++;
+    return d;
+  };
   const require = (d: UnitDef, slot: string, pid: string) => {
     if (!d.slots.includes(slot as any)) errors.push(`${pid}: ${d.id} cannot fill ${slot}`);
     if (d.summonOnly || d.roles.includes("Boss") || d.roles.includes("Deity")) errors.push(`${pid}: ${d.id} is summon-only/boss/deity and cannot start deployed`);
@@ -23,17 +34,34 @@ export function validateArmy(reg: Registry, army: ArmyBlueprint): ValidationResu
     require(count(p.elite), "Elite", p.id);
     if (p.foot.length !== slots["FootSoldier"]) errors.push(`${p.id}: needs exactly ${slots["FootSoldier"]} foot soldiers, has ${p.foot.length}`);
     for (const f of p.foot) require(count(f), "FootSoldier", p.id);
+    const cd = reg.unit(p.commander);
+    const ladder = reg.ranks.get(cd.faction);
+    if (!canLead(ladder, cd.factionRank, "Platoon")) errors.push(`${p.id}: rank ${cd.factionRank ?? "none"} of ${cd.id} may not lead a Platoon`);
+    const sd = reg.unit(p.second);
+    if (!canLead(reg.ranks.get(sd.faction), sd.factionRank, "Platoon")) errors.push(`${p.id}: second ${sd.id} holds rank ${sd.factionRank ?? "none"} and could not assume platoon command`);
+    if (canLead(ladder, cd.factionRank, "Company") || canLead(reg.ranks.get(sd.faction), sd.factionRank, "Company")) hasCompanyLeader = true;
     const factions = new Set([p.commander, p.second, p.elite, ...p.foot].map((id) => reg.unit(id).faction));
     if (factions.size > 1) errors.push(`${p.id}: mixed factions ${[...factions].join(",")}`);
     const wizards = [p.commander, p.second, p.elite].filter((id) => reg.unit(id).rank === "Wizard").length;
     if (wizards > reg.rules.limits.wizardsPerPlatoon) errors.push(`${p.id}: too many Wizards`);
   }
+  // Fielding more than one platoon is a Company in the field, not just a Platoon: rank ladders declare
+  // which ranks may lead a Company for exactly this reason (see `docs/samurai-ranks.md`), but nothing
+  // checked it before now, so any Platoon-rank commander could nominally field a whole army.
+  if (army.platoons.length > 1 && !hasCompanyLeader) errors.push(`Army fields ${army.platoons.length} platoons but no commander or second holds a rank that may lead a Company`);
   for (const s of army.specialists) {
     const d = count(s);
     if (d.roles.includes("Commander") || d.roles.includes("Elite")) errors.push(`Specialist teams cannot unlock extra commanders or elites: ${s}`);
     if (d.summonOnly) errors.push(`${s} is summon-only`);
   }
   for (const [id, n] of uniqueSeen) if (n > reg.rules.limits.uniqueCopiesPerArmy) errors.push(`Unique unit ${id} appears ${n} times`);
+  // Per-unit copy caps: archangels, named monastic holders and every Ascendant are one-of.
+  for (const [id, n] of copies) {
+    const limit = reg.unit(id).uniqueLimit;
+    if (limit !== undefined && n > limit) errors.push(`${reg.unit(id).name} is limited to ${limit} cop${limit === 1 ? "y" : "ies"} per army (has ${n})`);
+  }
+  const ascendantCap = reg.rules.limits.ascendantsPerArmy ?? Infinity;
+  if (ascendants > ascendantCap) errors.push(`Only ${ascendantCap} Ascendant (ten-star) unit may be fielded per army; this army has ${ascendants}`);
   if (capacity > army.capacity) errors.push(`Army Capacity ${capacity} exceeds ${army.capacity}`);
   return { ok: errors.length === 0, errors, capacityUsed: capacity };
 }
@@ -68,4 +96,23 @@ export function organizationLevel(b: Battle, side: string): "None" | "Platoon" |
   const full = [...b.platoons.values()].filter((p) => p.side === side && doctrineState(b, p) !== "Broken").length;
   if (full >= 3) return "Company";
   return full >= 1 ? "Platoon" : "None";
+}
+
+/**
+ * The living commander or second, anywhere on the side, whose faction rank may lead a Company
+ * (same rule `validateArmy` checks at list-building time, applied here to who is actually still
+ * standing). Returns the first one found; a side either has one or it doesn't; that unit is the
+ * only one who may issue the Company Order.
+ */
+export function companyLeader(b: Battle, side: string): UnitState | null {
+  for (const p of b.platoons.values()) {
+    if (p.side !== side) continue;
+    for (const uid of [p.commanderUid, p.secondUid]) {
+      if (!live(b, uid)) continue;
+      const u = b.units.get(uid!)!;
+      const d = b.def(u);
+      if (canLead(b.reg.ranks.get(d.faction), d.factionRank, "Company")) return u;
+    }
+  }
+  return null;
 }

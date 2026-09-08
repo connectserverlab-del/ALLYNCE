@@ -21,6 +21,7 @@
     "uniqueCopiesPerArmy": 1,
     "bossDeityStartingDeployment": false,
     "wizardsPerPlatoon": 1,
-    "clonesCountTowardComposition": false
+    "clonesCountTowardComposition": false,
+    "ascendantsPerArmy": 1
   }
 }

@@ -1,0 +1,15 @@
+{
+  "faction": "RIT",
+  "notes": "Five ranks, low to high. Ritual Cult fields specialist teams only and never unlocks extra commanders or elites (see its faction weakness), so this ladder carries no canLead privilege at any tier - unlike the four army ladders, rank here buys ritual mastery instead of command. Both current units (Affiliated Summoner, Foreign Ritualist) sit on the privilege-free Affiliated tier for now, so the ladder does not shift docs/CHECKLIST.md's D-13 match numbers; Adept through Grand Ritualist are reserved for the faction's own roster-depth pass.",
+  "ranks": [
+    { "id": "AFFILIATED", "title": "Affiliated", "tier": 0, "description": "Any recognized ritualist currently serving in the field, native or foreign.", "privileges": {}, "canLead": [] },
+    { "id": "ADEPT", "title": "Adept", "tier": 1, "description": "Has completed a full working unassisted. Ritual mastery +1.", "privileges": { "ritualMastery": 1 }, "canLead": [] },
+    { "id": "CHANNELER", "title": "Channeler", "tier": 2, "description": "Trusted to hold a circle through its own instability. Ritual mastery +2, instability ceiling 4.", "privileges": { "ritualMastery": 2, "instabilityCeiling": 4 }, "canLead": [] },
+    { "id": "MASTER_RITUALIST", "title": "Master Ritualist", "tier": 3, "description": "Leads a circle rather than merely joining one. Ritual mastery +3, instability ceiling 5.", "privileges": { "ritualMastery": 3, "instabilityCeiling": 5 }, "canLead": [] },
+    { "id": "GRAND_RITUALIST", "title": "Grand Ritualist", "tier": 4, "description": "Foremost of the affiliated channelers. Ritual mastery +5, instability ceiling 6.", "privileges": { "ritualMastery": 5, "instabilityCeiling": 6 }, "canLead": [] }
+  ],
+  "privilegeRules": {
+    "ritualMastery": "Flat bonus this ritualist adds to its circle's Progress each Objective Phase tick, source-tracked in RitualCalc.rankMastery apart from the unit's own channeling/knowledge/language/affinity stats.",
+    "instabilityCeiling": "Raises the unstableStacks a held ritual can sustain before disruption can collapse it (see RITUAL_INSTABILITY_BASE, 3) to the highest ceiling among the circle's current participants."
+  }
+}

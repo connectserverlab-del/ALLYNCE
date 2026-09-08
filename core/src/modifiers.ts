@@ -1,12 +1,16 @@
 import type { Battle } from "./state.js";
 import type { UnitState, Modifier, StatBreakdown, DoctrineState } from "./types.js";
+import { TERRAIN_RULES } from "./types.js";
 import { themeCohesionBonus } from "./cohesion.js";
 import { doctrineState } from "./composition.js";
 import { commandBonus } from "./command.js";
-import { moraleBand } from "./morale.js";
-import { attackArc, type AttackArc } from "./hex.js";
+import { moraleBand, platoonMembers } from "./morale.js";
+import { attackArc, hexDistance, type AttackArc } from "./hex.js";
+import { privileges, commandRadiusOf, CHARGE_BONUS_MIN_HEXES, DIVE_BONUS_MIN_DROP } from "./ranks.js";
+import { kingdomMods } from "./kingdom.js";
+import { weatherRangedAtkMod } from "./weather.js";
 
-export interface CombatContext { attacker?: UnitState; defender?: UnitState; arc?: AttackArc; ranged?: boolean }
+export interface CombatContext { attacker?: UnitState; defender?: UnitState; arc?: AttackArc; ranged?: boolean; reaction?: boolean; structureTarget?: boolean }
 
 /**
  * Modifier pipeline. Every contribution records its source so the UI can show the breakdown
@@ -16,7 +20,9 @@ export function computeStat(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: C
   const d = b.def(u);
   const mods: Modifier[] = [];
   const isDivine = !!d.divine;
-  const base = stat === "ATK" ? (u.isClone ? (u.cloneAtk ?? 0) : d.atk) : d.def;
+  // Copies are not free strength. A body that has split shares its attack and defence out across
+  // itself and every living copy, so three of a thing hit for what one of it used to.
+  const base = Math.floor((stat === "ATK" ? d.atk : d.def) / Math.max(1, u.splitBodies ?? 1));
 
   if (!u.isClone && !isDivine) {
     // 1. Theme Cohesion (capped at +100 when Disordered)
@@ -47,15 +53,44 @@ export function computeStat(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: C
     if (b.hasStatus(u, "Exposed")) mods.push({ source: "Status: Exposed", stat, value: -150 });
   }
 
-  // 6. Terrain
+  // 6. Terrain (from the rules table) and elevation
   if (u.pos && !d.flying) {
-    const t = b.terrainAt(u.pos);
-    if (stat === "DEF" && t === "Fortification") mods.push({ source: "Terrain: Fortification", stat, value: 200 });
-    if (stat === "ATK" && t === "HighGround" && ctx.ranged) mods.push({ source: "Terrain: High Ground", stat, value: 100 });
+    const t = b.terrainAt(u.pos); const rule = TERRAIN_RULES[t];
+    if (stat === "DEF" && rule.def) mods.push({ source: `Terrain: ${t}`, stat, value: rule.def });
+    if (stat === "ATK" && ctx.ranged && rule.ranged.atk) mods.push({ source: `Terrain: ${t}`, stat, value: rule.ranged.atk });
+  }
+  if (stat === "ATK" && ctx.attacker === u && ctx.defender?.pos && u.pos && !d.flying && b.elevationAt(u.pos) > b.elevationAt(ctx.defender.pos)) mods.push({ source: "Elevation advantage", stat, value: 50 });
+
+  // 6b. Time of day (round modifier): a ranged attack fired at Night goes wide more often.
+  if (stat === "ATK" && ctx.ranged) {
+    const nightPenalty = weatherRangedAtkMod(b);
+    if (nightPenalty) mods.push({ source: `Time of Day: ${b.timeOfDay}`, stat, value: nightPenalty });
   }
 
   // 7. Ability conditionals and platoon orders (data-driven)
   if (!u.isClone) mods.push(...abilityModifiers(b, u, stat, ctx));
+
+  // 8. Siege: breaching shot against fortified targets, or against a structure (portal) itself
+  if (stat === "ATK" && ctx.attacker === u && d.siege && d.passives.includes("ABL_BREACHING_SHOT")) {
+    if (ctx.structureTarget) {
+      mods.push({ source: "Breaching Shot", stat, value: d.siege.structureAtk });
+    } else if (ctx.defender?.pos) {
+      const t = b.terrainAt(ctx.defender.pos);
+      if (t === "Fortification" || t === "Ruins" || t === "Trench") mods.push({ source: "Breaching Shot", stat, value: d.siege.structureAtk });
+    }
+  }
+
+  // 9. Holding: buildings and completed research
+  if (!u.isClone && !isDivine) mods.push(...kingdomMods(b, u.side, d.roles, stat));
+
+  // 10. Faction rank privileges
+  if (!u.isClone && !isDivine) {
+    const pv = privileges(b, u);
+    if (stat === "ATK" && ctx.reaction && pv.twoSwords) mods.push({ source: "Rank: two swords (reaction)", stat, value: 50 });
+    if (stat === "DEF" && u.pos && b.terrainAt(u.pos) === "Fortification" && castleLordNearby(b, u)) mods.push({ source: "Rank: castle lord nearby", stat, value: 100 });
+    if (stat === "ATK" && pv.chargeBonus && u.chargeMoved >= CHARGE_BONUS_MIN_HEXES) mods.push({ source: "Rank: lance charge", stat, value: pv.chargeBonus });
+    if (stat === "ATK" && pv.divingCharge && u.altitudeDropped >= DIVE_BONUS_MIN_DROP) mods.push({ source: "Rank: wing dive", stat, value: pv.divingCharge });
+  }
 
   // Divine entities' stats scale down with lost anchors
   let final = base + mods.reduce((s, m) => s + m.value, 0);
@@ -97,9 +132,13 @@ function abilityModifiers(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: Com
       let ok = true;
       if (e.vsRoles) ok = ok && (e.vsRoles as string[]).some((r) => b.def(target).roles.includes(r as any));
       if (e.vsIsolated) ok = ok && b.isIsolated(target);
+      if (e.vsTerrain) ok = ok && !!target.pos && b.terrainAt(target.pos) === e.vsTerrain;
       if (ok) out.push({ source: a.name, stat, value: e.atk });
     }
   }
+  // Auras projected by nearby allies (Oathlight, Host Aloft, Stormbond, Two Schools)
+  out.push(...auraModifiers(b, u, stat));
+
   // Platoon-level marked target (Coordinated Cut)
   if (stat === "ATK" && u.platoonId && target) {
     const p = b.platoon(u.platoonId);
@@ -110,14 +149,69 @@ function abilityModifiers(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: Com
   return out;
 }
 
-const TEMP = new WeakMap<UnitState, Modifier[]>();
-export function tempMods(u: UnitState): Modifier[] { return TEMP.get(u) ?? []; }
-export function addTempMod(u: UnitState, m: Modifier): void { TEMP.set(u, [...tempMods(u), m]); }
+/**
+ * AuraStat passives. The aura is read from the projecting ally, never from the
+ * receiver, so a unit never buffs itself twice and auras of the same name do not stack.
+ */
+function auraModifiers(b: Battle, u: UnitState, stat: "ATK" | "DEF"): Modifier[] {
+  const d = b.def(u);
+  const best = new Map<string, Modifier>();
+  for (const ally of b.activeUnits(u.side)) {
+    if (ally.uid === u.uid || ally.isClone) continue;
+    const ad = b.def(ally);
+    for (const id of ad.passives) {
+      const a = b.reg.ability(id);
+      const e = a.effect as Record<string, any>;
+      if (e.kind !== "AuraStat" || e.stat !== stat) continue;
+      if (b.distance(u, ally) > e.radius) continue;
+      if (e.theme && !d.themes.includes(e.theme)) continue;
+      if (e.sameFusion && !(d.fusion && ad.fusion)) continue;
+      const prev = best.get(a.name);
+      if (!prev || prev.value < e.value) best.set(a.name, { source: a.name, stat, value: e.value });
+    }
+  }
+  return [...best.values()];
+}
+
+// Stored on the unit itself (like statuses and cooldowns) rather than in a side table keyed by object
+// identity, so a save/load round trip carries them forward instead of dropping them silently.
+export function tempMods(u: UnitState): Modifier[] { return u.tempMods; }
+export function addTempMod(u: UnitState, m: Modifier): void { u.tempMods = [...u.tempMods, m]; }
 export function clearTempMods(u: UnitState, predicate?: (m: Modifier) => boolean): void {
-  if (!predicate) TEMP.delete(u); else TEMP.set(u, tempMods(u).filter((m) => !predicate(m)));
+  u.tempMods = predicate ? u.tempMods.filter((m) => !predicate(m)) : [];
 }
 
 export function arcFor(b: Battle, attacker: UnitState, defender: UnitState): AttackArc {
   if (!attacker.pos || !defender.pos) return "front";
   return attackArc(defender.pos, defender.facing, attacker.pos);
+}
+
+/** Whether `u`'s own abilities or faction doctrine carry a passive of this effect kind. */
+export function hasPassiveKind(b: Battle, u: UnitState, kind: string): boolean {
+  const d = b.def(u);
+  const faction = b.reg.factions.get(d.faction);
+  const ids = [...d.passives, ...(faction?.passiveDoctrine ? [faction.passiveDoctrine] : [])];
+  return ids.some((id) => b.reg.ability(id).effect.kind === kind);
+}
+
+/**
+ * Unseen Network: a Hidden platoon-mate standing beside a Hidden enemy radios its position back, so
+ * the platoon commander can strike it despite the range-1 rule that otherwise protects anything Hidden.
+ * Only the unit actually holding the commander's slot benefits — which, after a succession, may be a
+ * longer-ranged Second rather than the platoon's original melee leader.
+ */
+export function revealsHiddenTarget(b: Battle, attacker: UnitState, target: UnitState): boolean {
+  if (!attacker.platoonId || !target.pos) return false;
+  const p = b.platoon(attacker.platoonId);
+  if (p.commanderUid !== attacker.uid || !hasPassiveKind(b, attacker, "SharedVision")) return false;
+  return platoonMembers(p).some((uid) => {
+    const m = b.units.get(uid);
+    return !!m && m.uid !== attacker.uid && !m.defeated && m.pos && b.hasStatus(m, "Hidden") && hexDistance(m.pos, target.pos!) <= 1;
+  });
+}
+
+/** A castle-holding rank on the same side whose command radius covers `u`. */
+function castleLordNearby(b: Battle, u: UnitState): boolean {
+  for (const l of b.activeUnits(u.side)) if (l.uid !== u.uid && privileges(b, l).castle && b.distance(l, u) <= commandRadiusOf(b, l)) return true;
+  return false;
 }

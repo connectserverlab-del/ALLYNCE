@@ -27,4 +27,24 @@ describe("theme cohesion", () => {
     const atk = computeStat(b, c, "ATK");
     expect(atk.modifiers.find((m) => m.source === "Theme Cohesion")?.value).toBe(100);
   });
+  it("an enemy of the same theme standing next door grants nothing: cohesion only ever counts allies", () => {
+    const { b } = newBattle();
+    const c = b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 5, r: 5 });
+    b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "B", { q: 6, r: 5 });
+    expect(themeCohesionBonus(b, c)).toBe(0);
+    // and once an actual ally of the same theme joins, only the ally is counted
+    b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 6, r: 4 });
+    expect(themeCohesionBonus(b, c)).toBe(50);
+  });
+  it("a themeless unit neither grants nor receives cohesion (Divine Entities carry no theme)", () => {
+    const { b } = newBattle();
+    const sovereign = b.spawn("DIV_BOSS_SOVEREIGN-OF-MEMORY", "A", { q: 5, r: 5 });
+    b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 6, r: 5 });
+    b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 6, r: 4 });
+    expect(b.def(sovereign).themes).toEqual([]);
+    expect(themeCohesionBonus(b, sovereign)).toBe(0);
+    // and it does not extend the Samurai pair's own connection either
+    const samurai = b.unitAt({ q: 6, r: 5 })!;
+    expect(themeCohesionBonus(b, samurai)).toBe(50); // the other ashigaru only, not the sovereign
+  });
 });

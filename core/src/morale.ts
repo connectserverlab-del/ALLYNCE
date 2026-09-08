@@ -1,5 +1,6 @@
 import type { Battle } from "./state.js";
 import type { UnitState, PlatoonState } from "./types.js";
+import { commandRadiusOf, privileges } from "./ranks.js";
 
 export type MoraleBand = "Steady" | "Shaken" | "Disordered" | "Routed" | "Broken";
 export function moraleBand(m: number): MoraleBand {
@@ -28,11 +29,10 @@ export function platoonMembers(p: PlatoonState): string[] {
 /** Routed/Broken statuses follow the morale value unless an order prevents routing. */
 function syncRouted(b: Battle, u: UnitState): void {
   const band = moraleBand(u.morale);
-  const prevented = tempPreventRouted.has(u.uid);
+  const prevented = b.tempPreventRouted.has(u.uid);
   if ((band === "Routed" || band === "Broken") && !prevented) { if (!b.hasStatus(u, "Routed")) b.addStatus(u, "Routed", 99, "Morale"); }
   else b.removeStatus(u, "Routed");
 }
-export const tempPreventRouted = new Set<string>();
 
 /** Morale recovery at round start: +5 inside a live commander's command radius. */
 export function commandRadiusRecovery(b: Battle): void {
@@ -41,8 +41,11 @@ export function commandRadiusRecovery(b: Battle): void {
     const p = b.platoon(u.platoonId);
     const leader = p.commanderUid ? b.units.get(p.commanderUid) : undefined;
     if (leader && !leader.defeated && leader.pos && leader.uid !== u.uid) {
-      const radius = b.def(leader).commandRadius ?? 0;
-      if (b.distance(leader, u) <= radius) changeMorale(b, u, 5, "Inside command radius");
+      const radius = commandRadiusOf(b, leader);
+      if (b.distance(leader, u) <= radius) {
+        changeMorale(b, u, 5, "Inside command radius");
+        if (privileges(b, leader).banner) changeMorale(b, u, 5, "Rank: banner");
+      }
     }
   }
 }

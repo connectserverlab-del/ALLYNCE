@@ -1,0 +1,23 @@
+{
+  "weather": {
+    "Clear": { "weight": 3, "text": "No change to the field." },
+    "Rain": {
+      "weight": 1,
+      "mudRadius": 1,
+      "text": "Standing water floods the low ground beside it: every Open hex within one step of Water or a Ford turns to Mud for the battle."
+    },
+    "Fog": {
+      "weight": 1,
+      "rangedRangeMod": -1,
+      "text": "A ranged unit's attack range is cut by one hex (never below one). Melee reach is unaffected."
+    }
+  },
+  "timeOfDay": {
+    "Day": { "weight": 2, "text": "No change to the field." },
+    "Night": {
+      "weight": 1,
+      "rangedAtkMod": -25,
+      "text": "Volleys fired at range go wide in the dark: -25 ATK on a ranged attack."
+    }
+  }
+}

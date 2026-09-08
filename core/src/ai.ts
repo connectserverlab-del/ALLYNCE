@@ -1,10 +1,17 @@
 import type { BattleController } from "./battle.js";
-import type { UnitState } from "./types.js";
+import { isBroken, canBeTaken, canBeSubdued, CAPTURE_THRESHOLD } from "./battle.js";
+import type { Battle } from "./state.js";
+import type { UnitState, UnitDef } from "./types.js";
+import { TERRAIN_RULES } from "./types.js";
 import type { Hex } from "./hex.js";
-import { hexDistance } from "./hex.js";
-import { computeStat } from "./modifiers.js";
+import { hexDistance, hexNeighbors, attackArc } from "./hex.js";
+import { computeStat, revealsHiddenTarget } from "./modifiers.js";
 import { cohesionConnections } from "./cohesion.js";
+import { bandOf, enemiesWithin } from "./effects.js";
+import { moraleBand } from "./morale.js";
 import type { RitualCircle } from "./rituals.js";
+import { effectiveRange } from "./weather.js";
+import { eligibleRecipes } from "./fusion.js";
 
 /**
  * Goal-oriented utility AI. Each unit scores candidate actions with weighted considerations:
@@ -17,6 +24,31 @@ export const DIFFICULTY: Record<string, AiProfile> = {
   normal: { name: "normal", risk: 0.5, lookahead: 1, objectiveWeight: 1.0 },
   hard: { name: "hard", risk: 0.7, lookahead: 1, objectiveWeight: 1.3 },
 };
+
+/**
+ * Weights the mover trades against ground. One hex of progress toward its goal is worth 100, so every
+ * number here says how many hexes of advance the AI will give up for something else. The terrain values
+ * themselves are never written down twice: they are read out of `TERRAIN_RULES`, so retuning a terrain
+ * retunes the AI with it.
+ */
+const TERRAIN_STAT_WEIGHT = 0.4;      // a point of terrain DEF, or of ranged ATK for a shooter, against a hex of ground
+const ELEVATION_WEIGHT = 20;          // per tier of height: the +50 ATK of attacking downhill, priced at the same rate
+const CONCEALMENT_BONUS = 30;         // cover worth disappearing into, for a unit that would rather not be shot at
+const BROKEN_CHARGE_PENALTY = 120;    // ground that kills momentum, for a horse that is only dangerous with it
+const SIEGE_EXPOSURE_PENALTY = 300;   // a gun in the front rank is a gun about to be lost
+const SIEGE_SCREEN_BONUS = 80;        // ... and a gun with friends in front of it is a gun that keeps firing
+const FLANK_ARC_WEIGHT = 100;         // per arc step around a target: rear is worth two, flank one
+const APPROACH_STEP_WEIGHT = 10;      // tie-break between equally exposed approaches: take the near one
+const FUSION_ENEMY_RANGE = 6;         // a clash close enough to be worth trading bodies for weight over
+
+/**
+ * When a card skill is worth an action. All six are setup for something else, so the tests they have to
+ * pass are about whether the thing they set up is actually going to happen this round.
+ */
+const AREA_SKILL_MIN_TARGETS = 2;     // a radius debuff earns its action once it catches a second enemy
+const BAND_SWING_MIN = 2;             // a team buff wants a band about to swing, not one soldier in the open
+const SACRIFICE_HP_FLOOR = 0.5;       // never bleed past half: the trade is reach, not a funeral
+const PORTAL_KEEPER_MIN_GAP = 6;      // hexes a new portal must clear from an existing one: presence, not a cluster
 
 export interface ReleasePolicy { (ctrl: BattleController, side: string): Record<string, boolean> }
 
@@ -39,6 +71,11 @@ export function runAiActivation(ctrl: BattleController, groupId: string, profile
   const members = ctrl.beginActivation(groupId);
   const side = members[0]?.side;
   if (!side) { ctrl.endActivation(groupId); return; }
+  if (shouldSurrender(ctrl, side)) {
+    try { ctrl.surrender(side); } catch { /* someone senior is still standing after all */ }
+    ctrl.endActivation(groupId);
+    return;
+  }
   // leader orders first
   for (const u of members) {
     if (!ctrl.canIssueOrder(u) || u.ap <= 0) continue;
@@ -75,33 +112,110 @@ function actOnce(ctrl: BattleController, u: UnitState, profile: AiProfile): bool
     if (target) return moveToward(ctrl, u, target.center);
     return false;
   }
-  // Portal keepers: open a portal if reserve allows, else defend
+  // Siege: never stand at the front. An enemy inside the minimum range blinds the gun, so give ground
+  // first; otherwise close only as far as the firing band needs — shortened by weather and failing light —
+  // and emplace rather than charge on.
+  if (isSiege(d)) {
+    const closest = nearestEnemy(ctrl, u);
+    if (closest && closest.pos) {
+      const dist = b.distance(u, closest);
+      if (dist <= (d.minRange ?? 0)) { if (retreatFrom(ctrl, u, closest.pos)) return true; }
+      else if (dist > effectiveRange(b, u)) { if (moveToward(ctrl, u, closest.pos, profile)) return true; }
+      else if (!u.setUp) {
+        const setupId = d.actives.find((id) => b.reg.ability(id).effect.kind === "SiegeSetup");
+        if (setupId) { try { ctrl.useAbility(u, setupId); return true; } catch { /* skip */ } }
+      }
+    }
+  }
+  // Portal keepers: feed Reserve into whatever of ours is already open before betting any of it on
+  // ground that has not opened yet, and only call a new portal once nothing of ours is up nearby.
+  if (d.roles.includes("PortalKeeper") && runPortalKeeper(ctrl, u)) return true;
   // Abilities with immediate value
   for (const id of d.actives) {
     const a = b.reg.ability(id);
     if (a.category !== "Active" || (u.cooldowns[id] ?? 0) > 0) continue;
     const enemy = nearestEnemy(ctrl, u);
-    if (a.effect.kind === "SpawnClones" && enemy && b.distance(u, enemy) <= 3) { try { ctrl.useAbility(u, id); return true; } catch { /* no room */ } }
-    if (a.effect.kind === "ChargeBonus" && u.movedThisActivation >= (a.effect as any).minHexesMoved && enemy && b.distance(u, enemy) <= d.range) { try { ctrl.useAbility(u, id); } catch { /* skip */ } }
+    if (a.effect.kind === "SpawnClones" && enemy && b.distance(u, enemy) <= 3 && shouldSplit(ctrl, u)) { try { ctrl.useAbility(u, id); return true; } catch { /* no room */ } }
+    if (a.effect.kind === "ChargeBonus" && u.movedThisActivation >= (a.effect as any).minHexesMoved && enemy && b.distance(u, enemy) <= effectiveRange(b, u)) { try { ctrl.useAbility(u, id); } catch { /* skip */ } }
     if (a.effect.kind === "Duel" && enemy && b.distance(u, enemy) === 1 && b.def(enemy).roles.some((r) => r === "Elite" || r === "Commander")) { try { ctrl.useAbility(u, id, { target: enemy }); } catch { /* skip */ } }
+    // A gun that has not been emplaced cannot fire, so set up the moment something walks into the sights.
+    if (a.effect.kind === "SiegeSetup" && !u.setUp && enemy && inFiringBand(b.def(u), b.distance(u, enemy))) { try { ctrl.useAbility(u, id); return true; } catch { /* skip */ } }
+
+    // The six card skills. Each of them buys a better version of some other action, so none of them is
+    // worth the last point of an activation: spend one only while there is still an attack or a move to
+    // spend it on. The same rule is what keeps the whole hand from being emptied on an untouched field.
+    if (u.ap < 2) continue;
+    if (a.effect.kind === "SelfSacrificeBuff" && enemy && !u.attackedThisActivation && b.distance(u, enemy) <= d.range
+      && u.hp - Math.floor(d.hp * (a.effect as any).hpCostShare) >= d.hp * SACRIFICE_HP_FLOOR) { try { ctrl.useAbility(u, id); return true; } catch { /* skip */ } }
+    // Haste is for the gap between wanting a fight and being able to reach one, and only when the extra
+    // ground actually closes it. Hexes and movement points are the same thing over open ground.
+    if (a.effect.kind === "SelfHaste" && enemy) {
+      const gap = b.distance(u, enemy) - d.range, allowance = ctrl.movementAllowance(u);
+      if (gap > allowance && gap <= allowance + (a.effect as any).mov) { try { ctrl.useAbility(u, id); return true; } catch { /* skip */ } }
+    }
+    if (a.effect.kind === "BandAtk" && bandAboutToSwing(ctrl, u) >= BAND_SWING_MIN) { try { ctrl.useAbility(u, id); return true; } catch { /* skip */ } }
+    if ((a.effect.kind === "EnemyAtkDebuff" || a.effect.kind === "EnemySlow") && enemiesWithin(b, u, a.range ?? 1).length >= AREA_SKILL_MIN_TARGETS) { try { ctrl.useAbility(u, id); return true; } catch { /* skip */ } }
+  }
+  // A warrant target that is already broken is worth more alive than dead: take it now
+  const warrants = b.wanted.get(u.side);
+  if (warrants?.size) {
+    const prisoner = b.adjacentEnemies(u).find((e) => warrants.has(e.defId) && ctrl.canSubdue(u, e));
+    if (prisoner) { try { ctrl.subdue(u, prisoner); return true; } catch { /* someone else took it */ } }
   }
   // Attack if a target is in range: prefer ritualists / exposed elites / isolated commanders
-  const targets = [...b.activeUnits()].filter((e) => e.side !== u.side && e.pos && hexDistance(u.pos!, e.pos) <= d.range && !(b.hasStatus(e, "Hidden") && hexDistance(u.pos!, e.pos) > 1));
+  const targets = [...b.activeUnits()].filter((e) => e.side !== u.side && e.pos && hexDistance(u.pos!, e.pos) <= effectiveRange(b, u) && hexDistance(u.pos!, e.pos) >= (d.minRange ?? 0) && !(b.hasStatus(e, "Hidden") && hexDistance(u.pos!, e.pos) > 1 && !revealsHiddenTarget(b, u, e)));
   if (targets.length && !u.attackedThisActivation) {
     const best = targets.map((t) => ({ t, s: targetScore(ctrl, u, t, profile) })).sort((a, c) => c.s - a.s)[0]!;
     try { ctrl.attack(u, best.t); return true; } catch { /* duel or other block */ }
   }
   // Enemy portal adjacent? hit it
-  for (const p of b.portals.values()) if (p.side !== u.side && p.state !== "Destroyed" && hexDistance(u.pos!, p.pos) <= d.range && !u.attackedThisActivation) { try { ctrl.attackStructure(u, p); return true; } catch { /* skip */ } }
+  for (const p of b.portals.values()) if (p.side !== u.side && p.state !== "Destroyed" && hexDistance(u.pos!, p.pos) <= effectiveRange(b, u) && !u.attackedThisActivation) { try { ctrl.attackStructure(u, p); return true; } catch { /* skip */ } }
 
   // Movement toward the highest-utility goal
   if (u.movedThisActivation === 0 || u.ap > 1) {
     const goal = chooseGoal(ctrl, u, profile);
-    if (goal) return moveToward(ctrl, u, goal, profile);
+    if (goal && moveToward(ctrl, u, goal, profile)) return true;
   }
+  // Fusion never outbids an attack or a move: it only spends an AP that would otherwise buy nothing,
+  // once a fight is close enough that the stronger single body is worth the platoon depth it costs.
+  // (A goal with no reachable hex toward it falls through to here rather than stopping the unit cold.)
+  if (tryFusion(ctrl, u)) return true;
   // Otherwise Defend
   if (u.ap > 0 && !u.defending) { ctrl.defend(u); return true; }
   return false;
+}
+
+/**
+ * Attempt to fuse this unit with one or more adjacent, same-side allies by any recipe the roster
+ * satisfies. Only considered once nothing more urgent (an attack, a move) is on offer, and only when
+ * an enemy is close enough that the trade — fewer bodies for one heavier one — is actually worth
+ * making now rather than a detour taken for its own sake.
+ */
+export function tryFusion(ctrl: BattleController, u: UnitState): boolean {
+  const b = ctrl.b;
+  if (u.isClone || u.ap < 1 || !u.pos) return false;
+  const side = b.sides.get(u.side);
+  if (!side) return false;
+  const enemy = nearestEnemy(ctrl, u);
+  if (!enemy || !enemy.pos || hexDistance(u.pos, enemy.pos) > FUSION_ENEMY_RANGE) return false;
+  const allies = b.adjacentAllies(u).filter((a) => !a.isClone && a.ap >= 1);
+  for (const r of b.reg.fusions.values()) {
+    const need = r.inputs.length - 1;
+    if (need < 1 || need > allies.length || (side.fusionCharges ?? 0) < (r.charges ?? 1)) continue;
+    for (const combo of combinations(allies, need)) {
+      const units = [u, ...combo];
+      if (!eligibleRecipes(b, units).some((x) => x.id === r.id)) continue;
+      try { ctrl.fuse(units, r.id); return true; } catch { /* another condition failed after all */ }
+    }
+  }
+  return false;
+}
+/** Every way to choose `size` distinct items out of `items`, order ignored. */
+function combinations<T>(items: T[], size: number): T[][] {
+  if (size === 0) return [[]];
+  if (items.length < size) return [];
+  const [first, ...rest] = items;
+  return [...combinations(rest, size - 1).map((c) => [first!, ...c]), ...combinations(rest, size)];
 }
 
 function targetScore(ctrl: BattleController, u: UnitState, t: UnitState, profile: AiProfile): number {
@@ -114,12 +228,38 @@ function targetScore(ctrl: BattleController, u: UnitState, t: UnitState, profile
   if (td.roles.includes("Commander")) s += 300;
   if (td.roles.includes("Elite") && b.hasStatus(t, "Exposed")) s += 250;
   if (b.isIsolated(t)) s += 150;
-  if (t.isClone) s -= 500; // clones are decoys
+  // A copy carries a share of the original's stats and falls in one hit; killing it hands that
+  // share back to the original, so it is worth taking rather than waved off as a decoy.
+  if (t.isClone) s += 250;
+  // A warrant pays for a prisoner, so a warrant target is not something to shoot at. Leave it
+  // alone while anyone of ours is close enough to lay hands on it; only once nobody can reach it
+  // does killing it beat letting it walk away.
+  if (b.wanted.get(u.side)?.has(t.defId) && canBeSubdued(b, t)) {
+    const threshold = Math.ceil(td.hp * CAPTURE_THRESHOLD);
+    const closingIn = [...b.activeUnits(u.side)].some((a) => !a.isClone && a.pos && t.pos && hexDistance(a.pos, t.pos) <= 6);
+    if (closingIn || canBeTaken(b, t, u.side) || t.hp - dmg <= threshold) s -= 4000;
+  }
   return s;
+}
+
+/**
+ * Splitting halves what a unit hits and defends with, so it only pays for itself as a trade: more
+ * bodies to hold ground or draw attacks across a crowd. Against a single attacker it just buys that
+ * hard hitter an easier kill, so refuse it there and only split when outnumbered.
+ */
+function shouldSplit(ctrl: BattleController, u: UnitState): boolean {
+  const b = ctrl.b;
+  if (!u.pos) return false;
+  const nearby = [...b.activeUnits()].filter((e) => e.side !== u.side && e.pos && hexDistance(u.pos!, e.pos) <= 3);
+  return nearby.length >= 2;
 }
 
 function chooseGoal(ctrl: BattleController, u: UnitState, profile: AiProfile): Hex | null {
   const b = ctrl.b; const d = b.def(u);
+  const enemy = nearestEnemy(ctrl, u);
+  // A siege piece is a range weapon on a carriage: once anything stands in its firing band there is
+  // nothing left to walk toward, and walking would only break the emplacement and hand it to the line.
+  if (isSiege(d) && enemy && inFiringBand(d, b.distance(u, enemy))) return null;
   const enemyRituals = [...b.rituals.values()].filter((r) => r.side !== u.side && r.state !== "Collapsed" && r.state !== "CompletedReleased");
   const enemyPortals = [...b.portals.values()].filter((p) => p.side !== u.side && p.state !== "Destroyed");
   const candidates: Array<{ hex: Hex; score: number }> = [];
@@ -130,12 +270,30 @@ function chooseGoal(ctrl: BattleController, u: UnitState, profile: AiProfile): H
     candidates.push({ hex: r.center, score: (600 * urgency * profile.objectiveWeight * mobile) / (1 + dist / 4) });
   }
   for (const p of enemyPortals) { const dist = hexDistance(u.pos!, p.pos); candidates.push({ hex: p.pos, score: 300 / (1 + dist / 4) }); }
-  const enemy = nearestEnemy(ctrl, u);
+  // An enemy copy dies in one hit and hands its stat share back to the original, so hunting it down
+  // shrinks a split body even before the original itself is caught.
+  for (const c of b.activeUnits()) {
+    if (c.side === u.side || !c.pos || !c.isClone) continue;
+    candidates.push({ hex: c.pos, score: 700 / (1 + hexDistance(u.pos!, c.pos) / 4) });
+  }
+  // A warrant target is the most valuable thing on the field. Converge on it: two bodies on it and
+  // its friends cleared away is a prisoner, and a prisoner is the only thing the writ pays for.
+  const warrants = b.wanted.get(u.side);
+  if (warrants?.size) {
+    for (const e of b.activeUnits()) {
+      if (e.side === u.side || !e.pos || !warrants.has(e.defId) || !canBeSubdued(b, e)) continue;
+      const ready = canBeTaken(b, e, u.side) ? 3 : 1;
+      candidates.push({ hex: e.pos, score: (900 * ready) / (1 + hexDistance(u.pos!, e.pos) / 4) });
+    }
+  }
   if (enemy) {
     const dist = b.distance(u, enemy);
     const myAtk = computeStat(b, u, "ATK").final, theirDef = computeStat(b, enemy, "DEF").final;
     const favorable = (myAtk - theirDef) / 400;
-    candidates.push({ hex: enemy.pos!, score: (250 + 200 * favorable * profile.risk) / (1 + dist / 6) });
+    // Horse does not ride into a braced shield. Aim a cavalry approach at the ground the target's facing
+    // does not cover, where the same lance is worth a quarter more.
+    const approach = d.roles.includes("Cavalry") ? flankHex(ctrl, u, enemy) : enemy.pos!;
+    candidates.push({ hex: approach, score: (250 + 200 * favorable * profile.risk) / (1 + dist / 6) });
   }
   // Commanders hold formation rather than charge
   if (d.roles.includes("Commander") && u.platoonId) {
@@ -145,32 +303,181 @@ function chooseGoal(ctrl: BattleController, u: UnitState, profile: AiProfile): H
   return candidates.sort((a, c) => c.score - a.score)[0]!.hex;
 }
 
-/** Move to the reachable hex closest to the goal that best preserves theme cohesion and avoids isolation. */
+/**
+ * Move to the reachable hex closest to the goal that best preserves theme cohesion, avoids isolation and
+ * stands on the best ground going. When nothing brings the unit closer at all it will still take a step
+ * sideways onto better ground rather than wait out the round in the open.
+ */
 function moveToward(ctrl: BattleController, u: UnitState, goal: Hex, profile: AiProfile = DIFFICULTY.normal!): boolean {
-  const b = ctrl.b;
+  const b = ctrl.b; const d = b.def(u);
   if (u.ap <= 0 || !u.pos) return false;
   const reach = [...ctrl.reachable(u).values()];
   if (!reach.length) return false;
   const currentDist = hexDistance(u.pos, goal);
   const before = cohesionConnections(b, u).length;
+  const here = groundScore(ctrl, u, u.pos);
+  const enemy = nearestEnemy(ctrl, u);
   let best: { hex: Hex; score: number } | null = null;
+  let hold: { hex: Hex; score: number } | null = null;
+  // A ranged unit closes only to its own stand-off ring: stepping inside it trades the shot it
+  // already has for a melee it did not want. Siege keeps its own, stricter handling in actOnce.
+  const standOff = !isSiege(d) && d.range > 1 && enemy && enemy.pos && hexDistance(goal, enemy.pos) === 0
+    ? effectiveRange(b, u) : 0;
   for (const r of reach) {
     const dist = hexDistance(r.hex, goal);
-    if (dist >= currentDist) continue;
+    if (dist > currentDist) continue;
+    if (standOff && dist < standOff && currentDist > standOff) continue;
     // simulate cohesion at destination
     const theme = b.def(u).themes[0];
     const after = theme ? b.adjacentUnits({ ...u, pos: r.hex } as UnitState).filter((a) => a.side === u.side && !a.isClone && b.def(a).themes[0] === theme && a.uid !== u.uid).length : 0;
     const enemiesAdj = b.adjacentUnits({ ...u, pos: r.hex } as UnitState).filter((a) => a.side !== u.side).length;
-    let score = (currentDist - dist) * 100;
+    const ground = groundScore(ctrl, u, r.hex);
+    let score = (currentDist - dist) * 100 + ground;
     score += (after - before) * 60 * (1 - profile.risk);
     if (after === 0 && before > 0) score -= 120 * (1 - profile.risk);   // isolation risk
     if (enemiesAdj >= 2) score -= 80 * (1 - profile.risk);
-    if (b.terrainAt(r.hex) === "Fortification") score += 40;
-    if (!best || score > best.score) best = { hex: r.hex, score };
+    if (isSiege(d)) {
+      score -= enemiesAdj * SIEGE_EXPOSURE_PENALTY;
+      if (enemy && screened(ctrl, u, r.hex, enemy)) score += SIEGE_SCREEN_BONUS;
+    }
+    if (dist < currentDist) { if (!best || score > best.score) best = { hex: r.hex, score }; }
+    else if (ground > here && (!hold || score > hold.score)) hold = { hex: r.hex, score };
+  }
+  const chosen = best ?? hold;
+  if (!chosen) return false;
+  const disengage = b.adjacentEnemies(u).length > 0 && u.ap >= 2;
+  try { ctrl.move(u, chosen.hex, { disengage }); return true; } catch { return false; }
+}
+
+/**
+ * What the ground under a hex is worth to this unit, in the same currency as a hex of progress. Every
+ * term comes out of `TERRAIN_RULES` or the elevation map, so the AI wants exactly what the rules pay for:
+ * cover it can shoot from, height it can shoot down from, and — for cavalry — ground a charge survives.
+ * A flier is carrying none of this, and the modifier pipeline agrees, so its ground is worth nothing.
+ */
+/** Move away from `threat`, to the reachable hex that gains the most distance. Keeps siege pieces off the front line. */
+function retreatFrom(ctrl: BattleController, u: UnitState, threat: Hex): boolean {
+  if (u.ap <= 0 || !u.pos) return false;
+  const currentDist = hexDistance(u.pos, threat);
+  let best: { hex: Hex; dist: number } | null = null;
+  for (const r of ctrl.reachable(u).values()) {
+    const dist = hexDistance(r.hex, threat);
+    if (dist <= currentDist) continue;
+    if (!best || dist > best.dist) best = { hex: r.hex, dist };
   }
   if (!best) return false;
-  const disengage = b.adjacentEnemies(u).length > 0 && u.ap >= 2;
-  try { ctrl.move(u, best.hex, { disengage }); return true; } catch { return false; }
+  try { ctrl.move(u, best.hex); return true; } catch { return false; }
+}
+
+function groundScore(ctrl: BattleController, u: UnitState, h: Hex): number {
+  const b = ctrl.b; const d = b.def(u);
+  if (d.flying) return 0;
+  const rule = TERRAIN_RULES[b.terrainAt(h)];
+  let s = rule.def * TERRAIN_STAT_WEIGHT + b.elevationAt(h) * ELEVATION_WEIGHT;
+  if (d.range > 1) s += rule.ranged.atk * TERRAIN_STAT_WEIGHT;
+  if (rule.concealment) s += CONCEALMENT_BONUS;
+  if (d.roles.includes("Cavalry") && rule.chargeBreaks) s -= BROKEN_CHARGE_PENALTY;
+  return s;
+}
+
+/** Is somebody of ours standing closer to that enemy than this hex is: a body between the gun and the line. */
+function screened(ctrl: BattleController, u: UnitState, h: Hex, enemy: UnitState): boolean {
+  const b = ctrl.b;
+  const gap = hexDistance(h, enemy.pos!);
+  return [...b.activeUnits(u.side)].some((a) => a.uid !== u.uid && !a.isClone && a.pos && hexDistance(a.pos, enemy.pos!) < gap);
+}
+
+/** The hex beside a target that its facing covers least, preferring ground a horse can arrive on intact. */
+function flankHex(ctrl: BattleController, u: UnitState, enemy: UnitState): Hex {
+  const b = ctrl.b;
+  let best: { hex: Hex; score: number } | null = null;
+  for (const h of hexNeighbors(enemy.pos!)) {
+    if (!b.inBounds(h)) continue;
+    const occ = b.unitAt(h);
+    if (occ && occ.uid !== u.uid) continue;
+    const arc = attackArc(enemy.pos!, enemy.facing, h);
+    const s = (arc === "rear" ? 2 : arc === "flank" ? 1 : 0) * FLANK_ARC_WEIGHT
+      + groundScore(ctrl, u, h) - hexDistance(u.pos!, h) * APPROACH_STEP_WEIGHT;
+    if (!best || s > best.score) best = { hex: h, score: s };
+  }
+  return best?.hex ?? enemy.pos!;
+}
+
+/** Siege pieces are the units that fight from behind their own line rather than in it. */
+function isSiege(d: UnitDef): boolean { return !!d.siege || d.roles.includes("Siege"); }
+
+/** Between the minimum range a piece cannot shoot inside of and the range it cannot shoot past. */
+function inFiringBand(d: UnitDef, distance: number): boolean { return distance <= d.range && distance >= (d.minRange ?? 0); }
+
+/**
+ * How many of a unit's band already have something in reach: a team buff is only worth an action when
+ * the band is about to swing. The band itself is `bandOf` from the effects layer rather than a second
+ * definition here, so what the AI thinks it is buffing is what the ability actually buffs.
+ */
+function bandAboutToSwing(ctrl: BattleController, u: UnitState): number {
+  const b = ctrl.b;
+  const band = bandOf(b, u, u.platoonId ? b.platoon(u.platoonId) : undefined);
+  return band.filter((m) => m.pos && [...b.activeUnits()].some((t) => t.side !== m.side && t.pos && hexDistance(m.pos!, t.pos) <= b.def(m).range)).length;
+}
+
+/**
+ * An army yields when there is nobody left to give the order and nobody left willing to take it: the
+ * army leader is dead, no commander has stepped into the gap, and average morale has fallen into the
+ * routing bands. Past that point every further round only feeds the other side's spoils.
+ */
+export function shouldSurrender(ctrl: BattleController, side: string): boolean {
+  const b = ctrl.b;
+  const state = b.sides.get(side);
+  if (!state || state.surrendered || b.winner) return false;
+  const leader = state.leaderUid ? b.units.get(state.leaderUid) : undefined;
+  if (leader && !leader.defeated) return false;
+  if ([...b.activeUnits(side)].some((u) => !u.isClone && b.def(u).roles.includes("Commander"))) return false;
+  const band = moraleBand(ctrl.moraleSummary(side).average);
+  return band === "Routed" || band === "Broken";
+}
+
+/** Yield the field on `side`'s behalf if the fight is lost per `shouldSurrender`. Returns whether it surrendered. */
+export function maybeSurrender(ctrl: BattleController, side: string): boolean {
+  if (!shouldSurrender(ctrl, side)) return false;
+  const b = ctrl.b;
+  const s = b.sides.get(side)!;
+  const leader = s.leaderUid ? b.units.get(s.leaderUid) : undefined;
+  const by = leader && !leader.defeated ? leader : [...b.activeUnits(side)].find((u) => b.def(u).roles.includes("Commander"));
+  try { ctrl.surrender(side, by); } catch { return false; }
+  return true;
+}
+
+/**
+ * A Support Portal Keeper has exactly one job beyond staying alive: keep the reinforcement stream
+ * flowing. Reserve already spent on a queue is Reserve that is on its way, so feeding an open portal
+ * always comes before betting any of it on ground that has not opened yet — and a second portal is
+ * only worth calling once nothing of ours is already up within reach.
+ */
+function runPortalKeeper(ctrl: BattleController, u: UnitState): boolean {
+  const b = ctrl.b; const d = b.def(u);
+  if (!u.pos || u.ap <= 0) return false;
+  const ownPortals = [...b.portals.values()].filter((p) => p.side === u.side && p.state !== "Destroyed" && p.state !== "Captured");
+  const feedable = ownPortals.find((p) => p.state === "Open" && hexDistance(u.pos!, p.pos) <= 1);
+  if (feedable) {
+    const defId = cheapestReinforcement(b, u.side, d.faction);
+    if (defId) { try { ctrl.queueReinforcement(u, feedable, defId); return true; } catch { /* Reserve moved under us */ } }
+  }
+  const openAbility = d.actives.find((id) => b.reg.ability(id).effect.kind === "PortalCall");
+  if (openAbility && (u.cooldowns[openAbility] ?? 0) <= 0 && !ownPortals.some((p) => hexDistance(u.pos!, p.pos) <= PORTAL_KEEPER_MIN_GAP)) {
+    for (const h of hexNeighbors(u.pos)) {
+      if (!b.inBounds(h)) continue;
+      try { ctrl.openPortal(u, h); return true; } catch { /* that ground will not take a portal; try the next */ }
+    }
+  }
+  return false;
+}
+
+/** The best-value unit a side's Reserve can currently afford: the highest star count under the point cap. */
+function cheapestReinforcement(b: Battle, side: string, faction: string): string | null {
+  const reserve = b.sides.get(side)?.reservePoints ?? 0;
+  const pool = [...b.reg.units.values()].filter((c) => c.faction === faction && !c.summonOnly && !c.unique && c.capacityCost <= reserve);
+  if (!pool.length) return null;
+  return pool.sort((x, y) => (y.stars ?? 1) - (x.stars ?? 1))[0]!.id;
 }
 
 export function nearestEnemy(ctrl: BattleController, u: UnitState): UnitState | null {

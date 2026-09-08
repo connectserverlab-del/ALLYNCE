@@ -1,0 +1,51 @@
+{
+  "id": "ford_crossing",
+  "title": "Ford Crossing",
+  "seed": 20260906,
+  "map": { "generate": { "width": 30, "height": 22, "size": 300, "forest": 0.22, "rugged": 0.28, "river": true, "trenches": true, "ruins": false } },
+  "roundLimit": 10,
+  "sides": {
+    "A": { "name": "Ember Vanguard", "reservePoints": 10, "armyCapacity": 120,
+      "platoons": [
+        { "id": "SAM-1", "faction": "SAM", "commander": "SAM_COMMANDER_EMBER-BANNER-DAIMYO", "second": "SAM_SECOND_WHITE-CRANE-RETAINER", "elite": "SAM_ELITE_ONI-GATE-CHAMPION",
+          "foot": ["SAM_FOOT_EMBERLINE-ASHIGARU","SAM_FOOT_EMBERLINE-ASHIGARU","SAM_FOOT_EMBERLINE-ASHIGARU","SAM_FOOT_EMBERLINE-ASHIGARU","SAM_FOOT_EMBERLINE-ASHIGARU"],
+          "deploy": [
+            { "role": "deployZone", "side": "A", "index": 0 }, { "role": "deployZone", "side": "A", "index": 1 },
+            { "role": "deployZone", "side": "A", "index": 2 }, { "role": "deployZone", "side": "A", "index": 3 },
+            { "role": "deployZone", "side": "A", "index": 4 }, { "role": "deployZone", "side": "A", "index": 5 },
+            { "role": "deployZone", "side": "A", "index": 6 }, { "role": "deployZone", "side": "A", "index": 7 }
+          ], "facing": 3 }
+      ],
+      "specialists": [
+        { "def": "RIT_LEADER_AFFILIATED-SUMMONER", "at": { "role": "along", "from": "A", "to": "B", "distance": 6 } }
+      ],
+      "objectives": [ { "type": "CompleteRituals", "side": "A", "ritualIds": ["circle-ford"] } ]
+    },
+    "B": { "name": "Bastion Line", "reservePoints": 20, "armyCapacity": 120,
+      "platoons": [
+        { "id": "KNI-1", "faction": "KNI", "commander": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL", "second": "KNI_SECOND_OATHBOUND-CASTELLAN", "elite": "KNI_ELITE_SKY-LANCE-DRAGOON",
+          "foot": ["KNI_FOOT_BASTION-MAN-AT-ARMS","KNI_FOOT_BASTION-MAN-AT-ARMS","KNI_FOOT_BASTION-MAN-AT-ARMS","KNI_FOOT_BASTION-MAN-AT-ARMS","KNI_FOOT_BASTION-MAN-AT-ARMS"],
+          "deploy": [
+            { "role": "deployZone", "side": "B", "index": 0 }, { "role": "deployZone", "side": "B", "index": 1 },
+            { "role": "deployZone", "side": "B", "index": 2 }, { "role": "deployZone", "side": "B", "index": 3 },
+            { "role": "deployZone", "side": "B", "index": 4 }, { "role": "deployZone", "side": "B", "index": 5 },
+            { "role": "deployZone", "side": "B", "index": 6 }, { "role": "deployZone", "side": "B", "index": 7 }
+          ], "facing": 0 }
+      ],
+      "specialists": [
+        { "def": "KNI_SUPPORT_PORTAL-KEEPER", "at": { "role": "along", "from": "B", "to": "A", "distance": -3 } }
+      ],
+      "portals": [ { "id": "portal-rear", "at": { "role": "along", "from": "B", "to": "A", "distance": -6 }, "capacity": 1, "cooldown": 2 } ],
+      "reinforcementQueue": [ { "portal": "portal-rear", "def": "KNI_FOOT_BASTION-MAN-AT-ARMS", "platoon": "KNI-1" } ],
+      "objectives": [
+        { "type": "CaptureHold", "side": "B", "hex": { "role": "along", "from": "B", "to": "A", "distance": 9 }, "rounds": 3 },
+        { "type": "SurviveRounds", "side": "B", "rounds": 10 }
+      ]
+    }
+  },
+  "rituals": [
+    { "id": "circle-ford", "side": "A", "center": { "role": "along", "from": "A", "to": "B", "distance": 6 }, "radius": 1, "required": 60, "leader": "RIT_LEADER_AFFILIATED-SUMMONER", "summon": "DIV_BOSS_SOVEREIGN-OF-MEMORY", "linkGroup": null }
+  ],
+  "roundLimitWinner": "B",
+  "briefing": "A single ritual circle pushes toward a crossing point while the line behind it holds a reinforcement gate. Every feature here is pinned by role to the deployment anchors rather than to fixed hexes, so the same scenario plays out on any regeneration of the field: a forest-choked crossing one seed, an open floodplain the next."
+}

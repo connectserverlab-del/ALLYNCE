@@ -2,13 +2,19 @@ import type { Hex, Facing } from "./hex.js";
 import { hexKey, hexNeighbors, hexDistance } from "./hex.js";
 import type { UnitState, PlatoonState, UnitDef, Terrain, GameEvent, Status, StatusInstance } from "./types.js";
 import type { Registry } from "./data.js";
-import { Rng } from "./rng.js";
 import type { RitualCircle } from "./rituals.js";
 import type { Portal } from "./portals.js";
+import type { DeckState } from "./cards.js";
+import type { KingdomEffects } from "./kingdom.js";
+import type { WeatherId, TimeOfDayId } from "./weather.js";
+import type { Command } from "./commands.js";
 
 export type Phase = "Command" | "Activation" | "Objective" | "End" | "Ended";
 
-export interface SideState { id: string; reservePoints: number; armyCapacity: number; morale: number }
+export interface SideState { id: string; reservePoints: number; armyCapacity: number; morale: number; leaderUid?: string | null; surrendered?: boolean; fusionCharges?: number; companyOrderUsedThisRound?: boolean }
+
+/** One enemy taken alive off the field. A kill leaves no card behind; only a subdual does. */
+export interface Capture { defId: string; uid: string; from: string; by: string; byUid: string; round: number }
 
 /** Simulation state. No presentation concerns live here. */
 export class Battle {
@@ -17,22 +23,51 @@ export class Battle {
   readonly units = new Map<string, UnitState>();
   readonly platoons = new Map<string, PlatoonState>();
   readonly terrain = new Map<string, Terrain>();
+  readonly elevation = new Map<string, number>();
+  /** Irregular playable area. When set, only these hexes exist; the bounding box is just a canvas. */
+  mask: Set<string> | null = null;
   readonly occupancy = new Map<string, string>(); // hexKey -> uid
   readonly rituals = new Map<string, RitualCircle>();
   readonly portals = new Map<string, Portal>();
   readonly sides = new Map<string, SideState>();
+  readonly decks = new Map<string, DeckState>();
+  readonly kingdomEffects = new Map<string, KingdomEffects>();
   readonly events: GameEvent[] = [];
-  readonly rng: Rng;
+  /** Every command `applyCommand` (`commands.ts`) has successfully applied, in order — the replayable record a client sends over the network instead of state. A command that threw is never appended: it never mutated the battle. */
+  readonly commands: Command[] = [];
+  /** Enemies subdued rather than killed, in the order they were taken. Wanted contracts read this. */
+  readonly captures: Capture[] = [];
+  /** Per side, the unit definitions its warrants name. Subduing one of these is worth a card. */
+  readonly wanted = new Map<string, Set<string>>();
+  /**
+   * Per-round effect flags, all keyed by unit uid rather than by object reference. Uids are only unique
+   * within one Battle (a fresh counter per instance), so these must live here rather than as module-level
+   * state shared by every Battle in the process — two battles that ever coexist, sequentially or not,
+   * would otherwise read and clear each other's duels, order flags and hidden-after-attack marks.
+   */
+  readonly duels = new Map<string, string>();
+  readonly orderFlags = new Map<string, string>();
+  readonly hideAfterAttack = new Set<string>();
+  readonly interceptUsed = new Set<string>();
+  readonly tempPreventRouted = new Set<string>();
+  /** Terrain placed by abilities (smoke, briar snare) with a lifetime in rounds, this battle's own. */
+  readonly timedTerrain: Array<{ key: string; rounds: number }> = [];
   width: number; height: number;
   activeSide = "A";
   activatedGroupsThisRound = new Set<string>();
   winner: string | null = null;
   winReason: string | null = null;
+  /** Round modifiers, rolled once per battle at setup (see `weather.ts`). */
+  weather: WeatherId = "Clear";
+  timeOfDay: TimeOfDayId = "Day";
   private uidCounter = 0;
+  readonly seed: number;
 
-  constructor(public readonly reg: Registry, opts: { seed: number; width?: number; height?: number; sides?: SideState[] }) {
-    this.rng = new Rng(opts.seed);
+  constructor(public readonly reg: Registry, opts: { seed: number; width?: number; height?: number; sides?: SideState[]; weather?: WeatherId; timeOfDay?: TimeOfDayId }) {
+    this.seed = opts.seed;
     this.width = opts.width ?? 24; this.height = opts.height ?? 18;
+    if (opts.weather) this.weather = opts.weather;
+    if (opts.timeOfDay) this.timeOfDay = opts.timeOfDay;
     for (const s of opts.sides ?? [{ id: "A", reservePoints: 0, armyCapacity: 100, morale: 100 }, { id: "B", reservePoints: 0, armyCapacity: 100, morale: 100 }]) this.sides.set(s.id, s);
   }
 
@@ -41,8 +76,11 @@ export class Battle {
   }
 
   newUid(prefix = "u"): string { return `${prefix}${++this.uidCounter}`; }
+  /** Restoring a save must not hand out a uid that already exists. */
+  setUidCounter(n: number): void { this.uidCounter = Math.max(this.uidCounter, n); }
 
-  inBounds(h: Hex): boolean { return h.q >= 0 && h.q < this.width && h.r >= 0 && h.r < this.height; }
+  inBounds(h: Hex): boolean { if (this.mask) return this.mask.has(hexKey(h)); return h.q >= 0 && h.q < this.width && h.r >= 0 && h.r < this.height; }
+  elevationAt(h: Hex): number { return this.elevation.get(hexKey(h)) ?? 0; }
   terrainAt(h: Hex): Terrain { return this.terrain.get(hexKey(h)) ?? "Open"; }
   unitAt(h: Hex): UnitState | undefined { const uid = this.occupancy.get(hexKey(h)); return uid ? this.units.get(uid) : undefined; }
   isFree(h: Hex): boolean { return this.inBounds(h) && !this.occupancy.has(hexKey(h)) && this.terrainAt(h) !== "Water"; }
@@ -78,8 +116,8 @@ export class Battle {
     const d = this.reg.unit(defId);
     const u: UnitState = {
       uid: this.newUid(opts.uidPrefix), defId, side, platoonId: opts.platoonId ?? null, pos: null, facing: opts.facing ?? 0,
-      hp: d.hp, morale: d.morale, ap: 0, statuses: [], cooldowns: {}, isClone: false, defeated: false, promotedFromSecond: false,
-      movedThisActivation: 0, attackedThisActivation: false, overwatch: false, defending: false, usedChargeLastRound: false,
+      hp: d.hp, morale: d.morale, ap: 0, statuses: [], cooldowns: {}, tempMods: [], isClone: false, defeated: false, promotedFromSecond: false,
+      movedThisActivation: 0, chargeMoved: 0, altitudeDropped: 0, attackedThisActivation: false, setUp: false, shadowStepped: false, freeMoveHexes: 0, overwatch: false, defending: false, usedChargeLastRound: false, captured: false,
       divine: d.divine ? { manifestation: d.divine.manifestation, anchors: d.divine.anchors } : undefined,
     };
     this.units.set(u.uid, u);

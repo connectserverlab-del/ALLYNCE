@@ -1,0 +1,29 @@
+{
+  "faction": "KNI",
+  "notes": "Fourteen ranks ordered low to high. Unlike Samurai's retainer ladder, mounted privilege and the new lance-charge bonus arrive together at Knight Bachelor, the first true knighthood, so the faction's own cavalry unit carries the theme from its first rank up.",
+  "ranks": [
+    { "id": "PAGE", "title": "Page", "tier": 0, "description": "Household child in training. Not yet armed.", "privileges": {}, "canLead": [] },
+    { "id": "SQUIRE", "title": "Squire", "tier": 1, "description": "Knight's attendant, permitted to bear arms in practice.", "privileges": {}, "canLead": [] },
+    { "id": "MAN_AT_ARMS", "title": "Man-at-Arms", "tier": 2, "description": "Professional soldier under contract. Armed and armored, but unknighted.", "privileges": {}, "canLead": [] },
+    { "id": "KNIGHT_ERRANT", "title": "Knight Errant", "tier": 3, "description": "Landless knight proven in the field. Leads other soldiers on a commander's word.", "privileges": {}, "canLead": ["Patrol"] },
+    { "id": "KNIGHT_BACHELOR", "title": "Knight Bachelor", "tier": 4, "description": "The ordinary knight. Mounted for war, and rides down a broken line.", "privileges": { "mounted": "war", "chargeBonus": 30 }, "canLead": ["Patrol"] },
+    { "id": "KNIGHT_BANNERET", "title": "Knight Banneret", "tier": 5, "description": "Entitled to raise a square banner and lead its retinue in the field.", "privileges": { "mounted": "war", "banner": true, "chargeBonus": 40 }, "canLead": ["Patrol", "Platoon"] },
+    { "id": "BARONET", "title": "Baronet", "tier": 6, "description": "Hereditary knight, mounted at all times, seat confirmed by charter.", "privileges": { "mounted": "always", "banner": true, "chargeBonus": 50 }, "canLead": ["Patrol", "Platoon"] },
+    { "id": "BARON", "title": "Baron", "tier": 7, "description": "Lowest of the peerage. Holds a keep and its garrison in his own right.", "privileges": { "mounted": "always", "banner": true, "commandRadiusBonus": 1, "chargeBonus": 60 }, "canLead": ["Platoon", "Company"] },
+    { "id": "VISCOUNT", "title": "Viscount", "tier": 8, "description": "Deputy to a count. Wardens a march keep and its garrison.", "privileges": { "mounted": "always", "banner": true, "commandRadiusBonus": 1, "castle": true, "chargeBonus": 70 }, "canLead": ["Platoon", "Company"] },
+    { "id": "COUNT", "title": "Count", "tier": 9, "description": "Rules a county from its castle. Commands every garrison within it.", "privileges": { "mounted": "always", "banner": true, "commandRadiusBonus": 2, "castle": true, "chargeBonus": 80 }, "canLead": ["Company", "Battalion"] },
+    { "id": "MARQUESS", "title": "Marquess", "tier": 10, "description": "Warden of the border march, the crown's first line of defense.", "privileges": { "mounted": "always", "banner": true, "commandRadiusBonus": 2, "castle": true, "chargeBonus": 90 }, "canLead": ["Company", "Battalion"] },
+    { "id": "DUKE", "title": "Duke", "tier": 11, "description": "Sovereign of a duchy. Answers to the crown alone.", "privileges": { "mounted": "always", "banner": true, "commandRadiusBonus": 3, "castle": true, "chargeBonus": 100 }, "canLead": ["Battalion", "Army"] },
+    { "id": "PRINCE", "title": "Prince", "tier": 12, "description": "Blood of the crown. Commands armies in the king's name.", "privileges": { "mounted": "always", "banner": true, "commandRadiusBonus": 3, "castle": true, "chargeBonus": 110 }, "canLead": ["Battalion", "Army"] },
+    { "id": "KING", "title": "King", "tier": 13, "description": "The crown itself. Commands the entire military.", "privileges": { "mounted": "always", "banner": true, "commandRadiusBonus": 4, "castle": true, "chargeBonus": 120, "supreme": true }, "canLead": ["Army"] }
+  ],
+  "privilegeRules": {
+    "twoSwords": "Not carried by this ladder.",
+    "mounted": "'war' grants +1 Movement while any enemy is within 6 hexes; 'always' grants +1 Movement unconditionally.",
+    "commandRadiusBonus": "Added to the unit's command radius for auras and morale recovery.",
+    "banner": "Platoon members inside command radius recover +5 additional Morale in the Command Phase.",
+    "castle": "Allies inside command radius standing on Fortification gain a further +100 DEF.",
+    "chargeBonus": "+ATK once the unit has moved at least 2 hexes this activation without the charge breaking on rough ground (see `chargeMoved`). Stacks with, but is smaller and always-on unlike, the one-shot Charge Bonus card skill.",
+    "supreme": "Reserved for campaign scale; not used in the vertical slice."
+  }
+}

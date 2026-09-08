@@ -1,0 +1,14 @@
+[
+  { "id": "FUS_PAIRED_LINE", "name": "Paired Line", "text": "Two foot soldiers of one theme lock into a single fighting pair. One hex, one composition slot: stronger, but the platoon counts one fewer soldier.",
+    "inputs": [{ "roles": ["FootSoldier"] }, { "roles": ["FootSoldier"] }], "sameTheme": true,
+    "result": { "nameFormat": "{a} Pair", "hp": "sum", "atk": "max+0.20", "def": "max+0.20", "mov": "min", "roles": ["FootSoldier"], "size": "Standard", "slot": "FootSoldier" } },
+  { "id": "FUS_GATE_WARDENS", "name": "Gate Wardens", "text": "An Oni-Gate Champion takes a spear-bearer into the duel line.",
+    "inputs": [{ "defId": "SAM_ELITE_ONI-GATE-CHAMPION" }, { "defId": "SAM_FOOT_EMBERLINE-ASHIGARU" }], "sameTheme": true,
+    "result": { "nameFormat": "Gate Wardens", "hp": "sum", "atk": "max+0.15", "def": "max+0.25", "mov": "min", "roles": ["Elite"], "size": "Standard", "slot": "Elite", "passives": ["ABL_SPEAR_WALL"] } },
+  { "id": "FUS_TWINWING", "name": "Twinwing Drake", "text": "Two Slatewing Drakes lock talons and fly as one large body.",
+    "inputs": [{ "defId": "DRG_FOOT_SLATEWING-DRAKE" }, { "defId": "DRG_FOOT_SLATEWING-DRAKE" }], "sameTheme": true,
+    "result": { "nameFormat": "Twinwing Drake", "hp": "sum", "atk": "max+0.30", "def": "max+0.10", "mov": "max", "roles": ["FootSoldier", "Cavalry"], "size": "Large", "slot": "FootSoldier" } },
+  { "id": "FUS_CALAMITY", "name": "The Calamity Form", "text": "Only when the Sovereigns of Memory, Torment and Reincarnation all stand together does a final convergence become possible.",
+    "inputs": [{ "defId": "DIV_BOSS_SOVEREIGN-OF-MEMORY" }, { "defId": "DIV_BOSS_SOVEREIGN-OF-TORMENT" }, { "defId": "DIV_BOSS_SOVEREIGN-OF-REINCARNATION" }], "sameTheme": false, "divine": true, "charges": 2,
+    "result": { "defId": "DIV_BOSS_CALAMITY-FORM", "rounds": 3 } }
+]

@@ -2,6 +2,7 @@ import type { Battle } from "./state.js";
 import type { UnitState, PlatoonState, Modifier } from "./types.js";
 import { platoonMorale, platoonMembers, changeMorale } from "./morale.js";
 import { applyEffect } from "./effects.js";
+import { commandRadiusOf } from "./ranks.js";
 
 /** Aura value by rank: commanders +100, seconds +50 (smaller aura while commander is active). Strongest eligible aura only. */
 export function commandBonus(b: Battle, u: UnitState, stat: "ATK" | "DEF"): Modifier | null {
@@ -12,7 +13,7 @@ export function commandBonus(b: Battle, u: UnitState, stat: "ATK" | "DEF"): Modi
     if (!uid || uid === u.uid) return;
     const l = b.units.get(uid);
     if (!l || l.defeated || !l.pos) return;
-    const radius = b.def(l).commandRadius ?? 0;
+    const radius = commandRadiusOf(b, l);
     if (b.distance(l, u) <= radius) candidates.push({ src: `${label} aura (${b.def(l).name})`, v });
   };
   consider(p.commanderUid, 100, "Commander");
@@ -30,8 +31,9 @@ export function onUnitDefeated(b: Battle, u: UnitState): void {
   if (p.commanderUid === u.uid) {
     platoonMorale(b, p, -20, "Commander defeated");
     p.pendingSuccession = true;
-    p.continuityRoundsLeft = b.reg.rules.standardPlatoon.continuityRounds;
-    b.log("CommanderFallen", { platoon: p.id, uid: u.uid });
+    // the holding's completed research (ContinuityRounds effect) extends the grace period, same as the base rule
+    p.continuityRoundsLeft = b.reg.rules.standardPlatoon.continuityRounds + (b.kingdomEffects.get(p.side)?.continuityRounds ?? 0);
+    b.log("CommanderFallen", { platoon: p.id, uid: u.uid, continuityRounds: p.continuityRoundsLeft });
   } else if (p.secondUid === u.uid) {
     platoonMorale(b, p, -10, "Second defeated before commander");
   } else if (p.eliteUid === u.uid) {
@@ -71,9 +73,17 @@ export function resolveSuccession(b: Battle, p: PlatoonState): boolean {
 }
 
 /** Promoted seconds gain the commander's radius for aura purposes. */
-export function effectiveCommandRadius(b: Battle, u: UnitState): number {
-  const d = b.def(u);
-  return d.commandRadius ?? 0;
+export function effectiveCommandRadius(b: Battle, u: UnitState): number { return commandRadiusOf(b, u); }
+
+/** True if any platoon on this side still has a living commander or second-in-command. */
+export function hasCommandStructure(b: Battle, side: string): boolean {
+  for (const p of b.platoons.values()) {
+    if (p.side !== side) continue;
+    const commander = p.commanderUid ? b.units.get(p.commanderUid) : undefined;
+    const second = p.secondUid ? b.units.get(p.secondUid) : undefined;
+    if ((commander && !commander.defeated) || (second && !second.defeated)) return true;
+  }
+  return false;
 }
 
 /** Rally action: +10 morale to allies within 2 hexes (requires Commander/Second/Support role). */

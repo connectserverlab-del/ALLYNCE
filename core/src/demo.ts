@@ -1,5 +1,5 @@
 import { buildScenario } from "./scenario.js";
-import { runAiActivation, holdForSyncPolicy, DIFFICULTY } from "./ai.js";
+import { runAiActivation, holdForSyncPolicy, maybeSurrender, DIFFICULTY } from "./ai.js";
 
 /** Runs Threefold Invocation with AI on both sides and prints a readable log. */
 const { ctrl, file } = buildScenario("threefold_invocation");
@@ -8,6 +8,7 @@ console.log(`# ${file.title}\n${file.briefing}\n`);
 
 while (!b.winner && b.round <= file.roundLimit + 1) {
   ctrl.commandPhase();
+  if (maybeSurrender(ctrl, "A") || maybeSurrender(ctrl, "B")) break;
   const sides = ["A", "B"];
   let turn = b.round % 2 === 1 ? 0 : 1;
   for (let guard = 0; guard < 20; guard++) {
@@ -17,6 +18,7 @@ while (!b.winner && b.round <= file.roundLimit + 1) {
     if (groups.length) runAiActivation(ctrl, groups[0]!, DIFFICULTY.normal);
     turn = 1 - turn;
   }
+  if (!b.winner) for (const s of ["A", "B"]) if (maybeSurrender(ctrl, s)) break;
   ctrl.objectivePhase(holdForSyncPolicy(ctrl, "A"));
   const rit = [...b.rituals.values()].map((r) => `${r.id}=${r.state}:${r.progress}/${r.required}${r.unstableStacks ? ` U${r.unstableStacks}` : ""}`).join("  ");
   const alive = (s: string) => [...b.activeUnits(s)].filter((u) => !u.isClone).length;

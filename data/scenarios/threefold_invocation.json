@@ -11,7 +11,7 @@
     ] },
   "roundLimit": 12,
   "sides": {
-    "A": { "name": "Invocation Host (attacker)", "reservePoints": 0, "armyCapacity": 120,
+    "A": { "name": "Invocation Host (attacker)", "reservePoints": 0, "armyCapacity": 120, "leader": "RIT_LEADER_AFFILIATED-SUMMONER",
       "platoons": [
         { "id": "SHI-1", "faction": "SHI", "commander": "SHI_COMMANDER_VEILED-MOON-JONIN", "second": "SHI_SECOND_REED-SIGNAL-LIEUTENANT", "elite": "SHI_ELITE_MIRROR-SHADE-ADEPT",
           "foot": ["SHI_FOOT_NIGHT-THREAD-OPERATIVE","SHI_FOOT_NIGHT-THREAD-OPERATIVE","SHI_FOOT_NIGHT-THREAD-OPERATIVE","SHI_FOOT_NIGHT-THREAD-OPERATIVE","SHI_FOOT_NIGHT-THREAD-OPERATIVE"],
@@ -30,7 +30,7 @@
       ],
       "objectives": [ { "type": "SynchronizeRituals", "side": "A", "linkGroup": "threefold" } ]
     },
-    "B": { "name": "Bastion Defenders", "reservePoints": 30, "armyCapacity": 120,
+    "B": { "name": "Bastion Defenders", "reservePoints": 30, "armyCapacity": 120, "leader": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL",
       "platoons": [
         { "id": "KNI-1", "faction": "KNI", "commander": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL", "second": "KNI_SECOND_OATHBOUND-CASTELLAN", "elite": "KNI_ELITE_SKY-LANCE-DRAGOON",
           "foot": ["KNI_FOOT_BASTION-MAN-AT-ARMS","KNI_FOOT_BASTION-MAN-AT-ARMS","KNI_FOOT_BASTION-MAN-AT-ARMS","KNI_FOOT_BASTION-MAN-AT-ARMS","KNI_FOOT_BASTION-MAN-AT-ARMS"],

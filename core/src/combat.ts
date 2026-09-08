@@ -2,7 +2,6 @@ import type { Battle } from "./state.js";
 import type { UnitState } from "./types.js";
 import { computeStat, arcFor, clearTempMods } from "./modifiers.js";
 import { onUnitDefeated } from "./command.js";
-import { duels, hideAfterAttack } from "./effects.js";
 import { onRitualistDamaged } from "./rituals.js";
 import { changeMorale } from "./morale.js";
 
@@ -11,35 +10,61 @@ export interface AttackResult { damage: number; atk: number; def: number; arc: s
 export const MIN_DAMAGE = 100;
 
 /** Damage = max(100, FinalATK - FinalDEF). Integer math, deterministic. */
-export function resolveAttack(b: Battle, attacker: UnitState, target: UnitState, opts: { ranged?: boolean } = {}): AttackResult {
+export function resolveAttack(b: Battle, attacker: UnitState, target: UnitState, opts: { ranged?: boolean; reaction?: boolean } = {}): AttackResult {
   // Formal Duel: outsiders cannot attack a dueling pair
-  const dueling = duels.get(target.uid);
+  const dueling = b.duels.get(target.uid);
   if (dueling && dueling !== attacker.uid) throw new Error("Target is in a Formal Duel; other units cannot interfere");
 
   // Oath of Intercession: a Knight adjacent to the target may take the melee hit once per round
   let defender = target;
   let intercepted: string | undefined;
   if (!opts.ranged) {
-    const knight = b.adjacentAllies(target).find((k) => !k.isClone && b.def(k).themes.includes("Knight") && !interceptUsed.has(k.uid) && k.uid !== target.uid && b.def(k).roles.includes("FootSoldier") === false && b.hasStatus(k, "Guarded"));
-    if (knight) { defender = knight; intercepted = knight.uid; interceptUsed.add(knight.uid); }
+    const knight = b.adjacentAllies(target).find((k) => !k.isClone && b.def(k).themes.includes("Knight") && !b.interceptUsed.has(k.uid) && k.uid !== target.uid && b.def(k).roles.includes("FootSoldier") === false && b.hasStatus(k, "Guarded"));
+    if (knight) { defender = knight; intercepted = knight.uid; b.interceptUsed.add(knight.uid); }
   }
 
   const arc = arcFor(b, attacker, defender);
-  const atk = computeStat(b, attacker, "ATK", { attacker, defender, arc, ranged: opts.ranged }).final;
+  const atk = computeStat(b, attacker, "ATK", { attacker, defender, arc, ranged: opts.ranged, reaction: opts.reaction }).final;
   const def = computeStat(b, defender, "DEF", { attacker, defender, arc, ranged: opts.ranged }).final;
-  const damage = Math.max(MIN_DAMAGE, atk - def);
+  const damage = Math.max(MIN_DAMAGE, atk - def - damageReduction(b, defender));
   const result = applyDamage(b, defender, damage, attacker.uid);
+  // Blood Loam / Thorned Ascent: the attacker heals for a share of what it dealt.
+  const steal = passiveValue(b, attacker, "Lifesteal", "percent");
+  if (steal) attacker.hp = Math.min(b.def(attacker).hp, attacker.hp + Math.round(damage * steal / 100));
+  // Thornward / Static Field: melee attackers take a fixed return hit.
+  if (!opts.ranged && !result.defeated) {
+    const thorns = passiveValue(b, defender, "Thorns", "damage");
+    if (thorns) { b.log("Thorns", { from: defender.uid, to: attacker.uid, damage: thorns }); applyDamage(b, attacker, thorns, defender.uid); }
+  }
   attacker.attackedThisActivation = true;
   attacker.overwatch = false;
   // consume one-shot melee bonuses (Measured Advance / charges)
   clearTempMods(attacker, (m) => m.stat === "ATK" && (m.source === "Measured Advance" || m.source === "Diving Charge" || m.source === "Crushing Dive"));
-  if (hideAfterAttack.has(attacker.uid)) { b.addStatus(attacker, "Hidden", 2, "Silent Directive"); hideAfterAttack.delete(attacker.uid); }
+  // Attacking normally breaks any stealth the attacker already had; Silent Directive's grant is
+  // applied after that reveal, so a unit ordered to Hide after this attack ends up Hidden rather
+  // than having its own new status immediately stripped by the reveal it just triggered.
   if (b.hasStatus(attacker, "Hidden")) b.addStatus(attacker, "Revealed", 0, "Attacked");
+  if (b.hideAfterAttack.has(attacker.uid)) { b.addStatus(attacker, "Hidden", 2, "Silent Directive"); b.hideAfterAttack.delete(attacker.uid); }
   b.log("Attack", { attacker: attacker.uid, target: defender.uid, atk, def, arc, damage, defeated: result.defeated, intercepted });
   return { damage, atk, def, arc, ...result, intercepted };
 }
 
-export const interceptUsed = new Set<string>();
+
+/** Sum one numeric field across every passive of a given effect kind. */
+function passiveValue(b: Battle, u: UnitState, kind: string, field: string): number {
+  if (u.isClone) return 0;
+  let total = 0;
+  for (const id of b.def(u).passives) {
+    const e = b.reg.ability(id).effect as Record<string, any>;
+    if (e.kind === kind) total += Number(e[field] ?? 0);
+  }
+  return total;
+}
+
+/** Scaled Hide and similar: flat reduction applied after the ATK/DEF subtraction. */
+function damageReduction(b: Battle, u: UnitState): number {
+  return passiveValue(b, u, "DamageReduction", "flat");
+}
 
 export function applyDamage(b: Battle, u: UnitState, damage: number, source: string): { defeated: boolean; staggered?: boolean } {
   u.hp -= damage;
@@ -57,7 +82,20 @@ export function defeat(b: Battle, u: UnitState, source: string): void {
   u.hp = 0; u.defeated = true;
   b.remove(u);
   b.log("Defeated", { uid: u.uid, def: u.defId, by: source, clone: u.isClone });
+  if (u.isClone && u.cloneOf) reclaimSplitShare(b, u.cloneOf);
   onUnitDefeated(b, u);
+}
+
+/**
+ * A copy has left the field, so the share it was holding goes back. The original's stats are
+ * divided across whatever is still standing, and once the last copy is gone it is whole again.
+ */
+function reclaimSplitShare(b: Battle, originalUid: string): void {
+  const original = b.units.get(originalUid);
+  if (!original || (original.splitBodies ?? 1) <= 1) return;
+  const living = [...b.units.values()].filter((c) => c.isClone && !c.defeated && c.cloneOf === originalUid).length;
+  original.splitBodies = living + 1;
+  b.log("SplitShareReclaimed", { uid: originalUid, bodies: original.splitBodies });
 }
 
 /** Destroy one Anchor of a Divine Entity: reduces stats/abilities; at zero anchors and 0 HP it is banished. */

@@ -1,9 +1,9 @@
-import { describe, it, expect } from "vitest";
-import { newBattle } from "./helpers.js";
-import { createRitual, computeRitualProgress, tickRitual, releaseRitual, disruptRitual, collapse } from "../src/rituals.js";
+import { describe, expect, it } from "vitest";
+import { kingdomWithResearch, newBattle } from "./helpers.js";
+import { assistRitual, collapse, computeRitualProgress, createRitual, disruptRitual, releaseRitual, tickRitual } from "../src/rituals.js";
 import { resolveAttack } from "../src/combat.js";
 import { hexDistance } from "../src/hex.js";
-
+import { applyKingdom } from "../src/kingdom.js";
 function setupCircles() {
   const { b, ctrl } = newBattle();
   const fast = createRitual(b, { id: "fast", side: "A", center: { q: 10, r: 5 }, radius: 1, required: 30, leaderUid: null, summonDefId: "DIV_BOSS_SOVEREIGN-OF-MEMORY", linkGroup: "g" });
@@ -25,6 +25,17 @@ describe("rituals", () => {
     expect(f).toMatchObject({ channeling: 7, leaderKnowledge: 3, leaderLanguage: 3, teamAffinity: 1, total: 14 });
     expect(s).toMatchObject({ channeling: 6, leaderKnowledge: 3, leaderLanguage: 1, teamAffinity: 1, total: 11 });
     expect(f.total).toBeGreaterThan(s.total);
+  });
+
+  it("Prepared Ground research adds its named bonus to every circle's progress on that side", () => {
+    const { b, fast, slow } = setupCircles();
+    const before = computeRitualProgress(b, fast);
+    const k = kingdomWithResearch("SAM", ["RES_DRILL_YARD", "RES_BANNER_DISCIPLINE", "RES_PREPARED_GROUND"]);
+    applyKingdom(b, "A", k);
+    const after = computeRitualProgress(b, fast);
+    expect(after.holding).toBe(2);
+    expect(after.total).toBe(before.total + 2);
+    expect(computeRitualProgress(b, slow).holding).toBe(2);
   });
 
   it("completed rituals are Held, accumulate Unstable damage each round, and only sync when all release together", () => {
@@ -57,6 +68,17 @@ describe("rituals", () => {
     expect(divs.every((d) => d.divine!.anchors === 3)).toBe(true);
   });
 
+  it("a ritual with no link group releases on its own in the Objective Phase, synchronized by default", () => {
+    const { b, ctrl } = newBattle();
+    const solo = createRitual(b, { id: "solo", side: "A", center: { q: 10, r: 5 }, radius: 1, required: 1, leaderUid: null, summonDefId: null, linkGroup: null });
+    b.spawn("RIT_FOOT_FOREIGN-RITUALIST", "A", { q: 10, r: 5 }); // a live participant, or the Held tick collapses an empty circle
+    solo.state = "CompletedHeld";
+    ctrl.objectivePhase({ solo: true });
+    expect(solo.state).toBe("CompletedReleased");
+    expect(b.events.some((e) => e.type === "RitualReleased" && e.data["ritual"] === "solo" && e.data["synchronized"] === true)).toBe(true);
+    expect(b.events.some((e) => e.type === "SynchronizedRelease")).toBe(false); // that event is for linked groups only
+  });
+
   it("damage halves a ritualist's contribution, Silence removes it, and losing all participants disrupts", () => {
     const { b, fast } = setupCircles();
     const lead = b.unit(fast.leaderUid!);
@@ -78,6 +100,21 @@ describe("rituals", () => {
     fast.state = "CompletedHeld";
     const s = releaseRitual(b, fast, { synchronized: true });
     expect(s).toBeNull();
+  });
+
+  it("collapses the same round its last participant dies to Unstable damage, not one round late", () => {
+    const { b, fast } = setupCircles();
+    const lead = b.unit(fast.leaderUid!);
+    // strip the circle down to its leader alone so a single, predictable HP total decides the death tick
+    for (const u of [...b.activeUnits("A")]) if (u.pos && hexDistance(u.pos, fast.center) <= fast.radius && u.uid !== lead.uid) { u.defeated = true; b.remove(u); }
+    fast.state = "CompletedHeld";
+    expect(computeRitualProgress(b, fast).participants).toEqual([lead.uid]);
+    for (let i = 0; i < 4; i++) tickRitual(b, fast); // stacks 1-4: 100+200+300+400 = 1000 damage, 1200 hp -> 200
+    expect(fast.state).toBe("CompletedHeld");
+    expect(lead.hp).toBe(200);
+    tickRitual(b, fast); // stack 5: 500 damage kills the only participant on this very tick
+    expect(lead.defeated).toBe(true);
+    expect(fast.state).toBe("Collapsed");
   });
 
   it("collapse resets progress and rewards the enemy morale", () => {

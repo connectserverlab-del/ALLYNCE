@@ -1,8 +1,10 @@
-import { describe, it, expect } from "vitest";
-import { newBattle, deploy, KNI, SAM, blob } from "./helpers.js";
+import { describe, expect, it } from "vitest";
+import { blob, deploy, KNI, newBattle, reg, SAM } from "./helpers.js";
 import { buildScenario } from "../src/scenario.js";
-import { runAiActivation, holdForSyncPolicy, DIFFICULTY } from "../src/ai.js";
+import { DIFFICULTY, holdForSyncPolicy, runAiActivation } from "../src/ai.js";
 import { computeStat } from "../src/modifiers.js";
+import { Battle } from "../src/state.js";
+import { BattleController } from "../src/battle.js";
 
 describe("turn structure and actions", () => {
   it("gives two AP per activation, forbids double attacks, and triggers zone-of-control reactions unless disengaging", () => {
@@ -80,6 +82,26 @@ describe("turn structure and actions", () => {
     expect(b.adjacentAllies(cmdr).every((k) => b.hasStatus(k, "Guarded"))).toBe(true);
   });
 
+  it("reaching the round limit with nothing decisive ends the battle in a draw, or the configured round-limit winner", () => {
+    const undecided = () => {
+      const b = new Battle(reg, { seed: 1, width: 24, height: 18 });
+      b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "A", { q: 2, r: 2 });
+      b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "B", { q: 20, r: 15 });
+      return b;
+    };
+    const noWinner = undecided();
+    const ctrl1 = new BattleController(noWinner, { sides: { A: [], B: [] }, roundLimit: 2 });
+    for (let i = 0; i < 2; i++) { ctrl1.commandPhase(); ctrl1.objectivePhase(); ctrl1.endPhase(); }
+    expect(noWinner.winner).toBe("draw");
+    expect(noWinner.winReason).toBe("Round limit");
+
+    const withDefault = undecided();
+    const ctrl2 = new BattleController(withDefault, { sides: { A: [], B: [] }, roundLimit: 2, roundLimitWinner: "B" });
+    for (let i = 0; i < 2; i++) { ctrl2.commandPhase(); ctrl2.objectivePhase(); ctrl2.endPhase(); }
+    expect(withDefault.winner).toBe("B");
+    expect(withDefault.winReason).toBe("Round limit");
+  });
+
   it("the event log is deterministic for a fixed seed", () => {
     const run = () => { const { ctrl } = buildScenario("threefold_invocation"); const b = ctrl.b;
       for (let i = 0; i < 3 && !b.winner; i++) { ctrl.commandPhase(); for (const s of ["A", "B"]) for (const g of ctrl.groupsFor(s)) runAiActivation(ctrl, g, DIFFICULTY.normal); ctrl.objectivePhase(holdForSyncPolicy(ctrl, "A")); ctrl.endPhase(); }
@@ -103,8 +125,14 @@ describe("Threefold Invocation scenario", () => {
       ctrl.endPhase();
     }
     expect(["A", "B"]).toContain(b.winner);
+    // Leader killed and Surrender are universal win conditions on top of scenario objectives, so a run can end
+    // decisively long before the round limit; command-succession coverage lives in succession.test.ts instead.
+    expect(typeof b.winReason).toBe("string");
     const types = new Set(b.events.map((e) => e.type));
-    for (const t of ["RitualProgress", "ReinforcementArrived", "Attack", "Move", "Succession", "ClonesSpawned"]) expect(types.has(t), t).toBe(true);
+    for (const t of ["RitualProgress", "ReinforcementArrived", "Attack", "Move", "ClonesSpawned"]) expect(types.has(t), t).toBe(true);
+    // a fallen commander either promotes a second or, if they were the army leader, ends the battle outright
+    expect(types.has("Succession") || b.winReason === "Leader killed").toBe(true);
+    expect(["SynchronizeRituals", "CollapseRituals", "Wipeout", "Leader killed", "Surrender", "Round limit"]).toContain(b.winReason);
     // rituals progressed at different rates
     const first = b.events.filter((e) => e.type === "RitualProgress" && e.round === 1);
     const fast = first.find((e) => e.data["ritual"] === "circle-fast")!.data["total"] as number;

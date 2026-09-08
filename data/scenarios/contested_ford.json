@@ -1,0 +1,248 @@
+{
+  "id": "contested_ford",
+  "title": "The Contested Ford",
+  "seed": 20260907,
+  "map": {
+    "generate": {
+      "width": 30,
+      "height": 22,
+      "size": 300,
+      "river": true,
+      "trenches": true,
+      "ruins": true
+    }
+  },
+  "roundLimit": 10,
+  "sides": {
+    "A": {
+      "name": "Foreign Rite (attacker)",
+      "reservePoints": 0,
+      "armyCapacity": 120,
+      "platoons": [
+        {
+          "id": "SHI-1",
+          "faction": "SHI",
+          "commander": "SHI_COMMANDER_VEILED-MOON-JONIN",
+          "second": "SHI_SECOND_REED-SIGNAL-LIEUTENANT",
+          "elite": "SHI_ELITE_MIRROR-SHADE-ADEPT",
+          "foot": [
+            "SHI_FOOT_NIGHT-THREAD-OPERATIVE",
+            "SHI_FOOT_NIGHT-THREAD-OPERATIVE",
+            "SHI_FOOT_NIGHT-THREAD-OPERATIVE",
+            "SHI_FOOT_NIGHT-THREAD-OPERATIVE",
+            "SHI_FOOT_NIGHT-THREAD-OPERATIVE"
+          ],
+          "deploy": [
+            {
+              "role": "deployZoneA",
+              "index": 0
+            },
+            {
+              "role": "deployZoneA",
+              "index": 1
+            },
+            {
+              "role": "deployZoneA",
+              "index": 2
+            },
+            {
+              "role": "deployZoneA",
+              "index": 3
+            },
+            {
+              "role": "deployZoneA",
+              "index": 4
+            },
+            {
+              "role": "deployZoneA",
+              "index": 5
+            },
+            {
+              "role": "deployZoneA",
+              "index": 6
+            },
+            {
+              "role": "deployZoneA",
+              "index": 7
+            }
+          ],
+          "facing": 3
+        }
+      ],
+      "specialists": [
+        {
+          "def": "RIT_LEADER_AFFILIATED-SUMMONER",
+          "at": {
+            "role": "ritualCenter",
+            "id": "ford-rite"
+          }
+        },
+        {
+          "def": "RIT_FOOT_FOREIGN-RITUALIST",
+          "at": {
+            "role": "near",
+            "from": {
+              "role": "ritualCenter",
+              "id": "ford-rite"
+            },
+            "ring": 1,
+            "index": 0
+          }
+        },
+        {
+          "def": "RIT_FOOT_FOREIGN-RITUALIST",
+          "at": {
+            "role": "near",
+            "from": {
+              "role": "ritualCenter",
+              "id": "ford-rite"
+            },
+            "ring": 1,
+            "index": 1
+          }
+        },
+        {
+          "def": "RIT_FOOT_FOREIGN-RITUALIST",
+          "at": {
+            "role": "near",
+            "from": {
+              "role": "ritualCenter",
+              "id": "ford-rite"
+            },
+            "ring": 1,
+            "index": 2
+          }
+        }
+      ],
+      "objectives": [
+        {
+          "type": "CompleteRituals",
+          "side": "A",
+          "ritualIds": [
+            "ford-rite"
+          ]
+        }
+      ]
+    },
+    "B": {
+      "name": "Ford Watch (defender)",
+      "reservePoints": 20,
+      "armyCapacity": 120,
+      "platoons": [
+        {
+          "id": "KNI-1",
+          "faction": "KNI",
+          "commander": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL",
+          "second": "KNI_SECOND_OATHBOUND-CASTELLAN",
+          "elite": "KNI_ELITE_SKY-LANCE-DRAGOON",
+          "foot": [
+            "KNI_FOOT_BASTION-MAN-AT-ARMS",
+            "KNI_FOOT_BASTION-MAN-AT-ARMS",
+            "KNI_FOOT_BASTION-MAN-AT-ARMS",
+            "KNI_FOOT_BASTION-MAN-AT-ARMS",
+            "KNI_FOOT_BASTION-MAN-AT-ARMS"
+          ],
+          "deploy": [
+            {
+              "role": "deployZoneB",
+              "index": 0
+            },
+            {
+              "role": "deployZoneB",
+              "index": 1
+            },
+            {
+              "role": "deployZoneB",
+              "index": 2
+            },
+            {
+              "role": "deployZoneB",
+              "index": 3
+            },
+            {
+              "role": "deployZoneB",
+              "index": 4
+            },
+            {
+              "role": "deployZoneB",
+              "index": 5
+            },
+            {
+              "role": "deployZoneB",
+              "index": 6
+            },
+            {
+              "role": "deployZoneB",
+              "index": 7
+            }
+          ],
+          "facing": 0
+        }
+      ],
+      "specialists": [
+        {
+          "def": "KNI_SUPPORT_PORTAL-KEEPER",
+          "at": {
+            "role": "fortification",
+            "offset": [
+              1,
+              0
+            ]
+          }
+        }
+      ],
+      "portals": [
+        {
+          "id": "ford-watch-portal",
+          "at": {
+            "role": "fortification"
+          },
+          "capacity": 1,
+          "cooldown": 2
+        }
+      ],
+      "reinforcementQueue": [
+        {
+          "portal": "ford-watch-portal",
+          "def": "KNI_FOOT_BASTION-MAN-AT-ARMS",
+          "platoon": "KNI-1"
+        }
+      ],
+      "objectives": [
+        {
+          "type": "CaptureHold",
+          "side": "B",
+          "rounds": 3,
+          "hexSpec": {
+            "role": "ford"
+          }
+        },
+        {
+          "type": "SurviveRounds",
+          "side": "B",
+          "rounds": 10
+        }
+      ]
+    }
+  },
+  "rituals": [
+    {
+      "id": "ford-rite",
+      "side": "A",
+      "center": {
+        "role": "ruins",
+        "offset": [
+          0,
+          0
+        ]
+      },
+      "radius": 2,
+      "required": 40,
+      "leader": "RIT_LEADER_AFFILIATED-SUMMONER",
+      "summon": null,
+      "linkGroup": null
+    }
+  ],
+  "roundLimitWinner": "B",
+  "briefing": "A foreign rite has found a mid-map ruin and means to complete it there; the ford watch holds the crossing below. The ground is generated fresh each time this scenario is built, so every position here is pinned to a role on that ground (the ruin, the crossing, each side's deployment zone) rather than to a fixed hex: the same scenario plays out, sensibly, whichever seed builds it. Attackers win by completing the rite; defenders win by holding the crossing for three rounds running or by surviving ten rounds."
+}

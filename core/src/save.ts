@@ -1,0 +1,127 @@
+import { Battle } from "./state.js";
+import type { Registry } from "./data.js";
+import type { UnitState, PlatoonState, Terrain, GameEvent } from "./types.js";
+import type { KingdomState, KingdomEffects } from "./kingdom.js";
+import type { DeckList } from "./cards.js";
+import { DeckState } from "./cards.js";
+import { Rng } from "./rng.js";
+import type { RitualCircle } from "./rituals.js";
+import type { Portal } from "./portals.js";
+import type { Capture } from "./state.js";
+import type { Command } from "./commands.js";
+import type { WeatherId, TimeOfDayId } from "./weather.js";
+
+export const SAVE_VERSION = 7;
+
+export interface BattleSave {
+  version: number; seed: number; round: number; phase: string;
+  width: number; height: number; mask: string[] | null;
+  weather: WeatherId; timeOfDay: TimeOfDayId;
+  /**
+   * Per-round effect state: Formal Duel pairings, PhaseMove/SequencedMove orders, Silent Directive's
+   * hide-after-attack mark, Oath of Intercession's once-per-round use, Hold the Standard's rout
+   * immunity, and any smoke or briar snare still ticking down. A save must carry these or a battle
+   * saved mid-duel, mid-order or under unexpired smoke forgets all of it silently on load, the same
+   * way one saved mid-ritual would without `rituals`.
+   */
+  /**
+   * Every command `applyCommand` has applied, in order. A battle that loses this on save cannot be
+   * rebuilt from its command log (`Q-22`), replayed by a client that joined late, or validated
+   * server-side after a reconnect — the same way losing `duels` or `kingdomEffects` silently dropped
+   * state that only surfaced much later.
+   */
+  commands: Command[];
+  duels: Array<[string, string]>; orderFlags: Array<[string, string]>;
+  hideAfterAttack: string[]; interceptUsed: string[]; tempPreventRouted: string[];
+  timedTerrain: Array<{ key: string; rounds: number }>;
+  terrain: Array<[string, Terrain]>; elevation: Array<[string, number]>;
+  units: UnitState[]; platoons: PlatoonState[];
+  sides: Array<{ id: string; reservePoints: number; armyCapacity: number; morale: number; leaderUid?: string | null; surrendered?: boolean; fusionCharges?: number; companyOrderUsedThisRound?: boolean }>;
+  rituals: Array<Omit<RitualCircle, "damagedThisRound"> & { damagedThisRound: string[] }>;
+  portals: Portal[];
+  decks: Array<{ side: string; list: DeckList; drawPile: string[]; hand: string[]; graveyard: string[]; sideDeck: string[]; usedSide: string[] }>;
+  kingdomEffects: Array<[string, KingdomEffects]>;
+  activatedGroups: string[]; activeSide: string;
+  winner: string | null; winReason: string | null;
+  events: GameEvent[];
+  captures: Capture[];
+  wanted: Array<[string, string[]]>;
+}
+export interface GameSave { version: number; battle: BattleSave | null; kingdom: KingdomState | null; savedAt: string }
+
+/** A battle is a plain object graph plus a seeded RNG, so a save is a deep copy of that graph. */
+export function saveBattle(b: Battle): BattleSave {
+  return {
+    version: SAVE_VERSION, seed: b.seed, round: b.round, phase: b.phase,
+    width: b.width, height: b.height, mask: b.mask ? [...b.mask] : null,
+    weather: b.weather, timeOfDay: b.timeOfDay,
+    commands: b.commands.map((c) => ({ ...c })),
+    duels: [...b.duels.entries()], orderFlags: [...b.orderFlags.entries()],
+    hideAfterAttack: [...b.hideAfterAttack], interceptUsed: [...b.interceptUsed], tempPreventRouted: [...b.tempPreventRouted],
+    timedTerrain: b.timedTerrain.map((t) => ({ ...t })),
+    terrain: [...b.terrain.entries()], elevation: [...b.elevation.entries()],
+    units: [...b.units.values()].map((u) => ({ ...u, statuses: u.statuses.map((s) => ({ ...s })), cooldowns: { ...u.cooldowns }, tempMods: u.tempMods.map((m) => ({ ...m })) })),
+    platoons: [...b.platoons.values()].map((p) => ({ ...p, footUids: [...p.footUids] })),
+    sides: [...b.sides.values()].map((s) => ({ ...s })),
+    rituals: [...b.rituals.values()].map((r) => ({ ...r, damagedThisRound: [...r.damagedThisRound], participantUids: [...r.participantUids] })),
+    portals: [...b.portals.values()].map((p) => ({ ...p, queue: p.queue.map((q) => ({ ...q })) })),
+    decks: [...b.decks.entries()].map(([side, d]) => ({ side, list: d.list, drawPile: [...d.drawPile], hand: [...d.hand], graveyard: [...d.graveyard], sideDeck: [...d.side], usedSide: [...d.usedSide] })),
+    kingdomEffects: [...b.kingdomEffects.entries()].map(([side, e]) => [side, { ...e, statMods: e.statMods.map((m) => ({ ...m })) }]),
+    activatedGroups: [...b.activatedGroupsThisRound], activeSide: b.activeSide,
+    winner: b.winner, winReason: b.winReason, events: b.events.map((e) => ({ ...e })),
+    captures: b.captures.map((c) => ({ ...c })),
+    wanted: [...b.wanted.entries()].map(([side, ids]) => [side, [...ids]] as [string, string[]]),
+  };
+}
+
+export function loadBattle(reg: Registry, save: BattleSave): Battle {
+  if (save.version !== SAVE_VERSION) throw new Error(`Save version ${save.version} cannot be read by this build (expects ${SAVE_VERSION})`);
+  const b = new Battle(reg, { seed: save.seed, width: save.width, height: save.height, sides: save.sides.map((s) => ({ ...s })), weather: save.weather, timeOfDay: save.timeOfDay });
+  b.round = save.round; b.phase = save.phase as Battle["phase"];
+  b.mask = save.mask ? new Set(save.mask) : null;
+  for (const [k, t] of save.terrain) b.terrain.set(k, t);
+  for (const [k, e] of save.elevation) b.elevation.set(k, e);
+  let maxUid = 0;
+  for (const u of save.units) {
+    const copy: UnitState = { ...u, statuses: u.statuses.map((s) => ({ ...s })), cooldowns: { ...u.cooldowns }, tempMods: u.tempMods.map((m) => ({ ...m })) };
+    b.units.set(copy.uid, copy);
+    if (copy.pos && !copy.defeated) b.occupancy.set(`${copy.pos.q},${copy.pos.r}`, copy.uid);
+    const n = Number(copy.uid.replace(/\D+/g, ""));
+    if (Number.isFinite(n)) maxUid = Math.max(maxUid, n);
+  }
+  b.setUidCounter(maxUid);
+  for (const p of save.platoons) b.platoons.set(p.id, { ...p, footUids: [...p.footUids] });
+  for (const r of save.rituals) b.rituals.set(r.id, { ...r, damagedThisRound: new Set(r.damagedThisRound) } as RitualCircle);
+  for (const p of save.portals) b.portals.set(p.id, { ...p, queue: p.queue.map((q) => ({ ...q })) });
+  for (const d of save.decks) {
+    const deck = new DeckState(d.list, new Rng(save.seed), reg.deckRules, false);
+    deck.drawPile = [...d.drawPile]; deck.hand = [...d.hand]; deck.graveyard = [...d.graveyard];
+    deck.side = [...d.sideDeck]; deck.usedSide = [...d.usedSide];
+    b.decks.set(d.side, deck);
+  }
+  for (const [side, e] of save.kingdomEffects ?? []) b.kingdomEffects.set(side, { ...e, statMods: e.statMods.map((m) => ({ ...m })) });
+  for (const g of save.activatedGroups) b.activatedGroupsThisRound.add(g);
+  b.activeSide = save.activeSide; b.winner = save.winner; b.winReason = save.winReason;
+  b.events.push(...save.events);
+  b.captures.push(...(save.captures ?? []).map((c) => ({ ...c })));
+  for (const [side, ids] of save.wanted ?? []) b.wanted.set(side, new Set(ids));
+  // These now live on the Battle, so a load fills in this battle's own flags and leaves any other
+  // battle alive in the process untouched.
+  for (const c of save.commands ?? []) b.commands.push(c);
+  for (const [k, v] of save.duels ?? []) b.duels.set(k, v);
+  for (const [k, v] of save.orderFlags ?? []) b.orderFlags.set(k, v);
+  for (const uid of save.hideAfterAttack ?? []) b.hideAfterAttack.add(uid);
+  for (const uid of save.interceptUsed ?? []) b.interceptUsed.add(uid);
+  for (const uid of save.tempPreventRouted ?? []) b.tempPreventRouted.add(uid);
+  for (const t of save.timedTerrain ?? []) b.timedTerrain.push({ ...t });
+
+  return b;
+}
+
+export function saveGame(b: Battle | null, k: KingdomState | null): GameSave {
+  return { version: SAVE_VERSION, battle: b ? saveBattle(b) : null, kingdom: k ? JSON.parse(JSON.stringify(k)) : null, savedAt: new Date(0).toISOString() };
+}
+export function loadGame(reg: Registry, save: GameSave): { battle: Battle | null; kingdom: KingdomState | null } {
+  if (save.version !== SAVE_VERSION) throw new Error(`Save version ${save.version} cannot be read by this build (expects ${SAVE_VERSION})`);
+  return { battle: save.battle ? loadBattle(reg, save.battle) : null, kingdom: save.kingdom ?? null };
+}

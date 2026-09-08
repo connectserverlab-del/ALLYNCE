@@ -4,6 +4,7 @@ import type { Hex } from "./hex.js";
 import { hexDistance } from "./hex.js";
 import { applyDamage } from "./combat.js";
 import { changeMorale } from "./morale.js";
+import { ritualInstabilityCeiling, ritualMasteryBonus } from "./ranks.js";
 
 export type RitualState = "Inactive" | "Preparing" | "Channeling" | "CompletedReleased" | "CompletedHeld" | "Disrupted" | "Collapsed";
 
@@ -16,7 +17,7 @@ export interface RitualCircle {
   damagedThisRound: Set<string>; disruption: number; assistBonus: number;
   lastCalc?: RitualCalc;
 }
-export interface RitualCalc { channeling: number; leaderKnowledge: number; leaderLanguage: number; teamAffinity: number; assist: number; disruption: number; total: number; participants: string[] }
+export interface RitualCalc { channeling: number; leaderKnowledge: number; leaderLanguage: number; teamAffinity: number; rankMastery: number; assist: number; holding: number; disruption: number; total: number; participants: string[] }
 
 export function createRitual(b: Battle, r: Omit<RitualCircle, "progress" | "state" | "heldRounds" | "unstableStacks" | "damagedThisRound" | "disruption" | "assistBonus" | "participantUids">): RitualCircle {
   const circle: RitualCircle = { ...r, progress: 0, state: "Inactive", heldRounds: 0, unstableStacks: 0, damagedThisRound: new Set(), disruption: 0, assistBonus: 0, participantUids: [] };
@@ -42,7 +43,7 @@ export function onRitualistDamaged(b: Battle, u: UnitState): void {
   for (const r of b.rituals.values()) if (r.side === u.side) r.damagedThisRound.add(u.uid);
 }
 
-/** Progress = Sum(Channeling) + LeaderKnowledge + LeaderLanguage + TeamAffinity + AssistBonuses - Disruption */
+/** Progress = Sum(Channeling) + LeaderKnowledge + LeaderLanguage + TeamAffinity + AssistBonuses + Holding - Disruption */
 export function computeRitualProgress(b: Battle, r: RitualCircle): RitualCalc {
   const parts = ritualParticipants(b, r);
   const leader = parts.find((p) => p.uid === r.leaderUid) ?? parts.slice().sort((a, c) => (b.def(c).ritual!.knowledge + b.def(c).ritual!.language) - (b.def(a).ritual!.knowledge + b.def(a).ritual!.language))[0];
@@ -56,9 +57,12 @@ export function computeRitualProgress(b: Battle, r: RitualCircle): RitualCalc {
   teamAffinity = parts.length ? Math.floor(teamAffinity / parts.length) : 0;
   const leaderKnowledge = leader ? b.def(leader).ritual!.knowledge : 0;
   const leaderLanguage = leader ? b.def(leader).ritual!.language : 0;
+  // the holding's completed research (RitualProgress effect) speeds channeling, same as any other named contribution
+  const holding = parts.length ? (b.kingdomEffects.get(r.side)?.ritualProgress ?? 0) : 0;
+  const rankMastery = ritualMasteryBonus(b, parts); // Rank: ritual mastery, source-tracked apart from the base ritual stats
   const disruption = r.disruption + r.unstableStacks; // instability raises the effect of enemy disruption
-  const total = parts.length ? Math.max(0, channeling + leaderKnowledge + leaderLanguage + teamAffinity + r.assistBonus - disruption) : 0;
-  return { channeling, leaderKnowledge, leaderLanguage, teamAffinity, assist: r.assistBonus, disruption, total, participants: parts.map((p) => p.uid) };
+  const total = parts.length ? Math.max(0, channeling + leaderKnowledge + leaderLanguage + teamAffinity + rankMastery + r.assistBonus + holding - disruption) : 0;
+  return { channeling, leaderKnowledge, leaderLanguage, teamAffinity, rankMastery, assist: r.assistBonus, holding, disruption, total, participants: parts.map((p) => p.uid) };
 }
 
 /** Objective Phase tick for one ritual. */
@@ -73,9 +77,16 @@ export function tickRitual(b: Battle, r: RitualCircle): void {
     r.heldRounds++;
     r.unstableStacks++;
     const dmg = 100 * r.unstableStacks;
-    for (const uid of calc.participants) { const u = b.unit(uid); b.addStatus(u, "Unstable", 1, r.id); applyDamage(b, u, dmg, `Unstable ritual ${r.id}`); }
+    let survivors = 0;
+    for (const uid of calc.participants) {
+      const u = b.unit(uid);
+      b.addStatus(u, "Unstable", 1, r.id);
+      if (!applyDamage(b, u, dmg, `Unstable ritual ${r.id}`).defeated) survivors++;
+    }
     b.log("RitualHeld", { ritual: r.id, heldRounds: r.heldRounds, unstable: r.unstableStacks, damage: dmg });
-    if (calc.participants.length === 0) collapse(b, r, "All ritualists lost while holding");
+    // check who is actually still standing after this tick's own damage, not the pre-damage snapshot,
+    // or a hold that kills its last ritualist outright limps on as Held for one extra, undeserved round
+    if (survivors === 0) collapse(b, r, "All ritualists lost while holding");
     r.damagedThisRound.clear(); r.disruption = 0; r.assistBonus = 0;
     return;
   }
@@ -108,8 +119,9 @@ export function collapse(b: Battle, r: RitualCircle, reason: string): void {
 export function disruptRitual(b: Battle, r: RitualCircle, amount: number, by: string): void {
   r.disruption += amount;
   b.log("RitualDisruption", { ritual: r.id, amount, by });
-  // A held, unstable ritual collapses when disruption reaches its instability
-  if (r.state === "CompletedHeld" && r.unstableStacks >= 3 && r.disruption >= r.unstableStacks) collapse(b, r, "Disruption overwhelmed unstable hold");
+  // A held, unstable ritual collapses once disruption reaches its instability ceiling (Rank: higher instability ceiling raises it)
+  const ceiling = ritualInstabilityCeiling(b, ritualParticipants(b, r));
+  if (r.state === "CompletedHeld" && r.unstableStacks >= ceiling && r.disruption >= r.unstableStacks) collapse(b, r, "Disruption overwhelmed unstable hold");
 }
 
 /** Assist action by a non-ritualist adjacent ally: +1 progress this round. */
@@ -145,21 +157,37 @@ export function releaseRitual(b: Battle, r: RitualCircle, opts: { synchronized: 
   return summon;
 }
 
-/** A Divine Entity's arrival changes the battlefield rather than only adding a big number. */
-function arrivalEffect(b: Battle, div: UnitState): void {
+function revealHidden(b: Battle, div: UnitState): void {
+  for (const u of b.activeUnits()) if (u.side !== div.side) b.addStatus(u, "Revealed", 0, "Sovereign of Memory");
+}
+function fearPulse(b: Battle, div: UnitState): void {
+  for (const u of b.activeUnits()) if (u.side !== div.side && b.distance(div, u) <= 6) changeMorale(b, u, -15, "Sovereign of Torment manifests");
+}
+function returnFallen(b: Battle, div: UnitState): void {
+  const fallen = [...b.units.values()].filter((u) => u.defeated && u.side === div.side && !u.isClone && !u.divine).slice(0, 2);
+  for (const f of fallen) {
+    const spot = b.adjacentUnits(div).length < 6 ? [...Array(6).keys()].map((i) => ({ q: div.pos!.q + [1, 1, 0, -1, -1, 0][i]!, r: div.pos!.r + [0, -1, -1, 0, 1, 1][i]! })).find((h) => b.isFree(h)) : undefined;
+    if (spot) { f.defeated = false; f.hp = Math.floor(b.def(f).hp / 2); f.morale = 50; b.place(f, spot); b.log("Reincarnated", { uid: f.uid }); }
+  }
+  if (div.divine) div.divine.manifestation = Math.max(0, div.divine.manifestation - 1);
+}
+
+/**
+ * A Divine Entity's arrival changes the battlefield rather than only adding a big number. Exported because a
+ * Divine Entity can also arrive by Fusion (the Calamity Form), not only by ritual release; both call this.
+ */
+export function arrivalEffect(b: Battle, div: UnitState): void {
   const kind = b.def(div).divine?.arrival;
   switch (kind) {
-    case "RevealHidden": for (const u of b.activeUnits()) if (u.side !== div.side) b.addStatus(u, "Revealed", 0, "Sovereign of Memory"); break;
-    case "FearPulse": for (const u of b.activeUnits()) if (u.side !== div.side && b.distance(div, u) <= 6) changeMorale(b, u, -15, "Sovereign of Torment manifests"); break;
-    case "ReturnFallen": {
-      const fallen = [...b.units.values()].filter((u) => u.defeated && u.side === div.side && !u.isClone && !u.divine).slice(0, 2);
-      for (const f of fallen) {
-        const spot = b.adjacentUnits(div).length < 6 ? [...Array(6).keys()].map((i) => ({ q: div.pos!.q + [1, 1, 0, -1, -1, 0][i]!, r: div.pos!.r + [0, -1, -1, 0, 1, 1][i]! })).find((h) => b.isFree(h)) : undefined;
-        if (spot) { f.defeated = false; f.hp = Math.floor(b.def(f).hp / 2); f.morale = 50; b.place(f, spot); b.log("Reincarnated", { uid: f.uid }); }
-      }
-      if (div.divine) div.divine.manifestation = Math.max(0, div.divine.manifestation - 1);
+    case "RevealHidden": revealHidden(b, div); break;
+    case "FearPulse": fearPulse(b, div); break;
+    case "ReturnFallen": returnFallen(b, div); break;
+    case "Convergence":
+      // The Calamity Form only exists because the Sovereigns of Memory, Torment and Reincarnation stood
+      // together (see FUS_CALAMITY); its arrival is the same three arrivals landing at once, not a new
+      // effect invented for it.
+      revealHidden(b, div); fearPulse(b, div); returnFallen(b, div);
       break;
-    }
   }
   b.log("DivineManifested", { uid: div.uid, def: div.defId, arrival: kind });
 }

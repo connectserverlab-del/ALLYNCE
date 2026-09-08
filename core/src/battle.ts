@@ -1,18 +1,41 @@
 import { Battle } from "./state.js";
 import type { UnitState, PlatoonState } from "./types.js";
+import { TERRAIN_RULES } from "./types.js";
+import { terrainCostFor } from "./ranks.js";
 import type { Hex } from "./hex.js";
+import { hexDistance as _hd } from "./hex.js";
 import { hexDistance, hexNeighbors, hexKey, directionTo } from "./hex.js";
-import { resolveAttack, interceptUsed, defeat } from "./combat.js";
-import { computeStat, clearTempMods, tempMods } from "./modifiers.js";
+import { resolveAttack, defeat } from "./combat.js";
+import { computeStat, clearTempMods, tempMods, revealsHiddenTarget } from "./modifiers.js";
+import { rooted, revealAllRounds, tickExpansionEffects } from "./effects.js";
 import { resolveSuccession, rally as rallyAction } from "./command.js";
-import { applyEffect, clearRoundEffectFlags, orderFlags } from "./effects.js";
+import { applyEffect, clearRoundEffectFlags } from "./effects.js";
 import { tickRitual, releaseRitual, linkedGroup, assistRitual, disruptRitual, type RitualCircle } from "./rituals.js";
-import { tickPortal, checkCaptureInterrupt, attackPortal, captureStep, type Portal } from "./portals.js";
+import { tickPortal, checkCaptureInterrupt, attackPortal, captureStep, callPortal, queueReinforcement as enqueueReinforcement, type Portal } from "./portals.js";
 import { commandRadiusRecovery, surroundedPenalty, moraleBand, changeMorale } from "./morale.js";
-import { doctrineState } from "./composition.js";
+import { doctrineState, organizationLevel, companyLeader } from "./composition.js";
 import { evaluateObjective, markSynchronized, type ObjectiveDef, type ObjectiveProgress } from "./objectives.js";
+import { mountedMoveBonus, commandRadiusOf, movementTraits } from "./ranks.js";
+import { fuse as fuseUnits, tickFusions } from "./fusion.js";
+import { effectiveRange } from "./weather.js";
+import { roundHash } from "./determinism.js";
 
-export interface VictoryRules { sides: Record<string, ObjectiveDef[]>; roundLimit: number; roundLimitWinner?: string }
+/** Consecutive End Phases a side has spent at or below the surrender threshold; one bad round shouldn't end a war. */
+const surrenderStreaks = new WeakMap<Battle, Map<string, number>>();
+function lowMoraleStreak(b: Battle): Map<string, number> {
+  let m = surrenderStreaks.get(b);
+  if (!m) { m = new Map(); surrenderStreaks.set(b, m); }
+  return m;
+}
+
+export interface VictoryRules {
+  sides: Record<string, ObjectiveDef[]>; roundLimit: number; roundLimitWinner?: string;
+  /** The three universal win conditions, on top of any scenario objectives above. All optional so
+   *  low-level tests that build a bare Battle keep their existing behavior unless they opt in. */
+  armyLeaderUid?: Record<string, string | null>;
+  surrenderMoraleThreshold?: number;
+  surrenderSustainedRounds?: number;
+}
 
 /**
  * Deterministic turn-state machine. Round = Command -> Alternating Activation -> Objective -> End.
@@ -26,14 +49,15 @@ export class BattleController {
     const b = this.b;
     b.phase = "Command";
     b.log("PhaseStart", { phase: "Command" });
-    clearRoundEffectFlags();
-    interceptUsed.clear();
+    clearRoundEffectFlags(b);
+    b.interceptUsed.clear();
     for (const p of b.platoons.values()) {
       resolveSuccession(b, p);
       p.orderUsedThisRound = false;
       p.markedTarget = null;
       if (p.continuityRoundsLeft > 0) p.continuityRoundsLeft--;
     }
+    for (const s of b.sides.values()) s.companyOrderUsedThisRound = false;
     for (const u of b.activeUnits()) {
       u.ap = 0; u.defending = false; u.overwatch = false;
       u.usedChargeLastRound = false;
@@ -41,6 +65,7 @@ export class BattleController {
       clearTempMods(u, (m) => m.stat === "DEF" && m.source === "Inherited Wall" ? false : true); // only Inherited Wall persists one round
       // Suppressed: -1 AP on next activation is applied at activation time
     }
+    for (const [side, deck] of b.decks) { const drawn = deck.draw(b.reg.deckRules.drawPerRound); if (drawn.length) b.log("Draw", { side, cards: drawn, hand: deck.hand.length }); }
     commandRadiusRecovery(b);
     b.activatedGroupsThisRound.clear();
     b.activeSide = b.round % 2 === 1 ? "A" : "B";
@@ -53,7 +78,7 @@ export class BattleController {
     if (b.activatedGroupsThisRound.has(groupId)) throw new Error(`${groupId} already activated this round`);
     const members = this.groupMembers(groupId);
     for (const u of members) {
-      u.ap = 2; u.movedThisActivation = 0; u.attackedThisActivation = false; u.defending = false;
+      u.ap = 2; u.movedThisActivation = 0; u.chargeMoved = 0; u.altitudeDropped = 0; u.attackedThisActivation = false; u.defending = false; u.shadowStepped = false; u.freeMoveHexes = 0;
       if (b.hasStatus(u, "Suppressed")) { u.ap -= 1; b.removeStatus(u, "Suppressed"); }
       if (b.hasStatus(u, "Routed")) { this.routedRetreat(u); u.ap = 0; }
     }
@@ -75,7 +100,7 @@ export class BattleController {
   }
 
   endActivation(groupId: string): void {
-    for (const u of this.groupMembers(groupId)) { u.ap = 0; orderFlags.delete(u.uid); }
+    for (const u of this.groupMembers(groupId)) { u.ap = 0; this.b.orderFlags.delete(u.uid); }
     this.b.log("ActivationEnd", { group: groupId });
   }
 
@@ -84,18 +109,19 @@ export class BattleController {
 
   movementAllowance(u: UnitState): number {
     const d = this.b.def(u);
-    return d.mov + tempMods(u).filter((m) => m.stat === "MOV").reduce((s, m) => s + m.value, 0);
+    return d.mov + mountedMoveBonus(this.b, u) + (movementTraits(this.b, u).bonusMov ?? 0) + (this.b.kingdomEffects.get(u.side)?.movement ?? 0) + tempMods(u).filter((m) => m.stat === "MOV").reduce((s, m) => s + m.value, 0);
   }
 
   /** BFS pathfinding with terrain costs, zone of control and flying rules. Returns reachable hexes with cost. */
-  reachable(u: UnitState): Map<string, { hex: Hex; cost: number }> {
+  reachable(u: UnitState): Map<string, { hex: Hex; cost: number; labored?: boolean }> {
     const b = this.b; const d = b.def(u);
-    const out = new Map<string, { hex: Hex; cost: number }>();
+    const out = new Map<string, { hex: Hex; cost: number; labored?: boolean }>();
     if (!u.pos) return out;
     const budget = this.movementAllowance(u);
-    const flag = orderFlags.get(u.uid);
-    const ignoreZoc = flag === "PhaseMove";
-    const passAllies = flag === "PhaseMove" || flag === "SequencedMove" || !!d.flying;
+    const flag = b.orderFlags.get(u.uid);
+    const traits = movementTraits(b, u);
+    const ignoreZoc = flag === "PhaseMove" || !!traits.ignoreZoc;
+    const passAllies = flag === "PhaseMove" || flag === "SequencedMove" || !!d.flying || !!traits.passAllies;
     const frontier: Array<{ hex: Hex; cost: number }> = [{ hex: u.pos, cost: 0 }];
     const best = new Map<string, number>([[hexKey(u.pos), 0]]);
     while (frontier.length) {
@@ -104,13 +130,13 @@ export class BattleController {
       for (const n of hexNeighbors(cur.hex)) {
         if (!b.inBounds(n)) continue;
         const t = b.terrainAt(n);
-        if (t === "Water" && !d.flying) continue;
-        if (t === "AntiAir" && d.flying) continue;
         const occ = b.unitAt(n);
         if (occ && (occ.side !== u.side || !passAllies)) continue;
-        let step = 1;
-        if (!d.flying) { if (t === "Forest") step = d.roles.includes("Cavalry") ? 3 : 2; }
-        else if (t === "Forest") step = 2; // dense forest restricts flying
+        const stepCost = terrainCostFor(b, u, t);
+        if (stepCost === null) continue;
+        let step = stepCost;
+        // climbing one elevation tier costs one more point for ground units
+        if (!d.flying && b.elevationAt(n) > b.elevationAt(cur.hex) && t !== "Road") step += 1;
         // Predatory Airspace: flying enemies cannot pass through a Dragon Flight commander's radius
         if (d.flying && this.inEnemyDragonAirspace(u, n)) step = 99;
         const cost = cur.cost + step;
@@ -123,6 +149,17 @@ export class BattleController {
         if (!ignoreZoc && this.adjacentEnemyAt(u, n)) { /* still allowed; reaction attack is triggered on leaving */ }
       }
     }
+    // The labored climb: ground that costs more than a unit has left is not closed to it, only slow.
+    // A unit that has not yet moved may enter one adjacent hex it cannot afford by spending the whole activation.
+    if (u.movedThisActivation === 0) {
+      for (const n of hexNeighbors(u.pos)) {
+        if (!b.inBounds(n) || out.has(hexKey(n))) continue;
+        if (b.unitAt(n)) continue;
+        const step = terrainCostFor(b, u, b.terrainAt(n));
+        if (step === null) continue;
+        out.set(hexKey(n), { hex: n, cost: step, labored: true });
+      }
+    }
     return out;
   }
 
@@ -131,7 +168,7 @@ export class BattleController {
     for (const p of b.platoons.values()) {
       if (p.side === u.side || p.faction !== "DRG" || !p.commanderUid) continue;
       const c = b.units.get(p.commanderUid);
-      if (c && !c.defeated && c.pos && hexDistance(c.pos, h) <= (b.def(c).commandRadius ?? 0)) return true;
+      if (c && !c.defeated && c.pos && hexDistance(c.pos, h) <= commandRadiusOf(b, c)) return true;
     }
     return false;
   }
@@ -141,28 +178,46 @@ export class BattleController {
   move(u: UnitState, to: Hex, opts: { disengage?: boolean } = {}): void {
     const b = this.b;
     if (!u.pos) throw new Error("Unit not deployed");
+    if (rooted.has(u.uid)) throw new Error(`${u.uid} is rooted and cannot move`);
     const r = this.reachable(u).get(hexKey(to));
     if (!r) throw new Error(`Hex ${hexKey(to)} not reachable`);
     const zocEnemies = b.adjacentEnemies(u).filter((e) => !b.hasStatus(e, "Routed"));
-    const ignoreZoc = orderFlags.get(u.uid) === "PhaseMove";
-    if (opts.disengage) this.spend(u, 1);
-    this.spend(u, 1);
+    const traits = movementTraits(b, u);
+    const ignoreZoc = b.orderFlags.get(u.uid) === "PhaseMove" || !!traits.ignoreZoc || u.freeMoveHexes > 0;
+    if (r.labored && u.freeMoveHexes <= 0) {
+      if (u.movedThisActivation > 0) throw new Error("A labored climb needs a fresh activation");
+      if (u.ap < 2) throw new Error("A labored climb costs the whole activation");
+    }
+    if (u.freeMoveHexes > 0) { if (r.cost > u.freeMoveHexes) throw new Error("Beyond free move"); u.freeMoveHexes = 0; }
+    else if (r.labored) { u.ap = 0; }
+    else { if (opts.disengage) this.spend(u, 1); this.spend(u, 1); }
+    u.setUp = false; // a siege piece that moves must set up again
     const from = u.pos;
     if (zocEnemies.length && !opts.disengage && !ignoreZoc) {
       const reactor = zocEnemies[0]!;
       b.log("ReactionAttack", { by: reactor.uid, on: u.uid });
-      resolveAttack(b, reactor, u);
+      resolveAttack(b, reactor, u, { reaction: true });
       if (u.defeated) return;
     }
     // Overwatch: first valid enemy entering range gets shot
     for (const e of b.activeUnits()) {
       if (e.side === u.side || !e.overwatch || !e.pos) continue;
-      if (hexDistance(e.pos, to) <= b.def(e).range && hexDistance(e.pos, from) > b.def(e).range) { b.log("OverwatchTriggered", { by: e.uid, on: u.uid }); resolveAttack(b, e, u, { ranged: b.def(e).range > 1 }); if (u.defeated) return; }
+      const eRange = effectiveRange(b, e);
+      if (hexDistance(e.pos, to) <= eRange && hexDistance(e.pos, from) > eRange) { b.log("OverwatchTriggered", { by: e.uid, on: u.uid }); resolveAttack(b, e, u, { ranged: b.def(e).range > 1, reaction: true }); if (u.defeated) return; }
     }
     b.place(u, to);
     u.facing = directionTo(from, to);
     u.movedThisActivation += r.cost;
+    // charge momentum: broken by rough ground, otherwise accumulates
+    u.chargeMoved = TERRAIN_RULES[b.terrainAt(to)].chargeBreaks ? 0 : u.chargeMoved + r.cost;
+    // diving momentum: a flier accumulates net altitude lost this activation; climbing back up breaks the dive
+    if (b.def(u).flying) {
+      const drop = b.elevationAt(from) - b.elevationAt(to);
+      u.altitudeDropped = drop > 0 ? u.altitudeDropped + drop : 0;
+    }
+    if (r.labored) b.log("LaboredClimb", { uid: u.uid, to, terrain: b.terrainAt(to), cost: r.cost });
     if (b.hasStatus(u, "Hidden") && b.terrainAt(to) !== "Forest" && b.terrainAt(to) !== "Smoke" && b.adjacentEnemies(u).length) b.addStatus(u, "Revealed", 0, "Moved into contact");
+    if (traits.hideOnForestStop && b.terrainAt(to) === "Forest") b.addStatus(u, "Hidden", 2, "Canopy");
     b.log("Move", { uid: u.uid, from, to, cost: r.cost });
     // moving away from a ritual circle forfeits contribution (participants are recomputed each tick)
   }
@@ -174,20 +229,65 @@ export class BattleController {
     const b = this.b;
     if (u.attackedThisActivation) throw new Error("Already attacked this activation");
     if (!u.pos || !target.pos) throw new Error("Not deployed");
-    const range = b.def(u).range + (b.terrainAt(u.pos) === "HighGround" && b.def(u).range > 1 ? 1 : 0);
-    if (hexDistance(u.pos, target.pos) > range) throw new Error("Out of range");
-    if (b.hasStatus(target, "Hidden") && hexDistance(u.pos, target.pos) > 1) throw new Error("Target is Hidden");
+    const range = effectiveRange(b, u) + (b.def(u).range > 1 ? TERRAIN_RULES[b.terrainAt(u.pos)].ranged.range : 0);
+    const dist = hexDistance(u.pos, target.pos);
+    if (dist > range) throw new Error("Out of range");
+    // A gun cannot depress far enough to hit what has already closed on it.
+    if (dist < (b.def(u).minRange ?? 0)) throw new Error("Target is inside minimum range");
+    if (b.hasStatus(target, "Hidden") && dist > 1 && !revealsHiddenTarget(b, u, target) && !revealAllRounds.has(u.side)) throw new Error("Target is Hidden");
     if (u.isClone && u.attackedThisActivation) throw new Error("Clones make one basic attack");
+    const d = b.def(u);
+    if (d.minRange && hexDistance(u.pos, target.pos) < d.minRange) throw new Error("Inside minimum range");
+    if (d.siege?.setupRequired && !u.setUp) throw new Error("Siege piece must Set Up before firing");
     this.spend(u, 1);
     u.facing = directionTo(u.pos, target.pos);
     resolveAttack(b, u, target, { ranged: range > 1 });
+    const fade = d.passives.map((id) => b.reg.ability(id)).find((a) => a.effect.kind === "FreeMoveAfterAttack");
+    if (fade) u.freeMoveHexes = (fade.effect as any).hexes;
     // attacking a ritual participant disrupts the circle
     for (const r of b.rituals.values()) if (r.side === target.side && r.participantUids.includes(target.uid)) disruptRitual(b, r, 1, u.uid);
   }
 
-  attackStructure(u: UnitState, portal: Portal): void {
+  /**
+   * Take an enemy alive. A body is worth nothing to a warrant, so a wanted target has to be beaten
+   * down and then subdued: the target must be broken (at or under the capture threshold of its
+   * maximum HP, or Routed), adjacent, and not a leader, a clone or a deity. It leaves the field
+   * exactly as a casualty does, but a card comes off it.
+   */
+  subdue(u: UnitState, target: UnitState): void {
+    const b = this.b;
+    if (!u.pos || !target.pos) throw new Error("Not deployed");
+    if (target.side === u.side) throw new Error("You may only subdue an enemy");
+    if (target.defeated) throw new Error("Nothing left to take");
+    if (u.isClone) throw new Error("Clones cannot take prisoners");
+    if (hexDistance(u.pos, target.pos) > 1) throw new Error("Subduing is done hand to hand");
+    if (!canBeSubdued(b, target)) throw new Error(`${b.def(target).name} cannot be taken alive`);
+    if (!canBeTaken(b, target, u.side)) throw new Error(`${b.def(target).name} is still fighting; break it or surround it first`);
     this.spend(u, 1);
-    const atk = computeStat(this.b, u, "ATK").final;
+    u.facing = directionTo(u.pos, target.pos);
+    b.remove(target);
+    target.defeated = true; target.captured = true; target.hp = Math.max(1, target.hp);
+    b.captures.push({ defId: target.defId, uid: target.uid, from: target.side, by: u.side, byUid: u.uid, round: b.round });
+    b.log("Subdued", { uid: target.uid, def: target.defId, by: u.uid, side: u.side });
+    this.evaluateVictory();
+  }
+
+  /** Is this enemy beaten down far enough to take alive right now? */
+  canSubdue(u: UnitState, target: UnitState): boolean {
+    const b = this.b;
+    if (!u.pos || !target.pos || target.defeated || u.isClone || u.ap < 1) return false;
+    if (target.side === u.side || hexDistance(u.pos, target.pos) > 1) return false;
+    return canBeSubdued(b, target) && canBeTaken(b, target, u.side);
+  }
+
+  attackStructure(u: UnitState, portal: Portal): void {
+    const d = this.b.def(u);
+    if (d.siege?.setupRequired && !u.setUp) throw new Error("Siege piece must Set Up before firing");
+    this.spend(u, 1);
+    // Route through the same modifier pipeline as any other attack, with the attacker set so
+    // attacker-scoped bonuses (Breaching Shot included) show up in the breakdown instead of
+    // being added in as an untracked number.
+    const atk = computeStat(this.b, u, "ATK", { attacker: u, structureTarget: true }).final;
     if (!attackPortal(this.b, u, portal, atk)) { u.ap += 1; throw new Error("Portal out of range"); }
   }
 
@@ -196,11 +296,64 @@ export class BattleController {
   rally(u: UnitState): void { this.spend(u, 1); if (!rallyAction(this.b, u)) { u.ap += 1; throw new Error("Unit cannot Rally"); } }
   assist(u: UnitState, ritual: RitualCircle): void { this.spend(u, 1); if (!assistRitual(this.b, ritual, u)) { u.ap += 1; throw new Error("Cannot assist"); } }
   capture(u: UnitState, portal: Portal): void { this.spend(u, 1); if (!captureStep(this.b, u, portal)) { u.ap += 1; throw new Error("Cannot capture"); } }
+
+  /** A PortalKeeper's Open Reinforcement Portal: call one at a hex within the ability's reach, no Reserve spent yet. */
+  openPortal(u: UnitState, pos: Hex): Portal {
+    const b = this.b; const d = b.def(u);
+    const abilityId = d.actives.find((id) => b.reg.ability(id).effect.kind === "PortalCall");
+    if (!abilityId) throw new Error(`${u.uid} cannot call a portal`);
+    const a = b.reg.ability(abilityId);
+    if (!u.pos) throw new Error("Not deployed");
+    if ((u.cooldowns[abilityId] ?? 0) > 0) throw new Error("On cooldown");
+    if (b.hasStatus(u, "Silenced")) throw new Error("Silenced");
+    if (hexDistance(u.pos, pos) > (a.range ?? 1)) throw new Error("Out of range");
+    this.spend(u, a.apCost ?? 1);
+    const p = callPortal(b, u.side, pos, { keeperUid: u.uid, telegraph: (a.effect as { telegraphRounds?: number }).telegraphRounds ?? 1 });
+    if (!p) { u.ap += a.apCost ?? 1; throw new Error("Cannot open a portal there"); }
+    if (a.cooldown) u.cooldowns[abilityId] = a.cooldown;
+    b.log("AbilityUsed", { uid: u.uid, ability: abilityId, targetHex: pos });
+    return p;
+  }
+
+  /** Feed reserve points into a portal of your own that has already opened. Any unit stationed beside it can call it in. */
+  queueReinforcement(u: UnitState, portal: Portal, defId: string): void {
+    const b = this.b;
+    if (!u.pos || u.side !== portal.side || hexDistance(u.pos, portal.pos) > 1) throw new Error("Not beside that portal");
+    this.spend(u, 1);
+    if (!enqueueReinforcement(b, portal, defId)) { u.ap += 1; throw new Error("Cannot queue that reinforcement"); }
+  }
+
   channel(u: UnitState, ritual: RitualCircle): void {
     // Channeling is implicit for eligible participants inside the circle; the action spends AP to stay committed and marks intent.
     this.spend(u, 1);
     if (!this.b.def(u).ritual || !u.pos || hexDistance(u.pos, ritual.center) > ritual.radius) { u.ap += 1; throw new Error("Not a ritualist in the circle"); }
     this.b.log("Channel", { uid: u.uid, ritual: ritual.id });
+  }
+
+  /** Kage rank: relocate up to N hexes to a Forest, Smoke or Ruins hex, ignoring everything between. Once per activation. */
+  shadowStep(u: UnitState, to: Hex): void {
+    const b = this.b; const n = movementTraits(b, u).shadowStep ?? 0;
+    if (!n) throw new Error("No Shadow Step");
+    if (u.shadowStepped) throw new Error("Already shadow-stepped this activation");
+    if (!u.pos || hexDistance(u.pos, to) > n || !b.isFree(to)) throw new Error("Invalid destination");
+    const t = b.terrainAt(to);
+    if (t !== "Forest" && t !== "Smoke" && t !== "Ruins") throw new Error("Shadow Step needs cover");
+    this.spend(u, 1);
+    const from = u.pos; b.place(u, to); u.shadowStepped = true; u.setUp = false;
+    b.addStatus(u, "Hidden", 2, "Shadow Step");
+    b.log("ShadowStep", { uid: u.uid, from, to });
+  }
+
+  /** Fusion function: merge adjacent units by recipe. Spends a Fusion charge; each input spends 1 AP. */
+  fuse(units: UnitState[], recipeId: string): UnitState { return fuseUnits(this.b, units, recipeId); }
+
+  /** Surrender: only the army leader (or any commander if the leader has fallen) may yield the field. */
+  surrender(side: string, by?: UnitState): void {
+    const b = this.b; const s = b.sides.get(side)!;
+    const leader = s.leaderUid ? b.units.get(s.leaderUid) : undefined;
+    if (leader && !leader.defeated && by && by.uid !== leader.uid) throw new Error("Only the army leader may surrender");
+    s.surrendered = true; b.log("Surrender", { side, by: by?.uid ?? null });
+    this.evaluateVictory();
   }
 
   /** Use an active/order ability. */
@@ -231,6 +384,32 @@ export class BattleController {
     if (!u.platoonId) return false;
     const p = this.b.platoon(u.platoonId);
     return p.commanderUid === u.uid; // a promoted second becomes commanderUid
+  }
+
+  /**
+   * Company Order: once a side fields three or more non-Broken platoons (Company organization,
+   * see `data/compositions/platoon.json`), a living commander or second whose faction rank may
+   * lead a Company can spend the side's one army-level order per round. It reissues that faction's
+   * own signature platoon order (`faction.platoonOrder`) to every non-Broken platoon on the side at
+   * once, through the same effect interpreter each platoon's own order already uses.
+   */
+  useCompanyOrder(u: UnitState, ctx: { target?: UnitState; targetHex?: Hex } = {}): void {
+    const b = this.b;
+    const side = b.sides.get(u.side);
+    if (!side) throw new Error(`Unknown side ${u.side}`);
+    if (organizationLevel(b, u.side) !== "Company") throw new Error("Company Order requires Company organization: three or more platoons in the field");
+    if (side.companyOrderUsedThisRound) throw new Error("Company Order already used this round");
+    if (companyLeader(b, u.side) !== u) throw new Error("Only a living commander or second whose rank may lead a Company can issue the Company Order");
+    const d = b.def(u);
+    const abilityId = b.reg.factions.get(d.faction)?.platoonOrder;
+    if (!abilityId) throw new Error(`${d.faction} has no signature platoon order to issue army-wide`);
+    const a = b.reg.ability(abilityId);
+    const platoons = [...b.platoons.values()].filter((p) => p.side === u.side && doctrineState(b, p) !== "Broken");
+    if (!platoons.length) throw new Error("No platoon in the field to receive the Company Order");
+    this.spend(u, a.apCost ?? 1);
+    for (const p of platoons) applyEffect(b, u, a, { platoon: p, target: ctx.target, targetHex: ctx.targetHex });
+    side.companyOrderUsedThisRound = true;
+    b.log("CompanyOrder", { uid: u.uid, ability: abilityId, platoons: platoons.map((p) => p.id) });
   }
 
   private routedRetreat(u: UnitState): void {
@@ -279,8 +458,16 @@ export class BattleController {
       if (u.divine && u.divine.manifestation <= 0 && u.divine.anchors <= 0) defeat(b, u, "Manifestation ended");
     }
     surroundedPenalty(b);
+    tickExpansionEffects();
     for (const p of b.portals.values()) checkCaptureInterrupt(b, p);
+    for (let i = b.timedTerrain.length - 1; i >= 0; i--) { const t = b.timedTerrain[i]!; t.rounds--; if (t.rounds <= 0) { b.terrain.delete(t.key); b.timedTerrain.splice(i, 1); } }
+    tickFusions(b);
     this.evaluateVictory();
+    // The desync detector: hash this round's own slice of the event log (every position, HP change,
+    // status, morale swing and side-state change was already logged as it happened) so two clients — or
+    // a replay rebuilt from a command log — can compare one number per round instead of diffing whole
+    // battles, and a divergence names the exact round it broke on.
+    b.log("RoundHash", { hash: roundHash(b) });
     if (!b.winner) { b.round++; b.phase = "Command"; }
     else b.phase = "Ended";
   }
@@ -292,16 +479,40 @@ export class BattleController {
     for (const side of Object.keys(this.victory.sides)) {
       const status = this.objectiveStatus(side);
       // all primary objectives satisfied -> win (objectives are ANDed; scenarios can encode OR by separate side entries later)
-      if (status.length && status.some((s) => s.satisfied && (s.def.type !== "SurviveRounds" && s.def.type !== "DefendForRounds"))) { b.winner = side; b.winReason = status.filter((s) => s.satisfied).map((s) => s.def.type).join("+"); }
+      const primary = status.filter((s) => s.def.type !== "SurviveRounds" && s.def.type !== "DefendForRounds");
+      if (primary.length && primary.every((s) => s.satisfied)) { b.winner = side; b.winReason = status.filter((s) => s.satisfied).map((s) => s.def.type).join("+"); }
+    }
+    // The three universal win conditions sit under any scenario objectives above: Wipeout, LeaderKilled, Surrender.
+    if (!b.winner) for (const side of b.sides.keys()) {
+      const other = [...b.sides.keys()].find((s) => s !== side);
+      if (!other) continue;
+      const living = [...b.activeUnits(side)].filter((u) => !u.isClone);
+      if (living.length === 0) { b.winner = other; b.winReason = "Wipeout"; break; }
+      const leaderUid = this.victory.armyLeaderUid?.[side];
+      if (leaderUid && b.units.get(leaderUid)?.defeated) { b.winner = other; b.winReason = "LeaderKilled"; break; }
+      const threshold = this.victory.surrenderMoraleThreshold;
+      if (threshold != null) {
+        const avg = Math.floor(living.reduce((s, u) => s + u.morale, 0) / living.length);
+        const streak = lowMoraleStreak(b);
+        const run = avg <= threshold ? (streak.get(side) ?? 0) + 1 : 0;
+        streak.set(side, run);
+        if (run >= (this.victory.surrenderSustainedRounds ?? 1)) { b.winner = other; b.winReason = "Surrender"; break; }
+      }
     }
     if (!b.winner && b.round >= this.victory.roundLimit) {
       b.winner = this.victory.roundLimitWinner ?? "draw";
       b.winReason = "Round limit";
     }
-    // command structure broken: a side with no living commanders or seconds and no rituals/portals loses morale war
+    // Universal win conditions, checked for every battle:
+    // 1) the opponent has no units left, 2) the opponent's army leader is killed, 3) the opponent surrenders.
     if (!b.winner) for (const side of b.sides.keys()) {
+      const other = [...b.sides.keys()].find((s) => s !== side) ?? "draw";
+      const st = b.sides.get(side)!;
       const alive = [...b.activeUnits(side)].filter((u) => !u.isClone);
-      if (alive.length === 0) { b.winner = [...b.sides.keys()].find((s) => s !== side) ?? "draw"; b.winReason = "Enemy eliminated"; }
+      if (alive.length === 0) { b.winner = other; b.winReason = "Wipeout"; break; }
+      if (st.surrendered) { b.winner = other; b.winReason = "Surrender"; break; }
+      const leader = st.leaderUid ? b.units.get(st.leaderUid) : undefined;
+      if (leader && leader.defeated && !leader.fusedFrom) { b.winner = other; b.winReason = "Leader killed"; break; }
     }
     if (b.winner) b.log("BattleEnded", { winner: b.winner, reason: b.winReason });
   }
@@ -317,3 +528,40 @@ export class BattleController {
 
 export { Battle, changeMorale };
 export type { PlatoonState };
+
+
+/** The share of maximum HP at or below which a unit can be taken alive instead of killed. */
+export const CAPTURE_THRESHOLD = 0.25;
+
+/** A unit is broken once it is down to the capture threshold, or once it has routed. */
+export function isBroken(b: Battle, u: UnitState): boolean {
+  return u.hp <= Math.ceil(b.def(u).hp * CAPTURE_THRESHOLD) || b.hasStatus(u, "Routed");
+}
+
+/**
+ * A unit is cornered when there are more hands on it than friends beside it: two or more of the
+ * capturing side pressed against it, outnumbering whatever is left of its own line. Damage in this
+ * game is blunt enough that a levy dies to one clean hit, so grinding a small target down to a
+ * quarter of its health is not a plan anyone can carry out on purpose. Surrounding it is. That is
+ * the route that makes a warrant playable.
+ */
+export function isCornered(b: Battle, u: UnitState, bySide: string): boolean {
+  if (!u.pos) return false;
+  const holders = b.adjacentUnits(u).filter((x) => x.side === bySide && !x.isClone).length;
+  const friends = b.adjacentAllies(u).filter((a) => !a.isClone).length;
+  return holders >= 2 && holders > friends;
+}
+
+/** The two ways an enemy stops being a fight and starts being a prisoner. */
+export function canBeTaken(b: Battle, u: UnitState, bySide: string): boolean {
+  return isBroken(b, u) || isCornered(b, u, bySide);
+}
+
+/** Who can be taken alive at all: not clones, not gods, not an army's own leader. */
+export function canBeSubdued(b: Battle, u: UnitState): boolean {
+  if (u.isClone || u.fusedFrom) return false;
+  const d = b.def(u);
+  if (d.divine || d.roles.includes("Deity")) return false;
+  if (b.sides.get(u.side)?.leaderUid === u.uid) return false;
+  return true;
+}

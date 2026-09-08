@@ -1,0 +1,227 @@
+import { describe, expect, it } from "vitest";
+import { blob, deploy, KNI, newBattle, reg, SAM, SHI } from "./helpers.js";
+import { loadBattle, SAVE_VERSION, saveBattle } from "../src/save.js";
+import { applyCommand } from "../src/commands.js";
+import { assistRitual, createRitual, disruptRitual, tickRitual } from "../src/rituals.js";
+import { resolveAttack } from "../src/combat.js";
+import { callPortal, captureStep, queueReinforcement, tickPortal } from "../src/portals.js";
+import { hexNeighbors } from "../src/hex.js";
+import { BattleController } from "../src/battle.js";
+import { applyKingdom, newKingdom, startResearch, startUpgrade, tick } from "../src/kingdom.js";
+import { addTempMod, clearTempMods, computeStat } from "../src/modifiers.js";
+import { applyEffect } from "../src/effects.js";
+describe("saving and loading rituals and portals", () => {
+  it("round-trips a ritual mid-channel, with damaged participants, disruption and assist still pending", () => {
+    const { b } = newBattle();
+    const r = createRitual(b, { id: "r1", side: "A", center: { q: 10, r: 5 }, radius: 1, required: 999, leaderUid: null, summonDefId: "DIV_BOSS_SOVEREIGN-OF-MEMORY", linkGroup: null });
+    const lead = b.spawn("RIT_LEADER_AFFILIATED-SUMMONER", "A", { q: 10, r: 5 });
+    r.leaderUid = lead.uid;
+    const helper = b.spawn("RIT_FOOT_FOREIGN-RITUALIST", "A", { q: 11, r: 5 });
+    tickRitual(b, r); // Preparing -> Channeling, first progress tick clears transient fields
+    const raider = b.spawn("KNI_ELITE_SKY-LANCE-DRAGOON", "B", { q: 10, r: 4 });
+    resolveAttack(b, raider, lead); // populates damagedThisRound via onRitualistDamaged
+    disruptRitual(b, r, 2, raider.uid);
+    assistRitual(b, r, helper);
+
+    expect(r.damagedThisRound.size).toBeGreaterThan(0);
+    expect(r.disruption).toBe(2);
+    expect(r.assistBonus).toBe(1);
+    expect(r.participantUids.length).toBeGreaterThan(0);
+
+    const snap = saveBattle(b);
+    const restored = loadBattle(reg, snap);
+    const rr = restored.rituals.get("r1")!;
+    expect(rr.damagedThisRound).toBeInstanceOf(Set);
+    expect([...rr.damagedThisRound]).toEqual([...r.damagedThisRound]);
+    expect(rr.disruption).toBe(r.disruption);
+    expect(rr.assistBonus).toBe(r.assistBonus);
+    expect(rr.participantUids).toEqual(r.participantUids);
+    expect(rr.state).toBe(r.state);
+    // continuing to tick the restored ritual behaves exactly like the original
+    tickRitual(b, r);
+    tickRitual(restored, rr);
+    expect(JSON.stringify(saveBattle(restored))).toBe(JSON.stringify(saveBattle(b)));
+  });
+
+  it("round-trips a portal with a queued reinforcement, cooldown and in-progress capture", () => {
+    const { b } = newBattle();
+    b.sides.get("B")!.reservePoints = 20;
+    const p = callPortal(b, "B", { q: 5, r: 5 }, { telegraph: 0, capacity: 1, cooldown: 2 })!;
+    queueReinforcement(b, p, "KNI_FOOT_BASTION-MAN-AT-ARMS");
+    queueReinforcement(b, p, "KNI_FOOT_BASTION-MAN-AT-ARMS");
+    tickPortal(b, p); // one arrives, one stays queued, cooldown starts
+    const openSpot = hexNeighbors(p.pos).find((h) => b.isFree(h))!;
+    const keeper = b.spawn("KNI_SUPPORT_PORTAL-KEEPER", "A", openSpot);
+    captureStep(b, keeper, p); // interrupted capture in progress against the portal's own side
+
+    expect(p.queue).toHaveLength(1);
+    expect(p.cooldownLeft).toBeGreaterThan(0);
+    expect(p.captureBy).toBe(keeper.uid);
+    expect(p.captureProgress).toBe(1);
+
+    const snap = saveBattle(b);
+    const restored = loadBattle(reg, snap);
+    const rp = restored.portals.get(p.id)!;
+    expect(rp.queue).toEqual(p.queue);
+    expect(rp.cooldownLeft).toBe(p.cooldownLeft);
+    expect(rp.captureBy).toBe(p.captureBy);
+    expect(rp.captureProgress).toBe(p.captureProgress);
+    // continuing to tick the restored portal behaves exactly like the original
+    tickPortal(b, p);
+    tickPortal(restored, rp);
+    expect(JSON.stringify(saveBattle(restored))).toBe(JSON.stringify(saveBattle(b)));
+  });
+});
+
+describe("saving and loading a battle with a holding attached", () => {
+  it("keeps every kingdom-derived stat and movement modifier alive across a round-trip", () => {
+    const { b, ctrl } = newBattle();
+    const p = deploy(b, "K", "A", KNI, blob(5, 5));
+    const k = newKingdom(reg, "KNI");
+    k.resources = { koku: 999999, iron: 999999, timber: 999999, silver: 999999 };
+    for (const bld of ["FORGE", "RESEARCH_HALL"] as const) { startUpgrade(reg, k, bld); tick(reg, k, 100000); }
+    startResearch(reg, k, "RES_FORGED_EDGE"); tick(reg, k, 100000);
+    applyKingdom(b, "A", k);
+
+    const foot = b.unit(p.footUids[0]!);
+    const before = computeStat(b, foot, "ATK");
+    const sourcesBefore = before.modifiers.map((m) => m.source);
+    expect(sourcesBefore).toContain("Forge 1");
+    expect(sourcesBefore).toContain("Research: Forged Edge");
+    const movBefore = ctrl.movementAllowance(foot);
+
+    const restored = loadBattle(reg, saveBattle(b));
+    const restoredCtrl = new BattleController(restored, ctrl.victory);
+    const restoredFoot = restored.unit(foot.uid);
+    const after = computeStat(restored, restoredFoot, "ATK");
+    expect(after.modifiers.map((m) => m.source)).toEqual(sourcesBefore);
+    expect(after.final).toBe(before.final);
+    expect(restoredCtrl.movementAllowance(restoredFoot)).toBe(movBefore);
+  });
+});
+
+describe("saveBattle/loadBattle round-trip process-wide effect flags", () => {
+  it("restores a Formal Duel pairing", () => {
+    const { b, ctrl } = newBattle();
+    const a = deploy(b, "pA", "A", SAM, blob(2, 2));
+    const bb = deploy(b, "pB", "B", SHI, blob(2, 8));
+    const champion = b.unit(a.commanderUid!); const rival = b.unit(bb.commanderUid!);
+    ctrl.commandPhase();
+    applyEffect(b, champion, b.reg.ability("ABL_FORMAL_DUEL"), { target: rival });
+    expect(b.duels.get(rival.uid)).toBe(champion.uid);
+
+    const loaded = loadBattle(b.reg, saveBattle(b));
+    expect(loaded.duels.get(rival.uid)).toBe(champion.uid);
+    expect(loaded.duels.get(champion.uid)).toBe(rival.uid);
+  });
+
+  it("restores a PhaseMove order flag on every platoon member", () => {
+    const { b, ctrl } = newBattle();
+    const a = deploy(b, "pA", "A", SAM, blob(2, 2));
+    const commander = b.unit(a.commanderUid!);
+    ctrl.commandPhase();
+    applyEffect(b, commander, b.reg.ability("ORD_VEIL_CROSSING"), { platoon: b.platoon(a.id) });
+    const foot = a.footUids[0]!;
+    expect(b.orderFlags.get(foot)).toBe("PhaseMove");
+
+    const loaded = loadBattle(b.reg, saveBattle(b));
+    expect(loaded.orderFlags.get(foot)).toBe("PhaseMove");
+  });
+
+  it("restores a Silent Directive hide-after-attack mark", () => {
+    const { b, ctrl } = newBattle();
+    const shinobi = b.spawn("SHI_FOOT_NIGHT-THREAD-OPERATIVE", "A", { q: 5, r: 5 });
+    ctrl.commandPhase();
+    applyEffect(b, shinobi, b.reg.ability("ABL_SILENT_DIRECTIVE"), { target: shinobi });
+    expect(b.hideAfterAttack.has(shinobi.uid)).toBe(true);
+
+    const loaded = loadBattle(b.reg, saveBattle(b));
+    expect(loaded.hideAfterAttack.has(shinobi.uid)).toBe(true);
+  });
+
+  it("restores Oath of Intercession's once-per-round use and Hold the Standard's rout immunity", () => {
+    const { b } = newBattle();
+    b.interceptUsed.add("u1");
+    b.tempPreventRouted.add("u2");
+
+    const loaded = loadBattle(b.reg, saveBattle(b));
+    expect(loaded.interceptUsed.has("u1")).toBe(true);
+    expect(loaded.tempPreventRouted.has("u2")).toBe(true);
+  });
+
+  it("restores unexpired timed terrain (a smoke shell mid-duration)", () => {
+    const { b, ctrl } = newBattle();
+    const mortar = b.spawn("SHI_SIEGE_REED-SMOKE-MORTAR", "A", { q: 2, r: 2 });
+    ctrl.commandPhase();
+    applyEffect(b, mortar, b.reg.ability("ABL_SMOKE_SHELL"), { targetHex: { q: 10, r: 10 } });
+    expect(b.terrainAt({ q: 10, r: 10 })).toBe("Smoke");
+    expect(b.timedTerrain.some((t) => t.key === "10,10")).toBe(true);
+
+    const loaded = loadBattle(b.reg, saveBattle(b));
+    expect(loaded.timedTerrain.some((t) => t.key === "10,10" && t.rounds === 2)).toBe(true);
+  });
+});
+
+const BLOB = [{ q: 2, r: 2 }, { q: 3, r: 2 }, { q: 4, r: 2 }, { q: 2, r: 3 }, { q: 3, r: 3 }, { q: 4, r: 3 }, { q: 5, r: 3 }, { q: 6, r: 3 }];
+
+describe("the command log survives a save/load round trip", () => {
+  it("carries every applied command, in order, so a loaded battle can still be rebuilt from it", () => {
+    const { b, ctrl } = newBattle();
+    const p = deploy(b, "P1", "A", SAM, blob(5, 5));
+    deploy(b, "P2", "B", KNI, blob(12, 5));
+    applyCommand(ctrl, { kind: "CommandPhase" });
+    applyCommand(ctrl, { kind: "BeginActivation", groupId: p.id });
+    const mover = b.unit(p.footUids[0]!);
+    applyCommand(ctrl, { kind: "Defend", uid: mover.uid });
+    expect(b.commands.length).toBe(3);
+
+    const loaded = loadBattle(b.reg, saveBattle(b));
+    expect(loaded.commands).toEqual(b.commands);
+    // and it is a copy, not the same array: mutating one must not move the other
+    loaded.commands.push({ kind: "EndPhase" });
+    expect(b.commands.length).toBe(3);
+  });
+
+  it("a command that threw was never applied, so it is never saved either", () => {
+    const { b, ctrl } = newBattle();
+    deploy(b, "P1", "A", SAM, blob(5, 5));
+    expect(() => applyCommand(ctrl, { kind: "Attack", uid: "no-such-uid", targetUid: "also-none" })).toThrow();
+    expect(b.commands).toEqual([]);
+    expect(loadBattle(b.reg, saveBattle(b)).commands).toEqual([]);
+  });
+});
+
+describe("temporary stat modifiers survive a save/load round trip", () => {
+  it("carries a unit's addTempMod entries across saveBattle/loadBattle", () => {
+    const { b } = newBattle();
+    deploy(b, "pa", "A", SAM, BLOB);
+    const u = [...b.units.values()][0]!;
+    addTempMod(u, { source: "Measured Advance", stat: "ATK", value: 100 });
+    expect(computeStat(b, u, "ATK").modifiers.map((m) => m.source)).toContain("Measured Advance");
+
+    const back = loadBattle(reg, saveBattle(b));
+    const restored = back.unit(u.uid);
+    expect(restored.tempMods).toEqual(u.tempMods);
+    expect(computeStat(back, restored, "ATK").modifiers.map((m) => m.source)).toContain("Measured Advance");
+  });
+
+  it("keeps a restored unit's temp mods independently clearable from the original", () => {
+    const { b } = newBattle();
+    deploy(b, "pa", "A", SAM, BLOB);
+    const u = [...b.units.values()][0]!;
+    addTempMod(u, { source: "Forced March", stat: "MOV", value: 3 });
+
+    const back = loadBattle(reg, saveBattle(b));
+    const restored = back.unit(u.uid);
+    clearTempMods(restored);
+    expect(restored.tempMods).toEqual([]);
+    expect(u.tempMods.map((m) => m.source)).toEqual(["Forced March"]); // the live battle is untouched
+  });
+
+  it("bumped SAVE_VERSION rejects a save from the previous version rather than silently misreading it", () => {
+    const { b } = newBattle();
+    const save = saveBattle(b);
+    expect(save.version).toBe(SAVE_VERSION);
+    expect(() => loadBattle(reg, { ...save, version: SAVE_VERSION - 1 })).toThrow(/cannot be read/);
+  });
+});

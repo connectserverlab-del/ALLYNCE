@@ -1,0 +1,22 @@
+{
+  "faction": "DRG",
+  "notes": "Nine ranks, low to high. Reuses mounted, commandRadiusBonus, banner and supreme from the Samurai ladder's shape, and adds one privilege of its own: divingCharge, logged in the stat breakdown as 'Rank: wing dive' to keep it distinct from the unrelated ABL_DIVING_CHARGE card ability (a Knight elite's hex-based ChargeBonus). Wing dive is keyed to altitude lost this activation rather than hexes moved, since a ground charge means nothing to a faction that fights from the air. Ridgeback Runner is the one ground-bound DRG unit and reuses mounted rather than divingCharge; Cinderthroat Siegewyrm is also ground-bound and sits on a privilege-free tier, same as a Knight siege crew.",
+  "ranks": [
+    { "id": "HATCHLING", "title": "Hatchling", "tier": 0, "description": "Newly hatched. Flies low and short.", "privileges": {}, "canLead": [] },
+    { "id": "WINGLING", "title": "Wingling", "tier": 1, "description": "Proven flier, still young.", "privileges": {}, "canLead": [] },
+    { "id": "SKYRIDER", "title": "Skyrider", "tier": 2, "description": "Line flier of the host.", "privileges": {}, "canLead": [] },
+    { "id": "RIDGEBACK_WARDEN", "title": "Ridgeback Warden", "tier": 3, "description": "Ground-bound scout and handler; rides rather than flies.", "privileges": { "mounted": "always" }, "canLead": [] },
+    { "id": "CINDER_WARDEN", "title": "Cinder Warden", "tier": 4, "description": "Siege crew. A gun crew does not fly, and carries no wing dive privilege.", "privileges": {}, "canLead": [] },
+    { "id": "WING_SECOND", "title": "Wing Second", "tier": 5, "description": "Junior sky officer. Wing dive +150.", "privileges": { "commandRadiusBonus": 1, "divingCharge": 150 }, "canLead": ["Patrol", "Platoon"] },
+    { "id": "WINGBREAKER", "title": "Wingbreaker", "tier": 6, "description": "Elite line-breaker. Wing dive +250.", "privileges": { "commandRadiusBonus": 1, "divingCharge": 250 }, "canLead": ["Patrol", "Platoon"] },
+    { "id": "DOMINANT", "title": "Dominant", "tier": 7, "description": "Apex of its wing; commands a platoon. Wing dive +300.", "privileges": { "commandRadiusBonus": 2, "banner": true, "divingCharge": 300 }, "canLead": ["Patrol", "Platoon", "Company"] },
+    { "id": "ELDER_SOVEREIGN", "title": "Elder Sovereign", "tier": 8, "description": "Ancient, army-tier. Wing dive +400.", "privileges": { "commandRadiusBonus": 3, "banner": true, "divingCharge": 400, "supreme": true }, "canLead": ["Company", "Battalion", "Army"] }
+  ],
+  "privilegeRules": {
+    "mounted": "'always' grants +1 Movement unconditionally.",
+    "commandRadiusBonus": "Added to the unit's command radius for auras and morale recovery.",
+    "banner": "Platoon members inside command radius recover +5 additional Morale in the Command Phase.",
+    "divingCharge": "'Rank: wing dive' in the stat breakdown. +ATK once the unit has lost at least DIVE_BONUS_MIN_DROP (1) elevation tier of net altitude this activation; climbing back to a net gain cancels the dive. Flying-only, since elevation advantage in the base pipeline already excludes fliers.",
+    "supreme": "Reserved for campaign scale; not used in the vertical slice."
+  }
+}
