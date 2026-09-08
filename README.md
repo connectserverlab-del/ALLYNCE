@@ -213,6 +213,9 @@ hundreds of units stay reviewable and the curves stay consistent. The hand-autho
 - **AI**: goal-oriented utility scoring (objective urgency, kill potential, formation gain or loss, isolation risk, commander caution), terrain-aware positioning (ranged units hold their stand-off ring and favor High Ground, Cavalry routes for a flank or rear attack), a surrender policy for a lost fight, a release policy that holds for synchronization until instability forces a decision, and difficulty profiles that change risk and planning depth only.
 - **Scenario**: `Threefold Invocation` fully data-defined and playable start to finish.
 
+- **Marching**: a continuous, real-time layer over the same ground the hex rules fight on. A dragged order walks a squad at its slowest member's pace, forming up in ring slots around the leader; a straight line is routed over the hex grid and pulled tight into a few waypoints wherever it is blocked, and every walk is capped at 45 seconds scaled by distance. Deterministic: no clock, no randomness, same field and orders land on the same positions. See `core/src/march.ts`.
+- **Wanted board**: rotating warrants up to seven stars, weighted toward whatever the holding is actually short of; a subdue-not-kill capture in battle pays the writ and the copy into the collection instead of the kill.
+
 ## Engine note
 
 The brief targets Unity with C#. No .NET toolchain is available in this environment, so the rules are implemented

@@ -1103,3 +1103,12 @@ stay separate, is an owner decision this pass is flagging rather than making —
   Continuity expires: rather than the platoon simply losing its aura, the highest-tier surviving unit on the rank
   ladder could inherit a partial aura scaled to its own rung, giving the ladder mechanical weight during a
   succession crisis and not only while the chain of command is intact.
+
+- 2026-09-08: Proposal — give Fusion and Ritual, already first-class functions of the engine, a payoff on the rank
+  ladders the same way combat stats already get one: gate one Fusion recipe or Ritual anchor per faction behind
+  that faction's own top rank (a Shogun-only fusion partner for the Samurai, a Kage-exclusive ritual anchor for
+  the Shinobi, and the same slot reserved for Knight, Dragon Host and Ritual Cult once those ladders land). The
+  cost is a single rank check against a field the ranks system already records per unit, so it adds nothing new
+  to the modifier pipeline and needs no new art or renamed units — only one new recipe or anchor entry per
+  faction in `data/abilities/fusions.json` or the ritual data, each still summon-limited and source-tracked like
+  every other one.
