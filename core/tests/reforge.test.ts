@@ -3,15 +3,35 @@ import { reg } from "./helpers.js";
 import { newKingdom, reforge, reforgeCost, reforgeTargets } from "../src/kingdom.js";
 
 describe("reforging duplicate cards", () => {
+  // The roster grows, so these assert the rule rather than a frozen list of ids: any card the roster
+  // adds one star above a source is a legitimate new target, and must still obey every clause.
   it("targets are same-faction, not summon-only, not Divine, exactly one star above the source", () => {
-    const targets = reforgeTargets(reg, "KNI_FOOT_BASTION-MAN-AT-ARMS").map((d) => d.id);
-    expect(targets).toEqual(["KNI_SUPPORT_PORTAL-KEEPER"]);
-    expect(reforgeTargets(reg, "KNI_LEVY_BASTION-SQUIRE").map((d) => d.id)).toEqual(["KNI_FOOT_BASTION-MAN-AT-ARMS"]);
+    for (const src of ["KNI_FOOT_BASTION-MAN-AT-ARMS", "KNI_LEVY_BASTION-SQUIRE"]) {
+      const from = reg.unit(src);
+      const targets = reforgeTargets(reg, src);
+      expect(targets.length, src).toBeGreaterThan(0);
+      for (const t of targets) {
+        expect(t.faction, t.id).toBe(from.faction);
+        expect(t.stars, t.id).toBe((from.stars ?? 1) + 1);
+        expect(t.summonOnly, t.id).toBeFalsy();
+        expect(t.divine, t.id).toBeUndefined();
+      }
+    }
+    // the hand-authored ladder step is still among them
+    expect(reforgeTargets(reg, "KNI_LEVY_BASTION-SQUIRE").map((d) => d.id)).toContain("KNI_FOOT_BASTION-MAN-AT-ARMS");
   });
 
-  it("has no target once the only cards one star up are summon-only", () => {
-    // SAM_LORD_ASHFALL-DAIMYO is 9 stars; every 10-star SAM card is a summon-only Shogun/deity.
-    expect(reforgeTargets(reg, "SAM_LORD_ASHFALL-DAIMYO")).toEqual([]);
+  it("has no target once there is no card a star above the source", () => {
+    // Nothing sits above ten stars, so a ten-star card can never be reforged upward.
+    for (const d of reg.units.values()) {
+      if (d.stars === 10) expect(reforgeTargets(reg, d.id), d.id).toEqual([]);
+    }
+  });
+
+  it("never offers a summon-only card as a target", () => {
+    for (const d of reg.units.values()) {
+      for (const t of reforgeTargets(reg, d.id)) expect(t.summonOnly, `${d.id} -> ${t.id}`).toBeFalsy();
+    }
   });
 
   it("costs more copies of a low-star card than a high-star one, and nothing spends a 10-star card", () => {

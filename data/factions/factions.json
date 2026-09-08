@@ -236,5 +236,75 @@
     "platoonOrder": "ORD_SWARM_CONVERGENCE",
     "passiveDoctrine": "DOC_ONE_WILL",
     "weakness": "Everything it does runs through the Empress; cut her out and the swarm is only insects."
+  },
+  "THC": {
+    "id": "THC",
+    "name": "Thorn Coven",
+    "identity": "Attrition, entanglement and the patient garden",
+    "palette": [
+      "bramble green",
+      "dried blood",
+      "bone ivory"
+    ],
+    "primaryTheme": "Thorn",
+    "platoonOrder": "ORD_CREEPING_BRIAR",
+    "passiveDoctrine": "DOC_THORN_TITHE",
+    "weakness": "Slow to reposition; loses its terrain advantage on open, burned or flooded ground."
+  },
+  "STM": {
+    "id": "STM",
+    "name": "Stormbound Clan",
+    "identity": "A bloodline of warriors and stormcallers",
+    "palette": [
+      "storm violet",
+      "wet slate",
+      "fulgurite white"
+    ],
+    "primaryTheme": "Storm",
+    "platoonOrder": "ORD_STORMFRONT",
+    "passiveDoctrine": "DOC_GROUNDING_ROD",
+    "weakness": "Its own chains and rods ground allies too; clustered clan lines share incoming arc damage."
+  },
+  "MNK": {
+    "id": "MNK",
+    "name": "Monastic Orders",
+    "identity": "Few holders, immovable ground",
+    "palette": [
+      "ink black",
+      "unbleached linen",
+      "temple copper"
+    ],
+    "primaryTheme": "Monastic",
+    "platoonOrder": "ORD_UNBROKEN_FORM",
+    "passiveDoctrine": "DOC_STILL_MIND",
+    "weakness": "Low unit count and several one-copy holders; loses badly to attrition it cannot answer."
+  },
+  "FUS": {
+    "id": "FUS",
+    "name": "Fused Orders",
+    "identity": "Two schools carried in one line",
+    "palette": [
+      "split bronze",
+      "muted indigo",
+      "ash"
+    ],
+    "primaryTheme": "Fusion",
+    "platoonOrder": null,
+    "passiveDoctrine": "DOC_TWO_TRADITIONS",
+    "weakness": "Expensive, few, and never a full platoon on their own; fusion units support an army, they are not one."
+  },
+  "DIV": {
+    "id": "DIV",
+    "name": "Divine Entities",
+    "identity": "Summoned powers that answer a rite, not an order",
+    "palette": [
+      "dim amethyst",
+      "bone",
+      "cold iron"
+    ],
+    "primaryTheme": "Divine",
+    "platoonOrder": null,
+    "passiveDoctrine": null,
+    "weakness": "Summon-only and one copy per battle; Anchors can be broken, and a staggered entity is a liability to whoever called it."
   }
 }

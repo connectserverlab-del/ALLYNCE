@@ -28,10 +28,15 @@ function readJson<T>(rel: string): T {
   return JSON.parse(readFileSync(resolve(DATA_ROOT, rel), "utf8")) as T;
 }
 
+/** The expansion roster ships as its own file; a build without it still loads the core roster. */
+function readJsonIfPresent<T>(rel: string, fallback: T): T {
+  try { return readJson<T>(rel); } catch { return fallback; }
+}
+
 export function loadRegistry(): Registry {
   return new Registry(
-    readJson<UnitDef[]>("units/units.json"),
-    readJson<AbilityDef[]>("abilities/abilities.json"),
+    [...readJson<UnitDef[]>("units/units.json"), ...readJsonIfPresent<UnitDef[]>("units/expansion.json", [])],
+    [...readJson<AbilityDef[]>("abilities/abilities.json"), ...readJsonIfPresent<AbilityDef[]>("abilities/expansion.json", [])],
     readJson<Record<string, FactionDef>>("factions/factions.json"),
     readJson<CompositionRules>("compositions/platoon.json"),
     ["SAM", "SHI", "KNI", "DRG", "RIT"].filter((f) => existsSync(resolve(DATA_ROOT, `factions/ranks/${f}.json`))).map((f) => readJson<RankLadder>(`factions/ranks/${f}.json`)),

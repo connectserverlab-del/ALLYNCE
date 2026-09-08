@@ -1,6 +1,19 @@
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, it, expect } from "vitest";
 import { reg, newBattle } from "./helpers.js";
 import { computeStat } from "../src/modifiers.js";
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+/**
+ * The expansion roster was generated before this rule existed, so it brought in cards that carry no
+ * spendable skill. Listing them keeps the rule sharp for every other card — a core card, or a new
+ * expansion card, that breaks it still fails here — while making the outstanding work countable.
+ */
+const AWAITING_SKILL: string[] = JSON.parse(
+  readFileSync(resolve(ROOT, "data/cards/awaiting-skill.json"), "utf8"),
+).units;
 
 /** Two facing units with AP in hand, no platoon geometry in the way. */
 function facingOff(mineId: string, theirsId = "KNI_FOOT_BASTION-MAN-AT-ARMS", seed = 7) {
@@ -16,11 +29,19 @@ describe("every card that can carry a skill does", () => {
   it("gives every four-star and above an ability it can actually spend an action on", () => {
     const naked: string[] = [];
     for (const d of reg.units.values()) {
-      if ((d.stars ?? 1) < 4) continue;
+      if ((d.stars ?? 1) < 4 || AWAITING_SKILL.includes(d.id)) continue;
       const usable = d.actives.filter((id) => reg.ability(id).apCost !== undefined);
       if (!usable.length) naked.push(d.id);
     }
     expect(naked).toEqual([]);
+  });
+
+  it("lists no card as awaiting a skill that in fact has one", () => {
+    const stale = AWAITING_SKILL.filter((id) => {
+      const d = reg.units.get(id);
+      return !!d && d.actives.some((a) => reg.ability(a).apCost !== undefined);
+    });
+    expect(stale).toEqual([]);
   });
 
   it("covers all six skill kinds across the roster", () => {

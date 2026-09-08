@@ -27,7 +27,12 @@ export interface CompositionRules {
     continuityRounds: number;
   };
   themeCohesion: { perAdjacentAlly: number; maxConnections: number; disorderedCap: number };
-  limits: { eliteSlotsPerPlatoon: number; uniqueCopiesPerArmy: number; bossDeityStartingDeployment: boolean; wizardsPerPlatoon: number };
+  limits: {
+    eliteSlotsPerPlatoon: number; uniqueCopiesPerArmy: number;
+    bossDeityStartingDeployment: boolean; wizardsPerPlatoon: number;
+    /** Ten-star units are army-defining; only this many may be fielded at once. */
+    ascendantsPerArmy?: number;
+  };
 }
 
 export class Registry {

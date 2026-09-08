@@ -1,0 +1,151 @@
+/* ALLYNCE design tokens.
+   The brief is a war game, not a toy: muted ground, one warm accent, thin rules,
+   and no colour used decoratively where it could be used to carry information. */
+:root {
+  color-scheme: dark;
+
+  --ink:        #0d0f13;
+  --ground:     #14171d;
+  --panel:      #1a1e26;
+  --panel-2:    #212630;
+  --line:       #2e3542;
+  --line-soft:  #232935;
+
+  --text:       #dfe3ea;
+  --text-dim:   #9aa3b2;
+  --text-faint: #6b7383;
+
+  --accent:      #c8a45c;   /* brass — the single warm note */
+  --accent-dim:  #8a6f3c;
+  --danger:      #b4483d;
+  --ok:          #5f8b62;
+  --info:        #5b7f9c;
+
+  --sam: #a4483c;  --shi: #4a5f7a;  --kni: #4d6a94;  --drg: #6d7684;
+  --rit: #5b7360;  --thc: #5d7048;  --ang: #b09a5e;  --stm: #7d6ea8;
+  --mnk: #8a7a63;  --fus: #8c6a52;  --div: #9c8fb0;
+
+  --r-sm: 3px; --r-md: 5px; --r-lg: 8px;
+  --pad: 16px;
+  --shadow: 0 1px 2px rgb(0 0 0 / .5), 0 8px 24px rgb(0 0 0 / .35);
+
+  --ui: ui-sans-serif, "Segoe UI", Inter, system-ui, sans-serif;
+  --display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--text);
+  font: 14px/1.5 var(--ui);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { font-family: var(--display); font-weight: 600; letter-spacing: .01em; margin: 0; }
+h1 { font-size: 26px; } h2 { font-size: 19px; } h3 { font-size: 15px; }
+p { margin: 0 0 10px; }
+a { color: var(--accent); }
+button { font: inherit; color: inherit; }
+
+/* `display: grid` would otherwise beat the UA's `[hidden] { display: none }`, leaving the
+   loading screen in flow and pushing the whole app below the fold. */
+.boot { display: grid; place-items: center; height: 100vh; color: var(--text-faint); letter-spacing: .08em; text-transform: uppercase; font-size: 12px; }
+[hidden] { display: none !important; }
+
+/* ------------------------------------------------------------------ topbar */
+.topbar {
+  display: flex; align-items: center; gap: 20px;
+  padding: 0 18px; height: 54px;
+  background: linear-gradient(var(--panel), var(--panel-2));
+  border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 40;
+}
+.brand { display: flex; align-items: baseline; gap: 8px; }
+.brand-mark {
+  width: 12px; height: 12px; align-self: center; border-radius: 1px;
+  background: var(--accent); transform: rotate(45deg);
+  box-shadow: inset 0 0 0 2px var(--panel);
+}
+.brand-name { font-family: var(--display); font-size: 18px; letter-spacing: .18em; }
+.brand-sub { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-faint); }
+
+.tabs { display: flex; gap: 2px; margin-left: auto; }
+.tab {
+  background: none; border: 1px solid transparent; border-radius: var(--r-sm);
+  padding: 7px 13px; cursor: pointer; color: var(--text-dim);
+  font-size: 12px; letter-spacing: .1em; text-transform: uppercase;
+}
+.tab:hover { color: var(--text); background: var(--panel-2); }
+.tab[aria-current="page"] { color: var(--ink); background: var(--accent); border-color: var(--accent); }
+
+.purse { display: flex; gap: 14px; margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
+.purse b { color: var(--accent); font-weight: 600; }
+
+/* -------------------------------------------------------------------- view */
+.view { padding: 22px 18px 64px; max-width: 1500px; margin: 0 auto; }
+.view-head { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+.view-head p { color: var(--text-dim); max-width: 62ch; margin: 4px 0 0; }
+.rule { height: 1px; background: var(--line); margin: 18px 0; border: 0; }
+
+/* ------------------------------------------------------------------ panels */
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-md); }
+.panel-head { padding: 12px 14px; border-bottom: 1px solid var(--line-soft); display: flex; align-items: center; gap: 10px; }
+.panel-body { padding: 14px; }
+
+.btn {
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--r-sm);
+  padding: 7px 13px; cursor: pointer; transition: background .12s, border-color .12s;
+  font-size: 13px;
+}
+.btn:hover:not(:disabled) { background: #2a3140; border-color: #3d4658; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--ink); font-weight: 600; }
+.btn-primary:hover:not(:disabled) { background: #d8b46c; border-color: #d8b46c; }
+.btn-ghost { background: none; }
+.btn-sm { padding: 4px 9px; font-size: 12px; }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-faint); }
+select, input[type="search"], input[type="text"] {
+  background: var(--ink); border: 1px solid var(--line); border-radius: var(--r-sm);
+  padding: 7px 9px; color: var(--text); font: inherit; min-width: 0;
+}
+select:focus, input:focus { outline: 2px solid var(--accent-dim); outline-offset: -1px; }
+
+.tag {
+  display: inline-block; padding: 2px 7px; border-radius: 2px; font-size: 10px;
+  letter-spacing: .09em; text-transform: uppercase; border: 1px solid var(--line);
+  color: var(--text-dim); background: var(--ink);
+}
+.muted { color: var(--text-dim); }
+.faint { color: var(--text-faint); }
+.mono { font-family: var(--mono); }
+.empty { padding: 40px; text-align: center; color: var(--text-faint); border: 1px dashed var(--line); border-radius: var(--r-md); }
+
+/* ------------------------------------------------------------------- toast */
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 16px);
+  background: var(--panel-2); border: 1px solid var(--line); border-left: 3px solid var(--accent);
+  padding: 10px 16px; border-radius: var(--r-sm); box-shadow: var(--shadow);
+  opacity: 0; pointer-events: none; transition: opacity .18s, transform .18s; z-index: 90; max-width: 70ch;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.bad { border-left-color: var(--danger); }
+
+.fx-layer { position: fixed; inset: 0; pointer-events: none; z-index: 80; overflow: hidden; }
+
+/* The bar is a single 54px row on the desktop; on a phone the tabs ran off the edge. */
+@media (max-width: 720px) {
+  .topbar { height: auto; padding: 8px 12px; flex-wrap: wrap; row-gap: 8px; }
+  .tabs { order: 3; width: 100%; margin-left: 0; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex: none; }
+  .purse { margin-left: auto; font-size: 11px; gap: 10px; }
+  .view { padding: 16px 12px 48px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
