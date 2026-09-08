@@ -49,3 +49,14 @@ export function hashEvents(events: readonly GameEvent[]): string {
   for (const e of events) assertPlain(e.data, `${e.type}.data`);
   return hashString(JSON.stringify(events));
 }
+
+/**
+ * Every `RoundHash` entry a battle logged (see `BattleController.endPhase`), keyed by round. `Q-24`'s
+ * lockstep simulation and any future netcode client compare these round by round instead of re-deriving
+ * them from the full event log each time.
+ */
+export function roundHashes(events: readonly GameEvent[]): Map<number, string> {
+  const out = new Map<number, string>();
+  for (const e of events) if (e.type === "RoundHash" && typeof e.data.hash === "string") out.set(e.round, e.data.hash as string);
+  return out;
+}

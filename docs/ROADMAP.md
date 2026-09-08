@@ -799,3 +799,14 @@ passes; this one doesn't resolve it either.
   matching. That gives a QA pass — and, later, a real multiplayer client comparing hashes with a peer — the
   same "which round diverged" answer a desync detector needs, off tooling the replay screen already has rather
   than a new debug surface. Proposal only; depends on `Q-20` existing first.
+- 2026-09-08 proposal: `Q-20` landed — `core/src/determinism.ts` now exports `roundHashes(events)` alongside
+  `hashEvents`, and every round closes with its own `RoundHash` entry. `Q-26`'s round-trip completeness test
+  (holding, mid-channel ritual, queued portal, in-progress march all at once, save then load) could lean on
+  this rather than growing a bespoke list of asserted fields: play a round, save, load, replay the same
+  commands for one more round on each side, and assert `roundHashes` agrees round for round between the
+  pre-save run and the post-load run. A field the migration silently dropped shows up as a hash mismatch on
+  the very next round instead of needing its own new assertion. The per-version fixture `Q-25` wants could
+  likewise carry its round's expected hash rather than a hand-picked list of "still correct" fields, so a
+  migration that quietly drops something fails loudly the same way `Q-20` already fails a battle that reaches
+  for `Math.random()`. Proposal only; both are their own queue items and this only shapes how their tests get
+  written once taken.

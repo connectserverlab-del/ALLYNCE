@@ -276,8 +276,19 @@ equal, and runs several different seeds and asserts they diverge. This is the ac
 determinism guarantee this section claims: lockstep multiplayer, replays and server-side validation all rest
 on the same seed always producing the same event log, and this is what fails loudly, in the suite every
 `npm run check` runs, the first time a change reaches for `Math.random()`, wall-clock time, or iteration order
-that depends on object identity. `Q-20`'s per-round `RoundHash` reuses `hashEvents` over a slice of the log
-rather than inventing a second hash.
+that depends on object identity.
+
+`Q-20`'s per-round `RoundHash` reuses `hashEvents` rather than inventing a second hash: at the end of every
+round, `BattleController.endPhase` hashes that round's own slice of the log (everything logged since the
+round's `PhaseStart`, filtered by `event.round`) and appends a `RoundHash` event carrying it. Every position
+change, HP loss, status, morale swing and side-state change a round produces was already logged as it
+happened, so the slice covers all of it without a second, hand-maintained snapshot to keep in sync with the
+first. `core/src/determinism.ts` also exports `roundHashes(events)`, which pulls every `RoundHash` entry out
+of a log keyed by round. Two clients — or a battle rebuilt from its command log alone (`Q-22`) — compare one
+short string per round instead of diffing whole battles, and the first round whose hash disagrees is exactly
+the round where they diverged. `core/tests/determinism.test.ts` covers this: two runs of the same seed log
+identical round hashes round for round, and perturbing a single logged field (a hex, a damage number, a
+status, a morale value) changes only the hash of the round it happened in.
 
 ## Worked example (from the brief §7)
 

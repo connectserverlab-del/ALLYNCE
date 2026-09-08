@@ -72,6 +72,7 @@ export function describeEvent(b: Battle, ev: GameEvent): string {
     case "Rally": return `${unitName(b, d.uid)} rallies`;
     case "Surrender": return `Side ${d.side} surrenders${d.by ? `, called by ${unitName(b, d.by)}` : ""}`;
     case "BattleEnded": return `The battle ends — ${d.winner} wins by ${d.reason}`;
+    case "RoundHash": return `Round ${ev.round} state hash: ${d.hash}`;
 
     case "AbilityUsed": return `${unitName(b, d.uid)} uses ${d.ability}${d.target ? ` on ${unitName(b, d.target)}` : ""}`;
     case "Ability": return `${unitName(b, d.uid)} triggers ${d.ability}`
