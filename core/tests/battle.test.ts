@@ -1,9 +1,8 @@
-import { describe, it, expect } from "vitest";
-import { newBattle, deploy, KNI, SAM, blob } from "./helpers.js";
+import { describe, expect, it } from "vitest";
+import { blob, deploy, KNI, newBattle, SAM } from "./helpers.js";
 import { buildScenario } from "../src/scenario.js";
-import { runAiActivation, holdForSyncPolicy, DIFFICULTY } from "../src/ai.js";
+import { DIFFICULTY, holdForSyncPolicy, runAiActivation } from "../src/ai.js";
 import { computeStat } from "../src/modifiers.js";
-
 describe("turn structure and actions", () => {
   it("gives two AP per activation, forbids double attacks, and triggers zone-of-control reactions unless disengaging", () => {
     const { b, ctrl } = newBattle();
@@ -103,6 +102,9 @@ describe("Threefold Invocation scenario", () => {
       ctrl.endPhase();
     }
     expect(["A", "B"]).toContain(b.winner);
+    // Leader killed and Surrender are universal win conditions on top of scenario objectives, so a run can end
+    // decisively long before the round limit; command-succession coverage lives in succession.test.ts instead.
+    expect(typeof b.winReason).toBe("string");
     const types = new Set(b.events.map((e) => e.type));
     for (const t of ["RitualProgress", "ReinforcementArrived", "Attack", "Move", "ClonesSpawned"]) expect(types.has(t), t).toBe(true);
     // a fallen commander either promotes a second or, if they were the army leader, ends the battle outright

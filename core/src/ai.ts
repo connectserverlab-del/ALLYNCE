@@ -319,9 +319,14 @@ function moveToward(ctrl: BattleController, u: UnitState, goal: Hex, profile: Ai
   const enemy = nearestEnemy(ctrl, u);
   let best: { hex: Hex; score: number } | null = null;
   let hold: { hex: Hex; score: number } | null = null;
+  // A ranged unit closes only to its own stand-off ring: stepping inside it trades the shot it
+  // already has for a melee it did not want. Siege keeps its own, stricter handling in actOnce.
+  const standOff = !isSiege(d) && d.range > 1 && enemy && enemy.pos && hexDistance(goal, enemy.pos) === 0
+    ? effectiveRange(b, u) : 0;
   for (const r of reach) {
     const dist = hexDistance(r.hex, goal);
     if (dist > currentDist) continue;
+    if (standOff && dist < standOff && currentDist > standOff) continue;
     // simulate cohesion at destination
     const theme = b.def(u).themes[0];
     const after = theme ? b.adjacentUnits({ ...u, pos: r.hex } as UnitState).filter((a) => a.side === u.side && !a.isClone && b.def(a).themes[0] === theme && a.uid !== u.uid).length : 0;

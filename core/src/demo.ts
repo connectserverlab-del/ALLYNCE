@@ -8,6 +8,7 @@ console.log(`# ${file.title}\n${file.briefing}\n`);
 
 while (!b.winner && b.round <= file.roundLimit + 1) {
   ctrl.commandPhase();
+  if (maybeSurrender(ctrl, "A") || maybeSurrender(ctrl, "B")) break;
   const sides = ["A", "B"];
   let turn = b.round % 2 === 1 ? 0 : 1;
   for (let guard = 0; guard < 20; guard++) {

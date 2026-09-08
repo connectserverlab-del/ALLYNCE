@@ -54,6 +54,8 @@ npm test            # 156 tests: combat math, cohesion, composition, succession,
 npm test            # 154 tests: combat math, cohesion, composition, succession, clones, rituals, portals, fusion, full scenario
 
 npm test            # 151 tests: combat math, cohesion, composition, succession, clones, rituals, portals, marching, full scenario
+
+npm test            # 44 tests: combat math, cohesion, composition, succession, clones, rituals, portals, victory conditions, AI positioning, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -196,6 +198,13 @@ hundreds of units stay reviewable and the curves stay consistent. The hand-autho
 - **Sworn companies and themed divisions**: five sworn companies (Cobalt Conclave, Thorn Coven, Cutpurse Court, Windmarch Host, Dunewake Compact) and seven themed divisions (angels, demons, chaos riders, demigods, wendigo-kin, sasquatch, ant-creature myrmidons) add 48 painted cards beyond the four host armies.
 - **Marching**: continuous, seconds-based movement over the same hexes and terrain costs the battle fights on — a straight line where one is clear, an A* route pulled to a few waypoints where it is not, squads that hold formation slots around a leader, capped at 45 seconds for the longest crossing. See `docs/mechanics.md` and `core/src/march.ts`.
 - **Asset integrity**: `scripts/audit-cutouts.py` fails a cutout that kept its background or lost its figure, so a card cannot ship as a blank slab.
+
+- **Victory**: three universal win conditions layered on top of scenario objectives — wipeout, a named army
+  leader killed, or a forced surrender (command structure gone and average morale collapsed) — any of which can
+  end a match before its round limit.
+- **Turn machine**: Command → alternating Activation (2 AP per unit) → Objective → End, seeded RNG, serializable event log for save, replay and tests.
+- **AI**: goal-oriented utility scoring (objective urgency, kill potential, formation gain or loss, isolation risk, commander caution), terrain-aware positioning (ranged units hold their stand-off ring and favor High Ground, Cavalry routes for a flank or rear attack), a surrender policy for a lost fight, a release policy that holds for synchronization until instability forces a decision, and difficulty profiles that change risk and planning depth only.
+- **Scenario**: `Threefold Invocation` fully data-defined and playable start to finish.
 
 ## Engine note
 
