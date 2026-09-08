@@ -11,12 +11,12 @@ import { guideView } from "./views/guide.js";
 import { battleView } from "./views/battle.js";
 
 const ROUTES = [
-  { id: "guide", label: "Guide", render: guideView },
   { id: "map", label: "Campaign", render: mapView },
   { id: "village", label: "Village", render: villageView },
   { id: "muster", label: "Deck", render: musterView },
   { id: "armoury", label: "Armoury", render: armouryView },
   { id: "battle", label: "Battle", render: battleView },
+  { id: "guide", label: "Guide", render: guideView },
 ];
 
 const el = {
@@ -45,7 +45,7 @@ export function go(route, params = {}) {
 }
 
 function parseHash() {
-  const raw = location.hash.replace(/^#\/?/, "") || "guide";
+  const raw = location.hash.replace(/^#\/?/, "") || "map";
   const [id, query] = raw.split("?");
   const found = ROUTES.find((r) => r.id === id) ?? ROUTES[0];
   return { route: found, params: Object.fromEntries(new URLSearchParams(query ?? "")) };

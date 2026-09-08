@@ -10,7 +10,7 @@ You are working in the ALLYNCE repository, an original tactical army strategy ga
 
 ## Where work goes
 
-**Every pass works on the integration branch `claude/merge-85-prs-ec3ca0`, which is pull request #88.**
+**Every pass works on the integration branch `claude/merge-85-prs-ec3ca0`, which is pull request #90.**
 
 Eighty-five parallel branches were open at once before this rule existed. Each was green alone and
 several were not green together: two branches implemented the same checklist item four different ways,
@@ -18,17 +18,25 @@ one moved a fix another branch had just made, and one silently overwrote a hand-
 every regeneration. Consolidating them cost more than the features did. One branch, reviewed as one
 pull request, is what replaced that.
 
+That first integration pull request (#88) merged on 2026-09-08, carrying the eighty-seven branches, the
+AAA retarget, and `Q-19` to `Q-21` of the netcode line. The branch name is deliberately reused: it was
+restarted from `main` and now tracks #90, so nothing that pushes here needs rewiring each time a
+pull request lands.
+
 So:
 
 - Branch from `claude/merge-85-prs-ec3ca0`, not from `main`.
 - Push your commits to `claude/merge-85-prs-ec3ca0`. Pull first (`git pull --rebase=false origin
   claude/merge-85-prs-ec3ca0`) so a concurrent pass is merged rather than clobbered.
-- **Do not open a new pull request.** Your work appears in #88. Never force-push it: other passes and
-  the owner's review are on that history.
+- **Do not open a new pull request.** Your work appears in whichever pull request the branch currently
+  tracks (named at the top of this section). Never force-push it: other passes and the owner's review
+  are on that history.
 - If the branch is red when you arrive, fixing it *is* your item for the pass.
 
-If #88 has been merged or closed, the integration branch has done its job: start the next one from
-`main`, open one pull request for it, and update this section to name it.
+When the current pull request merges, the branch has done its job for that cycle: restart it from
+`main` (`git fetch origin main && git checkout -B claude/merge-85-prs-ec3ca0 origin/main`), open one
+fresh pull request for it, and update this section and `docs/CHECKLIST.md` to name the new number.
+Keep the branch name — every routine pushes to it, and changing it means rewiring them all.
 
 ## The target
 
