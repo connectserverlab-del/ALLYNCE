@@ -809,3 +809,8 @@ stay separate, is an owner decision this pass is flagging rather than making.
   never mention any of them. A single save-format bump could close all four gaps at once rather than hunting
   them one at a time, the same way a save/load round-trip has already turned up at least one other silently
   dropped field on this project.
+
+- 2026-09-07: Proposal — a rank privilege that reads the battlefield's own shape rather than a flat bonus: a
+  unit that has held the same trench or high-ground hex for two full rounds gets a "dug in" arc widening
+  (its rear arc shrinks, front widens) so odd-shaped ground rewards patience, not just position. Would sit
+  next to the existing rank ladders as one more mechanically weighty privilege rather than a new system.
