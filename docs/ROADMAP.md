@@ -542,3 +542,11 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   already doubles morale recovery at the start of each round, but the manual Rally action still heals a flat 10
   regardless of rank. Let `banner` leaders Rally for 15 instead, so climbing a faction's rank ladder keeps paying off
   in the moment a platoon calls on its commander, not only between rounds.
+
+- 2026-09-06: Proposal — give the next three rank ladders (Knight, Dragon Host, Ritual Cult) a signature terrain
+  tie the way Samurai already leans on high ground and Shinobi outrun everyone through forest: Knights hold rank
+  privileges on Fortification and Trench (their doctrine is the shield wall, not the open field), Dragon Host ranks
+  ignore or halve the Mountain movement penalty above a rank threshold (dragons do not care about a slope), and
+  Ritual Cult ranks reduce ritual instability while the circle's center sits on Ruins (old ground remembers the
+  working). Keeps "mechanical weight" meaning a rank changes how the ground plays, not only a bigger stat block,
+  and gives each ladder a distinct board presence instead of three copies of the same privilege shape.
