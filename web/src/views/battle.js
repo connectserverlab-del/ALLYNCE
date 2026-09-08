@@ -126,7 +126,9 @@ export function battleView(root, { data, params, go, toast }) {
       </g>`;
     }).join("");
 
-    board.innerHTML = hexes.join("") + pawns;
+    const groundSrc = globalThis.__ALLYNCE_ART__?.["art/ui/UI_BOARD-GROUND_V01.jpg"] ?? "../art/ui/UI_BOARD-GROUND_V01.jpg";
+    const ground = `<image href="${groundSrc}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="xMidYMid slice"/>`;
+    board.innerHTML = ground + hexes.join("") + pawns;
     root.querySelector("#phase").textContent = `Round ${game.round}/${game.rounds} · ${game.turn === "player" ? "Your move" : "Enemy"}`;
     root.querySelector("#doctrine").textContent = `Your doctrine: ${game.doctrine("player")} · Enemy: ${game.doctrine("enemy")}`;
     drawSide();

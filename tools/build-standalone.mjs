@@ -120,10 +120,31 @@ const art = await buildThumbnails(plates, { log: console.log })
   ?? Object.fromEntries(plates.map((p) =>
     [p, `data:image/jpeg;base64,${readFileSync(resolve(ROOT, p)).toString("base64")}`]));
 
+/* The battle board's ground texture is an <image> battle.js writes into the SVG at
+   render time rather than a static <img> src, so it isn't a plate and it isn't in any
+   stylesheet either — CSS inlining above never sees it. Same registry, same reason: no
+   external request once this file is open. */
+const UI_GROUND = "art/ui/UI_BOARD-GROUND_V01.jpg";
+art[UI_GROUND] = `data:image/jpeg;base64,${readFileSync(resolve(ROOT, UI_GROUND)).toString("base64")}`;
+
 /* ---------------------------------------------------------------- assemble */
 const html = readFileSync(resolve(WEB, "index.html"), "utf8");
-const styles = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)">/g)]
+const rawStyles = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)">/g)]
   .map((m) => `/* ${m[1]} */\n${readFileSync(resolve(WEB, m[1]), "utf8")}`).join("\n");
+
+/* A stylesheet's own background-image plates (art/ui/...) are inlined the same way a
+   unit's painted plate is: the standalone build's whole point is no external requests,
+   and a CSS url() left as a relative path would silently break that once the file is
+   opened from somewhere that isn't served alongside art/. */
+const styles = rawStyles.replace(/url\(([^)]+)\)/g, (whole, ref) => {
+  const clean = ref.trim().replace(/^["']|["']$/g, "");
+  if (!clean.includes("art/ui/")) return whole;
+  try {
+    const buf = readFileSync(resolve(WEB, "styles", clean));
+    const mime = clean.toLowerCase().endsWith(".png") ? "image/png" : "image/jpeg";
+    return `url(data:${mime};base64,${buf.toString("base64")})`;
+  } catch { return whole; }
+});
 
 const payload =
   `<script>window.__ALLYNCE_DATA__ = ${JSON.stringify(data)};\n` +
