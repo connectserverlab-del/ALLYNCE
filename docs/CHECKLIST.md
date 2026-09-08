@@ -40,7 +40,7 @@ Three things bite:
 | Id | Item | Waiting on |
 |---|---|---|
 | `OWN-1` | Scale the remaining building tier art (25 paintings) | Confirmation that building portraits stay at a low angle rather than strictly top-down |
-| `OWN-2` | Raise the deck faction minimum from 40 toward 60 | Needs 15-20 distinct cards per faction. The roster is now 60 cards across 11 factions, but the four host armies still hold only 8-9 each, so the minimum stays at 40 |
+| `OWN-2` | Raise the deck faction minimum from 40 toward 60 | Needs 15-20 distinct cards per faction. The roster is now 88 cards across 18 factions, but the four host armies still hold only 8-9 each, so the minimum stays at 40 |
 | `OWN-3` | Let a side's designated army leader pass to a successor (update `leaderUid` in `resolveSuccession`), and delay the "army leader killed" win check until Continuity's succession attempt has actually run, instead of ending the match at the End Phase of the same round the leader fell | Changes when a match can end and how much the succession/Continuity system actually protects an army; also decides whether the new AI surrender policy (`Q-3`) ever gets a chance to fire in a standard match, since it is currently always shadowed by the instant leader-killed check |
 
 ## Queue
@@ -51,9 +51,8 @@ Three things bite:
 | `Q-9` | Unity port scaffolding: ScriptableObject importer for `data/`, and the C# module skeleton in `docs/mechanics.md` | The engine target the brief names |
 | `Q-10` | Replay viewer: step through a saved event log | The event log already exists and is unused |
 | `Q-11` | Warrant board screen in the sample page: read the posted writs, take one, and see which of them close the gaps in the current deck | The board exists in the core and has no interface |
-| `Q-12` | Give the five sworn companies depth: each has four cards, enough to hire but not to lead | A company is a flavour of ally until it can field a line of its own |
+| `Q-12` | Give the sworn companies and the seven divisions depth: each has four cards, enough to hire but not to lead | A division is a flavour of ally until it can field a line of its own |
 | `Q-15` | A division's own doctrine and platoon order, so a Choir or a Swarm can lead a deck instead of only joining one | Seven divisions is a lot of flavour with no army identity behind it |
-| `Q-16` | Teach the AI that splitting is a trade, not a gain: split to hold ground or bait, never against a single hard hitter, and hunt enemy copies to shrink the original | Cloning now costs the caster real weight and the AI still treats it as free presence |
 
 ## Done
 
@@ -76,13 +75,13 @@ Three things bite:
 | `D-15` | Five sworn companies: Cobalt Conclave mages, Thorn Coven hexers, Cutpurse Court rogues, Windmarch Host steppe archers, Dunewake Compact caravaneers — 20 cards, painted |
 | `D-16` | Card ownership: a deck may only run the copies the holding actually owns, with a starter box that opens a legal hundred |
 | `D-17` | Wanted board: rotating warrants up to 7 stars, subdue-not-kill capture, copies paid into the collection |
-| `D-18` | Scenario authoring on generated ground: position roles (anchor, deployZone, lerp, near, ritualCenter) so a scenario's objectives, rituals and portals pin to a generated field instead of fixed coordinates; `data/scenarios/ashfall_crossing.json` as the reference scenario |
-| `D-19` | AI: seeks trenches and high ground when moving, keeps siege pieces out of their own minimum range and sets them up once in their firing band, routes cavalry to a flank or rear hex instead of the front arc, and surrenders once a side is both leaderless (Doctrine `"None"`) and morale-broken |
-| `D-20` | Campaign map: regions on a province graph, each with its own biome bias and neighbors; a side may only contest ground bordering territory it already holds, fighting for a region is an ordinary generated-field match, and a held region pays its owner named, source-tracked resources per hour into the holding |
-| `D-21` | Seven themed divisions: angels, demons, chaos riders, demigods, wendigo-kin, sasquatch, ant creatures with humanoid myrmidons — 28 cards, painted |
-| `D-22` | A usable skill on every card at four stars and above: six kinds, all data-defined, enforced by a registry-wide test |
-| `D-23` | Card face: name across the top band, ATK and DEF in dark ink on the paper, copy badge moved to the foot |
-| `D-24` | Cloning splits attack and defence across the original and its copies instead of duplicating them, and the original reclaims each share as a copy falls |
+| `D-18` | Seven themed divisions: angels, demons, chaos riders, demigods, wendigo-kin, sasquatch, ant creatures with humanoid myrmidons — 28 cards, painted |
+| `D-19` | A usable skill on every card at four stars and above: six kinds, all data-defined, enforced by a registry-wide test |
+| `D-20` | Card face: name across the top band, ATK and DEF in dark ink on the paper, copy badge moved to the foot |
+| `D-21` | Cloning splits attack and defence across the original and its copies instead of duplicating them, and the original reclaims each share as a copy falls |
+| `D-22` | Scenario authoring on generated ground: position roles (anchor, deployZone, lerp, near, ritualCenter) so a scenario's objectives, rituals and portals pin to a generated field instead of fixed coordinates; `data/scenarios/ashfall_crossing.json` as the reference scenario |
+| `D-23` | AI: seeks trenches and high ground when moving, keeps siege pieces out of their own minimum range and sets them up once in their firing band, routes cavalry to a flank or rear hex instead of the front arc, and surrenders once a side is both leaderless (Doctrine `"None"`) and morale-broken |
+| `D-24` | Campaign map: regions on a province graph, each with its own biome bias and neighbors; a side may only contest ground bordering territory it already holds, fighting for a region is an ordinary generated-field match, and a held region pays its owner named, source-tracked resources per hour into the holding |
 | `D-25` | AI spends the six card skills on their own terms, fights the ground it stands on (terrain, elevation, siege screening, cavalry flanking) and yields a lost field |
 | `D-26` | Marching: continuous movement in seconds, squads with formation slots, a 45-second cap scaled by distance, and hex routing round anything a straight line cannot cross |
 | `D-27` | March screen: click the ground to send a squad, drag a name onto a squad to have that unit walk over and fall in, with the real engine bundled into the page rather than a recording of it |
@@ -93,3 +92,4 @@ Three things bite:
 | `D-32` | Duplicate-card reforge: spend several copies of a card for one copy of a same-faction card one star above it |
 | `D-33` | Stratagem cards as a third side-deck kind: Forced March, Smokescreen and False Retreat, each a one-round effect on a targeted platoon or hex, validated and spent through `checkStratagem`/`playStratagem` |
 | `D-34` | Escort composition for warrants: a sworn company's target is escorted by its own company, not a borrowed host starter deck |
+| `D-35` | AI splitting as a trade: only spawns copies when a crowd of enemies is closing in, never against a single hard hitter, and treats an enemy copy as a hunt-worthy kill that shrinks the original |

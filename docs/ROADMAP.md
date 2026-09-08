@@ -152,6 +152,10 @@ where they conflict.**
   validate and spend them the same way rituals and fusions are validated and spent; the effects themselves reuse
   the existing temporary-modifier and timed-terrain machinery so every number stays source-tracked.
 
+- AI splitting as a trade: a unit now only spawns copies when a crowd of enemies is closing in (holding
+  ground or baiting), never against a single hard hitter, and treats an enemy's own copy as a hunt-worthy
+  kill that shrinks the original back down.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -247,3 +251,8 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   escort deck and can surface a stray host-army unit standing beside a sworn company's line. Constraining those
   extras to the escort's own faction (or an explicit small ally list per company) would close the last place a
   warrant still reads as partly borrowed.
+
+- 2026-09-05: Proposal — a Shinobi rank privilege, "Read the Double," that marks a split enemy's true body to
+  every Shinobi within 3 hexes once it has taken its first hit after splitting. Splitting already trades stat
+  weight for presence; this would give one faction's rank ladder a mechanical answer that turns the hunt for
+  the original from a computed tiebreaker into a visible, playable duel.
