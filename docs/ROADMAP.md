@@ -408,3 +408,8 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   shot, and Wendigo-kin cavalry could be antlered pack-runners rather than mounted riders — would close that gap
   the same way the rank ladders are being closed faction by faction. Card art for whatever gets picked stays a
   separate, owner-sampled step.
+
+- 2026-09-06: Proposal — now that Silent Directive correctly lands its post-attack Hide (a same-call ordering bug
+  meant the generic "attacking reveals you" check stripped the status the instant it was granted), a unit that
+  attacks out of Hidden could carry a small named first-strike ATK bonus, giving ambush play offensive weight
+  rather than only defensive avoidance.

@@ -33,8 +33,11 @@ export function resolveAttack(b: Battle, attacker: UnitState, target: UnitState,
   attacker.overwatch = false;
   // consume one-shot melee bonuses (Measured Advance / charges)
   clearTempMods(attacker, (m) => m.stat === "ATK" && (m.source === "Measured Advance" || m.source === "Diving Charge" || m.source === "Crushing Dive"));
-  if (hideAfterAttack.has(attacker.uid)) { b.addStatus(attacker, "Hidden", 2, "Silent Directive"); hideAfterAttack.delete(attacker.uid); }
+  // Attacking normally breaks any stealth the attacker already had; Silent Directive's grant is
+  // applied after that reveal, so a unit ordered to Hide after this attack ends up Hidden rather
+  // than having its own new status immediately stripped by the reveal it just triggered.
   if (b.hasStatus(attacker, "Hidden")) b.addStatus(attacker, "Revealed", 0, "Attacked");
+  if (hideAfterAttack.has(attacker.uid)) { b.addStatus(attacker, "Hidden", 2, "Silent Directive"); hideAfterAttack.delete(attacker.uid); }
   b.log("Attack", { attacker: attacker.uid, target: defender.uid, atk, def, arc, damage, defeated: result.defeated, intercepted });
   return { damage, atk, def, arc, ...result, intercepted };
 }
