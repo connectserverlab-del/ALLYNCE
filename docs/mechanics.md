@@ -278,17 +278,19 @@ on the same seed always producing the same event log, and this is what fails lou
 `npm run check` runs, the first time a change reaches for `Math.random()`, wall-clock time, or iteration order
 that depends on object identity.
 
-`Q-20`'s per-round `RoundHash` reuses `hashEvents` rather than inventing a second hash: at the end of every
-round, `BattleController.endPhase` hashes that round's own slice of the log (everything logged since the
-round's `PhaseStart`, filtered by `event.round`) and appends a `RoundHash` event carrying it. Every position
-change, HP loss, status, morale swing and side-state change a round produces was already logged as it
-happened, so the slice covers all of it without a second, hand-maintained snapshot to keep in sync with the
-first. `core/src/determinism.ts` also exports `roundHashes(events)`, which pulls every `RoundHash` entry out
-of a log keyed by round. Two clients — or a battle rebuilt from its command log alone (`Q-22`) — compare one
-short string per round instead of diffing whole battles, and the first round whose hash disagrees is exactly
-the round where they diverged. `core/tests/determinism.test.ts` covers this: two runs of the same seed log
-identical round hashes round for round, and perturbing a single logged field (a hex, a damage number, a
-status, a morale value) changes only the hash of the round it happened in.
+`Q-20`'s per-round `RoundHash` is written at the end of every round by `BattleController.endPhase`, and
+hashes two things together: that round's own slice of the event log, and `stateDigest(b)` — a canonical,
+id-sorted digest of what the battle materially *is* at that moment (every unit's position, body, morale,
+statuses, cooldowns, temporary modifiers and per-activation flags, plus side, ritual, portal and terrain
+state).
+
+Both halves are needed. Hashing only the events misses everything that changes without being logged —
+action points, cooldowns ticking, a charge counter, a set-up flag, a modifier expiring — so two clients
+drift apart while every event they emitted that round matches, and the divergence only surfaces rounds
+later when it finally changes what someone does. A detector that names the wrong round is barely better
+than none. Hashing only the state misses two different paths that happen to land on the same board.
+`core/tests/determinism.test.ts` pins this: ten separate corruptions of unlogged state each move the
+digest while leaving the event log byte-identical.
 
 ## Worked example (from the brief §7)
 

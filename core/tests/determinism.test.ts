@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { reg } from "./helpers.js";
 import { buildStarterDeck } from "../src/cards.js";
 import { runMatch } from "../src/match.js";
-import { hashEvents, roundHashes } from "../src/determinism.js";
+import { hashEvents, roundHashes, stateDigest } from "../src/determinism.js";
 
 const decks = { SHI: buildStarterDeck(reg, "SHI"), KNI: buildStarterDeck(reg, "KNI") };
 
@@ -102,3 +102,63 @@ describe("Q-20 per-round state hash", () => {
     expect(checked).toBeGreaterThan(0); // not a vacuous pass because no scripted event matched
   });
 });
+
+describe("Q-20 the round hash covers state, not just events", () => {
+  /**
+   * The failure this guards against is the one an event-only hash cannot see. Action points,
+   * cooldowns, a charge counter, a set-up flag and an expiring modifier all change without being
+   * logged, so two clients can drift apart while every event they emitted that round matches. A
+   * detector that stays quiet through that names the wrong round later, or nothing at all.
+   */
+  const corruptions: Array<[string, (b: ReturnType<typeof scriptedMatch>["battle"]) => void]> = [
+    ["hit points", (b) => { live(b).hp -= 250; }],
+    ["action points", (b) => { live(b).ap += 1; }],
+    ["a cooldown", (b) => { live(b).cooldowns["ABL_FAKE"] = 3; }],
+    ["a charge counter", (b) => { live(b).chargeMoved += 3; }],
+    ["a set-up flag", (b) => { const u = live(b); u.setUp = !u.setUp; }],
+    ["morale", (b) => { live(b).morale -= 10; }],
+    ["position", (b) => { const u = live(b); u.pos = { q: 99, r: 99 }; }],
+    ["a temporary modifier", (b) => { live(b).tempMods.push({ source: "ghost", stat: "ATK", value: 1 }); }],
+    ["side reserve points", (b) => { [...b.sides.values()][0]!.reservePoints += 1; }],
+    ["a side's surrender flag", (b) => { const s = [...b.sides.values()][0]!; s.surrendered = !s.surrendered; }],
+  ];
+
+  for (const [what, corrupt] of corruptions) {
+    it(`notices ${what} diverging, though no event records it`, () => {
+      const { battle } = scriptedMatch(41);
+      const eventsBefore = hashEvents(battle.events);
+      const before = stateDigest(battle);
+      corrupt(battle);
+      expect(stateDigest(battle), what).not.toBe(before);
+      // the point: the event log is untouched, so an event-only hash would have said "in sync"
+      expect(hashEvents(battle.events)).toBe(eventsBefore);
+    });
+  }
+
+  it("is canonical: the same state hashes the same however the maps were built", () => {
+    const { battle } = scriptedMatch(41);
+    const before = stateDigest(battle);
+    const entries = [...battle.units.entries()];
+    battle.units.clear();
+    for (const [k, v] of [...entries].reverse()) battle.units.set(k, v);
+    expect(stateDigest(battle)).toBe(before);
+  });
+
+  it("returns to the same digest once a corruption is undone", () => {
+    const { battle } = scriptedMatch(41);
+    const before = stateDigest(battle);
+    const u = live(battle);
+    u.hp -= 100;
+    expect(stateDigest(battle)).not.toBe(before);
+    u.hp += 100;
+    expect(stateDigest(battle)).toBe(before);
+  });
+});
+
+/** Any unit still standing, for a corruption to land on. */
+function live(b: ReturnType<typeof scriptedMatch>["battle"]) {
+  const u = [...b.units.values()].find((x) => !x.defeated);
+  if (!u) throw new Error("scripted match left nobody standing");
+  return u;
+}
+

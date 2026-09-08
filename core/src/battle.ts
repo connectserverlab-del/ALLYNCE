@@ -18,7 +18,7 @@ import { evaluateObjective, markSynchronized, type ObjectiveDef, type ObjectiveP
 import { mountedMoveBonus, commandRadiusOf, movementTraits } from "./ranks.js";
 import { fuse as fuseUnits, tickFusions } from "./fusion.js";
 import { effectiveRange } from "./weather.js";
-import { hashEvents } from "./determinism.js";
+import { roundHash } from "./determinism.js";
 
 /** Consecutive End Phases a side has spent at or below the surrender threshold; one bad round shouldn't end a war. */
 const surrenderStreaks = new WeakMap<Battle, Map<string, number>>();
@@ -467,7 +467,7 @@ export class BattleController {
     // status, morale swing and side-state change was already logged as it happened) so two clients — or
     // a replay rebuilt from a command log — can compare one number per round instead of diffing whole
     // battles, and a divergence names the exact round it broke on.
-    b.log("RoundHash", { hash: hashEvents(b.events.filter((e) => e.round === b.round)) });
+    b.log("RoundHash", { hash: roundHash(b) });
     if (!b.winner) { b.round++; b.phase = "Command"; }
     else b.phase = "Ended";
   }
