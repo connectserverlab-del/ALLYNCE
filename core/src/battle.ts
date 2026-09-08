@@ -473,7 +473,8 @@ export class BattleController {
     for (const side of Object.keys(this.victory.sides)) {
       const status = this.objectiveStatus(side);
       // all primary objectives satisfied -> win (objectives are ANDed; scenarios can encode OR by separate side entries later)
-      if (status.length && status.some((s) => s.satisfied && (s.def.type !== "SurviveRounds" && s.def.type !== "DefendForRounds"))) { b.winner = side; b.winReason = status.filter((s) => s.satisfied).map((s) => s.def.type).join("+"); }
+      const primary = status.filter((s) => s.def.type !== "SurviveRounds" && s.def.type !== "DefendForRounds");
+      if (primary.length && primary.every((s) => s.satisfied)) { b.winner = side; b.winReason = status.filter((s) => s.satisfied).map((s) => s.def.type).join("+"); }
     }
     // The three universal win conditions sit under any scenario objectives above: Wipeout, LeaderKilled, Surrender.
     if (!b.winner) for (const side of b.sides.keys()) {

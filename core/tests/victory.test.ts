@@ -169,3 +169,37 @@ describe("the three universal win conditions", () => {
     expect(b.winner).toBeNull();
   });
 });
+
+describe("scenario-authored objectives are ANDed per side", () => {
+  it("a side with two primary objectives does not win on the first one alone", () => {
+    const { b, ctrl } = newBattle();
+    deploy(b, "K", "A", KNI, blob(2, 2));
+    deploy(b, "S", "B", SAM, blob(12, 12));
+    ctrl.victory.sides.A = [
+      { type: "MoraleBelow", side: "A", threshold: 1000 },
+      { type: "CollapseRituals", side: "A", count: 1 },
+    ];
+    ctrl.evaluateVictory();
+    expect(b.winner).toBeNull();
+  });
+  it("wins once every primary objective for that side is satisfied", () => {
+    const { b, ctrl } = newBattle();
+    deploy(b, "K", "A", KNI, blob(2, 2));
+    deploy(b, "S", "B", SAM, blob(12, 12));
+    ctrl.victory.sides.A = [
+      { type: "MoraleBelow", side: "A", threshold: 1000 },
+      { type: "DestroyPortals", side: "A", count: 0 },
+    ];
+    ctrl.evaluateVictory();
+    expect(b.winner).toBe("A");
+    expect(b.winReason).toBe("MoraleBelow+DestroyPortals");
+  });
+  it("SurviveRounds and DefendForRounds never trigger the AND check on their own", () => {
+    const { b, ctrl } = newBattle();
+    deploy(b, "K", "A", KNI, blob(2, 2));
+    deploy(b, "S", "B", SAM, blob(12, 12));
+    ctrl.victory.sides.A = [{ type: "SurviveRounds", side: "A", rounds: 12 }];
+    ctrl.evaluateVictory();
+    expect(b.winner).toBeNull();
+  });
+});
