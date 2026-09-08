@@ -47,7 +47,15 @@ where they conflict.**
 - Replay: a cursor over a battle's event log (`core/src/replay.ts`) that steps forward, back, or straight to a
   round, and narrates every event by unit name. No screen consumes it yet; it is the engine half of `Q-10`.
 
-### Done in the scale and tier pass
+## Done, and what's next
+
+`docs/CHECKLIST.md` is the single source of truth for finished work (its `Done` table) and the live work queue
+(its `Queue` table, claimed via open PRs and `agent/*` branches — see that file's claim protocol). Keeping a
+second, hand-maintained done/next list here let the two drift apart, so this file no longer carries one; check
+`docs/CHECKLIST.md` for what is built and what is queued next, and come back here for the owner's standing
+intent below and the brainstorm log.
+
+### Pass note — 2026-09-07
 
 - Battlefields raised from ~300 to ~950 hexes, with anchors and deployment zones chosen for open room so a
   deployed line no longer walls itself in.
@@ -404,6 +412,16 @@ built.
 3. Siege and cavalry rosters for the four combat factions (Samurai, Shinobi, Knight, Dragon Host), fitting each
    faction's theme, per the owner's standing intent.
 4. A second scenario, to prove the objective/AI systems generalize beyond `Threefold Invocation`.
+
+Audited `docs/CHECKLIST.md`'s Queue against open pull requests and `agent/*` branches: every one of the
+fourteen open items (`Q-1` through `Q-16`, skipping the ones already merged) has a matching open PR title or a
+still-existing claim branch, several dating back to `2026-09-05` and never merged. Per this file's own claim
+protocol, that means the queue is fully claimed; this pass did not start a new Queue item, and instead refreshed
+this file and `README.md` (stale test count, an implemented-features list that had fallen behind
+`docs/CHECKLIST.md`'s `Done` table) and added the brainstorm entry below. **Decision for the owner:** there are
+now 60+ open draft pull requests against this repository, the great majority never merged. Until some of that
+backlog is reviewed and merged (or closed), the Queue effectively cannot free up new claims for future passes —
+worth a look when time allows.
 
 ## Brainstorm log
 
@@ -918,3 +936,13 @@ stay separate, is an owner decision this pass is flagging rather than making —
   Proposal — a fusion invariant test that runs every recipe in `data/abilities/fusions.json` through both input
   orders (all permutations, for a three-body recipe) and asserts identical slot placement and result stats no
   matter which unit is named the anchor, so an asymmetric-role recipe can't reintroduce this class of bug.
+
+- 2026-09-07: Proposal — a twelfth objective type, `AnchorsBroken`, scoring a scenario loss when a summoned
+  Divine Entity's anchors reach zero before its ritual can be repeated. Anchors currently only shrink the
+  entity's own combat stats; this would let a scenario built around protecting one big summon risk the whole
+  battle on it, as a scenario-authored objective layered on top of the three universal win conditions rather
+  than a change to them.
+- 2026-09-07: Proposal — once the Dragon Host rank ladder lands, a senior "Wing Rank" privilege that lets its
+  riders cross Mountains at a rider's normal cost rather than the sixfold penalty cavalry pay elsewhere, the way
+  Shinobi already outrun Knights through Forest. Gives the faction's themed cavalry a rank-gated answer to the
+  terrain system rather than a flat stat bonus.

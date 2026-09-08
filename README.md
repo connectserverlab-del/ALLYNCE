@@ -52,6 +52,8 @@ npm test            # 152 tests: combat math, cohesion, composition, succession,
 npm test            # 156 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
 
 npm test            # 154 tests: combat math, cohesion, composition, succession, clones, rituals, portals, fusion, full scenario
+
+npm test            # 151 tests: combat math, cohesion, composition, succession, clones, rituals, portals, marching, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -187,6 +189,13 @@ hundreds of units stay reviewable and the curves stay consistent. The hand-autho
 - **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. The Knight ladder (fourteen ranks, Page to King) reuses that same engine and adds a lance-charge ATK bonus of its own. See `docs/samurai-ranks.md` and `docs/knight-ranks.md`; Dragon Host and Ritual Cult ladders are next.
 
 - **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. See `docs/samurai-ranks.md`. The Dragon Host ladder (nine ranks, Hatchling to Elder Sovereign) reuses those same privileges and adds its own: wing dive, an ATK bonus keyed to altitude lost this activation rather than hexes moved. See `docs/dragon-ranks.md`. The Ritual Cult ladder (five ranks, Affiliated to Grand Ritualist) grants no leadership privilege at all — specialist teams cannot unlock a commander or elite — and instead keys rank to ritual mastery: a Progress bonus and a higher instability ceiling on a held ritual. See `docs/ritual-ranks.md`.
+
+- **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. Shinobi ranks carry the movement traits above. See `docs/samurai-ranks.md`.
+- **Card ownership and the wanted board**: a deck may only run the copies a holding actually owns, opened by a starter box into a legal hundred; a rotating board of warrants up to seven stars pays subdued (not killed) targets into the collection. See `docs/cards-and-kingdom.md`.
+- **Card skills**: every card at four stars and above carries one usable ability, drawn from six data-defined kinds, enforced by a registry-wide test so the roster cannot grow a silent card. See `docs/mechanics.md`.
+- **Sworn companies and themed divisions**: five sworn companies (Cobalt Conclave, Thorn Coven, Cutpurse Court, Windmarch Host, Dunewake Compact) and seven themed divisions (angels, demons, chaos riders, demigods, wendigo-kin, sasquatch, ant-creature myrmidons) add 48 painted cards beyond the four host armies.
+- **Marching**: continuous, seconds-based movement over the same hexes and terrain costs the battle fights on — a straight line where one is clear, an A* route pulled to a few waypoints where it is not, squads that hold formation slots around a leader, capped at 45 seconds for the longest crossing. See `docs/mechanics.md` and `core/src/march.ts`.
+- **Asset integrity**: `scripts/audit-cutouts.py` fails a cutout that kept its background or lost its figure, so a card cannot ship as a blank slab.
 
 ## Engine note
 
