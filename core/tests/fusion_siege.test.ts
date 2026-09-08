@@ -24,6 +24,22 @@ describe("fusion", () => {
     expect(b.sides.get("A")!.fusionCharges).toBe(0);
     expect(() => ctrl.fuse([b.unit(p.footUids[1]!), b.unit(p.footUids[2]!)], "FUS_PAIRED_LINE")).toThrow(/Fusion charge/);
   });
+  it("fusing an army leader that has no platoon still hands leadership to the fused body", () => {
+    const { b, ctrl } = newBattle();
+    const leader = b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 5, r: 5 });
+    const ally = b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 6, r: 5 });
+    b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 15, r: 5 });
+    b.sides.get("A")!.leaderUid = leader.uid;
+    b.sides.get("A")!.fusionCharges = 1;
+    ctrl.commandPhase(); ctrl.beginActivation("ind:A");
+    const fused = ctrl.fuse([leader, ally], "FUS_PAIRED_LINE");
+    expect(leader.defeated).toBe(true);
+    // the old, now-defeated leader must not linger as the side's leader of record
+    expect(b.sides.get("A")!.leaderUid).toBe(fused.uid);
+    ctrl.evaluateVictory();
+    expect(b.winReason).not.toBe("Leader killed");
+    expect(b.winner).toBeNull();
+  });
   it("the Calamity Form needs all three Sovereigns adjacent and dissolves after three rounds", () => {
     const { b, ctrl } = newBattle();
     b.sides.get("A")!.fusionCharges = 2;

@@ -842,3 +842,11 @@ stay separate, is an owner decision this pass is flagging rather than making.
   blessing before the march, say) would let the holding's morale contribution grow steadily with a building level
   the way its other stats do, instead of waiting on one late-tier study. Proposal only; no building data changed
   here.
+
+- 2026-09-07: Proposal — a generic fusion recipe (no named result unit) currently builds its stat block from
+  `{ ...strongest, ... }` in `fusion.ts`, where "strongest" means the higher ATK+DEF input. That silently carries
+  the `rank` field along for the ride: fuse a ranked commander beside a plain foot soldier with a bigger stat
+  total and the fused body inherits the foot soldier's rank, quietly dropping whatever command radius, mounted
+  movement or banner-morale privilege the commander's rank carried. Rank ladders are meant to have mechanical
+  weight; a fusion shouldn't be a way to launder it away by accident. A generic recipe could instead keep the
+  higher-ranked input's rank explicitly (by ladder position, not by raw stats) unless the recipe names otherwise.
