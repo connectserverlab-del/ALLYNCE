@@ -13,7 +13,7 @@ export interface ScenarioFile {
   id: string; title: string; seed: number; roundLimit: number; roundLimitWinner?: string; briefing: string;
   map: { width: number; height: number; terrain: Array<{ type: Terrain; hexes: [number, number][] }> };
   sides: Record<string, {
-    name: string; reservePoints: number; armyCapacity: number;
+    name: string; reservePoints: number; armyCapacity: number; leader?: string; fusionCharges?: number;
     platoons: Array<{ id: string; faction: string; commander: string; second: string; elite: string; foot: string[]; deploy: [number, number][]; facing?: number }>;
     specialists: Array<{ def: string; at: [number, number] }>;
     portals?: Array<{ id: string; at: [number, number]; capacity: number; cooldown: number }>;
@@ -45,6 +45,12 @@ export function buildScenario(name: string, reg: Registry = loadRegistry(), seed
   for (const [sideId, s] of Object.entries(file.sides)) {
     for (const p of s.portals ?? []) callPortal(b, sideId, { q: p.at[0], r: p.at[1] }, { id: p.id, capacity: p.capacity, cooldown: p.cooldown, telegraph: 0 });
     for (const q of s.reinforcementQueue ?? []) { const portal = b.portals.get(q.portal); if (portal) queueReinforcement(b, portal, q.def, q.platoon); }
+  }
+  for (const [sideId, s] of Object.entries(file.sides)) {
+    const st = b.sides.get(sideId)!;
+    st.fusionCharges = s.fusionCharges ?? 1;
+    const leader = s.leader ? [...b.units.values()].find((u) => u.defId === s.leader && u.side === sideId) : [...b.activeUnits(sideId)].filter((u) => b.def(u).roles.includes("Commander")).sort((x, y) => b.def(y).capacityCost - b.def(x).capacityCost)[0];
+    st.leaderUid = leader?.uid ?? null;
   }
   const ctrl = new BattleController(b, { sides: Object.fromEntries(Object.entries(file.sides).map(([id, s]) => [id, s.objectives])), roundLimit: file.roundLimit, roundLimitWinner: file.roundLimitWinner });
   return { ctrl, file };

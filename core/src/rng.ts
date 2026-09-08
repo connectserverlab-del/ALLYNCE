@@ -1,7 +1,8 @@
 /** Deterministic PRNG (mulberry32) so saves and replays reproduce exactly. */
 export class Rng {
   private s: number;
-  constructor(seed: number) { this.s = seed >>> 0; }
+  readonly seed: number;
+  constructor(seed: number) { this.s = seed >>> 0; this.seed = seed; }
   next(): number {
     this.s = (this.s + 0x6d2b79f5) >>> 0;
     let t = this.s;

@@ -1,0 +1,20 @@
+{
+  "faction": "SHI",
+  "notes": "Six ranks. Each carries a movement trait: Shinobi outrun Knights by moving tree to tree through forest, where ground units pay double.",
+  "ranks": [
+    { "id": "APPRENTICE", "title": "Apprentice", "tier": 0, "description": "Unproven trainee. Moves like any ground unit.", "privileges": {}, "movement": {}, "canLead": [] },
+    { "id": "GENIN", "title": "Genin", "tier": 1, "description": "Field operative. Canopy step: forest costs 1 movement instead of 2.", "privileges": {}, "movement": { "canopy": true }, "canLead": [] },
+    { "id": "CHUNIN", "title": "Chunin", "tier": 2, "description": "Cell leader. Canopy step, and stopping in forest hides the unit.", "privileges": {}, "movement": { "canopy": true, "hideOnForestStop": true }, "canLead": ["Patrol", "Platoon"] },
+    { "id": "JOUNIN", "title": "Jounin", "tier": 3, "description": "Master operative. Canopy step, hide in forest, and enemies' zones of control do not hold them.", "privileges": { "commandRadiusBonus": 1 }, "movement": { "canopy": true, "hideOnForestStop": true, "ignoreZoc": true }, "canLead": ["Patrol", "Platoon", "Company"] },
+    { "id": "ANBU", "title": "Anbu", "tier": 4, "description": "Covert elite. All Jounin traits, +1 Movement, and may pass through allied hexes.", "privileges": { "commandRadiusBonus": 1 }, "movement": { "canopy": true, "hideOnForestStop": true, "ignoreZoc": true, "passAllies": true, "bonusMov": 1 }, "canLead": ["Patrol", "Platoon", "Company"] },
+    { "id": "KAGE", "title": "Kage", "tier": 5, "description": "Shadow sovereign. All Anbu traits and Shadow Step: once per activation, relocate up to 3 hexes to any forest, smoke or ruins hex, ignoring everything between.", "privileges": { "commandRadiusBonus": 2, "twoSwords": true }, "movement": { "canopy": true, "hideOnForestStop": true, "ignoreZoc": true, "passAllies": true, "bonusMov": 1, "shadowStep": 3 }, "canLead": ["Company", "Battalion", "Army"] }
+  ],
+  "privilegeRules": {
+    "canopy": "Forest movement cost 1 (tree to tree). Knights and other ground units pay 2, cavalry 3.",
+    "hideOnForestStop": "Ending a move on a Forest hex applies Hidden.",
+    "ignoreZoc": "Leaving a hex adjacent to an enemy does not trigger a reaction attack.",
+    "passAllies": "May move through hexes occupied by allies.",
+    "bonusMov": "Added to base Movement.",
+    "shadowStep": "Shadow Step action: 1 AP, once per activation, teleport up to N hexes to a Forest, Smoke or Ruins hex."
+  }
+}

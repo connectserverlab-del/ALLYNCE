@@ -1,0 +1,33 @@
+{
+  "faction": "SAM",
+  "notes": "Ordered low to high. Privileges are the mechanical hooks; koku and descriptions are lore. 'Koshogumi' appears twice in the source list (senior attendant and first-rank retainer); both are kept under distinct ids pending confirmation. The three garbled provincial-lord lines were split into Jun-kokushu, Kunimochi-nami and Kokushu.",
+  "ranks": [
+    { "id": "KOYAKUNIN", "title": "Koyakunin", "tier": 0, "description": "Gate guard.", "privileges": {}, "canLead": [] },
+    { "id": "NAKAKOSHO", "title": "Nakakosho", "tier": 1, "description": "Groom and stableman.", "privileges": {}, "canLead": [] },
+    { "id": "TOMOKOSHO", "title": "Tomokosho", "tier": 2, "description": "Personal attendant.", "privileges": {}, "canLead": [] },
+    { "id": "RUSUIGUMI", "title": "Rusuigumi", "tier": 3, "description": "Junior attendant.", "privileges": {}, "canLead": [] },
+    { "id": "KOSHOGUMI_ATTENDANT", "title": "Koshogumi (senior attendant)", "tier": 4, "description": "Senior attendant.", "privileges": {}, "canLead": ["Patrol"] },
+    { "id": "UMAMAWARI", "title": "Umamawari", "tier": 5, "description": "Third-rank retainer. Right to wear two swords.", "privileges": { "twoSwords": true }, "canLead": ["Patrol"] },
+    { "id": "CHURO", "title": "Churo", "tier": 6, "description": "Second-rank retainer. Two swords; rides a horse in war.", "privileges": { "twoSwords": true, "mounted": "war" }, "canLead": ["Patrol", "Platoon"] },
+    { "id": "KOSHOGUMI_RETAINER", "title": "Koshogumi (first-rank retainer)", "tier": 7, "description": "First-rank retainer. Two swords; rides a horse in war and peace.", "privileges": { "twoSwords": true, "mounted": "always" }, "canLead": ["Patrol", "Platoon"] },
+    { "id": "GOKENIN", "title": "Gokenin", "tier": 8, "description": "Household vassal.", "privileges": { "twoSwords": true, "mounted": "always", "commandRadiusBonus": 1 }, "canLead": ["Patrol", "Platoon"] },
+    { "id": "HATAMOTO", "title": "Hatamoto", "tier": 9, "description": "Banner Knight. Carries the lord's banner in the field.", "privileges": { "twoSwords": true, "mounted": "always", "commandRadiusBonus": 1, "banner": true }, "canLead": ["Patrol", "Platoon", "Company"] },
+    { "id": "KARO", "title": "Karo", "tier": 10, "description": "Elder councilor.", "privileges": { "twoSwords": true, "mounted": "always", "commandRadiusBonus": 1 }, "canLead": ["Platoon", "Company"] },
+    { "id": "MUJO_DAIMYO", "title": "Mujo Daimyo", "tier": 11, "description": "Lord without a castle. Yearly income 10,000 to 20,000 koku.", "koku": [10000, 20000], "privileges": { "twoSwords": true, "mounted": "always", "commandRadiusBonus": 2 }, "canLead": ["Company", "Battalion"] },
+    { "id": "JOSHU_DAIMYO", "title": "Joshu Daimyo", "tier": 12, "description": "Lord of a castle.", "privileges": { "twoSwords": true, "mounted": "always", "commandRadiusBonus": 2, "castle": true }, "canLead": ["Company", "Battalion"] },
+    { "id": "JUN_KOKUSHU_DAIMYO", "title": "Jun-kokushu (Tozama) Daimyo", "tier": 13, "description": "Outer lord ranked alongside provincial lords.", "privileges": { "twoSwords": true, "mounted": "always", "commandRadiusBonus": 2, "castle": true }, "canLead": ["Battalion"] },
+    { "id": "KUNIMOCHI_NAMI_DAIMYO", "title": "Kunimochi-nami (Fudai) Daimyo", "tier": 14, "description": "Hereditary lord treated as a province holder.", "privileges": { "twoSwords": true, "mounted": "always", "commandRadiusBonus": 2, "castle": true }, "canLead": ["Battalion"] },
+    { "id": "KOKUSHU_DAIMYO", "title": "Kokushu (Tozama) Daimyo", "tier": 15, "description": "Outer provincial lord with 100,000+ koku.", "koku": [100000, null], "privileges": { "twoSwords": true, "mounted": "always", "commandRadiusBonus": 3, "castle": true }, "canLead": ["Battalion", "Army"] },
+    { "id": "KUNIMOCHI_DAIMYO", "title": "Kunimochi (Fudai) Daimyo", "tier": 16, "description": "Hereditary provincial lord with 100,000+ koku.", "koku": [100000, null], "privileges": { "twoSwords": true, "mounted": "always", "commandRadiusBonus": 3, "castle": true }, "canLead": ["Battalion", "Army"] },
+    { "id": "SHINPAN_DAIMYO", "title": "Shinpan Daimyo", "tier": 17, "description": "Lord related to the Shogun.", "privileges": { "twoSwords": true, "mounted": "always", "commandRadiusBonus": 3, "castle": true }, "canLead": ["Battalion", "Army"] },
+    { "id": "SHOGUN", "title": "Shogun", "tier": 18, "description": "Generalissimo. Commands the entire military.", "privileges": { "twoSwords": true, "mounted": "always", "commandRadiusBonus": 4, "castle": true, "supreme": true }, "canLead": ["Army"] }
+  ],
+  "privilegeRules": {
+    "twoSwords": "+50 ATK on reaction attacks (zone-of-control and Overwatch strikes).",
+    "mounted": "'war' grants +1 Movement while any enemy is within 6 hexes; 'always' grants +1 Movement unconditionally.",
+    "commandRadiusBonus": "Added to the unit's command radius for auras and morale recovery.",
+    "banner": "Platoon members inside command radius recover +5 additional Morale in the Command Phase.",
+    "castle": "Allies inside command radius standing on Fortification gain a further +100 DEF.",
+    "supreme": "Reserved for campaign scale; not used in the vertical slice."
+  }
+}

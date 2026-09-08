@@ -104,7 +104,10 @@ describe("Threefold Invocation scenario", () => {
     }
     expect(["A", "B"]).toContain(b.winner);
     const types = new Set(b.events.map((e) => e.type));
-    for (const t of ["RitualProgress", "ReinforcementArrived", "Attack", "Move", "Succession", "ClonesSpawned"]) expect(types.has(t), t).toBe(true);
+    for (const t of ["RitualProgress", "ReinforcementArrived", "Attack", "Move", "ClonesSpawned"]) expect(types.has(t), t).toBe(true);
+    // a fallen commander either promotes a second or, if they were the army leader, ends the battle outright
+    expect(types.has("Succession") || b.winReason === "Leader killed").toBe(true);
+    expect(["SynchronizeRituals", "CollapseRituals", "Wipeout", "Leader killed", "Surrender", "Round limit"]).toContain(b.winReason);
     // rituals progressed at different rates
     const first = b.events.filter((e) => e.type === "RitualProgress" && e.round === 1);
     const fast = first.find((e) => e.data["ritual"] === "circle-fast")!.data["total"] as number;

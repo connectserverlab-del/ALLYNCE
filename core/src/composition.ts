@@ -1,6 +1,7 @@
 import type { Battle } from "./state.js";
 import type { PlatoonState, DoctrineState, UnitDef } from "./types.js";
 import type { Registry } from "./data.js";
+import { canLead } from "./ranks.js";
 
 export interface PlatoonBlueprint { id: string; side: string; faction: string; commander: string; second: string; elite: string; foot: string[] }
 export interface ArmyBlueprint { side: string; capacity: number; platoons: PlatoonBlueprint[]; specialists: string[] }
@@ -23,6 +24,10 @@ export function validateArmy(reg: Registry, army: ArmyBlueprint): ValidationResu
     require(count(p.elite), "Elite", p.id);
     if (p.foot.length !== slots["FootSoldier"]) errors.push(`${p.id}: needs exactly ${slots["FootSoldier"]} foot soldiers, has ${p.foot.length}`);
     for (const f of p.foot) require(count(f), "FootSoldier", p.id);
+    const cd = reg.unit(p.commander);
+    if (!canLead(reg.ranks.get(cd.faction), cd.factionRank, "Platoon")) errors.push(`${p.id}: rank ${cd.factionRank ?? "none"} of ${cd.id} may not lead a Platoon`);
+    const sd = reg.unit(p.second);
+    if (!canLead(reg.ranks.get(sd.faction), sd.factionRank, "Platoon")) errors.push(`${p.id}: second ${sd.id} holds rank ${sd.factionRank ?? "none"} and could not assume platoon command`);
     const factions = new Set([p.commander, p.second, p.elite, ...p.foot].map((id) => reg.unit(id).faction));
     if (factions.size > 1) errors.push(`${p.id}: mixed factions ${[...factions].join(",")}`);
     const wizards = [p.commander, p.second, p.elite].filter((id) => reg.unit(id).rank === "Wizard").length;
