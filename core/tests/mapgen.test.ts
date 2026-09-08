@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { generateMap, terrainCounts, applyMap } from "../src/mapgen.js";
+import { generateMap, terrainCounts, applyMap, deploymentBalance } from "../src/mapgen.js";
 import { newBattle } from "./helpers.js";
 import { hexKey, hexNeighbors } from "../src/hex.js";
 
@@ -27,6 +27,20 @@ describe("irregular battlefield generator", () => {
     expect(a.deployZones.B.length).toBeGreaterThanOrEqual(8);
     const byKey = new Map(a.hexes.map((h) => [hexKey({ q: h.q, r: h.r }), h]));
     for (const z of [...a.deployZones.A, ...a.deployZones.B]) expect(["Water", "Mountain", "Trench"]).not.toContain(byKey.get(hexKey(z))!.terrain);
+  });
+
+  it("never ships a field where one anchor's own approach ground is more than 10% harder to cross than the other's", () => {
+    for (let seed = 0; seed < 25; seed++) expect(deploymentBalance(generateMap({ seed })), `seed ${seed}`).toBeGreaterThanOrEqual(0.9);
+  });
+
+  it("scores a symmetric field as perfectly even and a lopsided one as unbalanced", () => {
+    const hexes = [];
+    for (let r = 0; r < 5; r++) for (let q = -10; q <= 10; q++) hexes.push({ q, r, terrain: "Open" as const, elevation: 1 });
+    const anchors = { A: { q: -10, r: 2 }, B: { q: 10, r: 2 } };
+    expect(deploymentBalance({ hexes, anchors })).toBe(1);
+    // mud only within reach of A's anchor: its own approach ground gets harder, B's does not
+    const muddy = hexes.map((h) => (h.q < -4 ? { ...h, terrain: "Mud" as const } : h));
+    expect(deploymentBalance({ hexes: muddy, anchors })).toBeLessThan(1);
   });
 
   it("loads into a battle: mountains block ground units, trenches block cavalry, mud slows, roads are cheap", () => {

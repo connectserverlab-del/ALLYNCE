@@ -27,6 +27,28 @@ export interface GeneratedMap {
   features: string[];
 }
 
+/**
+ * How much harder one side's own approach ground is to cross than the other's: the average foot-movement
+ * cost of the passable hexes within reach of a deployment anchor, which is what an army standing there
+ * actually has to walk through to advance. Two armies dropped onto the same generated field by nothing but
+ * noise should not find one of them rooted in a mud flat while the other stands on a clear road.
+ */
+export function approachCost(anchor: Hex, hexes: Hex[], terrain: Map<string, Terrain>, passable: (h: Hex) => boolean): number {
+  const near = hexesWithin(anchor, 6).filter((h) => hexes.some((x) => x.q === h.q && x.r === h.r) && passable(h));
+  if (!near.length) return 1;
+  const sum = near.reduce((s, h) => s + TERRAIN_RULES[terrain.get(hexKey(h))!].costFoot!, 0);
+  return sum / near.length;
+}
+
+/** 1.0 is perfectly even; anything at or above 0.9 is within the 10% band the generator is required to land in. */
+export function deploymentBalance(map: Pick<GeneratedMap, "hexes" | "anchors">): number {
+  const terrain = new Map(map.hexes.map((h) => [hexKey(h), h.terrain]));
+  const passable = (h: Hex) => { const t = terrain.get(hexKey(h)); return t !== undefined && TERRAIN_RULES[t].costFoot !== null && t !== "Mountain" && t !== "Water"; };
+  const ca = approachCost(map.anchors.A, map.hexes, terrain, passable);
+  const cb = approachCost(map.anchors.B, map.hexes, terrain, passable);
+  return Math.min(ca, cb) / Math.max(ca, cb);
+}
+
 /** Axial -> pixel (pointy-top, size 1). */
 export function hexToPixel(h: Hex): { x: number; y: number } { return { x: Math.sqrt(3) * (h.q + h.r / 2), y: 1.5 * h.r }; }
 
@@ -50,8 +72,25 @@ class Noise {
   ridged(x: number, y: number): number { return 1 - Math.abs(this.fractal(x, y, 3) * 2 - 1); }
 }
 
+/**
+ * A field is dealt by noise, and noise does not know it owes both sides an even fight. Most seeds land fine,
+ * but a rugged cluster or a wandering river can, by chance, pile the hard ground on one anchor's doorstep.
+ * Try a handful of deterministic re-rolls of the same spec before shipping the least lopsided one, so a
+ * generated battlefield never seats one army in the mud and the other on a road as a matter of luck.
+ */
 export function generateMap(spec: MapSpec): GeneratedMap {
-  const rng = new Rng(spec.seed);
+  let best: GeneratedMap | undefined; let bestBalance = -1;
+  for (let attempt = 0; attempt < 12; attempt++) {
+    const map = buildMap(spec, attempt === 0 ? spec.seed : (spec.seed ^ Math.imul(attempt, 0x9e3779b9)) >>> 0);
+    const balance = deploymentBalance(map);
+    if (balance > bestBalance) { best = map; bestBalance = balance; }
+    if (balance >= 0.9) break;
+  }
+  return best!;
+}
+
+function buildMap(spec: MapSpec, seed: number): GeneratedMap {
+  const rng = new Rng(seed);
   const W = spec.width ?? 52, H = spec.height ?? 38;
   const target = spec.size ?? 950;
   const shapeN = new Noise(rng), elevN = new Noise(rng), ridgeN = new Noise(rng), forestN = new Noise(rng), wetN = new Noise(rng);

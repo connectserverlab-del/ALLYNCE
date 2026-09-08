@@ -5,6 +5,7 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | Brief section | Module | Notes |
 |---|---|---|
 | §3 Battlefield and turn structure | `battle.ts`, `hex.ts`, `state.ts` | Command / Activation / Objective / End phases, 2 AP, standard actions |
+| Irregular battlefield generator | `mapgen.ts` | Noise-warped mask, elevation, river, forest, road, trenches, ruins; `deploymentBalance` rejects a lopsided deal |
 | §4 Unit statistics | `types.ts`, `data.ts`, `data/units/units.json` | All required fields; registry validates references on load |
 | §5 Army construction | `composition.ts` | `validateArmy`, slot rules, unique and boss limits, capacity |
 | §6 Theme cohesion and doctrine | `cohesion.ts`, `composition.ts`, `modifiers.ts` | `doctrineState`, Continuity, layered breakdown with sources |
@@ -108,6 +109,17 @@ four cards, checks it lands on Full doctrine rather than Broken, and exercises e
 | Winter Famine (WEN) | Crawling Cold — slows enemies within 3 hexes | Starveling Bite — +90 ATK against foot soldiers |
 | Ridge Kin (SAS) | Stone Stand — +70 platoon DEF | Lone Hunt — +80 ATK against an isolated target |
 | Formic Swarm (FMC) | Swarm Convergence — marks a target for +110 platoon ATK | One Will — +40 DEF with two Swarm allies adjacent |
+
+## Deployment-zone balance check
+
+`generateMap` deals terrain from noise, and noise does not know it owes both sides an even fight: a rugged
+cluster or a wandering river can, by chance, land all the hard ground on one anchor's doorstep. `deploymentBalance`
+scores a generated field by the average foot-movement cost of the passable ground within reach of each
+deployment anchor — the terrain a side's own army actually has to walk through to advance — and returns the
+ratio of the easier side to the harder one. `generateMap` re-rolls the same spec with deterministic derived
+seeds (still exactly reproducible for a given input seed) until that ratio is at least 0.9, i.e. within 10%
+both ways, or a bounded number of attempts run out, in which case it ships the least lopsided attempt rather
+than looping forever. `core/tests/mapgen.test.ts` asserts the 10% band holds across a spread of seeds.
 
 ## Worked example (from the brief §7)
 
