@@ -20,6 +20,8 @@ npm test            # 161 tests: combat math, cohesion, composition, succession,
 
 npm test            # 155 tests: combat math, cohesion, composition, succession, clones, rituals, portals, cards,
                     # the holding, wanted board, marching, map generation, AI, and a full scenario end to end
+
+npm test            # 153 tests: combat math, cohesion, composition, succession, clones, rituals, portals, save/load, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk

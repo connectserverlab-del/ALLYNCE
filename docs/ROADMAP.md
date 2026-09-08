@@ -325,3 +325,12 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   only a Jounin-or-higher Shinobi triggers a fusion with a shed-shadow effect). This gives the rank ladders
   mechanical weight over which fusions a platoon can even reach, the same way they already gate command radius
   and who may lead a platoon, rather than leaving fusion eligibility to unit id and theme alone.
+
+- 2026-09-05: Proposal — the army leader-killed win condition currently fires the instant the leader unit falls, in
+  the same End Phase, before the next Command Phase can run succession. That leaves the leader-killed condition with
+  no grace window at all while platoon Continuity gets one, so the two mechanics read as unequal weight for what the
+  owner named a rank ladder with mechanical weight. Two ways to close the gap without touching how Continuity works:
+  either let the leader-killed check itself wait one Command Phase so a promoted second can be recognised as the new
+  army leader first, or introduce a separate, capturable Army Standard as the actual leader-killed trigger so the
+  Commander's own death alone no longer instantly ends the battle. Either keeps all three win conditions comparably
+  hard to reach.
