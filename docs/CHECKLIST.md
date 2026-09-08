@@ -52,7 +52,6 @@ Three things bite:
 | `Q-10` | Replay viewer: step through a saved event log | The event log already exists and is unused |
 | `Q-11` | Warrant board screen in the sample page: read the posted writs, take one, and see which of them close the gaps in the current deck | The board exists in the core and has no interface |
 | `Q-12` | Give the five sworn companies depth: each has four cards, enough to hire but not to lead | A company is a flavour of ally until it can field a line of its own |
-| `Q-13` | Escort composition for warrants: build the escort around the target's own company rather than a generic host starter deck | The escort currently reads as a borrowed army with the target bolted on |
 | `Q-15` | A division's own doctrine and platoon order, so a Choir or a Swarm can lead a deck instead of only joining one | Seven divisions is a lot of flavour with no army identity behind it |
 | `Q-16` | Teach the AI that splitting is a trade, not a gain: split to hold ground or bait, never against a single hard hitter, and hunt enemy copies to shrink the original | Cloning now costs the caster real weight and the AI still treats it as free presence |
 
@@ -93,3 +92,4 @@ Three things bite:
 | `D-31` | Knight (8 ranks), Dragon Host (7 ranks) and Ritual Cult (4 ranks) rank ladders, each escalating one mechanical trait per rank (surefoot, climber, waterwalk respectively), matching the Samurai and Shinobi ladders already in place |
 | `D-32` | Duplicate-card reforge: spend several copies of a card for one copy of a same-faction card one star above it |
 | `D-33` | Stratagem cards as a third side-deck kind: Forced March, Smokescreen and False Retreat, each a one-round effect on a targeted platoon or hex, validated and spent through `checkStratagem`/`playStratagem` |
+| `D-34` | Escort composition for warrants: a sworn company's target is escorted by its own company, not a borrowed host starter deck |

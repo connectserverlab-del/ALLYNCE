@@ -237,3 +237,13 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   adjacent enemies this round without drawing a reaction attack. Cavalry already carries the raiding role in the
   fusion and siege kit; a stratagem that lets it strike and pull back cleanly would give every faction's cavalry
   a second, cheaper way to use that role beyond the charge bonus it already has.
+
+- 2026-09-05: Proposal — once Q-12 deepens the five sworn companies, give each one themed cavalry or siege
+  piece of its own (a Windmarch horse-archer already implies cavalry; Cutpurse Court could field a garrote-line
+  skirmish rider, Dunewake Compact a caravan-hauled siege sled), so "every faction gets cannons and cavalry that
+  fit its theme" reaches the companies too, not only the four host armies.
+- 2026-09-05: Proposal — a warrant escort's opening platoon now draws its commander, second, elite and foot
+  soldiers from the target's own company, but the handful of "extra" specialist slots still draw from the whole
+  escort deck and can surface a stray host-army unit standing beside a sworn company's line. Constraining those
+  extras to the escort's own faction (or an explicit small ally list per company) would close the last place a
+  warrant still reads as partly borrowed.
