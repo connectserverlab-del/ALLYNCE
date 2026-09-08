@@ -48,7 +48,6 @@ Three things bite:
 
 | Id | Item | Why it matters |
 |---|---|---|
-| `Q-1` | Second art pass on weak cutouts: any unit whose card still reads "no art yet", plus re-cuts where the flood fill left a panel edge | Blank cards are the most visible gap in the game |
 
 ## Done
 
@@ -99,3 +98,4 @@ Three things bite:
 | `D-43` | Writs screen made live: taking and giving back a warrant runs the real `core/src/wanted.ts` in the page (`web/sample/writs-boot.mts`, `scripts/bundle-writs.mjs`), and each posted warrant shows whether it would close or chip at a gap in the current deck (`contractRelief`) |
 | `D-44` | Fusion recipes are checked at registry load time like every other cross-reference: a bad input unit, result unit or granted ability now throws at startup instead of failing silently mid-battle or leaving a recipe permanently unreachable |
 | `D-45` | `deploymentBalance` in the map generator: rejects a field whose noise happened to hand one anchor's own approach ground more than 10% harder terrain than the other's, re-rolling deterministic derived seeds until it doesn't |
+| `D-46` | Second art pass on weak cutouts: all 88 units now carry both a concept and a cutout, and every cutout audits clean (`npm run assets`: 0 missing under "Units"; `python3 scripts/audit-cutouts.py`: 88/88 in band). `core/tests/art.test.ts` now runs the same opacity check on every `npm test`, so the gap this item tracked can't reopen silently. |
