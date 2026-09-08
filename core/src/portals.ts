@@ -3,6 +3,7 @@ import type { UnitState } from "./types.js";
 import type { Hex } from "./hex.js";
 import { hexNeighbors, hexDistance } from "./hex.js";
 import { changeMorale } from "./morale.js";
+import { effectiveRange } from "./weather.js";
 
 export type PortalState = "Telegraph" | "Open" | "Destroyed" | "Captured";
 export interface QueuedReinforcement { defId: string; cost: number; platoonId: string | null }
@@ -58,7 +59,7 @@ export function tickPortal(b: Battle, p: Portal): UnitState[] {
 }
 
 export function attackPortal(b: Battle, attacker: UnitState, p: Portal, finalAtk: number): boolean {
-  if (!attacker.pos || hexDistance(attacker.pos, p.pos) > b.def(attacker).range) return false;
+  if (!attacker.pos || hexDistance(attacker.pos, p.pos) > effectiveRange(b, attacker)) return false;
   const dmg = Math.max(100, finalAtk - p.def);
   p.hp -= dmg;
   attacker.attackedThisActivation = true;

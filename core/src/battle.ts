@@ -17,6 +17,7 @@ import { evaluateObjective, markSynchronized, type ObjectiveDef, type ObjectiveP
 import { mountedMoveBonus, commandRadiusOf, movementTraits } from "./ranks.js";
 import { fuse as fuseUnits, tickFusions } from "./fusion.js";
 import { timedTerrain } from "./effects.js";
+import { effectiveRange } from "./weather.js";
 
 export interface VictoryRules { sides: Record<string, ObjectiveDef[]>; roundLimit: number; roundLimitWinner?: string }
 
@@ -183,7 +184,8 @@ export class BattleController {
     // Overwatch: first valid enemy entering range gets shot
     for (const e of b.activeUnits()) {
       if (e.side === u.side || !e.overwatch || !e.pos) continue;
-      if (hexDistance(e.pos, to) <= b.def(e).range && hexDistance(e.pos, from) > b.def(e).range) { b.log("OverwatchTriggered", { by: e.uid, on: u.uid }); resolveAttack(b, e, u, { ranged: b.def(e).range > 1, reaction: true }); if (u.defeated) return; }
+      const eRange = effectiveRange(b, e);
+      if (hexDistance(e.pos, to) <= eRange && hexDistance(e.pos, from) > eRange) { b.log("OverwatchTriggered", { by: e.uid, on: u.uid }); resolveAttack(b, e, u, { ranged: b.def(e).range > 1, reaction: true }); if (u.defeated) return; }
     }
     b.place(u, to);
     u.facing = directionTo(from, to);
@@ -204,7 +206,7 @@ export class BattleController {
     const b = this.b;
     if (u.attackedThisActivation) throw new Error("Already attacked this activation");
     if (!u.pos || !target.pos) throw new Error("Not deployed");
-    const range = b.def(u).range + (b.def(u).range > 1 ? TERRAIN_RULES[b.terrainAt(u.pos)].ranged.range : 0);
+    const range = effectiveRange(b, u) + (b.def(u).range > 1 ? TERRAIN_RULES[b.terrainAt(u.pos)].ranged.range : 0);
     if (hexDistance(u.pos, target.pos) > range) throw new Error("Out of range");
     if (b.hasStatus(target, "Hidden") && hexDistance(u.pos, target.pos) > 1) throw new Error("Target is Hidden");
     if (u.isClone && u.attackedThisActivation) throw new Error("Clones make one basic attack");

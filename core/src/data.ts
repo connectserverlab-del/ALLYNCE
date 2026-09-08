@@ -15,6 +15,7 @@ import type { DeckRules, SideCard } from "./cards.js";
 import type { KingdomData, ResearchDef, BannerDef } from "./kingdom.js";
 import type { WantedRules } from "./wanted.js";
 import type { MarchRules } from "./march.js";
+import type { WeatherRules } from "./weather.js";
 import { Registry, type CompositionRules } from "./registry.js";
 
 export { Registry } from "./registry.js";
@@ -42,6 +43,7 @@ export function loadRegistry(): Registry {
     readJson<BannerDef[]>("kingdom/banners.json"),
     readJson<WantedRules>("missions/wanted.json"),
     readJson<MarchRules>("movement/march.json"),
+    readJson<WeatherRules>("rules/weather.json"),
   );
 }
 

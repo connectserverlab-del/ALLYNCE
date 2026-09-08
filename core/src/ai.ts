@@ -9,6 +9,7 @@ import { cohesionConnections } from "./cohesion.js";
 import { bandOf, enemiesWithin } from "./effects.js";
 import { moraleBand } from "./morale.js";
 import type { RitualCircle } from "./rituals.js";
+import { effectiveRange } from "./weather.js";
 
 /**
  * Goal-oriented utility AI. Each unit scores candidate actions with weighted considerations:
@@ -108,11 +109,18 @@ function actOnce(ctrl: BattleController, u: UnitState, profile: AiProfile): bool
     return false;
   }
   // Siege: never stand at the front. An enemy inside the minimum range blinds the gun, so give ground
-  // first and let the next activation emplace once the firing band is clear again.
+  // first; otherwise close only as far as the firing band needs — shortened by weather and failing light —
+  // and emplace rather than charge on.
   if (isSiege(d)) {
     const closest = nearestEnemy(ctrl, u);
-    if (closest && closest.pos && b.distance(u, closest) <= (d.minRange ?? 0)) {
-      if (retreatFrom(ctrl, u, closest.pos)) return true;
+    if (closest && closest.pos) {
+      const dist = b.distance(u, closest);
+      if (dist <= (d.minRange ?? 0)) { if (retreatFrom(ctrl, u, closest.pos)) return true; }
+      else if (dist > effectiveRange(b, u)) { if (moveToward(ctrl, u, closest.pos, profile)) return true; }
+      else if (!u.setUp) {
+        const setupId = d.actives.find((id) => b.reg.ability(id).effect.kind === "SiegeSetup");
+        if (setupId) { try { ctrl.useAbility(u, setupId); return true; } catch { /* skip */ } }
+      }
     }
   }
   // Portal keepers: open a portal if reserve allows, else defend
@@ -122,7 +130,7 @@ function actOnce(ctrl: BattleController, u: UnitState, profile: AiProfile): bool
     if (a.category !== "Active" || (u.cooldowns[id] ?? 0) > 0) continue;
     const enemy = nearestEnemy(ctrl, u);
     if (a.effect.kind === "SpawnClones" && enemy && b.distance(u, enemy) <= 3) { try { ctrl.useAbility(u, id); return true; } catch { /* no room */ } }
-    if (a.effect.kind === "ChargeBonus" && u.movedThisActivation >= (a.effect as any).minHexesMoved && enemy && b.distance(u, enemy) <= d.range) { try { ctrl.useAbility(u, id); } catch { /* skip */ } }
+    if (a.effect.kind === "ChargeBonus" && u.movedThisActivation >= (a.effect as any).minHexesMoved && enemy && b.distance(u, enemy) <= effectiveRange(b, u)) { try { ctrl.useAbility(u, id); } catch { /* skip */ } }
     if (a.effect.kind === "Duel" && enemy && b.distance(u, enemy) === 1 && b.def(enemy).roles.some((r) => r === "Elite" || r === "Commander")) { try { ctrl.useAbility(u, id, { target: enemy }); } catch { /* skip */ } }
     // A gun that has not been emplaced cannot fire, so set up the moment something walks into the sights.
     if (a.effect.kind === "SiegeSetup" && !u.setUp && enemy && inFiringBand(b.def(u), b.distance(u, enemy))) { try { ctrl.useAbility(u, id); return true; } catch { /* skip */ } }
@@ -149,13 +157,13 @@ function actOnce(ctrl: BattleController, u: UnitState, profile: AiProfile): bool
     if (prisoner) { try { ctrl.subdue(u, prisoner); return true; } catch { /* someone else took it */ } }
   }
   // Attack if a target is in range: prefer ritualists / exposed elites / isolated commanders
-  const targets = [...b.activeUnits()].filter((e) => e.side !== u.side && e.pos && hexDistance(u.pos!, e.pos) <= d.range && !(b.hasStatus(e, "Hidden") && hexDistance(u.pos!, e.pos) > 1));
+  const targets = [...b.activeUnits()].filter((e) => e.side !== u.side && e.pos && hexDistance(u.pos!, e.pos) <= effectiveRange(b, u) && !(b.hasStatus(e, "Hidden") && hexDistance(u.pos!, e.pos) > 1));
   if (targets.length && !u.attackedThisActivation) {
     const best = targets.map((t) => ({ t, s: targetScore(ctrl, u, t, profile) })).sort((a, c) => c.s - a.s)[0]!;
     try { ctrl.attack(u, best.t); return true; } catch { /* duel or other block */ }
   }
   // Enemy portal adjacent? hit it
-  for (const p of b.portals.values()) if (p.side !== u.side && p.state !== "Destroyed" && hexDistance(u.pos!, p.pos) <= d.range && !u.attackedThisActivation) { try { ctrl.attackStructure(u, p); return true; } catch { /* skip */ } }
+  for (const p of b.portals.values()) if (p.side !== u.side && p.state !== "Destroyed" && hexDistance(u.pos!, p.pos) <= effectiveRange(b, u) && !u.attackedThisActivation) { try { ctrl.attackStructure(u, p); return true; } catch { /* skip */ } }
 
   // Movement toward the highest-utility goal
   if (u.movedThisActivation === 0 || u.ap > 1) {

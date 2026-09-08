@@ -12,6 +12,7 @@ import type { RankLadder } from "./ranks.js";
 import type { FusionRecipe } from "./fusion.js";
 import type { DeckRules, SideCard } from "./cards.js";
 import type { KingdomData, ResearchDef, BannerDef } from "./kingdom.js";
+import type { WeatherRules } from "./weather.js";
 import type { WantedRules } from "./wanted.js";
 import type { MarchRules } from "./march.js";
 
@@ -41,11 +42,13 @@ export class Registry {
   readonly kingdom: KingdomData;
   readonly research = new Map<string, ResearchDef>();
   readonly banners = new Map<string, BannerDef>();
+  readonly weather: WeatherRules;
   readonly wanted: WantedRules;
   readonly march: MarchRules;
 
-  constructor(units: UnitDef[], abilities: AbilityDef[], factions: Record<string, FactionDef>, rules: CompositionRules, ladders: RankLadder[] = [], fusions: FusionRecipe[] = [], deckRules?: DeckRules, sideCards: SideCard[] = [], kingdom?: KingdomData, research: ResearchDef[] = [], banners: BannerDef[] = [], wanted?: WantedRules, march?: MarchRules) {
+  constructor(units: UnitDef[], abilities: AbilityDef[], factions: Record<string, FactionDef>, rules: CompositionRules, ladders: RankLadder[] = [], fusions: FusionRecipe[] = [], deckRules?: DeckRules, sideCards: SideCard[] = [], kingdom?: KingdomData, research: ResearchDef[] = [], banners: BannerDef[] = [], wanted?: WantedRules, march?: MarchRules, weather?: WeatherRules) {
     this.kingdom = kingdom!;
+    this.weather = weather!;
     this.wanted = wanted!;
     this.march = march!;
     for (const r of research) this.research.set(r.id, r);
