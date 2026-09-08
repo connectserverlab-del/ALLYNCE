@@ -1336,3 +1336,8 @@ passes; this one doesn't resolve it either.
   own right, a themed cavalry trait ("Portal Raider": one steppe or dragon-cavalry unit per faction captures in a
   single uninterrupted action instead of two) would give cavalry a distinct siege-adjacent job on odd-shaped maps
   where portals sit behind rough ground infantry cannot reach in time.
+
+- 2026-09-08: Proposal — marching squads now promote a replacement leader by list order the instant the old one is
+  reused or peels off elsewhere; that promotion could read rank instead, so the highest-ranked member left in a
+  Samurai or Knight column takes over the same way a promoted second inherits command in the Command Phase. Would
+  give the rank ladders another place their mechanical weight actually shows.

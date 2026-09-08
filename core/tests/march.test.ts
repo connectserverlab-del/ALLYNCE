@@ -1,14 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { loadRegistry } from "../src/data.js";
 import type { GeneratedMap, MapHex } from "../src/mapgen.js";
 import type { Terrain } from "../src/types.js";
-import {
-  newMarchField, enlist, enlistFromBattle, formSquad, orderUnit, orderSquad, followSquad, halt, step,
-  travelSeconds, squadTravelSeconds, poseOf, poses, hexAtPoint, pointOfHex, terrainAt, soloPace, formationSlot,
-  type MarchField, type Vec2,
-} from "../src/march.js";
-import { newBattle, deploy, blob, SAM } from "./helpers.js";
-
+import { enlist, enlistFromBattle, followSquad, formationSlot, formSquad, halt, hexAtPoint, newMarchField, orderSquad, orderUnit, paceOf, pointOfHex, poseOf, poses, soloPace, squadTravelSeconds, step, terrainAt, travelSeconds, type MarchField, type Vec2 } from "../src/march.js";
+import { blob, deploy, newBattle, SAM } from "./helpers.js";
 const reg = loadRegistry();
 
 const REF = "SAM_LORD_ASHFALL-DAIMYO";            // MOV 5, the reference pace
@@ -163,6 +158,50 @@ describe("marching", () => {
     expect(gap).toBeLessThan(f.rules.formationSpacing * 2);
   });
 
+
+  it("drops a unit from its old squad when it joins a new one", () => {
+    const f = testField();
+    const lead = enlist(f, REF, { x: 5, y: 5 });
+    const heavy = enlist(f, HEAVY, { x: 5, y: 5 });
+    const sqA = formSquad(f, { leaderId: lead.id, memberIds: [heavy.id] });
+    // the battery is the anchor's whole problem right now
+    expect(paceOf(f, lead)).toBeCloseTo(soloPace(f, HEAVY), 6);
+
+    const leadB = enlist(f, REF, { x: 20, y: 5 });
+    const sqB = formSquad(f, { leaderId: leadB.id });
+    followSquad(f, heavy.id, sqB.id);
+    for (let i = 0; i < 3000 && heavy.squadId !== sqB.id; i++) step(f, 0.05);
+    expect(heavy.squadId).toBe(sqB.id);
+
+    expect(sqA.memberIds).not.toContain(heavy.id);
+    expect(sqB.memberIds).toContain(heavy.id);
+    // the battery is gone, so the old squad is back to the fast pace it started with
+    expect(paceOf(f, lead)).toBeCloseTo(soloPace(f, REF), 6);
+
+    // and an order to the old squad no longer reaches a unit that left it
+    run(f, 30, 0.1, () => !heavy.order);
+    const parked = { x: heavy.pos.x, y: heavy.pos.y };
+    orderSquad(f, sqA.id, { x: 5, y: 25 });
+    step(f, 1);
+    expect(heavy.pos).toEqual(parked);
+  });
+
+  it("promotes a new leader, or disbands the squad, when membership is torn apart by reuse", () => {
+    const f = testField();
+    const lead1 = enlist(f, REF, { x: 5, y: 5 });
+    const mate1 = enlist(f, REF, { x: 5, y: 5 });
+    const sqX = formSquad(f, { leaderId: lead1.id, memberIds: [mate1.id] });
+
+    // reusing lead1 as another squad's leader pulls it out of sqX
+    formSquad(f, { leaderId: lead1.id });
+    expect(sqX.leaderId).toBe(mate1.id);
+    expect(sqX.memberIds).toEqual([mate1.id]);
+    expect(f.squads.get(sqX.id)).toBe(sqX);
+
+    // and pulling its last member out disbands it rather than leaving a dangling anchor
+    formSquad(f, { leaderId: mate1.id });
+    expect(f.squads.get(sqX.id)).toBeUndefined();
+  });
 
   it("walks a follower around ground its own kind cannot cross", () => {
     // a trench is two movement points to a foot soldier and no way at all to a rider

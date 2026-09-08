@@ -46,6 +46,8 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 
 | §16 AI | `ai.ts` | Utility scoring, release policy, terrain and flank positioning, difficulty without stat bonuses |
 | §17 Victory | `battle.ts` (`evaluateVictory`, `surrender`) | Three universal win conditions on top of scenario objectives |
+
+| Marching between battles | `march.ts`, `data/movement/march.json` | Continuous movement in seconds over the same hexes the battle fights on. A straight line where one works; an A* over the grid, string-pulled to a few waypoints, where it does not. Nothing crosses a field in more than 45 seconds, and a route forced the long way round hurries rather than arriving late. A unit belongs to at most one squad: reusing it as a new squad's member or letting it complete a Join order always removes it from whatever squad it was in first, promoting a new leader or disbanding the squad if that was its last member, so a squad's pace and formation slots never carry a member who has actually left |
 | §18 Architecture | all | Simulation is separate from presentation; every action logs a serializable event |
 | Scenario authoring | `scenario.ts` | `buildScenario` loads a scenario file onto either a hand-authored fixed map or a generated one; positions can be pinned by role instead of fixed coordinates (see below) |
 | Campaign map | `campaign.ts`, `data/campaign/` | Regions on a province map, each with its own biome bias for `setUpMatch`; a held region's production is a named, source-tracked income line into the holding (see below) |
