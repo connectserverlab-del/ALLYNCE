@@ -8,6 +8,7 @@ import { callPortal, queueReinforcement } from "./portals.js";
 import type { Hex } from "./hex.js";
 import { hexKey, hexRing, hexDistance, DIRECTIONS, directionTo } from "./hex.js";
 import { generateMap, applyMap, type MapSpec, type GeneratedMap, type MapHex } from "./mapgen.js";
+import { resolvePlacement, type PlacementRole } from "./placement.js";
 import type { ObjectiveDef } from "./objectives.js";
 import type { Terrain } from "./types.js";
 
@@ -27,6 +28,9 @@ export type PositionSpec =
    *  than a fraction of it: a negative `distance` steps back from `from`, away from `to`. Useful when a
    *  scenario wants "six hexes off the ford" whatever separation the generator happened to produce. */
   | { role: "along"; from: string; to: string; distance: number; lateral?: number }
+  /** Named ground the generator produced — a ford, a trench line, ruins, a fortification, the road,
+   *  the midpoint. `index` picks among several of the same kind; see `placement.ts` for the full list. */
+  | { role: PlacementRole; index?: number; offset?: [number, number] }
   /** The `index`-th standable hex (deterministic, wraps) on the ring at `ring` distance from `from`. */
   | { role: "near"; from: PositionSpec; ring: number; index: number }
   /** The already-resolved center of the ritual with this id. Rituals resolve their center before anything
@@ -111,6 +115,12 @@ export function resolvePosition(ctx: MapCtx, used: Set<string>, spec: PositionSp
         point = { q: point.q + perp.q * spec.lateral, r: point.r + perp.r * spec.lateral };
       }
       return nearestPlayable(ctx, point, used);
+    }
+    case "midpoint": case "trenchA": case "trenchB": case "ruins":
+    case "fortification": case "ford": case "road": case "anchorA": case "anchorB":
+    case "deployZoneA": case "deployZoneB": {
+      const hex = resolvePlacement(ctx.generated, spec as never);
+      return nearestPlayable(ctx, hex, used);
     }
     case "near": {
       const from = resolvePosition(ctx, used, spec.from);

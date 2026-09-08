@@ -34,6 +34,8 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses. A PortalKeeper feeds Reserve into a portal of its own that has already opened before it risks any on one that has not, and only calls a new one once nothing of its own is up within six hexes |
 
 | §15 Objectives | `objectives.ts` | Eleven composable types. `DefendForRounds` with a `uidOrPortal` also requires that unit or portal to still be undefeated/undestroyed when the round count passes, not the clock alone |
+
+| Irregular battlefields, generated | `mapgen.ts` (`Landmarks`), `placement.ts`, `scenario.ts` | A scenario built on `mapSpec` pins rituals, portals, deploy hexes and the two hex-bearing objectives (`CaptureHold`, `Escort`) to a role — anchor, deploy zone, midpoint, trench, ruins, fortification, ford, road — instead of a fixed [q, r] pair. A role that did not generate on a given seed falls back to the midpoint rather than failing the build. See `data/scenarios/contested_ford.json` |
 | §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses |
 | Marching between battles | `march.ts`, `data/movement/march.json` | Continuous movement in seconds over the same hexes the battle fights on. A straight line where one works; an A* over the grid, string-pulled to a few waypoints, where it does not. Nothing crosses a field in more than 45 seconds, and a route forced the long way round hurries rather than arriving late |
 

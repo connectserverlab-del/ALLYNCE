@@ -1030,3 +1030,11 @@ stay separate, is an owner decision this pass is flagging rather than making —
 - 2026-09-07: **Proposal** — once siege units exist (see Next #3), give them a `minimumRange` field enforced the
   same way `range` already caps `attack()`, so a siege piece standing adjacent to a target is mechanically
   unable to fire rather than merely AI-discouraged from standing there.
+
+- 2026-09-07: Proposal — once the generator names biomes (Ashfall, Marsh, Highland pass), let a scenario's
+  role placements take a biome-scoped variant ("ford in the marsh reach" rather than just "ford"), so a
+  scenario can ask for a specific kind of ground within a larger generated field instead of only the nearest
+  instance of a feature.
+- 2026-09-07: Proposal — a "flank" role pair (the passable hex on each side of the road, offset from the
+  midpoint) so a scenario can pin an ambush or a flanking reinforcement point without hand-picking a hex,
+  the same way rituals and portals now pin to the ruins or the ford.
