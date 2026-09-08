@@ -1,8 +1,14 @@
 # ALLYNCE — original tactical army strategy game
 
-Data-first vertical slice for an original, PC-first tactical war game: platoons of eight, commanders with
-second-in-command succession, theme cohesion, rituals that can be held and synchronized, reinforcement portals,
-dragon cavalry raids, and objective-based victory. Everything is original: names, units, symbols, lore and art.
+An original tactical war game for PC and console, with multiplayer as a first-class pillar: platoons of eight,
+commanders with second-in-command succession, theme cohesion, rituals that can be held and synchronized,
+reinforcement portals, dragon cavalry raids, and objective-based victory. Everything is original: names, units,
+symbols, lore and art.
+
+The rules engine is deterministic and logs every event, every stat modifier records its source, and the rules
+themselves live in data rather than code — which is what makes lockstep multiplayer, replays and balance
+telemetry tractable rather than a retrofit. `docs/ROADMAP.md` holds the target and its pillars;
+`docs/CHECKLIST.md` holds the live queue.
 
 This repository holds five things:
 

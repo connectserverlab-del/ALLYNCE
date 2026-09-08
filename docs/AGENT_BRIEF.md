@@ -30,6 +30,20 @@ So:
 If #88 has been merged or closed, the integration branch has done its job: start the next one from
 `main`, open one pull request for it, and update this section to name it.
 
+## The target
+
+ALLYNCE is aimed at being a AAA game for PC and console, with multiplayer as a first-class pillar.
+`docs/ROADMAP.md` states the five pillars and the honest scale; read it before picking an item. Every
+queued item serves at least one pillar. An item that serves none is not AAA work — say so rather than
+doing it.
+
+Two consequences for a pass, both cheap now and expensive later:
+
+- **Do not reach for `Math.random()`, wall-clock time, or iteration order that depends on object identity.**
+  The engine is deterministic and that guarantee is what lockstep multiplayer, replays and server-side
+  validation all rest on. Seeded `Rng` or nothing.
+- **Player-facing strings are content, not code.** They will be localised.
+
 ## Each pass
 
 1. `npm install` and then `npm run check` must be green before you change anything. That is the same
