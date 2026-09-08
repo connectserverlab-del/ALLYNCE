@@ -1119,3 +1119,9 @@ stay separate, is an owner decision this pass is flagging rather than making —
   anything that reads the event log later — an after-action report, a future step-through viewer — the same
   source-tracked honesty the live stat breakdown already has, instead of re-deriving it from the ability
   definition after the fact.
+
+- 2026-09-08: Proposal — scale the Rally order's heal and radius by the caster's rank, not a flat +10/2 hexes for
+  every Commander or Second regardless of ladder position. A fresh Ashigaru sergeant and a seasoned Daimyo already
+  diverge in command radius through the rank privilege table; giving Rally the same per-rank privilege (say
+  `rallyBonus`) would make climbing a ladder matter in the same battle it is fought, not only between them, and the
+  bonus would sit beside `commandRadiusBonus` as a second named, source-tracked use of that table.
