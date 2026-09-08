@@ -1324,3 +1324,10 @@ passes; this one doesn't resolve it either.
   to a round or a trigger (a bridge that collapses into Water once a unit crosses it, a trench that floods into Mud
   after N rounds near a river), layered on top of the irregular generator rather than replacing it, so a battlefield
   can turn uneven mid-fight instead of only at generation time.
+
+- 2026-09-08: Proposal — gate a banner's top rate behind the holding's own rank ladder: the highest star a
+  faction's banner can draw would be capped by the highest living rank the holding currently fields in that
+  faction, so pulling a named lord or a sovereign requires already having someone in the field senior enough
+  to vouch for them. Ties the rank ladders' "mechanical weight" directly to recruitment instead of leaving
+  ranks and banners as two systems that never talk to each other. Not implemented; needs a call on whether the
+  cap should be per-banner or per-faction, and whether it should ease as more of the ladder is filled.

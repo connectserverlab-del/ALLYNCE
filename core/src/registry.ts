@@ -92,6 +92,12 @@ export class Registry {
       if (c.kind === "stratagem" && (!c.target || !c.effect)) throw new Error(`Side card ${c.id} is missing a stratagem target or effect`);
     }
     for (const r of this.research.values()) for (const q of r.requires) if (!this.research.has(q)) throw new Error(`Research ${r.id} requires a missing study ${q}`);
+    for (const bn of this.banners.values()) {
+      for (const r of bn.rates) {
+        const fillable = [...this.units.values()].some((u) => (u.stars ?? 1) === r.stars && !u.summonOnly && u.faction !== "DIV");
+        if (!fillable) throw new Error(`Banner ${bn.id} offers ${r.stars}-star cards but no recruitable unit exists at that tier`);
+      }
+    }
     for (const f of this.factions.values()) {
       if (f.platoonOrder && !this.abilities.has(f.platoonOrder)) throw new Error(`Faction ${f.id} missing order ${f.platoonOrder}`);
       if (f.passiveDoctrine && !this.abilities.has(f.passiveDoctrine)) throw new Error(`Faction ${f.id} missing doctrine ${f.passiveDoctrine}`);
