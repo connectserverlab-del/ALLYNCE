@@ -1224,3 +1224,9 @@ stay separate, is an owner decision this pass is flagging rather than making —
   Mountain hexes entirely (matches the intent that only fliers ignore the fivefold cost; siege pieces are the
   least mobile unit type and shouldn't be able to perch on high ground the rest of the army can barely climb),
   while ranged units on adjacent HighGround still get the existing +1 range bonus over a dug-in siege line.
+
+- 2026-09-08: Proposal — let a Fusion recipe optionally spend a ritual's leftover Unstable stacks as a named
+  material ("Unstable Residue") instead of only fixed unit ingredients. A circle about to collapse would still
+  feed the engine something back rather than being pure loss, at the cost of a source-tracked risk modifier
+  (e.g. "Unstable Residue x2": -DEF for a few rounds) carried onto whatever the fusion produces. Ties Ritual and
+  Fusion together as the brief asks without adding a new resource type.
