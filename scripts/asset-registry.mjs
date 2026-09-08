@@ -33,6 +33,15 @@ for (const [id, b] of Object.entries(kingdom.buildings)) {
 // --- side cards borrow the art of what they summon, so only rituals with no result need their own ---
 for (const c of sideCards) {
   if (c.kind === "fusion") { rows.push({ group: "Side cards", id: c.id, label: c.name, kind: "card", path: null, status: "derived", note: "shows its materials' art" }); continue; }
+  // A stratagem summons nothing, so there is no unit cutout for it to borrow. This read
+  // `art/samples/${c.result}_CUTOUT_V01.png` for every side card, and a stratagem's absent `result`
+  // spelled that literally `art/samples/undefined_CUTOUT_V01.png` — three rows pointing at one
+  // impossible file, reported as three ordinary missing assets rather than as the modelling gap it
+  // was. Stratagems carry their own painted emblem instead.
+  if (c.kind === "stratagem") {
+    add("Side cards", c.id, c.name, "card", `art/cards/${c.id}_V01.png`, "stratagem emblem");
+    continue;
+  }
   add("Side cards", c.id, c.name, "card", `art/samples/${c.result}_CUTOUT_V01.png`, "ritual result");
 }
 // --- fixed interface and world art ---

@@ -769,7 +769,11 @@
     ],
     "unique": false,
     "summonOnly": false,
-    "ai": "siege_support"
+    "ai": "siege_support",
+    "art": {
+      "concept": "art/samples/SAM_SIEGE_CINDERTHROAT-BATTERY_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_SIEGE_CINDERTHROAT-BATTERY_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SHI_SIEGE_HOLLOW-REED-MORTAR",
@@ -803,7 +807,11 @@
     ],
     "unique": false,
     "summonOnly": false,
-    "ai": "siege_support"
+    "ai": "siege_support",
+    "art": {
+      "concept": "art/samples/SHI_SIEGE_HOLLOW-REED-MORTAR_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_SIEGE_HOLLOW-REED-MORTAR_CUTOUT_V01.png"
+    }
   },
   {
     "id": "KNI_SIEGE_WARDENS-BOMBARD",
@@ -835,7 +843,11 @@
     ],
     "unique": false,
     "summonOnly": false,
-    "ai": "siege_support"
+    "ai": "siege_support",
+    "art": {
+      "concept": "art/samples/KNI_SIEGE_WARDENS-BOMBARD_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_SIEGE_WARDENS-BOMBARD_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DRG_SIEGE_BONEFORGE-BALLISTA",
@@ -867,7 +879,11 @@
     ],
     "unique": false,
     "summonOnly": false,
-    "ai": "siege_support"
+    "ai": "siege_support",
+    "art": {
+      "concept": "art/samples/DRG_SIEGE_BONEFORGE-BALLISTA_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_SIEGE_BONEFORGE-BALLISTA_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SAM_CAVALRY_CHARWIND-LANCERS",
@@ -899,7 +915,11 @@
     ],
     "unique": true,
     "summonOnly": false,
-    "ai": "cavalry_raid"
+    "ai": "cavalry_raid",
+    "art": {
+      "concept": "art/samples/SAM_CAVALRY_CHARWIND-LANCERS_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_CAVALRY_CHARWIND-LANCERS_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SHI_CAVALRY_REED-MARSH-OUTRIDERS",
@@ -931,7 +951,11 @@
     ],
     "unique": true,
     "summonOnly": false,
-    "ai": "cavalry_raid"
+    "ai": "cavalry_raid",
+    "art": {
+      "concept": "art/samples/SHI_CAVALRY_REED-MARSH-OUTRIDERS_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_CAVALRY_REED-MARSH-OUTRIDERS_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DIV_BOSS_SOVEREIGN-OF-MEMORY",
@@ -2615,7 +2639,11 @@
     "summonOnly": false,
     "ai": "formation_hold",
     "stars": 1,
-    "flying": true
+    "flying": true,
+    "art": {
+      "concept": "art/samples/ANG_LEVY_ASHWING-NOVICE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ANG_LEVY_ASHWING-NOVICE_CUTOUT_V01.png"
+    }
   },
   {
     "id": "ANG_SECOND_WARDING-SERAPH",
@@ -2800,7 +2828,11 @@
     "unique": false,
     "summonOnly": false,
     "ai": "raider",
-    "stars": 1
+    "stars": 1,
+    "art": {
+      "concept": "art/samples/DEM_LEVY_PIT-STRAY_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DEM_LEVY_PIT-STRAY_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DEM_SECOND_FLENSING-TORMENTOR",
@@ -3289,7 +3321,11 @@
     "unique": false,
     "summonOnly": false,
     "ai": "raider",
-    "stars": 1
+    "stars": 1,
+    "art": {
+      "concept": "art/samples/WEN_LEVY_GAUNT-STRAGGLER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WEN_LEVY_GAUNT-STRAGGLER_CUTOUT_V01.png"
+    }
   },
   {
     "id": "WEN_SECOND_RIME-ANTLER-WARDEN",
@@ -3324,7 +3360,11 @@
     "unique": false,
     "summonOnly": false,
     "ai": "leader_support",
-    "stars": 5
+    "stars": 5,
+    "art": {
+      "concept": "art/samples/WEN_SECOND_RIME-ANTLER-WARDEN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WEN_SECOND_RIME-ANTLER-WARDEN_CUTOUT_V01.png"
+    }
   },
   {
     "id": "WEN_ELITE_ANTLER-WRAITH",
@@ -3778,7 +3818,11 @@
     "unique": false,
     "summonOnly": false,
     "ai": "siege",
-    "stars": 5
+    "stars": 5,
+    "art": {
+      "concept": "art/samples/ARC_SIEGE_WARDED-CULVERIN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ARC_SIEGE_WARDED-CULVERIN_CUTOUT_V01.png"
+    }
   },
   {
     "id": "ARC_CAVALRY_WARDBOUND-COURSER",
@@ -3810,7 +3854,11 @@
     "unique": false,
     "summonOnly": false,
     "ai": "cavalry_raid",
-    "stars": 4
+    "stars": 4,
+    "art": {
+      "concept": "art/samples/ARC_CAVALRY_WARDBOUND-COURSER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ARC_CAVALRY_WARDBOUND-COURSER_CUTOUT_V01.png"
+    }
   },
   {
     "id": "WIT_SIEGE_BLIGHT-MORTAR",
@@ -3849,7 +3897,11 @@
     "unique": false,
     "summonOnly": false,
     "ai": "siege",
-    "stars": 5
+    "stars": 5,
+    "art": {
+      "concept": "art/samples/WIT_SIEGE_BLIGHT-MORTAR_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WIT_SIEGE_BLIGHT-MORTAR_CUTOUT_V01.png"
+    }
   },
   {
     "id": "WIT_CAVALRY_BRAMBLEHORN-RIDER",
@@ -3881,7 +3933,11 @@
     "unique": false,
     "summonOnly": false,
     "ai": "cavalry_raid",
-    "stars": 4
+    "stars": 4,
+    "art": {
+      "concept": "art/samples/WIT_CAVALRY_BRAMBLEHORN-RIDER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WIT_CAVALRY_BRAMBLEHORN-RIDER_CUTOUT_V01.png"
+    }
   },
   {
     "id": "ROG_SIEGE_STOLEN-BOMBARD",
@@ -3920,7 +3976,11 @@
     "unique": false,
     "summonOnly": false,
     "ai": "siege",
-    "stars": 4
+    "stars": 4,
+    "art": {
+      "concept": "art/samples/ROG_SIEGE_STOLEN-BOMBARD_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ROG_SIEGE_STOLEN-BOMBARD_CUTOUT_V01.png"
+    }
   },
   {
     "id": "ROG_CAVALRY_BACKSTREET-COURSER",
@@ -3954,7 +4014,11 @@
     "unique": false,
     "summonOnly": false,
     "ai": "raider",
-    "stars": 4
+    "stars": 4,
+    "art": {
+      "concept": "art/samples/ROG_CAVALRY_BACKSTREET-COURSER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ROG_CAVALRY_BACKSTREET-COURSER_CUTOUT_V01.png"
+    }
   },
   {
     "id": "STP_SIEGE_STEPPE-FALCONET",
@@ -3993,7 +4057,11 @@
     "unique": false,
     "summonOnly": false,
     "ai": "siege",
-    "stars": 4
+    "stars": 4,
+    "art": {
+      "concept": "art/samples/STP_SIEGE_STEPPE-FALCONET_CONCEPT_V01.jpg",
+      "cutout": "art/samples/STP_SIEGE_STEPPE-FALCONET_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DUN_SIEGE_GLASSROAD-BALLISTA",
@@ -4032,7 +4100,11 @@
     "unique": false,
     "summonOnly": false,
     "ai": "siege",
-    "stars": 5
+    "stars": 5,
+    "art": {
+      "concept": "art/samples/DUN_SIEGE_GLASSROAD-BALLISTA_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DUN_SIEGE_GLASSROAD-BALLISTA_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DUN_CAVALRY_DUNEWAKE-VANGUARD",
@@ -4064,7 +4136,11 @@
     "unique": false,
     "summonOnly": false,
     "ai": "cavalry_raid",
-    "stars": 4
+    "stars": 4,
+    "art": {
+      "concept": "art/samples/DUN_CAVALRY_DUNEWAKE-VANGUARD_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DUN_CAVALRY_DUNEWAKE-VANGUARD_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SAM_COMMANDER_STONEGATE-WARDEN",
@@ -4098,7 +4174,11 @@
     "summonOnly": false,
     "ai": "leader_hold",
     "factionRank": "GOKENIN",
-    "stars": 6
+    "stars": 6,
+    "art": {
+      "concept": "art/samples/SAM_COMMANDER_STONEGATE-WARDEN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_COMMANDER_STONEGATE-WARDEN_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SAM_COMMANDER_CINDERWATCH-CAPTAIN",
@@ -4132,7 +4212,11 @@
     "summonOnly": false,
     "ai": "leader_flank",
     "factionRank": "KOSHOGUMI_RETAINER",
-    "stars": 5
+    "stars": 5,
+    "art": {
+      "concept": "art/samples/SAM_COMMANDER_CINDERWATCH-CAPTAIN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_COMMANDER_CINDERWATCH-CAPTAIN_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SAM_SECOND_IRON-SASH-LIEUTENANT",
@@ -4166,7 +4250,11 @@
     "summonOnly": false,
     "ai": "leader_support",
     "factionRank": "CHURO",
-    "stars": 4
+    "stars": 4,
+    "art": {
+      "concept": "art/samples/SAM_SECOND_IRON-SASH-LIEUTENANT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_SECOND_IRON-SASH-LIEUTENANT_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SAM_SECOND_JADE-CREST-RETAINER",
@@ -4200,7 +4288,11 @@
     "summonOnly": false,
     "ai": "leader_support",
     "factionRank": "GOKENIN",
-    "stars": 5
+    "stars": 5,
+    "art": {
+      "concept": "art/samples/SAM_SECOND_JADE-CREST-RETAINER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_SECOND_JADE-CREST-RETAINER_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SAM_ELITE_CRIMSON-FANG-DUELIST",
@@ -4233,7 +4325,11 @@
     "summonOnly": false,
     "ai": "line_breaker",
     "factionRank": "UMAMAWARI",
-    "stars": 7
+    "stars": 7,
+    "art": {
+      "concept": "art/samples/SAM_ELITE_CRIMSON-FANG-DUELIST_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_ELITE_CRIMSON-FANG-DUELIST_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SAM_ELITE_ASHEN-BLADE-SENTINEL",
@@ -4266,7 +4362,11 @@
     "summonOnly": false,
     "ai": "line_breaker",
     "factionRank": "UMAMAWARI",
-    "stars": 6
+    "stars": 6,
+    "art": {
+      "concept": "art/samples/SAM_ELITE_ASHEN-BLADE-SENTINEL_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_ELITE_ASHEN-BLADE-SENTINEL_CUTOUT_V01.png"
+    }
   },
   {
     "id": "KNI_COMMANDER_IRONWALL-MARSHAL",
@@ -4300,7 +4400,11 @@
     "summonOnly": false,
     "ai": "leader_hold",
     "stars": 6,
-    "factionRank": "BARON"
+    "factionRank": "BARON",
+    "art": {
+      "concept": "art/samples/KNI_COMMANDER_IRONWALL-MARSHAL_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_COMMANDER_IRONWALL-MARSHAL_CUTOUT_V01.png"
+    }
   },
   {
     "id": "KNI_COMMANDER_VIGIL-BASTION-LORD",
@@ -4334,7 +4438,11 @@
     "summonOnly": false,
     "ai": "leader_hold",
     "stars": 5,
-    "factionRank": "BARON"
+    "factionRank": "BARON",
+    "art": {
+      "concept": "art/samples/KNI_COMMANDER_VIGIL-BASTION-LORD_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_COMMANDER_VIGIL-BASTION-LORD_CUTOUT_V01.png"
+    }
   },
   {
     "id": "KNI_SECOND_DAWNGUARD-LIEUTENANT",
@@ -4368,7 +4476,11 @@
     "summonOnly": false,
     "ai": "leader_support",
     "stars": 4,
-    "factionRank": "KNIGHT_BANNERET"
+    "factionRank": "KNIGHT_BANNERET",
+    "art": {
+      "concept": "art/samples/KNI_SECOND_DAWNGUARD-LIEUTENANT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_SECOND_DAWNGUARD-LIEUTENANT_CUTOUT_V01.png"
+    }
   },
   {
     "id": "KNI_SECOND_OATH-SHIELD-KNIGHT",
@@ -4402,7 +4514,11 @@
     "summonOnly": false,
     "ai": "leader_support",
     "stars": 5,
-    "factionRank": "KNIGHT_BANNERET"
+    "factionRank": "KNIGHT_BANNERET",
+    "art": {
+      "concept": "art/samples/KNI_SECOND_OATH-SHIELD-KNIGHT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_SECOND_OATH-SHIELD-KNIGHT_CUTOUT_V01.png"
+    }
   },
   {
     "id": "KNI_ELITE_STORMBREAKER-PALADIN",
@@ -4434,7 +4550,11 @@
     "unique": true,
     "summonOnly": false,
     "ai": "line_breaker",
-    "stars": 7
+    "stars": 7,
+    "art": {
+      "concept": "art/samples/KNI_ELITE_STORMBREAKER-PALADIN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_ELITE_STORMBREAKER-PALADIN_CUTOUT_V01.png"
+    }
   },
   {
     "id": "KNI_ELITE_SILVER-VOW-CHAMPION",
@@ -4466,7 +4586,11 @@
     "unique": true,
     "summonOnly": false,
     "ai": "line_breaker",
-    "stars": 6
+    "stars": 6,
+    "art": {
+      "concept": "art/samples/KNI_ELITE_SILVER-VOW-CHAMPION_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_ELITE_SILVER-VOW-CHAMPION_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SHI_COMMANDER_HOLLOW-REED-JONIN",
@@ -4500,7 +4624,11 @@
     "summonOnly": false,
     "ai": "leader_flank",
     "factionRank": "JOUNIN",
-    "stars": 6
+    "stars": 6,
+    "art": {
+      "concept": "art/samples/SHI_COMMANDER_HOLLOW-REED-JONIN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_COMMANDER_HOLLOW-REED-JONIN_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SHI_COMMANDER_ASHVEIL-STRATEGIST",
@@ -4534,7 +4662,11 @@
     "summonOnly": false,
     "ai": "leader_flank",
     "factionRank": "JOUNIN",
-    "stars": 5
+    "stars": 5,
+    "art": {
+      "concept": "art/samples/SHI_COMMANDER_ASHVEIL-STRATEGIST_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_COMMANDER_ASHVEIL-STRATEGIST_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SHI_SECOND_INK-STEP-LIEUTENANT",
@@ -4568,7 +4700,11 @@
     "summonOnly": false,
     "ai": "leader_support",
     "factionRank": "CHUNIN",
-    "stars": 4
+    "stars": 4,
+    "art": {
+      "concept": "art/samples/SHI_SECOND_INK-STEP-LIEUTENANT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_SECOND_INK-STEP-LIEUTENANT_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SHI_SECOND_SILENT-BELL-OPERATIVE",
@@ -4602,7 +4738,11 @@
     "summonOnly": false,
     "ai": "leader_support",
     "factionRank": "CHUNIN",
-    "stars": 4
+    "stars": 4,
+    "art": {
+      "concept": "art/samples/SHI_SECOND_SILENT-BELL-OPERATIVE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_SECOND_SILENT-BELL-OPERATIVE_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SHI_ELITE_HOLLOW-MASK-ADEPT",
@@ -4635,7 +4775,11 @@
     "summonOnly": false,
     "ai": "assassin",
     "factionRank": "ANBU",
-    "stars": 7
+    "stars": 7,
+    "art": {
+      "concept": "art/samples/SHI_ELITE_HOLLOW-MASK-ADEPT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_ELITE_HOLLOW-MASK-ADEPT_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SHI_ELITE_NIGHT-GLASS-ASSASSIN",
@@ -4668,7 +4812,11 @@
     "summonOnly": false,
     "ai": "assassin",
     "factionRank": "ANBU",
-    "stars": 6
+    "stars": 6,
+    "art": {
+      "concept": "art/samples/SHI_ELITE_NIGHT-GLASS-ASSASSIN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_ELITE_NIGHT-GLASS-ASSASSIN_CUTOUT_V01.png"
+    }
   },
   {
     "id": "SHI_FOOT_ASH-STEP-INFILTRATOR",
@@ -4699,7 +4847,11 @@
     "summonOnly": false,
     "ai": "raider",
     "factionRank": "GENIN",
-    "stars": 2
+    "stars": 2,
+    "art": {
+      "concept": "art/samples/SHI_FOOT_ASH-STEP-INFILTRATOR_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_FOOT_ASH-STEP-INFILTRATOR_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DRG_COMMANDER_ASHWING-DOMINANT",
@@ -4734,7 +4886,11 @@
     "summonOnly": false,
     "ai": "leader_flank",
     "stars": 8,
-    "factionRank": "DOMINANT"
+    "factionRank": "DOMINANT",
+    "art": {
+      "concept": "art/samples/DRG_COMMANDER_ASHWING-DOMINANT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_COMMANDER_ASHWING-DOMINANT_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DRG_COMMANDER_STORMSCALE-SOVEREIGN",
@@ -4769,7 +4925,11 @@
     "summonOnly": false,
     "ai": "leader_hold",
     "stars": 7,
-    "factionRank": "DOMINANT"
+    "factionRank": "DOMINANT",
+    "art": {
+      "concept": "art/samples/DRG_COMMANDER_STORMSCALE-SOVEREIGN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_COMMANDER_STORMSCALE-SOVEREIGN_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DRG_SECOND_EMBERCLAW-WINGSECOND",
@@ -4804,7 +4964,11 @@
     "summonOnly": false,
     "ai": "leader_support",
     "stars": 6,
-    "factionRank": "WING_SECOND"
+    "factionRank": "WING_SECOND",
+    "art": {
+      "concept": "art/samples/DRG_SECOND_EMBERCLAW-WINGSECOND_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_SECOND_EMBERCLAW-WINGSECOND_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DRG_SECOND_DUSKWING-SECOND",
@@ -4839,7 +5003,11 @@
     "summonOnly": false,
     "ai": "leader_support",
     "stars": 5,
-    "factionRank": "WING_SECOND"
+    "factionRank": "WING_SECOND",
+    "art": {
+      "concept": "art/samples/DRG_SECOND_DUSKWING-SECOND_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_SECOND_DUSKWING-SECOND_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DRG_ELITE_CINDERMAW-STALKER",
@@ -4872,7 +5040,11 @@
     "unique": true,
     "summonOnly": false,
     "ai": "line_breaker",
-    "stars": 8
+    "stars": 8,
+    "art": {
+      "concept": "art/samples/DRG_ELITE_CINDERMAW-STALKER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_ELITE_CINDERMAW-STALKER_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DRG_ELITE_ASHFANG-RAVAGER",
@@ -4905,7 +5077,11 @@
     "unique": true,
     "summonOnly": false,
     "ai": "line_breaker",
-    "stars": 7
+    "stars": 7,
+    "art": {
+      "concept": "art/samples/DRG_ELITE_ASHFANG-RAVAGER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_ELITE_ASHFANG-RAVAGER_CUTOUT_V01.png"
+    }
   },
   {
     "id": "DRG_FOOT_ASHSCALE-DRAKE",
@@ -4938,6 +5114,10 @@
     "unique": false,
     "summonOnly": false,
     "ai": "raider",
-    "stars": 3
+    "stars": 3,
+    "art": {
+      "concept": "art/samples/DRG_FOOT_ASHSCALE-DRAKE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_FOOT_ASHSCALE-DRAKE_CUTOUT_V01.png"
+    }
   }
 ]

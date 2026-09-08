@@ -846,3 +846,15 @@ passes; this one doesn't resolve it either.
   page the check was supposed to be protecting. A build artefact nobody loads is not tested by the suite that
   produced it — `tools/ui-smoke.mjs` now opens every page under `docs/samples/`, and the same question is
   owed to `dist/allynce.html` and the published artifact, which are still checked by nothing.
+
+- 2026-09-08 proposal: the art gap turned out to be two different gaps wearing one number. 118 assets read as
+  "missing" in the registry, but 16 of them were already painted and sitting on disk unreferenced — three
+  interface textures made for the web client that never reached the sample page, three stat icons packed into
+  every build and drawn by nothing, and a second painted ground. Generating art before checking what already
+  exists would have paid twice for six of them. Proposal: `npm run assets` should report a third state
+  alongside present and missing — *unused*, meaning a file exists under `art/` that no data file, script or
+  template references — so the difference between "not painted" and "painted and forgotten" is visible before
+  anyone spends on it. Related: `art/ASSET_MANIFEST.json` now carries an `approved` flag per asset and
+  everything landed this pass is `false`. The registry counts a file as present because it exists, which is
+  how a fully opaque cutout once shipped; approval is the owner's, and the manifest should be what the
+  contact sheet is built from, so an unapproved plate is visible as unapproved rather than merely present.

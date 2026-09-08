@@ -102,11 +102,22 @@ def main(out_path):
         u = uri(cutout, "token")
         if u:
             assets["tokens"][unit["id"]] = u
+    # A stratagem summons nothing, so it has no unit token to borrow and the Rites screen drew it
+    # blank. Its own painted emblem goes in under the card id, which is the first key the template's
+    # `tok()` tries.
+    for entry in registry:
+        if entry.get("group") != "Side cards" or entry.get("status") != "present":
+            continue
+        if entry.get("note") != "stratagem emblem":
+            continue
+        u = uri(entry["path"], "token")
+        if u:
+            assets["tokens"][entry["id"]] = u
 
     with open(out_path, "w") as fh:
         json.dump(assets, fh)
     size = os.path.getsize(out_path) / 1e6
-    print(f"packed {len(assets['tokens'])}/{len(units)} unit tokens, "
+    print(f"packed {len(assets['tokens'])} tokens ({len(units)} units + stratagem emblems), "
           f"{len(assets['tiers'])} building tiers, {len(assets['icons'])} icons "
           f"({size:.1f} MB)")
 
