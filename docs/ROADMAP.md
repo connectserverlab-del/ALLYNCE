@@ -65,6 +65,21 @@ where they conflict.**
 - New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
 - Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
 
+## Status note (2026-09-08)
+
+Every id in `docs/CHECKLIST.md`'s Queue table (`Q-1` through `Q-16`, minus the ids that were never assigned) already
+has a matching open pull request or `agent/*` branch, several more than once. That queue has been fully claimed for
+multiple passes running, so this pass could not take a Next item without duplicating work already in flight; it adds
+docs and the brainstorm entries below instead, per the brief's guidance for when the queue is saturated.
+
+Separately, an unrelated pull request (`Merge all 85 open pull requests into one integration branch`, branch
+`claude/merge-85-prs-ec3ca0`, base `main`) already exists, is marked mergeable, and reports the full suite green after
+folding in every other open PR by hand. Roughly ninety pull requests are open across this repository and none of the
+recent ones have merged, which means every fresh pass keeps claiming queue items against a base that never advances.
+**This is an owner decision, not something a pass can resolve**: review and merge that integration branch (or a
+curated subset of the open PRs) before the next few passes run, or the queue will keep filling with parallel
+implementations of the same ids that can never land together.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -102,3 +117,11 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-08: Proposal — gate fusion materials by rank: a recipe could require at least one material at or above a
+  named rank (a Gate Wardens fusion wanting a Chunin-or-higher Shinobi, say), so climbing a rank ladder pays off in
+  the fusion system as well as in command radius and battlefield privileges, rather than the two systems staying
+  parallel and unconnected.
+- 2026-09-08: Proposal — let siege pieces claim a terrain-defined emplacement: the map generator could mark a small
+  number of hexes per named biome as a gun pit or firing step (cheaper to occupy and set up from, for siege pieces
+  only), so an odd-shaped, generated battlefield rewards the themed cannon a faction already brings instead of
+  siege placement being anywhere-is-as-good-as-anywhere on open ground.
