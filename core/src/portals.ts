@@ -58,6 +58,7 @@ export function tickPortal(b: Battle, p: Portal): UnitState[] {
 }
 
 export function attackPortal(b: Battle, attacker: UnitState, p: Portal, finalAtk: number): boolean {
+  if (attacker.side === p.side || p.state === "Destroyed" || p.state === "Captured") return false;
   if (!attacker.pos || hexDistance(attacker.pos, p.pos) > b.def(attacker).range) return false;
   const dmg = Math.max(100, finalAtk - p.def);
   p.hp -= dmg;

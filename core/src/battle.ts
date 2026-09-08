@@ -257,7 +257,7 @@ export class BattleController {
     if (d.siege?.setupRequired && !u.setUp) throw new Error("Siege piece must Set Up before firing");
     this.spend(u, 1);
     const atk = computeStat(this.b, u, "ATK").final + (d.siege && d.passives.includes("ABL_BREACHING_SHOT") ? d.siege.structureAtk : 0);
-    if (!attackPortal(this.b, u, portal, atk)) { u.ap += 1; throw new Error("Portal out of range"); }
+    if (!attackPortal(this.b, u, portal, atk)) { u.ap += 1; throw new Error("Cannot attack this portal"); }
   }
 
   defend(u: UnitState): void { this.spend(u, 1); u.defending = true; this.b.log("Defend", { uid: u.uid }); }
