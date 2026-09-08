@@ -261,7 +261,10 @@ export class BattleController {
     const d = this.b.def(u);
     if (d.siege?.setupRequired && !u.setUp) throw new Error("Siege piece must Set Up before firing");
     this.spend(u, 1);
-    const atk = computeStat(this.b, u, "ATK").final + (d.siege && d.passives.includes("ABL_BREACHING_SHOT") ? d.siege.structureAtk : 0);
+    // Route through the same modifier pipeline as any other attack, with the attacker set so
+    // attacker-scoped bonuses (Breaching Shot included) show up in the breakdown instead of
+    // being added in as an untracked number.
+    const atk = computeStat(this.b, u, "ATK", { attacker: u, structureTarget: true }).final;
     if (!attackPortal(this.b, u, portal, atk)) { u.ap += 1; throw new Error("Portal out of range"); }
   }
 

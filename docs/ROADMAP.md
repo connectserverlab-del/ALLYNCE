@@ -687,3 +687,9 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   faster Progress accrual, a higher Instability ceiling before a hold turns dangerous, or an extra linked circle
   a synchronized release can reach. Same data shape (`RankLadder`, `RankPrivileges`), a different mechanical
   axis to match a faction that fields teams, not armies.
+
+- 2026-09-07: Proposal — `PortalAttacked` only logs the final damage a siege piece does to a structure, unlike unit
+  combat which logs a full modifier breakdown. Now that firing on a structure runs through the same modifier
+  pipeline as any other attack (see the `attackStructure` fix in this pass), the breakdown is available for free;
+  carrying it onto the event would let a future siege UI show a player why a shot did what it did, the same way
+  the attack log already does for unit-on-unit combat.
