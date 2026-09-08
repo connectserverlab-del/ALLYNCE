@@ -2,7 +2,6 @@ import type { Hex, Facing } from "./hex.js";
 import { hexKey, hexNeighbors, hexDistance } from "./hex.js";
 import type { UnitState, PlatoonState, UnitDef, Terrain, GameEvent, Status, StatusInstance } from "./types.js";
 import type { Registry } from "./data.js";
-import { Rng } from "./rng.js";
 import type { RitualCircle } from "./rituals.js";
 import type { Portal } from "./portals.js";
 import type { DeckState } from "./cards.js";
@@ -36,7 +35,6 @@ export class Battle {
   readonly captures: Capture[] = [];
   /** Per side, the unit definitions its warrants name. Subduing one of these is worth a card. */
   readonly wanted = new Map<string, Set<string>>();
-  readonly rng: Rng;
   width: number; height: number;
   activeSide = "A";
   activatedGroupsThisRound = new Set<string>();
@@ -46,7 +44,6 @@ export class Battle {
   readonly seed: number;
 
   constructor(public readonly reg: Registry, opts: { seed: number; width?: number; height?: number; sides?: SideState[] }) {
-    this.rng = new Rng(opts.seed);
     this.seed = opts.seed;
     this.width = opts.width ?? 24; this.height = opts.height ?? 18;
     for (const s of opts.sides ?? [{ id: "A", reservePoints: 0, armyCapacity: 100, morale: 100 }, { id: "B", reservePoints: 0, armyCapacity: 100, morale: 100 }]) this.sides.set(s.id, s);

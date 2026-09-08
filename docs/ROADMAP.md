@@ -102,3 +102,13 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-08 proposal: give rank ladders a mechanical say inside the ritual system, tying two pieces of stated
+  intent (rank ladders with real mechanical weight, and ritual/fusion as first-class engine functions) together
+  instead of leaving them parallel. Today any participant contributes the same ritual rating regardless of rank.
+  Proposal — a unit above a named rank threshold on its own faction's ladder (a Samurai at Hatamoto and above,
+  a Shinobi Chunin and above, and the equivalent rung once Knight, Dragon Host and Ritual Cult ladders land)
+  could anchor a circle alone at reduced progress-per-round instead of needing the current minimum headcount,
+  and could hold a circle one Unstable stack longer before it starts taking damage — representing discipline
+  under pressure rather than a flat rating bonus, so it shows up as a named modifier source on the circle, not
+  a hidden number. Proposal only; needs an owner call on which rank is the threshold per faction, since the
+  ladders above Samurai and Shinobi are not built yet.
