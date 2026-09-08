@@ -2,12 +2,12 @@
   "generated": "npm run assets",
   "total": {
     "present": 213,
-    "missing": 106
+    "missing": 118
   },
   "summary": {
     "Units": {
       "present": 176,
-      "missing": 78,
+      "missing": 90,
       "derived": 0
     },
     "Buildings": {
@@ -373,6 +373,114 @@
       "path": "art/samples/KNI_SUPPORT_PORTAL-KEEPER_CUTOUT_V01.png",
       "status": "present",
       "note": "3★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_SIEGE_CINDERTHROAT-BATTERY",
+      "label": "Cinderthroat Battery",
+      "kind": "concept",
+      "path": "art/samples/SAM_SIEGE_CINDERTHROAT-BATTERY_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "1★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_SIEGE_CINDERTHROAT-BATTERY",
+      "label": "Cinderthroat Battery",
+      "kind": "cutout",
+      "path": "art/samples/SAM_SIEGE_CINDERTHROAT-BATTERY_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "1★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_SIEGE_HOLLOW-REED-MORTAR",
+      "label": "Hollow Reed Mortar",
+      "kind": "concept",
+      "path": "art/samples/SHI_SIEGE_HOLLOW-REED-MORTAR_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "1★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_SIEGE_HOLLOW-REED-MORTAR",
+      "label": "Hollow Reed Mortar",
+      "kind": "cutout",
+      "path": "art/samples/SHI_SIEGE_HOLLOW-REED-MORTAR_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "1★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_SIEGE_WARDENS-BOMBARD",
+      "label": "Warden's Bombard",
+      "kind": "concept",
+      "path": "art/samples/KNI_SIEGE_WARDENS-BOMBARD_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "1★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "KNI_SIEGE_WARDENS-BOMBARD",
+      "label": "Warden's Bombard",
+      "kind": "cutout",
+      "path": "art/samples/KNI_SIEGE_WARDENS-BOMBARD_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "1★ KNI"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_SIEGE_BONEFORGE-BALLISTA",
+      "label": "Boneforge Ballista",
+      "kind": "concept",
+      "path": "art/samples/DRG_SIEGE_BONEFORGE-BALLISTA_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "1★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "DRG_SIEGE_BONEFORGE-BALLISTA",
+      "label": "Boneforge Ballista",
+      "kind": "cutout",
+      "path": "art/samples/DRG_SIEGE_BONEFORGE-BALLISTA_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "1★ DRG"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_CAVALRY_CHARWIND-LANCERS",
+      "label": "Charwind Lancers",
+      "kind": "concept",
+      "path": "art/samples/SAM_CAVALRY_CHARWIND-LANCERS_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "1★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SAM_CAVALRY_CHARWIND-LANCERS",
+      "label": "Charwind Lancers",
+      "kind": "cutout",
+      "path": "art/samples/SAM_CAVALRY_CHARWIND-LANCERS_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "1★ SAM"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_CAVALRY_REED-MARSH-OUTRIDERS",
+      "label": "Reed Marsh Outriders",
+      "kind": "concept",
+      "path": "art/samples/SHI_CAVALRY_REED-MARSH-OUTRIDERS_CONCEPT_V01.jpg",
+      "status": "missing",
+      "note": "1★ SHI"
+    },
+    {
+      "group": "Units",
+      "id": "SHI_CAVALRY_REED-MARSH-OUTRIDERS",
+      "label": "Reed Marsh Outriders",
+      "kind": "cutout",
+      "path": "art/samples/SHI_CAVALRY_REED-MARSH-OUTRIDERS_CUTOUT_V01.png",
+      "status": "missing",
+      "note": "1★ SHI"
     },
     {
       "group": "Units",

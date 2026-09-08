@@ -67,8 +67,15 @@ Three things bite:
 
 ## Queue
 
+Every item the eighty-five open branches claimed is now Done. What is left is the debt those
+branches created between them: rosters merged in faster than art and card skills were authored
+for them. Both lists are data files, so the count is exact and the tests hold the line for
+everything not on them.
+
 | Id | Item | Why it matters |
 |---|---|---|
+| `Q-17` | Paint the 295 units listed in `data/art/awaiting-art.json`, emptying it as each lands | The expansion and the sworn-company rosters arrived unpainted; a blank card is the most visible gap in the game |
+| `Q-18` | Give the 52 four-star-and-above cards in `data/cards/awaiting-skill.json` a spendable skill | D-19 says every card at four stars and up carries one; the generated roster predates that rule |
 
 ## Done
 
