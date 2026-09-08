@@ -598,3 +598,11 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   Arcanist theme are where spellcasters actually live, the limit could instead count the `Ritualist` role (already
   on the books for ritual-casting units) rather than a rank that was never wired up. Left as a proposal rather than
   a silent fix, since deciding which units count as a "wizard" for this cap is a rules call, not a test-file fix.
+
+- 2026-09-06: Proposal — tie some rituals and fusions to the ground they are cast on instead of letting them fire
+  anywhere: Gate Wardens could need ruins underfoot (echoing whatever stood there before), Calamity Form could
+  need high ground, a water-affinity ritual could need a river or ford tile. The map generator already tags roles
+  like these for anchors and deployment zones, and Q-2's scenario-authoring-by-role work is teaching the engine to
+  read those tags for objectives, rituals and portals; reusing the same role tags for fusion/ritual eligibility
+  would make an odd-shaped battlefield part of the decision to commit an already-costly play, not just scenery
+  around it, and would cost little once Q-2 lands the underlying lookup.
