@@ -334,3 +334,7 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   army leader first, or introduce a separate, capturable Army Standard as the actual leader-killed trigger so the
   Commander's own death alone no longer instantly ends the battle. Either keeps all three win conditions comparably
   hard to reach.
+
+- 2026-09-05: Proposal — closing a warrant alive could leave a one-time, named study on the board immediately
+  ("Captured Discipline: +1 Continuity Round" or the like), so a warrant's outcome shows up on the holding the
+  same way a building or a study does: as a permanent, source-tracked line rather than a resource payout only.

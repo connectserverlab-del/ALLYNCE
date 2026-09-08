@@ -31,8 +31,9 @@ export function onUnitDefeated(b: Battle, u: UnitState): void {
   if (p.commanderUid === u.uid) {
     platoonMorale(b, p, -20, "Commander defeated");
     p.pendingSuccession = true;
-    p.continuityRoundsLeft = b.reg.rules.standardPlatoon.continuityRounds;
-    b.log("CommanderFallen", { platoon: p.id, uid: u.uid });
+    // the holding's completed research (ContinuityRounds effect) extends the grace period, same as the base rule
+    p.continuityRoundsLeft = b.reg.rules.standardPlatoon.continuityRounds + (b.kingdomEffects.get(p.side)?.continuityRounds ?? 0);
+    b.log("CommanderFallen", { platoon: p.id, uid: u.uid, continuityRounds: p.continuityRoundsLeft });
   } else if (p.secondUid === u.uid) {
     platoonMorale(b, p, -10, "Second defeated before commander");
   } else if (p.eliteUid === u.uid) {

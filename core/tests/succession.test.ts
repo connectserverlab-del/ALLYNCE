@@ -1,8 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { newBattle, deploy, SAM, KNI, blob } from "./helpers.js";
+import { newBattle, deploy, SAM, KNI, blob, kingdomWithResearch } from "./helpers.js";
 import { defeat } from "../src/combat.js";
 import { doctrineState } from "../src/composition.js";
 import { computeStat } from "../src/modifiers.js";
+import { applyKingdom } from "../src/kingdom.js";
 
 describe("command and succession", () => {
   it("promotes the second in the next Command Phase, fires the succession ability, and keeps Doctrine through Continuity", () => {
@@ -22,6 +23,16 @@ describe("command and succession", () => {
     expect(b.unit(p.footUids[0]!).morale).toBe(moraleBefore - 20 + 10 + 5 /* command radius recovery */);
     expect(ctrl.canIssueOrder(second)).toBe(true);
     expect(doctrineState(b, p)).toBe("Full");
+  });
+
+  it("Succession Doctrine research extends the continuity grace period by its named amount", () => {
+    const { b } = newBattle();
+    const p = deploy(b, "P1", "A", SAM, blob(5, 5));
+    const baseline = b.reg.rules.standardPlatoon.continuityRounds;
+    const k = kingdomWithResearch("SAM", ["RES_DRILL_YARD", "RES_BANNER_DISCIPLINE", "RES_SUCCESSION_DOCTRINE"]);
+    applyKingdom(b, "A", k);
+    defeat(b, b.unit(p.commanderUid!), "test");
+    expect(p.continuityRoundsLeft).toBe(baseline + 1);
   });
 
   it("Doctrine collapses when no second survives to promote", () => {
