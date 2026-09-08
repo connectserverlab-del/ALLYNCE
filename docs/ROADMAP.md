@@ -176,7 +176,11 @@ where they conflict.**
    deployment-zone balance check (path cost between anchors within 10 percent both ways).
 6. Army builder validation UI in the sample page (drag units into slots, live doctrine and capacity readout).
 7. Formation Sandbox mode as a page: place units, see cohesion and doctrine live.
-8. Unity port scaffolding once the owner confirms the engine target (see `docs/mechanics.md`).
+8. ~~Unity port scaffolding~~ — done: the engine target is written down in `docs/mechanics.md`'s
+   "Unity port guidance", and a structural scaffold following it lives under `unity/` (see
+   `unity/README.md`). Next on this thread, whenever it is picked up: port `computeStat` and the
+   `applyEffect` cases into `unity/Runtime` one kind at a time against real Unity, once a project
+   exists to compile them in.
 
 ## Brainstorm log
 
@@ -264,3 +268,13 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — give a high Samurai or Knight rank a privilege that halves a self-sacrifice skill's
   health cost for anyone it commands within its radius. The rank ladders are meant to carry mechanical weight
   beyond morale and succession, and the six card skills are a lever nothing in a rank ladder reaches yet.
+
+- 2026-09-05: Proposal — once real logic starts landing in `unity/Runtime` (see the Unity port scaffold under
+  `unity/`), add a small headless C# console harness that replays one of the TypeScript engine's saved event
+  logs and cross-checks the resulting HP, positions and morale against the TypeScript save file. That turns
+  "the port agrees with the reference" into a test that runs on every ported system, the same way
+  `core/tests/combat.test.ts` pins the worked example from the brief, instead of a claim nobody can check.
+- 2026-09-05: Proposal — give the named biomes on the "Map generator" Next item (Ashfall, Marsh, Highland pass)
+  their own Fortification/Ruins/Mountain density presets in the generator, so each painted region keeps a
+  distinct silhouette at a glance — the way the approved Samurai province reads as Samurai before a single
+  unit is on the field — rather than three regions that only differ by name and palette.

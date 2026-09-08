@@ -48,7 +48,6 @@ Three things bite:
 | Id | Item | Why it matters |
 |---|---|---|
 | `Q-1` | Second art pass on weak cutouts: any unit whose card still reads "no art yet", plus re-cuts where the flood fill left a panel edge | Blank cards are the most visible gap in the game |
-| `Q-9` | Unity port scaffolding: ScriptableObject importer for `data/`, and the C# module skeleton in `docs/mechanics.md` | The engine target the brief names |
 | `Q-10` | Replay viewer: step through a saved event log | The event log already exists and is unused |
 | `Q-11` | Warrant board screen in the sample page: read the posted writs, take one, and see which of them close the gaps in the current deck | The board exists in the core and has no interface |
 | `Q-12` | Give the sworn companies and the seven divisions depth: each has four cards, enough to hire but not to lead | A division is a flavour of ally until it can field a line of its own |
@@ -79,10 +78,10 @@ Three things bite:
 | `D-19` | A usable skill on every card at four stars and above: six kinds, all data-defined, enforced by a registry-wide test |
 | `D-20` | Card face: name across the top band, ATK and DEF in dark ink on the paper, copy badge moved to the foot |
 | `D-21` | Cloning splits attack and defence across the original and its copies instead of duplicating them, and the original reclaims each share as a copy falls |
-| `D-22` | Scenario authoring on generated ground: position roles (anchor, deployZone, lerp, near, ritualCenter) so a scenario's objectives, rituals and portals pin to a generated field instead of fixed coordinates; `data/scenarios/ashfall_crossing.json` as the reference scenario |
-| `D-23` | AI: seeks trenches and high ground when moving, keeps siege pieces out of their own minimum range and sets them up once in their firing band, routes cavalry to a flank or rear hex instead of the front arc, and surrenders once a side is both leaderless (Doctrine `"None"`) and morale-broken |
-| `D-24` | Campaign map: regions on a province graph, each with its own biome bias and neighbors; a side may only contest ground bordering territory it already holds, fighting for a region is an ordinary generated-field match, and a held region pays its owner named, source-tracked resources per hour into the holding |
-| `D-25` | AI spends the six card skills on their own terms, fights the ground it stands on (terrain, elevation, siege screening, cavalry flanking) and yields a lost field |
+| `D-22` | AI spends the six card skills on their own terms, fights the ground it stands on (terrain, elevation, siege screening, cavalry flanking) and yields a lost field |
+| `D-23` | Scenario authoring on generated ground: position roles (anchor, deployZone, lerp, near, ritualCenter) so a scenario's objectives, rituals and portals pin to a generated field instead of fixed coordinates; `data/scenarios/ashfall_crossing.json` as the reference scenario |
+| `D-24` | AI: seeks trenches and high ground when moving, keeps siege pieces out of their own minimum range and sets them up once in their firing band, routes cavalry to a flank or rear hex instead of the front arc, and surrenders once a side is both leaderless (Doctrine `"None"`) and morale-broken |
+| `D-25` | Campaign map: regions on a province graph, each with its own biome bias and neighbors; a side may only contest ground bordering territory it already holds, fighting for a region is an ordinary generated-field match, and a held region pays its owner named, source-tracked resources per hour into the holding |
 | `D-26` | Marching: continuous movement in seconds, squads with formation slots, a 45-second cap scaled by distance, and hex routing round anything a straight line cannot cross |
 | `D-27` | March screen: click the ground to send a squad, drag a name onto a squad to have that unit walk over and fall in, with the real engine bundled into the page rather than a recording of it |
 | `D-28` | `scripts/audit-cutouts.py` fails a cutout that kept its background or lost its figure, so a card cannot ship as a pale slab again |
@@ -94,3 +93,4 @@ Three things bite:
 | `D-34` | Escort composition for warrants: a sworn company's target is escorted by its own company, not a borrowed host starter deck |
 | `D-35` | AI splitting as a trade: only spawns copies when a crowd of enemies is closing in, never against a single hard hitter, and treats an enemy copy as a hunt-worthy kill that shrinks the original |
 | `D-36` | AI now spends all six card skills, not only clones, charges and duels: self and band attack buffs before a swing, haste to close ground its base movement cannot, and area debuffs on whoever is already close enough to hit back |
+| `D-37` | Unity port scaffold: `unity/Runtime` and `unity/Editor` C# skeleton matching `docs/mechanics.md`'s guidance, plus a generator (`npm run unity:scaffold`) that mirrors `EFFECT_KINDS` and `TERRAIN_RULES` into checked-in C#, tested against the TypeScript reference so the two cannot silently drift |
