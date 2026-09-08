@@ -1,8 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { newBattle, deploy, KNI, SAM, blob } from "./helpers.js";
+import { newBattle, deploy, reg, KNI, SAM, blob } from "./helpers.js";
 import { buildScenario } from "../src/scenario.js";
 import { runAiActivation, holdForSyncPolicy, DIFFICULTY } from "../src/ai.js";
 import { computeStat } from "../src/modifiers.js";
+import { Battle } from "../src/state.js";
+import { BattleController } from "../src/battle.js";
 
 describe("turn structure and actions", () => {
   it("gives two AP per activation, forbids double attacks, and triggers zone-of-control reactions unless disengaging", () => {
@@ -78,6 +80,26 @@ describe("turn structure and actions", () => {
     ctrl.commandPhase(); ctrl.beginActivation("K");
     ctrl.useAbility(cmdr, "ORD_BASTION_FORMATION");
     expect(b.adjacentAllies(cmdr).every((k) => b.hasStatus(k, "Guarded"))).toBe(true);
+  });
+
+  it("reaching the round limit with nothing decisive ends the battle in a draw, or the configured round-limit winner", () => {
+    const undecided = () => {
+      const b = new Battle(reg, { seed: 1, width: 24, height: 18 });
+      b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "A", { q: 2, r: 2 });
+      b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "B", { q: 20, r: 15 });
+      return b;
+    };
+    const noWinner = undecided();
+    const ctrl1 = new BattleController(noWinner, { sides: { A: [], B: [] }, roundLimit: 2 });
+    for (let i = 0; i < 2; i++) { ctrl1.commandPhase(); ctrl1.objectivePhase(); ctrl1.endPhase(); }
+    expect(noWinner.winner).toBe("draw");
+    expect(noWinner.winReason).toBe("Round limit");
+
+    const withDefault = undecided();
+    const ctrl2 = new BattleController(withDefault, { sides: { A: [], B: [] }, roundLimit: 2, roundLimitWinner: "B" });
+    for (let i = 0; i < 2; i++) { ctrl2.commandPhase(); ctrl2.objectivePhase(); ctrl2.endPhase(); }
+    expect(withDefault.winner).toBe("B");
+    expect(withDefault.winReason).toBe("Round limit");
   });
 
   it("the event log is deterministic for a fixed seed", () => {

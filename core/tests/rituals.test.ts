@@ -57,6 +57,17 @@ describe("rituals", () => {
     expect(divs.every((d) => d.divine!.anchors === 3)).toBe(true);
   });
 
+  it("a ritual with no link group releases on its own in the Objective Phase, synchronized by default", () => {
+    const { b, ctrl } = newBattle();
+    const solo = createRitual(b, { id: "solo", side: "A", center: { q: 10, r: 5 }, radius: 1, required: 1, leaderUid: null, summonDefId: null, linkGroup: null });
+    b.spawn("RIT_FOOT_FOREIGN-RITUALIST", "A", { q: 10, r: 5 }); // a live participant, or the Held tick collapses an empty circle
+    solo.state = "CompletedHeld";
+    ctrl.objectivePhase({ solo: true });
+    expect(solo.state).toBe("CompletedReleased");
+    expect(b.events.some((e) => e.type === "RitualReleased" && e.data["ritual"] === "solo" && e.data["synchronized"] === true)).toBe(true);
+    expect(b.events.some((e) => e.type === "SynchronizedRelease")).toBe(false); // that event is for linked groups only
+  });
+
   it("damage halves a ritualist's contribution, Silence removes it, and losing all participants disrupts", () => {
     const { b, fast } = setupCircles();
     const lead = b.unit(fast.leaderUid!);
