@@ -28,6 +28,8 @@ npm test            # 156 tests: combat math, cohesion, composition, succession,
 npm test            # 159 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
 
 npm test            # 157 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
+
+npm test            # 40 tests: combat math, cohesion, composition, succession, clones, rituals, portals, victory, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -47,6 +49,7 @@ npm run assets      # rebuilds the asset registry from the data and from disk
 - **Divine Entities**: summon-only, one copy per battle, Manifestation and Anchors, stagger at 0 HP, arrival changes the battlefield (reveal, fear pulse, return the fallen).
 - **Portals**: telegraph, open, capacity and cooldown, Reserve Points, queued units held when blocked, half refund on destruction, two-action capture by specialists, no opening in enemy zone of control.
 - **Objectives**: eleven composable objective types, evaluated per side every End Phase.
+- **Victory**: three universal win conditions apply to every battle underneath any scenario objectives — Wipeout (a side with no living units), Army Leader Killed (a scenario-designated leader's death, independent of Doctrine succession), and Surrender (a side's command structure fully collapsed and its remaining morale too low to fight on, or an explicit `surrender()` decision).
 - **Turn machine**: Command → alternating Activation (2 AP per unit) → Objective → End, seeded RNG, serializable event log for save, replay and tests.
 - **AI**: goal-oriented utility scoring (objective urgency, kill potential, formation gain or loss, isolation risk, commander caution), terrain-seeking movement toward trenches and high ground, siege pieces that hold off outside their own minimum range and set up rather than advance, cavalry that routes to a flank or rear hex instead of the front arc, a release policy that holds for synchronization until instability forces a decision, a surrender policy for a side that is both leaderless and morale-broken, and difficulty profiles that change risk and planning depth only.
 - **Scenario**: `Threefold Invocation` fully data-defined and playable start to finish. Scenarios can also run on a

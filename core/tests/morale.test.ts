@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { newBattle, deploy, SAM, KNI, blob } from "./helpers.js";
+import { newBattle, deploy, ARC, SAM, blob } from "./helpers.js";
 import { moraleBand, changeMorale, commandRadiusRecovery, surroundedPenalty, tempPreventRouted } from "../src/morale.js";
 
 describe("moraleBand", () => {
@@ -91,7 +91,7 @@ describe("changeMorale", () => {
 describe("commandRadiusRecovery", () => {
   it("recovers +5 inside a live commander's radius", () => {
     const { b } = newBattle();
-    const p = deploy(b, "P1", "A", KNI, blob(5, 5)); // Knight ladder has no faction rank on this unit yet: no banner
+    const p = deploy(b, "P1", "A", ARC, blob(5, 5)); // a sworn company: no rank ladder, so no banner on top
     const foot = b.unit(p.footUids[0]!);
     foot.morale = 50;
     commandRadiusRecovery(b);

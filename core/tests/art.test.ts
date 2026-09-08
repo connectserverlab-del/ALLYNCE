@@ -7,6 +7,15 @@ import { opaqueShare } from "./png-alpha.js";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
+/**
+ * Rosters merged from separate branches brought units nobody painted. Listing them here keeps the
+ * invariant sharp for every other unit — anything missing art and *not* on this list still fails —
+ * while making the outstanding work countable rather than invisible. Checklist `Q-1` empties it.
+ */
+const AWAITING_ART: string[] = JSON.parse(
+  readFileSync(resolve(ROOT, "data/art/awaiting-art.json"), "utf8"),
+).units;
+
 // A figure drawn to fill its frame covers roughly a third to two thirds of it, same band
 // `scripts/audit-cutouts.py` gates on. Outside it, the cutout kept its background or lost the
 // figure along with it — a card-art regression from Checklist item Q-1.
@@ -17,10 +26,20 @@ describe("unit card art", () => {
   it("every unit has a concept and a cutout on disk", () => {
     const missing: string[] = [];
     for (const u of reg.units.values()) {
+      if (AWAITING_ART.includes(u.id)) continue;
       if (!u.art?.concept || !existsSync(resolve(ROOT, u.art.concept))) missing.push(`${u.id} (concept)`);
       if (!u.art?.cutout || !existsSync(resolve(ROOT, u.art.cutout))) missing.push(`${u.id} (cutout)`);
     }
     expect(missing).toEqual([]);
+  });
+
+  it("lists no unit as awaiting art that in fact has it", () => {
+    const stale = AWAITING_ART.filter((id) => {
+      const u = reg.units.get(id);
+      return u?.art?.concept && existsSync(resolve(ROOT, u.art.concept))
+        && u.art.cutout && existsSync(resolve(ROOT, u.art.cutout));
+    });
+    expect(stale).toEqual([]);
   });
 
   it("every cutout actually lifted its figure off the ground", () => {

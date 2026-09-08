@@ -1,7 +1,10 @@
-import { describe, it, expect } from "vitest";
-import { newBattle, deploy, SAM, KNI, blob } from "./helpers.js";
+import { describe, expect, it } from "vitest";
+import { blob, deploy, KNI, newBattle, reg, SAM } from "./helpers.js";
 import { defeat } from "../src/combat.js";
 import { buildScenario } from "../src/scenario.js";
+import { Battle } from "../src/state.js";
+import { BattleController } from "../src/battle.js";
+import { organizationLevel } from "../src/composition.js";
 
 describe("universal win conditions", () => {
   it("wipeout ends the battle", () => {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { newBattle, deploy, SAM, ANG } from "./helpers.js";
+import { newBattle, deploy, ARC, SAM } from "./helpers.js";
 import { companyLeader } from "../src/composition.js";
 import { tempMods } from "../src/modifiers.js";
 
@@ -13,6 +13,7 @@ import { tempMods } from "../src/modifiers.js";
  */
 
 const churo: typeof SAM = { ...SAM, commander: "SAM_SECOND_WHITE-CRANE-RETAINER", second: "SAM_SECOND_WHITE-CRANE-RETAINER" };
+
 
 describe("companyLeader", () => {
   it("is null until a Company-capable commander or second is present", () => {
@@ -48,9 +49,9 @@ describe("useCompanyOrder", () => {
 
   it("refuses a faction with no signature platoon order to issue army-wide", () => {
     const { b, ctrl } = newBattle();
-    const p1 = deploy(b, "P1", "A", ANG, [{ q: 0, r: 0 }, { q: 1, r: 0 }, { q: 2, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 1 }, { q: 2, r: 1 }, { q: 3, r: 1 }, { q: 4, r: 1 }]);
-    deploy(b, "P2", "A", ANG, [{ q: 0, r: 4 }, { q: 1, r: 4 }, { q: 2, r: 4 }, { q: 0, r: 5 }, { q: 1, r: 5 }, { q: 2, r: 5 }, { q: 3, r: 5 }, { q: 4, r: 5 }]);
-    deploy(b, "P3", "A", ANG, [{ q: 0, r: 8 }, { q: 1, r: 8 }, { q: 2, r: 8 }, { q: 0, r: 9 }, { q: 1, r: 9 }, { q: 2, r: 9 }, { q: 3, r: 9 }, { q: 4, r: 9 }]);
+    const p1 = deploy(b, "P1", "A", ARC, [{ q: 0, r: 0 }, { q: 1, r: 0 }, { q: 2, r: 0 }, { q: 0, r: 1 }, { q: 1, r: 1 }, { q: 2, r: 1 }, { q: 3, r: 1 }, { q: 4, r: 1 }]);
+    deploy(b, "P2", "A", ARC, [{ q: 0, r: 4 }, { q: 1, r: 4 }, { q: 2, r: 4 }, { q: 0, r: 5 }, { q: 1, r: 5 }, { q: 2, r: 5 }, { q: 3, r: 5 }, { q: 4, r: 5 }]);
+    deploy(b, "P3", "A", ARC, [{ q: 0, r: 8 }, { q: 1, r: 8 }, { q: 2, r: 8 }, { q: 0, r: 9 }, { q: 1, r: 9 }, { q: 2, r: 9 }, { q: 3, r: 9 }, { q: 4, r: 9 }]);
     ctrl.commandPhase(); ctrl.beginActivation("P1");
     expect(() => ctrl.useCompanyOrder(b.unit(p1.commanderUid!))).toThrow(/no signature platoon order/);
   });

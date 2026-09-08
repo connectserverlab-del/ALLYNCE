@@ -20,6 +20,9 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §15 Objectives | `objectives.ts` | Eleven composable types |
 | §16 AI | `ai.ts` | Utility scoring, release policy, surrender policy, difficulty without stat bonuses |
 | Marching between battles | `march.ts`, `data/movement/march.json` | Continuous movement in seconds over the same hexes the battle fights on. A straight line where one works; an A* over the grid, string-pulled to a few waypoints, where it does not. Nothing crosses a field in more than 45 seconds, and a route forced the long way round hurries rather than arriving late |
+
+| Victory | `battle.ts` (`evaluateVictory`, `surrender`) | Three universal win conditions layered under scenario objectives: Wipeout, Army Leader Killed (`VictoryRules.armyLeaderUids`, resolved in `scenario.ts` from a side's optional `armyLeader` def id), Surrender (`organizationLevel` at "None" plus average morale at or below `DEFAULT_SURRENDER_MORALE`, or an explicit call) |
+| §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses |
 | §18 Architecture | all | Simulation is separate from presentation; every action logs a serializable event |
 | Scenario authoring | `scenario.ts` | `buildScenario` loads a scenario file onto either a hand-authored fixed map or a generated one; positions can be pinned by role instead of fixed coordinates (see below) |
 | Campaign map | `campaign.ts`, `data/campaign/` | Regions on a province map, each with its own biome bias for `setUpMatch`; a held region's production is a named, source-tracked income line into the holding (see below) |

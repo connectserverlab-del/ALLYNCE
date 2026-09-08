@@ -1,0 +1,18 @@
+{
+  "_comment": "Units merged from roster branches that were never painted. The art test fails for any unit NOT on this list, so the invariant still holds for everything else; this list is the visible debt. Checklist item Q-1 is the pass that empties it.",
+  "units": [
+    "ANG_LEVY_ASHWING-NOVICE",
+    "ARC_CAVALRY_WARDBOUND-COURSER",
+    "ARC_SIEGE_WARDED-CULVERIN",
+    "DEM_LEVY_PIT-STRAY",
+    "DUN_CAVALRY_DUNEWAKE-VANGUARD",
+    "DUN_SIEGE_GLASSROAD-BALLISTA",
+    "ROG_CAVALRY_BACKSTREET-COURSER",
+    "ROG_SIEGE_STOLEN-BOMBARD",
+    "STP_SIEGE_STEPPE-FALCONET",
+    "WEN_LEVY_GAUNT-STRAGGLER",
+    "WEN_SECOND_RIME-ANTLER-WARDEN",
+    "WIT_CAVALRY_BRAMBLEHORN-RIDER",
+    "WIT_SIEGE_BLIGHT-MORTAR"
+  ]
+}

@@ -29,6 +29,13 @@ export const KNI: Omit<PlatoonBlueprint, "id" | "side"> = {
 export const DRG: Omit<PlatoonBlueprint, "id" | "side"> = {
   faction: "DRG", commander: "DRG_COMMANDER_RIFTWING-DOMINANT", second: "DRG_SECOND_STORMCLAW-WINGSECOND", elite: "DRG_ELITE_OBSIDIAN-MAW",
   foot: Array(5).fill("DRG_FOOT_SLATEWING-DRAKE"),
+};
+
+/** A sworn company: no rank ladder (so no banner privilege) and no faction signature order. */
+export const ARC: Omit<PlatoonBlueprint, "id" | "side"> = {
+  faction: "ARC", commander: "ARC_COMMANDER_AZURE-SEAL-MAGISTER", second: "ARC_SECOND_WARD-CAPTAIN", elite: "ARC_ELITE_STORMGLASS-WIZARD",
+  foot: Array(5).fill("ARC_FOOT_COBALT-LINE-MAGE"),
+};
 
 /** A division with no rank ladder and no faction signature order (`platoonOrder: null`). */
 export const ANG: Omit<PlatoonBlueprint, "id" | "side"> = {

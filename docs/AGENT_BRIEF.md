@@ -8,6 +8,11 @@ You are working in the ALLYNCE repository, an original tactical army strategy ga
 4. `art/prompts/STYLE_GUIDE.md` (approved art direction) if the task touches art
 5. The original engineering brief, if present under `docs/`, for the long-term vision
 
+1. `docs/ROADMAP.md` (owner intent, what is done, what is next, brainstorm log)
+2. `README.md` and `docs/mechanics.md` (how the engine is organised)
+3. `art/prompts/STYLE_GUIDE.md` (approved art direction) if the task touches art
+4. The original engineering brief, if present under `docs/`, for the long-term vision
+
 ## Each pass
 
 1. `npm install && npm test` must be green before you change anything.
@@ -18,6 +23,9 @@ You are working in the ALLYNCE repository, an original tactical army strategy ga
    or the AI, and say so in the pull request.
 3. Name the branch `agent/<yyyy-mm-dd>-<ITEM-ID>` and put the item id in the pull request title. That is what makes
    your claim visible to the next pass, so do it even if the work is small.
+
+2. Pick the highest item in "Next" that is not blocked on an owner decision. Do one item well rather than several
+   half-done. If everything is blocked, improve tests, docs or the AI instead.
 3. Implement data-first: numbers in `data/`, rules in `core/src`, tests in `core/tests`. Keep the modifier breakdown
    honest: every new bonus records its source.
 4. Run `npm test` and `npm run typecheck`. Do not push red.
@@ -40,6 +48,11 @@ You are working in the ALLYNCE repository, an original tactical army strategy ga
 - The holding: `data/kingdom/`, `core/src/kingdom.ts`. Everything it grants must reach battle as a named,
   source-tracked modifier so the attack breakdown stays honest.
 - Maps are painted straight down from above. Never commission a three-quarter battlefield painting.
+
+6. Push to a new branch and open a draft pull request that explains what changed, why it follows the owner's
+   intent, and what decision (if any) the owner should make next.
+7. Move the finished item from "Next" to "Done" in `docs/ROADMAP.md`. Add at least one dated line to the brainstorm log:
+   an idea that follows from the owner's stated intent, marked as a proposal.
 
 ## Guardrails
 
