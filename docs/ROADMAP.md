@@ -1112,3 +1112,10 @@ stay separate, is an owner decision this pass is flagging rather than making —
   to the modifier pipeline and needs no new art or renamed units — only one new recipe or anchor entry per
   faction in `data/abilities/fusions.json` or the ritual data, each still summon-limited and source-tracked like
   every other one.
+
+- 2026-09-08: Proposal — now that a unit's temporary modifiers (from Orders, charges and card skills) persist
+  through a save/load round trip instead of vanishing by object identity, the `AbilityUsed` event log entry
+  could carry the exact modifier it granted (source, stat, value) alongside the ability id. That would give
+  anything that reads the event log later — an after-action report, a future step-through viewer — the same
+  source-tracked honesty the live stat breakdown already has, instead of re-deriving it from the ability
+  definition after the fact.

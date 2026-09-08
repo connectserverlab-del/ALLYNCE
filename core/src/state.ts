@@ -116,7 +116,7 @@ export class Battle {
     const d = this.reg.unit(defId);
     const u: UnitState = {
       uid: this.newUid(opts.uidPrefix), defId, side, platoonId: opts.platoonId ?? null, pos: null, facing: opts.facing ?? 0,
-      hp: d.hp, morale: d.morale, ap: 0, statuses: [], cooldowns: {}, isClone: false, defeated: false, promotedFromSecond: false,
+      hp: d.hp, morale: d.morale, ap: 0, statuses: [], cooldowns: {}, tempMods: [], isClone: false, defeated: false, promotedFromSecond: false,
       movedThisActivation: 0, chargeMoved: 0, altitudeDropped: 0, attackedThisActivation: false, setUp: false, shadowStepped: false, freeMoveHexes: 0, overwatch: false, defending: false, usedChargeLastRound: false, captured: false,
       divine: d.divine ? { manifestation: d.divine.manifestation, anchors: d.divine.anchors } : undefined,
     };

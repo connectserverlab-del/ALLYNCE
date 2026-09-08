@@ -60,6 +60,8 @@ npm test            # 44 tests: combat math, cohesion, composition, succession, 
 npm test            # combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
 
 npm test            # 44 tests: combat math, cohesion, composition, succession, clones, rituals, portals, rank ladders, full scenario
+
+npm test            # combat math, cohesion, composition, succession, clones, rituals, portals, save/load, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
