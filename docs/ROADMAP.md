@@ -143,6 +143,15 @@ where they conflict.**
   unit than doing nothing at all; it now only ever lowers cost.
 - See `docs/rank-ladders.md` (renamed from `docs/samurai-ranks.md`) for the full table of all five ladders.
 
+### Done in the stratagem pass
+
+- Stratagem cards: a third side-deck kind alongside ritual and fusion. Each names a target (a platoon or a hex)
+  and a one-round effect that costs no sacrifice and no material, only the card. Forced March (+3 MOV to a
+  platoon), Smokescreen (Smoke terrain over a hex and its neighbours for two rounds), and False Retreat (+3 MOV
+  and +100 ATK on a platoon at -50 DEF) ship as the first three. `checkStratagem`/`playStratagem` in `cards.ts`
+  validate and spend them the same way rituals and fusions are validated and spent; the effects themselves reuse
+  the existing temporary-modifier and timed-terrain machinery so every number stays source-tracked.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -176,6 +185,7 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   one, giving duplicates a purpose instead of dead weight.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
+  **Built in the stratagem pass** (see Done), with exactly those three cards.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
 - 2026-09-05: Proposal — now that a scenario can pin positions to a generated field by role, a named biome
   (`data/scenarios/*.json` → `map.generate`) could carry its own bias (a Mountain Pass scenario with `rugged`
@@ -222,3 +232,8 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — gate which reforge targets show up by how far the holding's own faction has climbed its
   rank ladder (a holding that has never fielded a Marshal could not reforge toward one), so the rank ladders and
   the card collection reinforce each other instead of running as separate systems.
+
+- 2026-09-05: Proposal — a cavalry-themed stratagem, "Hit and Fade," that lets one cavalry platoon disengage from
+  adjacent enemies this round without drawing a reaction attack. Cavalry already carries the raiding role in the
+  fusion and siege kit; a stratagem that lets it strike and pull back cleanly would give every faction's cavalry
+  a second, cheaper way to use that role beyond the charge bonus it already has.
