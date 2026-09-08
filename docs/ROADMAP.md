@@ -385,3 +385,8 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-06: Proposal — an uneven battlefield could carry a named "vantage" hex per elevation band (the single
   highest hex in a highland cluster, the driest hex in a marsh) that grants a small, source-tracked sight or
   defence bonus, giving odd-shaped terrain a landmark worth fighting over beyond raw elevation and movement cost.
+
+- 2026-09-06: Proposal — an `EliminateRank` objective: satisfied once every enemy unit holding a named faction
+  rank (a Shogun, a Jonin, a Marshal) is defeated or subdued. This gives the rank ladders a stake beyond their
+  own mechanics: a scenario could be won by unseating a specific rank rather than only the fixed army leader,
+  which matters once Knight, Dragon Host and Ritual Cult get ladders of their own.
