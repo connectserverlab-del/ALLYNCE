@@ -821,3 +821,15 @@ passes; this one doesn't resolve it either.
   file needs, with no second code path to keep in sync. Proposal only — depends on `Q-22`/`Q-23` first, and on
   a decision that the AI should be the thing generating commands rather than a UI layer that does not exist
   yet (see `OWN-4`).
+
+- 2026-09-08 proposal: `Q-22` landed — `core/tests/rebuild.test.ts` proves a fresh battle replayed from
+  another one's `Battle.commands` alone reaches the same event log and round hashes, and that a mutation
+  which bypasses `applyCommand` is exactly the kind of gap that proof would catch. That test only ever
+  exercises hand-scripted command streams (the same style `commands.test.ts` already uses); it does not touch
+  `runMatch`'s own output, because the AI still calls `BattleController` methods directly (see the proposal
+  above this one). Once that follow-on lands and a full seeded match's `battle.commands` is a complete log by
+  construction, the same rebuild assertion this item just proved by hand — replay the log into a fresh
+  `setUpMatch` of the same `MatchSpec`, compare `hashEvents` and `roundHashes` — could run as one more check
+  inside `core/tests/match.test.ts`'s existing "is deterministic for a seed" test, giving `Q-22`'s guarantee
+  end-to-end coverage over a real, AI-played battle rather than only a scripted one. Proposal only; depends on
+  the AI-emits-commands follow-on above.

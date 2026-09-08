@@ -318,8 +318,15 @@ for every command kind, applying it through `applyCommand` on one battle reaches
 (by `hashEvents`) as calling the direct method on an identical forked battle, and a command that fails
 its own validation is never logged as if it had applied.
 
-`Q-22` (rebuild a battle from its command log alone) and `Q-23` (a pure `isLegal` pre-check) build on
-this directly; neither is in scope here.
+`Q-22` proves the funnel is complete the other direction: `core/tests/rebuild.test.ts` builds a
+fresh `Battle` the same deterministic way as another one already played through `applyCommand`, then
+replays nothing but that other battle's `Battle.commands` — round-tripped through
+`JSON.stringify`/`parse`, exactly what a save or a network hop does to it — into the fresh battle,
+and asserts the same `hashEvents` and the same `roundHashes` across several rounds. A second test in
+the same file proves the guarantee actually bites: one call that reaches the controller directly
+instead of through `applyCommand` mutates the battle for real without ever reaching `commands`, and a
+rebuild from that now-incomplete log diverges from what actually happened. `Q-23` (a pure `isLegal`
+pre-check) and `Q-24` (two-client lockstep) build on this next.
 
 ## Worked example (from the brief §7)
 
