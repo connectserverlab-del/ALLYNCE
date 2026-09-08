@@ -5,8 +5,9 @@ import { doctrineState } from "./composition.js";
 import { commandBonus } from "./command.js";
 import { moraleBand } from "./morale.js";
 import { attackArc, type AttackArc } from "./hex.js";
+import { castleDefBonus, rankOf, rankPrivileges } from "./ranks.js";
 
-export interface CombatContext { attacker?: UnitState; defender?: UnitState; arc?: AttackArc; ranged?: boolean }
+export interface CombatContext { attacker?: UnitState; defender?: UnitState; arc?: AttackArc; ranged?: boolean; reaction?: boolean }
 
 /**
  * Modifier pipeline. Every contribution records its source so the UI can show the breakdown
@@ -37,24 +38,32 @@ export function computeStat(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: C
     const cmd = commandBonus(b, u, stat);
     if (cmd) mods.push(cmd);
 
-    // 4. Morale band
+    // 4. Rank privilege: two-swords bonus on reaction attacks (zone-of-control and Overwatch strikes)
+    if (stat === "ATK" && ctx.reaction && rankPrivileges(b, u)?.twoSwords) {
+      mods.push({ source: `Rank: ${rankOf(b, u)!.title} (two swords)`, stat, value: 50 });
+    }
+
+    // 5. Morale band
     if (band === "Shaken") mods.push({ source: "Morale: Shaken", stat, value: -50 });
   }
 
-  // 5. Statuses
+  // 6. Statuses
   if (stat === "DEF") {
     if (b.hasStatus(u, "Guarded") || u.defending) mods.push({ source: u.defending ? "Defend action" : "Status: Guarded", stat, value: 150 });
     if (b.hasStatus(u, "Exposed")) mods.push({ source: "Status: Exposed", stat, value: -150 });
   }
 
-  // 6. Terrain
+  // 7. Terrain (and a leader's rank-granted castle bonus, which only applies on a Fortification hex)
   if (u.pos && !d.flying) {
     const t = b.terrainAt(u.pos);
-    if (stat === "DEF" && t === "Fortification") mods.push({ source: "Terrain: Fortification", stat, value: 200 });
+    if (stat === "DEF" && t === "Fortification") {
+      mods.push({ source: "Terrain: Fortification", stat, value: 200 });
+      if (!u.isClone && !isDivine) { const cb = castleDefBonus(b, u); if (cb) mods.push(cb); }
+    }
     if (stat === "ATK" && t === "HighGround" && ctx.ranged) mods.push({ source: "Terrain: High Ground", stat, value: 100 });
   }
 
-  // 7. Ability conditionals and platoon orders (data-driven)
+  // 8. Ability conditionals and platoon orders (data-driven)
   if (!u.isClone) mods.push(...abilityModifiers(b, u, stat, ctx));
 
   // Divine entities' stats scale down with lost anchors

@@ -11,6 +11,7 @@ import { tickPortal, checkCaptureInterrupt, attackPortal, captureStep, type Port
 import { commandRadiusRecovery, surroundedPenalty, moraleBand, changeMorale } from "./morale.js";
 import { doctrineState } from "./composition.js";
 import { evaluateObjective, markSynchronized, type ObjectiveDef, type ObjectiveProgress } from "./objectives.js";
+import { rankMovementBonus, rankOf, rankPrivileges } from "./ranks.js";
 
 export interface VictoryRules { sides: Record<string, ObjectiveDef[]>; roundLimit: number; roundLimitWinner?: string }
 
@@ -84,7 +85,7 @@ export class BattleController {
 
   movementAllowance(u: UnitState): number {
     const d = this.b.def(u);
-    return d.mov + tempMods(u).filter((m) => m.stat === "MOV").reduce((s, m) => s + m.value, 0);
+    return d.mov + tempMods(u).filter((m) => m.stat === "MOV").reduce((s, m) => s + m.value, 0) + rankMovementBonus(this.b, u);
   }
 
   /** BFS pathfinding with terrain costs, zone of control and flying rules. Returns reachable hexes with cost. */
@@ -94,8 +95,9 @@ export class BattleController {
     if (!u.pos) return out;
     const budget = this.movementAllowance(u);
     const flag = orderFlags.get(u.uid);
-    const ignoreZoc = flag === "PhaseMove";
-    const passAllies = flag === "PhaseMove" || flag === "SequencedMove" || !!d.flying;
+    const priv = rankPrivileges(b, u);
+    const ignoreZoc = flag === "PhaseMove" || !!priv?.ignoreZoc;
+    const passAllies = flag === "PhaseMove" || flag === "SequencedMove" || !!d.flying || !!priv?.passAllies;
     const frontier: Array<{ hex: Hex; cost: number }> = [{ hex: u.pos, cost: 0 }];
     const best = new Map<string, number>([[hexKey(u.pos), 0]]);
     while (frontier.length) {
@@ -109,7 +111,7 @@ export class BattleController {
         const occ = b.unitAt(n);
         if (occ && (occ.side !== u.side || !passAllies)) continue;
         let step = 1;
-        if (!d.flying) { if (t === "Forest") step = d.roles.includes("Cavalry") ? 3 : 2; }
+        if (!d.flying) { if (t === "Forest") step = priv?.canopy ? 1 : d.roles.includes("Cavalry") ? 3 : 2; }
         else if (t === "Forest") step = 2; // dense forest restricts flying
         // Predatory Airspace: flying enemies cannot pass through a Dragon Flight commander's radius
         if (d.flying && this.inEnemyDragonAirspace(u, n)) step = 99;
@@ -144,24 +146,25 @@ export class BattleController {
     const r = this.reachable(u).get(hexKey(to));
     if (!r) throw new Error(`Hex ${hexKey(to)} not reachable`);
     const zocEnemies = b.adjacentEnemies(u).filter((e) => !b.hasStatus(e, "Routed"));
-    const ignoreZoc = orderFlags.get(u.uid) === "PhaseMove";
+    const ignoreZoc = orderFlags.get(u.uid) === "PhaseMove" || !!rankPrivileges(b, u)?.ignoreZoc;
     if (opts.disengage) this.spend(u, 1);
     this.spend(u, 1);
     const from = u.pos;
     if (zocEnemies.length && !opts.disengage && !ignoreZoc) {
       const reactor = zocEnemies[0]!;
       b.log("ReactionAttack", { by: reactor.uid, on: u.uid });
-      resolveAttack(b, reactor, u);
+      resolveAttack(b, reactor, u, { reaction: true });
       if (u.defeated) return;
     }
     // Overwatch: first valid enemy entering range gets shot
     for (const e of b.activeUnits()) {
       if (e.side === u.side || !e.overwatch || !e.pos) continue;
-      if (hexDistance(e.pos, to) <= b.def(e).range && hexDistance(e.pos, from) > b.def(e).range) { b.log("OverwatchTriggered", { by: e.uid, on: u.uid }); resolveAttack(b, e, u, { ranged: b.def(e).range > 1 }); if (u.defeated) return; }
+      if (hexDistance(e.pos, to) <= b.def(e).range && hexDistance(e.pos, from) > b.def(e).range) { b.log("OverwatchTriggered", { by: e.uid, on: u.uid }); resolveAttack(b, e, u, { ranged: b.def(e).range > 1, reaction: true }); if (u.defeated) return; }
     }
     b.place(u, to);
     u.facing = directionTo(from, to);
     u.movedThisActivation += r.cost;
+    if (b.terrainAt(to) === "Forest" && rankPrivileges(b, u)?.hideOnForestStop) b.addStatus(u, "Hidden", 99, `Rank: ${rankOf(b, u)!.title}`);
     if (b.hasStatus(u, "Hidden") && b.terrainAt(to) !== "Forest" && b.terrainAt(to) !== "Smoke" && b.adjacentEnemies(u).length) b.addStatus(u, "Revealed", 0, "Moved into contact");
     b.log("Move", { uid: u.uid, from, to, cost: r.cost });
     // moving away from a ritual circle forfeits contribution (participants are recomputed each tick)
