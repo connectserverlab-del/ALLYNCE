@@ -36,6 +36,8 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | §15 Objectives | `objectives.ts` | Eleven composable types. `DefendForRounds` with a `uidOrPortal` also requires that unit or portal to still be undefeated/undestroyed when the round count passes, not the clock alone |
 
 | Irregular battlefields, generated | `mapgen.ts` (`Landmarks`), `placement.ts`, `scenario.ts` | A scenario built on `mapSpec` pins rituals, portals, deploy hexes and the two hex-bearing objectives (`CaptureHold`, `Escort`) to a role — anchor, deploy zone, midpoint, trench, ruins, fortification, ford, road — instead of a fixed [q, r] pair. A role that did not generate on a given seed falls back to the midpoint rather than failing the build. See `data/scenarios/contested_ford.json` |
+
+| Universal win conditions | `battle.ts` (`evaluateVictory`), `data/rules/victory.json` | Wipeout, LeaderKilled, Surrender — always evaluated under any scenario objectives |
 | §16 AI | `ai.ts` | Utility scoring, release policy, difficulty without stat bonuses |
 | Marching between battles | `march.ts`, `data/movement/march.json` | Continuous movement in seconds over the same hexes the battle fights on. A straight line where one works; an A* over the grid, string-pulled to a few waypoints, where it does not. Nothing crosses a field in more than 45 seconds, and a route forced the long way round hurries rather than arriving late |
 
@@ -391,6 +393,29 @@ deploying anything, spiralling a role to the nearest free hex if two features wo
 one. `data/scenarios/ford_crossing.json` is the worked example: the same file plays out on any seed, with its
 ritual circle, reinforcement portal and capture-hold objective always the same distance from the lines they
 belong to rather than the same two coordinates.
+
+## Universal win conditions
+
+Every battle is decided by one of three ways, on top of whatever objectives the scenario layers in:
+
+1. **Wipeout** — a side has no living, un-cloned units left on the field.
+2. **LeaderKilled** — a side's designated Army Leader is defeated. A scenario opts a side in by setting
+   `armyLeaderDefId` on that side in its scenario file; `buildScenario` resolves it to the deployed unit's
+   runtime id. Left unset, the condition stays inactive for that side — there is no default. **An Army Leader is
+   not a platoon Commander.** Platoon Commanders already have a Second and a succession line
+   (`command.ts`); wiring `LeaderKilled` to one would end the battle before succession ever fires, which is why
+   `Threefold Invocation` does not set this field yet — its Commanders are platoon-level, not army-level. The
+   roster has no King/Shogun/Kage-tier unique unit to point this at until one exists (see the brainstorm log).
+3. **Surrender** — a side's average morale among living, un-cloned units falls at or below
+   `surrenderMoraleThreshold` and stays there for `surrenderSustainedRounds` consecutive End Phases, both read
+   from `data/rules/victory.json`. The sustained window exists so one bad round of combat can't end a war outright;
+   morale climbing back above the threshold resets the streak.
+
+`BattleController.evaluateVictory()` checks scenario objectives first, then these three (Wipeout, LeaderKilled,
+Surrender, in that order per side), then the round limit as a last resort. `core/tests/victory.test.ts` exercises
+all three in isolation with bare battles; `core/tests/battle.test.ts` confirms the full Threefold Invocation
+scenario still runs its full objective/ritual/portal/succession sequence with Wipeout and Surrender both live and
+LeaderKilled correctly inactive.
 
 ## Unity port guidance
 
