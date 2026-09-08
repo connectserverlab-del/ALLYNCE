@@ -389,7 +389,8 @@ export class BattleController {
     for (const side of Object.keys(this.victory.sides)) {
       const status = this.objectiveStatus(side);
       // all primary objectives satisfied -> win (objectives are ANDed; scenarios can encode OR by separate side entries later)
-      if (status.length && status.some((s) => s.satisfied && (s.def.type !== "SurviveRounds" && s.def.type !== "DefendForRounds"))) { b.winner = side; b.winReason = status.filter((s) => s.satisfied).map((s) => s.def.type).join("+"); }
+      const primary = status.filter((s) => s.def.type !== "SurviveRounds" && s.def.type !== "DefendForRounds");
+      if (primary.length && primary.every((s) => s.satisfied)) { b.winner = side; b.winReason = status.filter((s) => s.satisfied).map((s) => s.def.type).join("+"); }
     }
     if (!b.winner && b.round >= this.victory.roundLimit) {
       b.winner = this.victory.roundLimitWinner ?? "draw";

@@ -102,3 +102,12 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-08: Proposal — veterancy carried from battle into the holding: a unit that survives a fight banks a
+  kill/survival tally, and at a threshold the holding can muster it back in as a named veteran variant (a small,
+  source-tracked stat modifier plus a title on the card), giving rank ladders a second, personal track that sits
+  underneath the faction ranks and rewards the permanent-holding loop for keeping the same body alive rather than
+  only recruiting fresh ones.
+- 2026-09-08: Proposal — scenario-authored terrain events: a scenario can declare a one-shot geography change tied
+  to a round or a trigger (a bridge that collapses into Water once a unit crosses it, a trench that floods into Mud
+  after N rounds near a river), layered on top of the irregular generator rather than replacing it, so a battlefield
+  can turn uneven mid-fight instead of only at generation time.
