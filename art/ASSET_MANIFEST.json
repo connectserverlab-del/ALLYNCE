@@ -712,6 +712,42 @@
       "file": "art/buildings/BLD_STABLE_T3_V01.jpg",
       "jobId": "2fa0851f-8d44-47c3-99c0-d4e5decdb2dc",
       "approved": false
+    },
+    {
+      "buildingTier": "SHOP_T1",
+      "file": "art/buildings/BLD_SHOP_T1_V01.jpg",
+      "jobId": "cdc4d80f-f987-477f-9446-82b2c0c10c8e",
+      "approved": false
+    },
+    {
+      "buildingTier": "SHOP_T2",
+      "file": "art/buildings/BLD_SHOP_T2_V01.jpg",
+      "jobId": "b919b8a7-0d9d-45a2-99b6-718eeb9c1d0c",
+      "approved": false
+    },
+    {
+      "buildingTier": "SHOP_T3",
+      "file": "art/buildings/BLD_SHOP_T3_V01.jpg",
+      "jobId": "5a24b490-8149-4ad7-8831-306b44e39574",
+      "approved": false
+    },
+    {
+      "buildingTier": "ARMORY_T1",
+      "file": "art/buildings/BLD_ARMORY_T1_V01.jpg",
+      "jobId": "1305bbad-0f0d-4fcd-b5a3-b808e134b1e0",
+      "approved": false
+    },
+    {
+      "buildingTier": "ARMORY_T2",
+      "file": "art/buildings/BLD_ARMORY_T2_V01.jpg",
+      "jobId": "fa6965e2-2101-40e3-99c6-368aa5feea5e",
+      "approved": false
+    },
+    {
+      "buildingTier": "ARMORY_T3",
+      "file": "art/buildings/BLD_ARMORY_T3_V01.jpg",
+      "jobId": "faddda4f-df00-4730-8efd-9fde6218b07f",
+      "approved": false
     }
   ],
   "cards": [
@@ -731,6 +767,112 @@
       "cardId": "SIDE_STRAT_FALSE-RETREAT",
       "file": "art/cards/SIDE_STRAT_FALSE-RETREAT_V01.png",
       "jobId": "7573b33d-87f0-4ffb-bab2-7f2153b4b1ce",
+      "approved": false
+    }
+  ],
+  "mapSymbols": [
+    {
+      "id": "MAP_BRIDGE",
+      "file": "art/map/MAP_BRIDGE_V01.png",
+      "jobId": "6d20b8c2-ed77-4933-bfb0-1cde4ab77f59",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_FORD",
+      "file": "art/map/MAP_FORD_V01.png",
+      "jobId": "1bc993c6-b4d8-48fc-9ac3-2c618f2c7ab9",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_FOREST",
+      "file": "art/map/MAP_FOREST_V01.png",
+      "jobId": "ae5e0ceb-1d48-4362-aecf-ecf00c851d90",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_HILL",
+      "file": "art/map/MAP_HILL_V01.png",
+      "jobId": "ba63d3e7-ece2-4cdb-8e0d-6f6fbcf0e2cc",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_MARSH",
+      "file": "art/map/MAP_MARSH_V01.png",
+      "jobId": "4d7f1e48-9001-46c3-b318-7b5475c7f645",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_MOUNTAIN",
+      "file": "art/map/MAP_MOUNTAIN_V01.png",
+      "jobId": "bd11f3ca-e3db-4318-87fe-e7c32fe216cd",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_PALISADE",
+      "file": "art/map/MAP_PALISADE_V01.png",
+      "jobId": "b62e8bdf-9106-4f43-9981-e7756b183439",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_RIVER",
+      "file": "art/map/MAP_RIVER_V01.png",
+      "jobId": "f6ad79c7-b1dc-4223-9bcb-538e4242d812",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_ROAD",
+      "file": "art/map/MAP_ROAD_V01.png",
+      "jobId": "7dff92b6-1ad0-4119-abba-bccbcbbd7b86",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_RUINS",
+      "file": "art/map/MAP_RUINS_V01.png",
+      "jobId": "712dbc2c-8f9b-4e65-b086-b49be4ad39a6",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_TREE",
+      "file": "art/map/MAP_TREE_V01.png",
+      "jobId": "7b404600-e156-4838-ae9e-28a43793450f",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_WATCHTOWER",
+      "file": "art/map/MAP_WATCHTOWER_V01.png",
+      "jobId": "e4c0fd0d-53c5-411b-b208-a28e83e89c0f",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    }
+  ],
+  "icons": [
+    {
+      "id": "ICON_RES-GOLD",
+      "file": "art/ui/ICON_RES-GOLD_V01.png",
+      "jobId": "883028d0-f853-43bf-a2c7-db678055a9d3",
+      "approved": false
+    },
+    {
+      "id": "ICON_RES-RUBY",
+      "file": "art/ui/ICON_RES-RUBY_V01.png",
+      "jobId": "10e46c9c-dbe7-48d8-90a9-64c8b8aed956",
+      "approved": false
+    },
+    {
+      "id": "ICON_UI-POWER",
+      "file": "art/ui/ICON_UI-POWER_V01.png",
+      "jobId": "d47b08e4-b65d-42a8-be76-a818427f3251",
       "approved": false
     }
   ]

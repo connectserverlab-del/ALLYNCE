@@ -201,6 +201,36 @@ try {
       if (hasField) {
         const units = await sp.$$eval("#map .unit", (n) => n.length).catch(() => 0);
         check(`${sample}: draws units on the field`, units > 0, `${units} unit tokens`);
+        const symbols = await sp.$$eval("#map image.furn", (n) => n.length).catch(() => 0);
+        check(`${sample}: paints its terrain symbols`, symbols > 0, `${symbols} plan-view symbols`);
+      }
+      // The Hold is the one screen that runs the holding engine live rather than showing a
+      // snapshot, so it is the one that breaks silently if that bundle stops loading.
+      const hasHold = await sp.$('.rail button[data-s="hold"]') !== null;
+      if (hasHold) {
+        await sp.evaluate(() => document.querySelector('.rail button[data-s="hold"]').click());
+        await sp.waitForTimeout(600);
+        const power = await sp.$eval("#powerbox .n", (n) => n.textContent.trim()).catch(() => "");
+        check(`${sample}: shows power in the corner`, /^[\d,]+$/.test(power) && power !== "0", power || "(missing)");
+        const plots = await sp.$$eval("#plotgrid .plot", (n) => n.length).catch(() => 0);
+        const placed = await sp.$$eval("#plotgrid .bldg", (n) => n.length).catch(() => 0);
+        check(`${sample}: lays the hold out on plots`, plots > 0 && placed > 0, `${placed} buildings on ${plots} plots`);
+        // Drag one building to a free plot and confirm the engine actually moved it. A grid that
+        // looks draggable and is not is worse than one that does not invite the drag.
+        const moved = await sp.evaluate(() => {
+          const g = document.getElementById("plotgrid");
+          const b = g.querySelector(".bldg");
+          const empty = [...g.querySelectorAll(".plot")].find((c) => !c.querySelector(".bldg"));
+          if (!b || !empty) return null;
+          const id = b.dataset.b, to = { x: +empty.dataset.x, y: +empty.dataset.y };
+          const dt = new DataTransfer();
+          b.dispatchEvent(new DragEvent("dragstart", { bubbles: true, dataTransfer: dt }));
+          empty.dispatchEvent(new DragEvent("dragover", { bubbles: true, dataTransfer: dt, cancelable: true }));
+          empty.dispatchEvent(new DragEvent("drop", { bubbles: true, dataTransfer: dt, cancelable: true }));
+          const now = document.querySelector(`#plotgrid .bldg[data-b="${id}"]`)?.closest(".plot");
+          return now ? { ok: +now.dataset.x === to.x && +now.dataset.y === to.y, id } : null;
+        });
+        check(`${sample}: a building can be dragged to another plot`, !!moved?.ok, moved ? `moved ${moved.id}` : "no drag target");
       }
     } finally {
       await sp.close();

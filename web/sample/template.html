@@ -298,6 +298,69 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 .cost{display:flex;gap:9px;font-family:"JetBrains Mono";font-size:12px;color:var(--dim);align-items:center}
 .cost img{width:15px;height:15px;object-fit:contain;vertical-align:-2px;margin-right:2px}
 
+
+/* ---------- the hold as a place: a plot grid you can rearrange ---------- */
+.cityhead{display:flex;align-items:center;gap:10px;padding:8px 10px;flex-wrap:wrap}
+.cityhead .zooms{display:flex;gap:4px;margin-left:auto}
+.cityhead .zooms button{border:1px solid var(--edge);color:var(--faint);font-family:"Alegreya SC";font-size:11.5px;padding:3px 10px}
+.cityhead .zooms button.on{color:var(--text);border-color:var(--dim);background:rgba(255,255,255,.05)}
+
+/* Power sits top-left of the city, where the eye lands first. */
+.powerbox{position:absolute;left:14px;top:12px;z-index:6;padding:8px 12px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.powerbox img{width:30px;height:30px;object-fit:contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.7))}
+.powerbox .n{font-family:"JetBrains Mono";font-size:21px;line-height:1;color:var(--parch)}
+.powerbox .l{font-family:"Alegreya SC";font-size:10.5px;letter-spacing:.1em;color:var(--faint)}
+.powerbreak{position:absolute;left:14px;top:70px;z-index:7;width:250px;max-height:46%;overflow-y:auto;padding:9px 11px;display:none}
+.powerbreak.on{display:block}
+.powerbreak .line{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:1.5px 0}
+
+.holdmap img.ground{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.7) brightness(.42)}
+.plotgrid{position:absolute;inset:0;display:grid;padding:66px 16px 64px;z-index:2}
+.plot{position:relative;border:1px dashed transparent;border-radius:2px}
+.plot.over{border-color:var(--star);background:rgba(217,164,65,.12)}
+.city .bldg{position:absolute;inset:4%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  cursor:grab;user-select:none}
+.city .bldg.dragging{opacity:.55;cursor:grabbing}
+.city .bldg img{width:100%;height:auto;max-height:78%;object-fit:contain;filter:drop-shadow(0 3px 6px rgba(0,0,0,.75))}
+.city .bldg .cap{font-family:"Alegreya SC";font-size:10.5px;letter-spacing:.03em;background:rgba(10,12,16,.82);
+  border:1px solid var(--edge);padding:0 5px;color:var(--bone);white-space:nowrap;margin-top:-2px}
+.city .bldg .lv{position:absolute;right:6%;top:2%;background:#12141a;border:1px solid var(--edge-2);color:var(--star);
+  font-family:"JetBrains Mono";font-size:10px;padding:0 4px}
+.city .bldg.empty img{filter:grayscale(1) brightness(.42)}
+.city .bldg.empty .cap{color:var(--faint)}
+.city .bldg.locked .cap{color:var(--bad);border-color:var(--bad)}
+.city .bldg.busy .cap{color:var(--warn);border-color:var(--warn)}
+.hint-drag{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-size:11px;color:var(--faint);pointer-events:none;z-index:3;
+  text-shadow:0 1px 3px #000}
+
+/* Zoomed out: the region, with the hold on it and neighbours around it. */
+.region{position:absolute;inset:0;overflow:hidden}
+.region img.ground{width:100%;height:100%;object-fit:cover;filter:saturate(.85) brightness(.72)}
+.holdpin{position:absolute;transform:translate(-50%,-50%);text-align:center;cursor:pointer}
+.holdpin .dot{width:16px;height:16px;border-radius:50%;margin:0 auto;border:2px solid #0a0b0e;box-shadow:0 2px 5px rgba(0,0,0,.8)}
+.holdpin b{display:block;font-family:"Alegreya SC";font-size:10.5px;background:rgba(10,12,16,.82);border:1px solid var(--edge);
+  padding:0 5px;margin-top:3px;white-space:nowrap;color:var(--bone)}
+.holdpin .pw{display:block;font-family:"JetBrains Mono";font-size:9.5px;color:var(--faint)}
+.holdpin.mine .dot{background:var(--ember)}
+.holdpin.mine b{color:#fff;border-color:var(--ember)}
+.holdpin.them .dot{background:var(--moon)}
+
+/* Card borders and shine. Both are display only. */
+.card.b-gold img.fr,.mini.b-gold img.fr{filter:drop-shadow(0 0 0 #b8923f) drop-shadow(0 0 3px rgba(184,146,63,.95)) drop-shadow(0 0 7px rgba(184,146,63,.5))}
+.card.b-rainbow img.fr,.mini.b-rainbow img.fr{filter:drop-shadow(0 0 2px rgba(255,90,90,.8)) drop-shadow(0 0 5px rgba(120,220,140,.7)) drop-shadow(0 0 9px rgba(120,160,255,.65))}
+.card.shine::after,.mini.shine::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:2px;
+  background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.42) 47%,rgba(255,255,255,.72) 50%,rgba(255,255,255,.42) 53%,transparent 62%);
+  background-size:280% 280%;animation:sheen 3.6s linear infinite;mix-blend-mode:screen}
+.card.shine-3::after,.mini.shine-3::after{animation-duration:2.4s}
+.card.shine-5::after,.mini.shine-5::after{animation-duration:1.6s}
+@keyframes sheen{0%{background-position:120% 0}100%{background-position:-40% 0}}
+@media (prefers-reduced-motion:reduce){.card.shine::after,.mini.shine::after{animation:none;background-position:52% 0}}
+.cosmbar{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.cosmbar button{border:1px solid var(--edge);color:var(--dim);font-family:"Alegreya SC";font-size:11px;padding:2px 8px}
+.cosmbar button:hover:not([disabled]){color:var(--text);border-color:var(--dim);background:rgba(255,255,255,.05)}
+.cosmbar button[disabled]{opacity:.35;cursor:default}
+.cosmbar .own{font-size:11.5px;color:var(--faint);font-family:"JetBrains Mono"}
+
 /* ---------- lands ---------- */
 .lands{padding:16px 20px 28px;height:100%;overflow-y:auto}
 .lands figure{margin:0 0 16px;border:1px solid var(--edge);background:#14171c;padding:8px}
@@ -374,6 +437,7 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 <script>__MARCH_ENGINE__</script>
 <script>__WRITS_ENGINE__</script>
 <script>__CARDS_ENGINE__</script>
+<script>__HOLD_ENGINE__</script>
 <script>
 const D = __DATA__, A = __ASSETS__;
 const C = window.CARDS;
@@ -427,6 +491,24 @@ const statIcon=(k)=>A.icons[k]?`<img class="sticon" src="${A.icons[k]}" alt="">`
 const SQ3=Math.sqrt(3), NS='http://www.w3.org/2000/svg';
 const el=(t,a={},p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
 const px=(h,s)=>({x:s*SQ3*(h.q+h.r/2), y:s*1.5*h.r});
+/**
+ * Draw a painted plan-view terrain symbol centred on a hex, and say whether it drew anything.
+ *
+ * These are the same hand-painted assets as everything else on the page, cut to alpha, rather than
+ * the SVG triangles the field used to draw. A symbol that is not in the pack returns false and the
+ * caller falls back to its old path, so a missing plate never leaves bare ground.
+ */
+/** How strongly each symbol prints. A mountain is the shape of the ground and should read hard; a
+ *  hill or a marsh is a modifier on ground you still have to see through, so it prints faint. Drawn
+ *  at full weight they turn the field into a field of coins. */
+const SYM_INK={MOUNTAIN:.95,FOREST:.82,RUINS:.72,PALISADE:.8,FORD:.7,HILL:.34,MARSH:.42,BRIDGE:.85,RIVER:.7,ROAD:.6,TREE:.8,WATCHTOWER:.85};
+function sym(c,s,name,scale,parent){
+  const src=A.map&&A.map[name];
+  if(!src) return false;
+  const w=s*scale;
+  el('image',{href:src,x:c.x-w/2,y:c.y-w/2,width:w,height:w,preserveAspectRatio:'xMidYMid meet',opacity:SYM_INK[name]??.85,class:'furn'},parent);
+  return true;
+}
 const pts=(cx,cy,s)=>{let o=[];for(let i=0;i<6;i++){const a=Math.PI/180*(60*i-30);o.push((cx+s*Math.cos(a)).toFixed(2)+','+(cy+s*Math.sin(a)).toFixed(2));}return o.join(' ');};
 let show={grid:true,relief:true,coh:true,reach:true,summon:true,sprites:true};
 let selUid = D.battle.selected.uid;
@@ -482,13 +564,21 @@ function drawMap(){
       const dn=N(h)[5]; if(dn&&dn.elevation<h.elevation){const a1=Math.PI/180*150,a2=Math.PI/180*210,a3=Math.PI/180*270;
         el('polyline',{points:[c.x+s*Math.cos(a1),c.y+s*Math.sin(a1),c.x+s*Math.cos(a2),c.y+s*Math.sin(a2),c.x+s*Math.cos(a3),c.y+s*Math.sin(a3)].join(' '),stroke:'#000',opacity:.42,'stroke-width':s*.15,fill:'none'},gT);}
     }
-    if(h.terrain==='Mountain'){el('path',{d:`M${c.x-s*.6},${c.y+s*.42} L${c.x-s*.14},${c.y-s*.52} L${c.x+s*.08},${c.y-s*.1} L${c.x+s*.28},${c.y-s*.38} L${c.x+s*.6},${c.y+s*.42} Z`,fill:'#26262b',stroke:'#0e0f12','stroke-width':.5},gT);
-      el('path',{d:`M${c.x-s*.3},${c.y-s*.17} L${c.x-s*.14},${c.y-s*.52} L${c.x+s*.01},${c.y-s*.22} Z`,fill:'#96948b'},gT);}
+    if(h.terrain==='Mountain'){
+      if(!sym(c,s,'MOUNTAIN',1.34,gT)){
+        el('path',{d:`M${c.x-s*.6},${c.y+s*.42} L${c.x-s*.14},${c.y-s*.52} L${c.x+s*.08},${c.y-s*.1} L${c.x+s*.28},${c.y-s*.38} L${c.x+s*.6},${c.y+s*.42} Z`,fill:'#26262b',stroke:'#0e0f12','stroke-width':.5},gT);
+        el('path',{d:`M${c.x-s*.3},${c.y-s*.17} L${c.x-s*.14},${c.y-s*.52} L${c.x+s*.01},${c.y-s*.22} Z`,fill:'#96948b'},gT);}}
     if(!detail) continue;
-    if(h.terrain==='Forest') for(const [dx,dy,k] of [[-.3,.08,.55],[.09,-.26,.6],[.28,.26,.5],[-.04,.28,.45]])
-      el('path',{d:`M${c.x+dx*s-s*.2*k},${c.y+dy*s+s*.32*k} L${c.x+dx*s},${c.y+dy*s-s*.46*k} L${c.x+dx*s+s*.2*k},${c.y+dy*s+s*.32*k} Z`,fill:'#1a2819',stroke:'#0d150c','stroke-width':.4},gT);
+    if(h.terrain==='HighGround') sym(c,s,'HILL',1.28,gT);
+    if(h.terrain==='Ruins') sym(c,s,'RUINS',1.16,gT);
+    if(h.terrain==='Fortification') sym(c,s,'PALISADE',1.2,gT);
+    if(h.terrain==='Mud') sym(c,s,'MARSH',1.2,gT);
+    if(h.terrain==='Forest' && !sym(c,s,'FOREST',1.3,gT))
+      for(const [dx,dy,k] of [[-.3,.08,.55],[.09,-.26,.6],[.28,.26,.5],[-.04,.28,.45]])
+        el('path',{d:`M${c.x+dx*s-s*.2*k},${c.y+dy*s+s*.32*k} L${c.x+dx*s},${c.y+dy*s-s*.46*k} L${c.x+dx*s+s*.2*k},${c.y+dy*s+s*.32*k} Z`,fill:'#1a2819',stroke:'#0d150c','stroke-width':.4},gT);
     if(h.terrain==='Trench'){const d=`M${c.x-s*.68},${c.y-s*.12} Q${c.x-s*.18},${c.y+s*.26} ${c.x+s*.2},${c.y-s*.08} T${c.x+s*.68},${c.y+s*.12}`;
       el('path',{d,fill:'none',stroke:'#16100a','stroke-width':s*.26},gT); el('path',{d,fill:'none',stroke:'#7d6748','stroke-width':.9,'stroke-dasharray':'2 3'},gT);}
+    if(h.terrain==='Ford') sym(c,s,'FORD',1.22,gT);
     if(h.terrain==='Road') el('path',{d:`M${c.x-s*.86},${c.y+s*.13} Q${c.x},${c.y-s*.18} ${c.x+s*.86},${c.y+s*.09}`,fill:'none',stroke:'#8d7c5c','stroke-width':s*.2,'stroke-linecap':'round',opacity:.85},gT);
     if(h.terrain==='Water'||h.terrain==='Ford'){el('path',{d:`M${c.x-s*.58},${c.y} q${s*.29},${-s*.17} ${s*.58},0 t${s*.58},0`,fill:'none',stroke:'rgba(168,206,214,.4)','stroke-width':1.1},gT);
       if(h.terrain==='Ford')for(let i=-1;i<=1;i++)el('circle',{cx:c.x+i*s*.3,cy:c.y+s*.24,r:s*.085,fill:'#918b7b'},gT);}
@@ -1004,10 +1094,16 @@ function rmMain(id){
   if(i<0) return;
   deckMain.splice(i,1); renderDeck();
 }
+/** The classes a bought border and an earned shine put on a card. Display only, both of them. */
+function cosmClass(id){
+  const cm=HE.cosmeticOf(HK,id);
+  return (cm.border?` b-${cm.border}`:'') + (cm.shine?` shine shine-${Math.min(5,cm.shine)}`:'');
+}
+
 function cardHTML(c,n){
   const t=A.tokens[c.id];
   const cap=C.effectiveCopyLimit(C.reg,c.id,D.deck.collection);
-  return `<div class="card" data-id="${c.id}" style="${frameVars(c)}">
+  return `<div class="card${cosmClass(c.id)}" data-id="${c.id}" style="${frameVars(c)}">
     <img class="fr" src="${FRAME(c).img()}" alt="">
     <div class="pips">${starRow(c.stars)}</div>
     <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
@@ -1039,7 +1135,7 @@ const ownedOf = (id)=> D.deck.pool.find(c=>c.id===id)?.ownedN ?? 0;
 function openCard(c){
   if(!c)return;
   const t=A.tokens[c.id];
-  $('detailbox').innerHTML=`<div class="big" style="${frameVars(c)}"><img class="fr" src="${FRAME(c).img()}" alt="">
+  $('detailbox').innerHTML=`<div class="big${cosmClass(c.id)}" style="${frameVars(c)}"><img class="fr" src="${FRAME(c).img()}" alt="">
       <div class="pips">${starRow(c.stars,true)}</div>
       <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
       <div class="nm">${esc(c.name)}</div><div class="sub">${esc(c.roles.join(' · '))}${tributeMark(c)}</div>
@@ -1057,10 +1153,57 @@ function openCard(c){
         <div class="line"><span class="dim">Move / Range</span><b class="mono">${c.mov}${c.flying?' ✦ flying':''} · ${c.range}</b></div>
       </div>
       ${c.abilities.map(a=>`<div class="abil"><b>${esc(a.name)}</b> <span class="faint" style="font-size:11px">${esc(a.category)}</span><p>${esc(a.text)}</p></div>`).join('')}
+      ${cosmeticsHTML(c)}
     </div>`;
   $('detail').classList.add('on');
   $('detailbox').querySelector('.close').onclick=()=>$('detail').classList.remove('on');
+  wireCosmetics(c);
 }
+/**
+ * Borders and shine, on the card's own sheet.
+ *
+ * Everything here is display: `buyBorder` and `mergeDuplicate` change nothing a battle reads, and
+ * `power()` is unmoved by either. The one real cost is that a merge eats a copy, which is why the
+ * button says so.
+ */
+function cosmeticsHTML(c){
+  const cm=HE.cosmeticOf(HK,c.id);
+  const copies=HK.collection[c.id]||0;
+  const merge=HE.canMerge(HREG,HK,c.id);
+  const list=HE.borders(HREG);
+  return `<div class="req" style="margin-top:10px">
+    <div class="line"><span class="dim sc">Appearance</span>
+      <b class="mono" style="font-size:12px">${cm.border?esc(list.find(b=>b.id===cm.border).name):'plain'}${cm.shine?` · shine ${cm.shine}/${HE.MAX_SHINE}`:''}</b></div>
+    <div class="cosmbar">
+      ${list.map(b=>{
+        const owned=cm.border===b.id;
+        const blocked=b.requires&&cm.border!==b.requires&&!owned;
+        const price=Object.entries(b.cost).map(([r,v])=>`${v.toLocaleString()} ${HREG.kingdom.resources[r].name.toLowerCase()}`).join(' + ');
+        return `<button data-border="${b.id}" ${owned||blocked?'disabled':''} title="${owned?'Already on this card':blocked?'Buy the gold border first':price}">${esc(b.name)} · ${price}</button>`;
+      }).join('')}
+      <button data-merge="${c.id}" ${merge.ok?'':'disabled'} title="${merge.ok?'Consumes one duplicate copy':esc(merge.reason||'')}">Merge duplicate → shine</button>
+      <span class="own">${copies} held</span>
+    </div>
+    <div class="faint" style="font-size:11.5px;margin-top:4px" id="cosm-msg">A border is bought. A shine is not for sale — it costs a second copy of the card.</div>
+  </div>`;
+}
+
+function wireCosmetics(c){
+  const box=$('detailbox');
+  const say=(t,bad)=>{const m=box.querySelector('#cosm-msg'); if(m){m.textContent=t;m.style.color=bad?'var(--bad)':'var(--star)';}};
+  box.querySelectorAll('[data-border]').forEach(btn=>btn.onclick=()=>{
+    const res=HE.buyBorder(HREG,HK,c.id,btn.dataset.border);
+    if(!res.ok){ say(res.reason,true); return; }
+    openCard(c); renderDeck(); if(screen==='hold') renderHold();
+  });
+  const mb=box.querySelector('[data-merge]');
+  if(mb) mb.onclick=()=>{
+    const res=HE.mergeDuplicate(HREG,HK,c.id);
+    if(!res.ok){ say(res.reason,true); return; }
+    openCard(c); renderDeck();
+  };
+}
+
 $('detail').onclick=(e)=>{if(e.target===$('detail'))$('detail').classList.remove('on');};
 addEventListener('keydown',e=>{if(e.key==='Escape')$('detail').classList.remove('on');});
 
@@ -1234,62 +1377,211 @@ function openWrit(c){
 }
 
 /* ---------------- hold ---------------- */
-const PINS={KEEP:[50,44],BARRACKS:[33,60],FORGE:[63,58],RESEARCH_HALL:[41,30],RECRUITMENT_HALL:[62,33],GRANARY:[27,44],MINE:[76,52],SAWPIT:[22,68],STABLE:[47,71],WALL:[50,86],SHRINE:[75,72]};
-const BICON={KEEP:'BLD-KEEP',BARRACKS:'BLD-BARRACKS',FORGE:'BLD-FORGE',RESEARCH_HALL:'BLD-RESEARCH',RECRUITMENT_HALL:'BLD-RECRUIT',GRANARY:'RES-KOKU',MINE:'RES-IRON',SAWPIT:'RES-TIMBER',STABLE:'UI-BANNER',WALL:'BLD-BUILD',SHRINE:'UI-DRAW'};
-const RICON={koku:'RES-KOKU',iron:'RES-IRON',timber:'RES-TIMBER',silver:'RES-SILVER'};
+/**
+ * The Hold runs the real engine, not a snapshot: `window.HOLD` is `core/src/kingdom.ts` and
+ * `core/src/cosmetics.ts` compiled for the browser (see `web/sample/hold-boot.mts`). Everything
+ * below asks the engine and draws the answer. Nothing here decides a rule.
+ */
+const H = window.HOLD, HE = H.engine, HREG = H.reg;
+const HK = (() => {
+  // Seed a live holding from the snapshot the build wrote, so the page opens on the same hold the
+  // rest of the screens describe and then lets the player change it.
+  const k = HE.newKingdom(HREG, D.kingdom.state.faction || 'SAM', { name: D.kingdom.state.name });
+  k.levels = { ...k.levels, ...D.kingdom.state.levels };
+  k.resources = { ...k.resources, ...D.kingdom.state.resources };
+  k.collection = { ...D.kingdom.state.collection };
+  k.research = JSON.parse(JSON.stringify(D.kingdom.state.research ?? k.research));
+  k.buildQueue = JSON.parse(JSON.stringify(D.kingdom.state.buildQueue ?? []));
+  return HE.normalizeKingdom(HREG, k);
+})();
+
+const BICON={KEEP:'BLD-KEEP',BARRACKS:'BLD-BARRACKS',FORGE:'BLD-FORGE',RESEARCH_HALL:'BLD-RESEARCH',RECRUITMENT_HALL:'BLD-RECRUIT',GRANARY:'RES-KOKU',MINE:'RES-IRON',SAWPIT:'RES-TIMBER',STABLE:'UI-BANNER',WALL:'BLD-BUILD',SHRINE:'UI-DRAW',SHOP:'RES-GOLD',ARMORY:'BLD-FORGE'};
+const RICON={koku:'RES-KOKU',iron:'RES-IRON',timber:'RES-TIMBER',silver:'RES-SILVER',gold:'RES-GOLD',ruby:'RES-RUBY'};
+let cityZoom = 'city';          // 'city' = your own plots, 'region' = the map around you
+let powerOpen = false;
+
+/** The painted plate for a building at its current level, or its icon if none is painted. */
+const bldArt = (id) => A.tiers[id + '_T' + HE.buildingTier(HREG, HK.levels[id]).tier] || null;
+
+/** Neighbouring holds, so zooming out shows something other than your own. Their power is drawn
+ *  from the same `power()` the player's own figure uses, so the comparison is honest. Until a
+ *  server exists (see OWN-5 in the roadmap) these are local stand-ins, and say so. */
+const NEIGHBOURS = [
+  { name: 'Veiled Moon Cell', at: [24, 30], levels: { KEEP: 5, BARRACKS: 4, FORGE: 3, MINE: 3 } },
+  { name: 'Bastion Vigil',    at: [70, 24], levels: { KEEP: 7, BARRACKS: 5, WALL: 6, ARMORY: 3 } },
+  { name: 'Thornhollow',      at: [63, 71], levels: { KEEP: 3, GRANARY: 4, SAWPIT: 3 } },
+  { name: 'Emberwatch',       at: [30, 76], levels: { KEEP: 6, FORGE: 5, STABLE: 4, SHOP: 3 } },
+].map(n => {
+  const k = HE.newKingdom(HREG, 'SAM', { name: n.name });
+  k.levels = { ...k.levels, ...n.levels };
+  return { ...n, power: H.power(HREG, k).total };
+});
+function holdRows(){
+  return HE.BUILDING_IDS.map(id=>{
+    const d=HREG.kingdom.buildings[id], lvl=HK.levels[id];
+    return { id, name:d.name, text:d.text, level:lvl,
+      tier:HE.buildingTier(HREG,lvl), nextTierAt:HE.nextTierAt(HREG,lvl),
+      nextCost:HE.upgradeCost(HREG,HK,id), nextSeconds:HE.upgradeSeconds(HREG,HK,id),
+      building:HK.buildQueue.find(j=>j.building===id)||null,
+      unmet:HE.unmetRequirements(HREG,HK,id), can:HE.canUpgrade(HREG,HK,id),
+      produces:d.produces||null };
+  });
+}
+
+function renderPower(){
+  const p=H.power(HREG,HK);
+  return `<div class="panel rivet powerbox" id="powerbox" title="What this hold is worth">
+      ${A.icons['UI-POWER']?`<img src="${A.icons['UI-POWER']}" alt="">`:''}
+      <div><div class="n">${p.total.toLocaleString()}</div><div class="l">Power</div></div>
+    </div>
+    <div class="panel rivet powerbreak${powerOpen?' on':''}" id="powerbreak">
+      <div class="hd" style="margin-bottom:5px">Power ${p.total.toLocaleString()}</div>
+      ${p.lines.map(l=>`<div class="line"><span class="dim">${esc(l.source)}</span><b class="mono">${l.value.toLocaleString()}</b></div>`).join('')}
+      <div class="line" style="border-top:1px solid var(--edge);margin-top:4px;padding-top:4px">
+        <span class="faint">built ${p.buildings.toLocaleString()} · studied ${p.research.toLocaleString()} · held ${p.collection.toLocaleString()}</span></div>
+    </div>`;
+}
+
+function renderCity(){
+  const { cols, rows } = HE.layoutSize(HREG);
+  const rowsById = Object.fromEntries(holdRows().map(r=>[r.id,r]));
+  let cells='';
+  for(let y=0;y<rows;y++) for(let x=0;x<cols;x++){
+    const id=HE.BUILDING_IDS.find(b=>HK.layout[b].x===x&&HK.layout[b].y===y);
+    const r=id?rowsById[id]:null;
+    const art=id?bldArt(id):null;
+    cells+=`<div class="plot" data-x="${x}" data-y="${y}">${r?`
+      <div class="bldg ${r.level?'':'empty'} ${r.building?'busy':''} ${!r.level&&r.unmet.length?'locked':''}" draggable="true" data-b="${r.id}">
+        ${art?`<img src="${art}" alt="">`:(A.icons[BICON[r.id]]?`<img src="${A.icons[BICON[r.id]]}" alt="">`:'')}
+        ${r.level?`<span class="lv">${r.level}</span>`:''}
+        <span class="cap">${esc(r.name)}${r.level?'':' · unbuilt'}</span>
+      </div>`:''}</div>`;
+  }
+  return `<img class="ground" src="${A.art.hold}" alt="The hold seen from above">
+    <div class="vig"></div>
+    <div class="plotgrid city" id="plotgrid" style="grid-template-columns:repeat(${cols},1fr);grid-template-rows:repeat(${rows},1fr)">${cells}</div>
+    <div class="hint-drag">Drag a building to another plot &middot; dropping it on one that is taken swaps them</div>`;
+}
+
+function renderRegion(){
+  const mine=H.power(HREG,HK).total;
+  const pins=[{name:HK.name,at:[48,50],power:mine,mine:true},...NEIGHBOURS.map(n=>({...n,mine:false}))]
+    .map(n=>`<div class="holdpin ${n.mine?'mine':'them'}" style="left:${n.at[0]}%;top:${n.at[1]}%">
+        <span class="dot"></span><b>${esc(n.name)}</b><span class="pw">${n.power.toLocaleString()} power</span></div>`).join('');
+  return `<div class="region"><img class="ground" src="${A.art.world||A.art.hold}" alt="The region around the hold">
+      <div class="vig"></div>${pins}
+      <div class="hint-drag">Zoomed out: your hold and the ones around it, each with its power. Neighbours are local stand-ins until there is a server to ask (roadmap OWN-5).</div>
+    </div>`;
+}
+
 function renderHold(){
-  const K=D.kingdom, st=K.state;
-  const resBar=Object.entries(RICON).map(([r,ic])=>`<div class="panel"><img src="${A.icons[ic]}" alt=""><b>${st.resources[r].toLocaleString()}</b></div>`).join('');
-  const pins=K.buildings.map(b=>{const p=PINS[b.id];if(!p)return'';
-    return `<div class="pin ${b.building?'busy':''}" style="left:${p[0]}%;top:${p[1]}%" data-b="${b.id}">
-      <img src="${A.icons[BICON[b.id]]}" alt=""><b>${esc(b.name)}${b.level?'':' <span style="color:var(--faint)">·</span>'}</b>
-      ${b.level?`<span class="lv">${b.level}</span>`:''}</div>`;}).join('');
-  const eff=K.effects;
+  const K=D.kingdom, st=HK;
+  const rows=holdRows();
+  const eff=HE.kingdomEffects(HREG,HK);
+  const buff=HE.tenStarBonus(HREG,HK);
+  const storage=HE.storageCap(HREG,HK);
+  const uncapped=new Set(HREG.kingdom.uncappedResources||[]);
+  const resBar=Object.entries(RICON).map(([r,ic])=>`<div class="panel" title="${esc(HREG.kingdom.resources[r].text)}">
+      ${A.icons[ic]?`<img src="${A.icons[ic]}" alt="">`:''}<b>${Math.floor(st.resources[r]).toLocaleString()}</b></div>`).join('');
+
   $('holdpane').innerHTML=`
-   <div class="holdmap"><img src="${A.art.hold}" alt="The stronghold seen from above"><div class="vig"></div>
-     <div class="res">${resBar}</div>${pins}</div>
+   <div class="holdmap" id="cityhost">
+     ${renderPower()}
+     <div class="res" style="left:auto;right:14px">${resBar}</div>
+     ${cityZoom==='city'?renderCity():renderRegion()}
+     <div class="panel rivet cityhead" style="position:absolute;left:14px;bottom:26px;z-index:6">
+       <span class="hd">${esc(st.name)}</span>
+       <span class="faint mono" style="font-size:11.5px">${esc(HREG.kingdom.buildings.KEEP.name)} ${st.levels.KEEP} · storage ${storage.toLocaleString()}</span>
+       <span class="zooms">
+         <button data-zoom="city" class="${cityZoom==='city'?'on':''}">City</button>
+         <button data-zoom="region" class="${cityZoom==='region'?'on':''}">Region</button>
+       </span>
+     </div>
+   </div>
    <div class="holdside">
-     <div class="sec"><h3 class="sc">${esc(st.name)} <span class="faint mono" style="font-size:12px">Keep ${st.levels.KEEP} · storage ${K.storage.toLocaleString()}</span></h3>
+     <div class="sec"><h3 class="sc">${esc(st.name)}</h3>
        <p class="faint" style="font-size:13px;margin:0 0 8px">Everything raised here follows you onto the field. Buildings and finished study show up by name in the attack breakdown, so a battle can always be traced back to what you built.</p>
        <div class="req"><div class="line"><span class="dim">Army capacity carried in</span><b class="mono">+${eff.armyCapacity}</b></div>
          <div class="line"><span class="dim">Fusion charges</span><b class="mono">${eff.fusionCharges}</b></div>
-         <div class="line"><span class="dim">Ritual progress</span><b class="mono">+${eff.ritualProgress}</b></div>
-         ${eff.statMods.map(m=>`<div class="line"><span class="dim">${esc(m.source)}${m.role?' <span class="faint">('+esc(m.role)+' only)</span>':''}</span><b class="mono">${m.value>0?'+':''}${m.value} ${m.stat}</b></div>`).join('')}</div>
+         ${eff.statMods.map(m=>`<div class="line"><span class="dim">${esc(m.source)}${m.role?' <span class="faint">('+esc(m.role)+' only)</span>':''}</span><b class="mono">${m.value>0?'+':''}${m.value} ${m.stat}</b></div>`).join('')}
+         <div class="line" style="border-top:1px solid var(--edge);margin-top:4px;padding-top:4px">
+           <span class="dim">Ten-star bonus${buff.units.length?` <span class="faint">(${buff.units.length} held)</span>`:''}</span>
+           <b class="mono" style="color:${buff.multiplier?'var(--star)':'var(--faint)'}">+${Math.round(buff.multiplier*100)}% ${buff.resources.map(r=>HREG.kingdom.resources[r].name).join(', ')}</b></div>
+       </div>
+       <p class="faint" style="font-size:12px;margin:6px 0 0">${esc(HREG.kingdom.tenStarProduction.text)}</p>
      </div>
-     <div class="sec"><h3 class="sc">Works <span class="faint" style="font-size:12px">${st.buildQueue.length?'1 under way':'nothing under way'}</span></h3>
-       ${K.buildings.map(b=>`<div class="bld ${b.building?'q':''}" data-b="${b.id}">
-          ${A.tiers[b.id+'_T'+b.tier.tier]?`<img class="thumb" src="${A.tiers[b.id+'_T'+b.tier.tier]}" alt="">`:`<img src="${A.icons[BICON[b.id]]}" alt="">`}
-          <div><div class="n">${esc(b.name)} <span class="faint" style="font-size:11px">tier ${b.tier.tier}${b.nextTierAt?` · rebuilds at ${b.nextTierAt}`:''}</span></div><div class="t">${esc(b.text)}</div>
-            ${b.building?`<div class="bar"><i style="width:${(100*(1-b.building.secondsLeft/b.nextSeconds)).toFixed(0)}%"></i></div>`:''}</div>
+     <div class="sec"><h3 class="sc">Works <span class="faint" style="font-size:12px">${st.buildQueue.length?st.buildQueue.length+' under way':'nothing under way'}</span></h3>
+       ${rows.map(b=>`<div class="bld ${b.building?'q':''}" data-b="${b.id}">
+          ${bldArt(b.id)?`<img class="thumb" src="${bldArt(b.id)}" alt="">`:`<img src="${A.icons[BICON[b.id]]||''}" alt="">`}
+          <div><div class="n">${esc(b.name)} <span class="faint" style="font-size:11px">tier ${b.tier.tier}${b.nextTierAt?` · rebuilds at ${b.nextTierAt}`:''}</span></div>
+            <div class="t">${esc(b.text)}</div>
+            ${b.unmet.length?`<div class="t" style="color:var(--bad)">Needs ${b.unmet.map(u=>esc(HREG.kingdom.buildings[u.building].name)+' '+u.level).join(', ')}</div>`:''}
+            ${b.building?`<div class="bar"><i style="width:${(100*(1-b.building.secondsLeft/Math.max(1,b.nextSeconds))).toFixed(0)}%"></i></div>`:''}</div>
           <div style="text-align:right"><div class="lvl">${b.level}</div>
-            <div class="faint mono" style="font-size:10.5px">${b.building?secs(b.building.secondsLeft):'→ '+secs(b.nextSeconds)}</div></div>
+            <div class="faint mono" style="font-size:10.5px">${b.building?secs(b.building.secondsLeft):'→ '+secs(b.nextSeconds)}</div>
+            <button class="act" data-raise="${b.id}" ${b.can&&!b.building?'':'disabled'}>Raise</button></div>
         </div>`).join('')}
-     </div>
-     <div class="sec"><h3 class="sc">Upgrade tiers <span class="faint" style="font-size:12px">Keep · levels 1-3, 4-7, 8-10</span></h3>
-       <p class="faint" style="font-size:12.5px;margin:0 0 7px">A building changes its look three times over ten levels. Where a tier has not been painted yet the previous one keeps standing, so a missing asset never leaves a hole in the map.</p>
-       <div class="tierstrip">${K.tierBands.map(band=>{const art=A.tiers['KEEP_T'+band.tier];
-         return `<figure class="${band.tier===K.buildings.find(x=>x.id==='KEEP').tier.tier?'now':''}">${art?`<img src="${art}" alt="Keep tier ${band.tier}">`:'<div class="todo">not painted</div>'}
-           <figcaption>Tier ${band.tier} · levels ${band.fromLevel}–${band.toLevel}</figcaption></figure>`;}).join('')}</div>
-       <div class="tierstrip" style="margin-top:7px">${K.tierBands.map(band=>{const art=A.tiers['WALL_T'+band.tier];
-         return `<figure class="${band.tier===K.buildings.find(x=>x.id==='WALL').tier.tier?'now':''}">${art?`<img src="${art}" alt="Wall tier ${band.tier}">`:'<div class="todo">not painted</div>'}
-           <figcaption>Wall tier ${band.tier}</figcaption></figure>`;}).join('')}</div>
+       <div class="faint" style="font-size:11.5px;margin-top:4px" id="hold-msg"></div>
      </div>
      <div class="sec"><h3 class="sc">Study</h3>
        <div class="tree">${K.research.map(r=>`<div class="node ${r.done?'done':r.active?'active':r.available?'':'locked'}">
          <div><b>${esc(r.name)}</b> <span class="faint" style="font-size:11px">tier ${r.tier}</span><p>${esc(r.text)}</p></div>
          <div style="text-align:right"><div class="st" style="color:${r.done?'var(--good)':r.active?'var(--warn)':r.available?'var(--dim)':'var(--faint)'}">${r.done?'Complete':r.active?secs(r.activeLeft):r.available?'Ready':'Locked'}</div>
-         <div class="cost" style="justify-content:flex-end;margin-top:2px">${Object.entries(r.cost).map(([k2,v])=>`<span><img src="${A.icons[RICON[k2]]}" alt="">${v}</span>`).join('')}</div></div></div>`).join('')}</div>
+         <div class="cost" style="justify-content:flex-end;margin-top:2px">${Object.entries(r.cost).map(([k2,v])=>`<span>${A.icons[RICON[k2]]?`<img src="${A.icons[RICON[k2]]}" alt="">`:''}${v}</span>`).join('')}</div></div></div>`).join('')}</div>
      </div>
      <div class="sec"><h3 class="sc">Recruitment</h3>
+       <p class="faint" style="font-size:12.5px;margin:0 0 7px">Summoning is paid in silver, gold and ruby. Nothing you build produces ruby.</p>
        ${K.banners.map(b=>{const max=Math.max(...b.rates.map(r=>r.weight));
+         const cost=HREG.kingdom ? (HREG.banners.get(b.id)?.cost ?? b.cost) : b.cost;
          return `<div class="banner"><h4>${esc(b.name)}</h4><p>${esc(b.text)}</p>
-           <div class="cost">${Object.entries(b.cost).map(([k2,v])=>`<span><img src="${A.icons[RICON[k2]]}" alt="">${v}</span>`).join('')}<span class="faint">· guarantee at ${b.pity} draws</span></div>
+           <div class="cost">${Object.entries(cost).map(([k2,v])=>`<span>${A.icons[RICON[k2]]?`<img src="${A.icons[RICON[k2]]}" alt="">`:''}${v}</span>`).join('')}<span class="faint">· guarantee at ${b.pity} draws</span></div>
            <div class="rates">${b.rates.map(r=>`<div style="height:${Math.max(3,r.weight/max*32)}px" title="${r.stars}★ ${r.weight}%"><em>${r.stars}</em></div>`).join('')}</div>
            <div style="height:12px"></div></div>`;}).join('')}
      </div>
    </div>`;
-  $('holdpane').querySelectorAll('[data-b]').forEach(elm=>{
-    elm.onmousemove=(e)=>{const b=K.buildings.find(x=>x.id===elm.dataset.b);
+
+  wireHold();
+}
+
+/** Everything the Hold screen listens to. Re-run after each render. */
+function wireHold(){
+  $('holdpane').querySelectorAll('[data-zoom]').forEach(btn=>btn.onclick=()=>{cityZoom=btn.dataset.zoom;renderHold();});
+
+  const pb=$('powerbox');
+  if(pb) pb.onclick=()=>{powerOpen=!powerOpen;$('powerbreak').classList.toggle('on',powerOpen);};
+
+  $('holdpane').querySelectorAll('[data-raise]').forEach(btn=>btn.onclick=()=>{
+    const res=HE.startUpgrade(HREG,HK,btn.dataset.raise);
+    if(!res.ok){ const m=$('hold-msg'); if(m){m.textContent=res.reason;m.style.color='var(--bad)';} return; }
+    renderHold();
+  });
+
+  // Drag a building from one plot to another. `moveBuilding` and `swapBuildings` decide whether it
+  // is allowed; this only reports what they say.
+  let held=null;
+  $('holdpane').querySelectorAll('.bldg').forEach(elm=>{
+    elm.addEventListener('dragstart',e=>{held=elm.dataset.b;elm.classList.add('dragging');
+      try{e.dataTransfer.setData('text/plain',held);e.dataTransfer.effectAllowed='move';}catch{}});
+    elm.addEventListener('dragend',()=>{held=null;elm.classList.remove('dragging');
+      $('holdpane').querySelectorAll('.plot.over').forEach(p=>p.classList.remove('over'));});
+  });
+  $('holdpane').querySelectorAll('.plot').forEach(cell=>{
+    cell.addEventListener('dragover',e=>{if(held){e.preventDefault();cell.classList.add('over');}});
+    cell.addEventListener('dragleave',()=>cell.classList.remove('over'));
+    cell.addEventListener('drop',e=>{
+      e.preventDefault(); cell.classList.remove('over');
+      if(!held) return;
+      const to={x:+cell.dataset.x,y:+cell.dataset.y};
+      const sitting=HE.BUILDING_IDS.find(b=>HK.layout[b].x===to.x&&HK.layout[b].y===to.y);
+      const res = sitting && sitting!==held ? HE.swapBuildings(HK,held,sitting) : HE.moveBuilding(HREG,HK,held,to);
+      held=null;
+      if(!res.ok){ const m=$('hold-msg'); if(m){m.textContent=res.reason;m.style.color='var(--bad)';} }
+      renderHold();
+    });
+  });
+
+  $('holdpane').querySelectorAll('.bld[data-b]').forEach(elm=>{
+    elm.onmousemove=(e)=>{const b=holdRows().find(x=>x.id===elm.dataset.b);
       $('tip').style.display='block';$('tip').style.left=(e.clientX+14)+'px';$('tip').style.top=(e.clientY+14)+'px';
       $('tip').innerHTML=`<b>${esc(b.name)} · level ${b.level}</b>${esc(b.text)}<br><span class="m">next: ${Object.entries(b.nextCost).map(([k2,v])=>k2+' '+v).join(' · ')} · ${secs(b.nextSeconds)}</span>`;};
     elm.onmouseleave=hideTip;});

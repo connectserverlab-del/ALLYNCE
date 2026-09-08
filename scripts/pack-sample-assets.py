@@ -46,8 +46,14 @@ def uri(rel, kind):
 
 UI = "art/ui"
 ICONS = ["BLD-BARRACKS", "BLD-BUILD", "BLD-FORGE", "BLD-KEEP", "BLD-RECRUIT", "BLD-RESEARCH",
-         "RES-IRON", "RES-KOKU", "RES-SILVER", "RES-TIMBER", "UI-BANNER", "UI-DRAW",
+         "RES-IRON", "RES-KOKU", "RES-SILVER", "RES-TIMBER", "RES-GOLD", "RES-RUBY",
+         "UI-BANNER", "UI-DRAW", "UI-POWER",
          "STAT-LIFE", "STAT-ATK", "STAT-DEF"]
+
+# Painted plan-view terrain symbols. The field drew these as bare SVG paths — a triangle for a
+# mountain, four little wedges for a wood — which is what a map looks like before anyone paints it.
+MAP_SYMBOLS = ["FOREST", "TREE", "MOUNTAIN", "HILL", "BRIDGE", "RIVER", "FORD",
+               "RUINS", "PALISADE", "ROAD", "MARSH", "WATCHTOWER"]
 
 
 def main(out_path):
@@ -84,7 +90,12 @@ def main(out_path):
         },
         "tiers": {},
         "tokens": {},
+        "map": {},
     }
+    for m in MAP_SYMBOLS:
+        u = uri(f"art/map/MAP_{m}_V01.png", "token")
+        if u:
+            assets["map"][m] = u
     for i in ICONS:
         u = uri(f"{UI}/ICON_{i}_V01.png", "icon")
         if u:
@@ -118,7 +129,8 @@ def main(out_path):
         json.dump(assets, fh)
     size = os.path.getsize(out_path) / 1e6
     print(f"packed {len(assets['tokens'])} tokens ({len(units)} units + stratagem emblems), "
-          f"{len(assets['tiers'])} building tiers, {len(assets['icons'])} icons "
+          f"{len(assets['tiers'])} building tiers, {len(assets['icons'])} icons, "
+          f"{len(assets['map'])} map symbols "
           f"({size:.1f} MB)")
 
 

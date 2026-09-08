@@ -57,8 +57,11 @@ for (const [id, label, p] of [
   ["STAR_FILLED", "Star: earned", "art/ui/STAR_FILLED_V01.png"],
   ["STAR_EMPTY", "Star: unearned", "art/ui/STAR_EMPTY_V01.png"],
 ]) add("World and interface", id, label, "art", p);
-for (const n of ["RES-KOKU","RES-IRON","RES-TIMBER","RES-SILVER","BLD-FORGE","BLD-RESEARCH","BLD-RECRUIT","BLD-BARRACKS","BLD-KEEP","UI-BANNER","UI-DRAW","BLD-BUILD"])
+for (const n of ["RES-KOKU","RES-IRON","RES-TIMBER","RES-SILVER","RES-GOLD","RES-RUBY","BLD-FORGE","BLD-RESEARCH","BLD-RECRUIT","BLD-BARRACKS","BLD-KEEP","UI-BANNER","UI-DRAW","UI-POWER","BLD-BUILD","STAT-LIFE","STAT-ATK","STAT-DEF"])
   add("Icons", n, n.replace(/-/g, " ").toLowerCase(), "icon", `art/ui/ICON_${n}_V01.png`);
+// Painted plan-view terrain symbols for the field.
+for (const n of ["FOREST","TREE","MOUNTAIN","HILL","BRIDGE","RIVER","FORD","RUINS","PALISADE","ROAD","MARSH","WATCHTOWER"])
+  add("Map symbols", n, n.toLowerCase(), "map", `art/map/MAP_${n}_V01.png`);
 
 const summary = {};
 for (const r of rows) {

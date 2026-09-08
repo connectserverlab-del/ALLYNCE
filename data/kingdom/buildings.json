@@ -2,26 +2,40 @@
   "resources": {
     "koku": {
       "name": "Koku",
-      "text": "Rice measured for a year of service. Feeds every soldier you keep."
+      "text": "Rice measured for a year of service. Feeds every soldier you keep.",
+      "kind": "common"
     },
     "iron": {
       "name": "Iron",
-      "text": "Bar stock for blades, plate and cannon."
+      "text": "Bar stock for blades, plate and cannon.",
+      "kind": "common"
     },
     "timber": {
       "name": "Timber",
-      "text": "Beams, carriages, siege frames and palisades."
+      "text": "Beams, carriages, siege frames and palisades.",
+      "kind": "common"
     },
     "silver": {
       "name": "Silver",
-      "text": "Coin for oaths, contracts and recruiters."
+      "text": "Coin for oaths, contracts and recruiters.",
+      "kind": "common"
+    },
+    "gold": {
+      "name": "Gold",
+      "text": "Struck coin. What the summoning bell and the shopkeeper both want.",
+      "kind": "premium"
+    },
+    "ruby": {
+      "name": "Ruby",
+      "text": "Cut stones out of the deep seams. Never produced by a building; won, found, or paid for.",
+      "kind": "rare"
     }
   },
   "buildings": {
     "KEEP": {
-      "name": "Keep",
+      "name": "City Hall",
       "maxLevel": 10,
-      "text": "Your seat. No other building may exceed the Keep's level.",
+      "text": "Your seat. No other building may exceed the City Hall's level.",
       "cost": {
         "koku": 400,
         "iron": 200,
@@ -38,6 +52,10 @@
         "art/buildings/BLD_KEEP_T1_V01.jpg",
         "art/buildings/BLD_KEEP_T2_V01.jpg",
         "art/buildings/BLD_KEEP_T3_V01.jpg"
+      ],
+      "plot": [
+        5,
+        3
       ]
     },
     "GRANARY": {
@@ -58,6 +76,10 @@
         "art/buildings/BLD_GRANARY_T1_V01.jpg",
         "art/buildings/BLD_GRANARY_T2_V01.jpg",
         "art/buildings/BLD_GRANARY_T3_V01.jpg"
+      ],
+      "plot": [
+        2,
+        2
       ]
     },
     "MINE": {
@@ -78,6 +100,16 @@
         "art/buildings/BLD_MINE_T1_V01.jpg",
         "art/buildings/BLD_MINE_T2_V01.jpg",
         "art/buildings/BLD_MINE_T3_V01.jpg"
+      ],
+      "requires": [
+        {
+          "building": "SAWPIT",
+          "level": 1
+        }
+      ],
+      "plot": [
+        9,
+        2
       ]
     },
     "SAWPIT": {
@@ -98,6 +130,10 @@
         "art/buildings/BLD_SAWPIT_T1_V01.jpg",
         "art/buildings/BLD_SAWPIT_T2_V01.jpg",
         "art/buildings/BLD_SAWPIT_T3_V01.jpg"
+      ],
+      "plot": [
+        1,
+        5
       ]
     },
     "BARRACKS": {
@@ -119,6 +155,16 @@
         "art/buildings/BLD_BARRACKS_T1_V01.jpg",
         "art/buildings/BLD_BARRACKS_T2_V01.jpg",
         "art/buildings/BLD_BARRACKS_T3_V01.jpg"
+      ],
+      "requires": [
+        {
+          "building": "GRANARY",
+          "level": 1
+        }
+      ],
+      "plot": [
+        3,
+        5
       ]
     },
     "RESEARCH_HALL": {
@@ -142,6 +188,16 @@
         "art/buildings/BLD_RESEARCH_HALL_T1_V01.jpg",
         "art/buildings/BLD_RESEARCH_HALL_T2_V01.jpg",
         "art/buildings/BLD_RESEARCH_HALL_T3_V01.jpg"
+      ],
+      "requires": [
+        {
+          "building": "KEEP",
+          "level": 2
+        }
+      ],
+      "plot": [
+        3,
+        1
       ]
     },
     "RECRUITMENT_HALL": {
@@ -164,6 +220,16 @@
         "art/buildings/BLD_RECRUITMENT_HALL_T1_V01.jpg",
         "art/buildings/BLD_RECRUITMENT_HALL_T2_V01.jpg",
         "art/buildings/BLD_RECRUITMENT_HALL_T3_V01.jpg"
+      ],
+      "requires": [
+        {
+          "building": "BARRACKS",
+          "level": 1
+        }
+      ],
+      "plot": [
+        7,
+        1
       ]
     },
     "FORGE": {
@@ -185,6 +251,16 @@
         "art/buildings/BLD_FORGE_T1_V01.jpg",
         "art/buildings/BLD_FORGE_T2_V01.jpg",
         "art/buildings/BLD_FORGE_T3_V01.jpg"
+      ],
+      "requires": [
+        {
+          "building": "MINE",
+          "level": 2
+        }
+      ],
+      "plot": [
+        8,
+        4
       ]
     },
     "STABLE": {
@@ -206,6 +282,16 @@
         "art/buildings/BLD_STABLE_T1_V01.jpg",
         "art/buildings/BLD_STABLE_T2_V01.jpg",
         "art/buildings/BLD_STABLE_T3_V01.jpg"
+      ],
+      "requires": [
+        {
+          "building": "BARRACKS",
+          "level": 2
+        }
+      ],
+      "plot": [
+        6,
+        6
       ]
     },
     "WALL": {
@@ -227,6 +313,16 @@
         "art/buildings/BLD_WALL_T1_V01.jpg",
         "art/buildings/BLD_WALL_T2_V01.jpg",
         "art/buildings/BLD_WALL_T3_V01.jpg"
+      ],
+      "requires": [
+        {
+          "building": "SAWPIT",
+          "level": 2
+        }
+      ],
+      "plot": [
+        0,
+        7
       ]
     },
     "SHRINE": {
@@ -250,6 +346,82 @@
         "art/buildings/BLD_SHRINE_T1_V01.jpg",
         "art/buildings/BLD_SHRINE_T2_V01.jpg",
         "art/buildings/BLD_SHRINE_T3_V01.jpg"
+      ],
+      "requires": [
+        {
+          "building": "RESEARCH_HALL",
+          "level": 2
+        }
+      ],
+      "plot": [
+        10,
+        6
+      ]
+    },
+    "SHOP": {
+      "name": "Shop",
+      "maxLevel": 10,
+      "text": "Trade turns grain and ore into coin. Every level raises the gold it brings in.",
+      "cost": {
+        "koku": 300,
+        "timber": 250,
+        "silver": 200
+      },
+      "costGrowth": 1.55,
+      "buildSeconds": 600,
+      "timeGrowth": 1.7,
+      "produces": {
+        "gold": 12
+      },
+      "requires": [
+        {
+          "building": "KEEP",
+          "level": 2
+        }
+      ],
+      "art": [
+        "art/buildings/BLD_SHOP_T1_V01.jpg",
+        "art/buildings/BLD_SHOP_T2_V01.jpg",
+        "art/buildings/BLD_SHOP_T3_V01.jpg"
+      ],
+      "plot": [
+        7,
+        3
+      ]
+    },
+    "ARMORY": {
+      "name": "Armory",
+      "maxLevel": 10,
+      "text": "Kept arms and mail. Every level adds defence to every unit you field.",
+      "cost": {
+        "iron": 400,
+        "timber": 300,
+        "silver": 150
+      },
+      "costGrowth": 1.55,
+      "buildSeconds": 600,
+      "timeGrowth": 1.7,
+      "effect": {
+        "def": 12
+      },
+      "requires": [
+        {
+          "building": "KEEP",
+          "level": 3
+        },
+        {
+          "building": "FORGE",
+          "level": 2
+        }
+      ],
+      "art": [
+        "art/buildings/BLD_ARMORY_T1_V01.jpg",
+        "art/buildings/BLD_ARMORY_T2_V01.jpg",
+        "art/buildings/BLD_ARMORY_T3_V01.jpg"
+      ],
+      "plot": [
+        9,
+        5
       ]
     }
   },
@@ -257,7 +429,9 @@
     "koku": 800,
     "iron": 500,
     "timber": 800,
-    "silver": 600
+    "silver": 600,
+    "gold": 250,
+    "ruby": 5
   },
   "storagePerKeepLevel": 4000,
   "tierBands": [
@@ -278,6 +452,65 @@
       "fromLevel": 8,
       "toLevel": 10,
       "text": "Enlarged, towered and fortified."
+    }
+  ],
+  "uncappedResources": [
+    "gold",
+    "ruby"
+  ],
+  "tenStarProduction": {
+    "bonusPerUnit": 0.2,
+    "resources": [
+      "koku",
+      "iron",
+      "timber"
+    ],
+    "text": "Every distinct ten-star unit in the collection raises grain, ore and timber production by 20%."
+  },
+  "layout": {
+    "cols": 12,
+    "rows": 8,
+    "text": "The hold is a grid of plots. A building occupies one plot and may be moved to any free plot."
+  },
+  "power": {
+    "perBuildingLevel": 40,
+    "levelExponent": 1.35,
+    "cityHallMultiplier": 2.5,
+    "perResearch": 120,
+    "perCardByStar": [
+      5,
+      12,
+      25,
+      50,
+      90,
+      160,
+      280,
+      480,
+      800,
+      1400
+    ],
+    "duplicateShare": 0.25,
+    "text": "One comparable number for a holding's strength: what is built, what is researched, what is owned. Never anything from a battle in progress or from the clock."
+  },
+  "borders": [
+    {
+      "id": "gold",
+      "name": "Gold Leaf",
+      "text": "Gold beaten thin over the card's edge and burnished. Display only; it changes no rule.",
+      "cost": {
+        "gold": 4000,
+        "silver": 2500
+      }
+    },
+    {
+      "id": "rainbow",
+      "name": "Rainbow Foil",
+      "text": "Split light worked into the leaf, so the edge shifts colour as the card turns. Display only. The gold border must be bought first.",
+      "cost": {
+        "gold": 18000,
+        "ruby": 30
+      },
+      "requires": "gold"
     }
   ]
 }

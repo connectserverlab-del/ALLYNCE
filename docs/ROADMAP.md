@@ -858,3 +858,17 @@ passes; this one doesn't resolve it either.
   everything landed this pass is `false`. The registry counts a file as present because it exists, which is
   how a fully opaque cutout once shipped; approval is the owner's, and the manifest should be what the
   contact sheet is built from, so an unapproved plate is visible as unapproved rather than merely present.
+
+- 2026-09-08 proposal: the holding gained currencies, power, plots, prerequisites and card cosmetics, and the
+  type system paid for itself on the first of those. Widening `ResourceId` by two broke nine files — every
+  place that had written out a full resource bag as a literal — and each one was a place a new currency would
+  otherwise have been silently missing. The fix was `NO_RESOURCES` and `RESOURCE_IDS`, one canonical spelling.
+  Proposal: the same treatment for the other bags that are still written out by hand, `Reward` having just
+  been converted; a full-record literal is a silent-drop waiting for the next field.
+  Related, and open: `power()` is deterministic and derived only from durable state precisely so a server can
+  recompute a client's claim, but nothing checks that today. When `OWN-5` settles the multiplayer shape, the
+  first thing the server should do is verify power the same way `Q-20`'s round hash verifies a battle — the
+  region view already shows neighbours' power, and today those neighbours are local stand-ins.
+  Also open: a shine is capped at five merges and a border is a single purchase, so a card has a small,
+  finite set of appearances. That is deliberate, but it means the sink for a very rich player is shallow;
+  the roadmap should decide whether there is a deeper one before anything is priced against real money.

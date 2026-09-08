@@ -1,7 +1,7 @@
 {
   "generated": "npm run assets",
   "total": {
-    "present": 331,
+    "present": 355,
     "missing": 0
   },
   "summary": {
@@ -11,7 +11,7 @@
       "derived": 0
     },
     "Buildings": {
-      "present": 33,
+      "present": 39,
       "missing": 0,
       "derived": 0
     },
@@ -26,6 +26,11 @@
       "derived": 0
     },
     "Icons": {
+      "present": 18,
+      "missing": 0,
+      "derived": 0
+    },
+    "Map symbols": {
       "present": 12,
       "missing": 0,
       "derived": 0
@@ -2429,7 +2434,7 @@
     {
       "group": "Buildings",
       "id": "KEEP_T1",
-      "label": "Keep tier 1",
+      "label": "City Hall tier 1",
       "kind": "building",
       "path": "art/buildings/BLD_KEEP_T1_V01.jpg",
       "status": "present",
@@ -2438,7 +2443,7 @@
     {
       "group": "Buildings",
       "id": "KEEP_T2",
-      "label": "Keep tier 2",
+      "label": "City Hall tier 2",
       "kind": "building",
       "path": "art/buildings/BLD_KEEP_T2_V01.jpg",
       "status": "present",
@@ -2447,7 +2452,7 @@
     {
       "group": "Buildings",
       "id": "KEEP_T3",
-      "label": "Keep tier 3",
+      "label": "City Hall tier 3",
       "kind": "building",
       "path": "art/buildings/BLD_KEEP_T3_V01.jpg",
       "status": "present",
@@ -2724,6 +2729,60 @@
       "note": "levels 8-10"
     },
     {
+      "group": "Buildings",
+      "id": "SHOP_T1",
+      "label": "Shop tier 1",
+      "kind": "building",
+      "path": "art/buildings/BLD_SHOP_T1_V01.jpg",
+      "status": "present",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "SHOP_T2",
+      "label": "Shop tier 2",
+      "kind": "building",
+      "path": "art/buildings/BLD_SHOP_T2_V01.jpg",
+      "status": "present",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "SHOP_T3",
+      "label": "Shop tier 3",
+      "kind": "building",
+      "path": "art/buildings/BLD_SHOP_T3_V01.jpg",
+      "status": "present",
+      "note": "levels 8-10"
+    },
+    {
+      "group": "Buildings",
+      "id": "ARMORY_T1",
+      "label": "Armory tier 1",
+      "kind": "building",
+      "path": "art/buildings/BLD_ARMORY_T1_V01.jpg",
+      "status": "present",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "ARMORY_T2",
+      "label": "Armory tier 2",
+      "kind": "building",
+      "path": "art/buildings/BLD_ARMORY_T2_V01.jpg",
+      "status": "present",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "ARMORY_T3",
+      "label": "Armory tier 3",
+      "kind": "building",
+      "path": "art/buildings/BLD_ARMORY_T3_V01.jpg",
+      "status": "present",
+      "note": "levels 8-10"
+    },
+    {
       "group": "Side cards",
       "id": "SIDE_RIT_VOID-CORONATION",
       "label": "The Void Coronation",
@@ -2977,6 +3036,24 @@
     },
     {
       "group": "Icons",
+      "id": "RES-GOLD",
+      "label": "res gold",
+      "kind": "icon",
+      "path": "art/ui/ICON_RES-GOLD_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "RES-RUBY",
+      "label": "res ruby",
+      "kind": "icon",
+      "path": "art/ui/ICON_RES-RUBY_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
       "id": "BLD-FORGE",
       "label": "bld forge",
       "kind": "icon",
@@ -3040,10 +3117,154 @@
     },
     {
       "group": "Icons",
+      "id": "UI-POWER",
+      "label": "ui power",
+      "kind": "icon",
+      "path": "art/ui/ICON_UI-POWER_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
       "id": "BLD-BUILD",
       "label": "bld build",
       "kind": "icon",
       "path": "art/ui/ICON_BLD-BUILD_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "STAT-LIFE",
+      "label": "stat life",
+      "kind": "icon",
+      "path": "art/ui/ICON_STAT-LIFE_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "STAT-ATK",
+      "label": "stat atk",
+      "kind": "icon",
+      "path": "art/ui/ICON_STAT-ATK_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "STAT-DEF",
+      "label": "stat def",
+      "kind": "icon",
+      "path": "art/ui/ICON_STAT-DEF_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "FOREST",
+      "label": "forest",
+      "kind": "map",
+      "path": "art/map/MAP_FOREST_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "TREE",
+      "label": "tree",
+      "kind": "map",
+      "path": "art/map/MAP_TREE_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "MOUNTAIN",
+      "label": "mountain",
+      "kind": "map",
+      "path": "art/map/MAP_MOUNTAIN_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "HILL",
+      "label": "hill",
+      "kind": "map",
+      "path": "art/map/MAP_HILL_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "BRIDGE",
+      "label": "bridge",
+      "kind": "map",
+      "path": "art/map/MAP_BRIDGE_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "RIVER",
+      "label": "river",
+      "kind": "map",
+      "path": "art/map/MAP_RIVER_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "FORD",
+      "label": "ford",
+      "kind": "map",
+      "path": "art/map/MAP_FORD_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "RUINS",
+      "label": "ruins",
+      "kind": "map",
+      "path": "art/map/MAP_RUINS_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "PALISADE",
+      "label": "palisade",
+      "kind": "map",
+      "path": "art/map/MAP_PALISADE_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "ROAD",
+      "label": "road",
+      "kind": "map",
+      "path": "art/map/MAP_ROAD_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "MARSH",
+      "label": "marsh",
+      "kind": "map",
+      "path": "art/map/MAP_MARSH_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "WATCHTOWER",
+      "label": "watchtower",
+      "kind": "map",
+      "path": "art/map/MAP_WATCHTOWER_V01.png",
       "status": "present",
       "note": ""
     }

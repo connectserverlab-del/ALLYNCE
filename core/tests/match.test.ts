@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { reg } from "./helpers.js";
+import { reg, fill, enable } from "./helpers.js";
 import { buildStarterDeck } from "../src/cards.js";
 import { runMatch, setUpMatch, openingForce, spoils, collectReward, aiPlayCards } from "../src/match.js";
 import { newKingdom, startUpgrade, tick } from "../src/kingdom.js";
@@ -81,7 +81,8 @@ describe("a whole match", () => {
 
   it("carries a holding into the match so its buildings show up in the battle", () => {
     const k = newKingdom(reg, "SAM");
-    k.resources = { koku: 99999, iron: 99999, timber: 99999, silver: 99999 };
+    k.resources = fill(99999);
+    enable(reg, k, "BARRACKS");
     startUpgrade(reg, k, "BARRACKS"); tick(reg, k, 1e6);
     const { ctrl } = setUpMatch({ reg, seed: 4, A: { deck: decks.SHI, name: "a" }, B: { deck: decks.SAM, name: "b", kingdom: k } });
     expect(ctrl.b.kingdomEffects.get("B")!.armyCapacity).toBe(12);
@@ -110,7 +111,8 @@ describe("saving and loading", () => {
 
   it("round-trips a holding and refuses a save from another version", () => {
     const k = newKingdom(reg, "KNI");
-    k.resources = { koku: 99999, iron: 99999, timber: 99999, silver: 99999 };
+    k.resources = fill(99999);
+    enable(reg, k, "FORGE");
     startUpgrade(reg, k, "FORGE"); tick(reg, k, 1e6);
     const save = saveGame(null, k);
     const back = loadGame(reg, save);
