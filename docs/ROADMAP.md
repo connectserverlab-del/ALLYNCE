@@ -640,3 +640,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   (`UnitState.fusedFrom` is set) as a priority kill the way it already weights a ritualist or an exposed elite:
   a fused body carries the value of the two or three cards that went into it, so a smart opponent should want
   to break it apart before it lands the first swing, not treat it as an ordinary target of the same size.
+
+- 2026-09-06: Proposal — a fourth, portal-driven path to surrender pressure: on an odd-shaped map with only two or
+  three portals anchoring the uneven ground, a side that holds every portal on the field (by capture, not just
+  survival) for three straight rounds should force an immediate morale check on the side with none, on top of the
+  existing average-morale surrender condition. Capturing a portal already flips it permanently rather than merely
+  disabling it, so this would give capture a payoff beyond the reinforcement stream it steals, and it reads as a
+  natural escalation on a battlefield built from trenches and mud rather than an even square.
