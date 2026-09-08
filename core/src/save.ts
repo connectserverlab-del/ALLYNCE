@@ -16,6 +16,16 @@ export interface BattleSave {
   version: number; seed: number; round: number; phase: string;
   width: number; height: number; mask: string[] | null;
   weather: WeatherId; timeOfDay: TimeOfDayId;
+  /**
+   * Per-round effect state: Formal Duel pairings, PhaseMove/SequencedMove orders, Silent Directive's
+   * hide-after-attack mark, Oath of Intercession's once-per-round use, Hold the Standard's rout
+   * immunity, and any smoke or briar snare still ticking down. A save must carry these or a battle
+   * saved mid-duel, mid-order or under unexpired smoke forgets all of it silently on load, the same
+   * way one saved mid-ritual would without `rituals`.
+   */
+  duels: Array<[string, string]>; orderFlags: Array<[string, string]>;
+  hideAfterAttack: string[]; interceptUsed: string[]; tempPreventRouted: string[];
+  timedTerrain: Array<{ key: string; rounds: number }>;
   terrain: Array<[string, Terrain]>; elevation: Array<[string, number]>;
   units: UnitState[]; platoons: PlatoonState[];
   sides: Array<{ id: string; reservePoints: number; armyCapacity: number; morale: number; leaderUid?: string | null; surrendered?: boolean; fusionCharges?: number; companyOrderUsedThisRound?: boolean }>;
@@ -37,6 +47,9 @@ export function saveBattle(b: Battle): BattleSave {
     version: SAVE_VERSION, seed: b.seed, round: b.round, phase: b.phase,
     width: b.width, height: b.height, mask: b.mask ? [...b.mask] : null,
     weather: b.weather, timeOfDay: b.timeOfDay,
+    duels: [...b.duels.entries()], orderFlags: [...b.orderFlags.entries()],
+    hideAfterAttack: [...b.hideAfterAttack], interceptUsed: [...b.interceptUsed], tempPreventRouted: [...b.tempPreventRouted],
+    timedTerrain: b.timedTerrain.map((t) => ({ ...t })),
     terrain: [...b.terrain.entries()], elevation: [...b.elevation.entries()],
     units: [...b.units.values()].map((u) => ({ ...u, statuses: u.statuses.map((s) => ({ ...s })), cooldowns: { ...u.cooldowns } })),
     platoons: [...b.platoons.values()].map((p) => ({ ...p, footUids: [...p.footUids] })),
@@ -83,6 +96,15 @@ export function loadBattle(reg: Registry, save: BattleSave): Battle {
   b.events.push(...save.events);
   b.captures.push(...(save.captures ?? []).map((c) => ({ ...c })));
   for (const [side, ids] of save.wanted ?? []) b.wanted.set(side, new Set(ids));
+  // These now live on the Battle, so a load fills in this battle's own flags and leaves any other
+  // battle alive in the process untouched.
+  for (const [k, v] of save.duels ?? []) b.duels.set(k, v);
+  for (const [k, v] of save.orderFlags ?? []) b.orderFlags.set(k, v);
+  for (const uid of save.hideAfterAttack ?? []) b.hideAfterAttack.add(uid);
+  for (const uid of save.interceptUsed ?? []) b.interceptUsed.add(uid);
+  for (const uid of save.tempPreventRouted ?? []) b.tempPreventRouted.add(uid);
+  for (const t of save.timedTerrain ?? []) b.timedTerrain.push({ ...t });
+
   return b;
 }
 

@@ -212,3 +212,9 @@ keep-lands to the Iron Vale.
 - A held region pays its owner resources per hour, same as a building. `regionProduction` lists each one as a
   named line — `"Region: Ashfall Keep Lands"` — and `applyCampaignProduction` folds that into the holding,
   capped by the same storage a building's own production respects.
+
+restored battle keeps issuing fresh unit ids instead of colliding with saved ones. The save also carries the
+handful of per-round effect flags that live outside the `Battle` object itself — Formal Duel pairings, PhaseMove
+and SequencedMove orders, Silent Directive's hide-after-attack mark, Oath of Intercession's once-per-round use,
+Hold the Standard's rout immunity, and any smoke or other timed terrain still ticking down — so a battle saved
+mid-duel or under unexpired smoke plays on exactly as it would have without the save (`SAVE_VERSION` 6).

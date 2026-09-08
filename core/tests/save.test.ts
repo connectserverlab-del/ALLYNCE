@@ -1,15 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { blob, deploy, KNI, newBattle, reg } from "./helpers.js";
+import { blob, deploy, KNI, newBattle, reg, SAM, SHI } from "./helpers.js";
 import { loadBattle, saveBattle } from "../src/save.js";
 import { assistRitual, createRitual, disruptRitual, tickRitual } from "../src/rituals.js";
 import { resolveAttack } from "../src/combat.js";
 import { callPortal, captureStep, queueReinforcement, tickPortal } from "../src/portals.js";
 import { hexNeighbors } from "../src/hex.js";
 import { BattleController } from "../src/battle.js";
-import { newKingdom, startUpgrade, tick, startResearch, applyKingdom } from "../src/kingdom.js";
+import { applyKingdom, newKingdom, startResearch, startUpgrade, tick } from "../src/kingdom.js";
 import { computeStat } from "../src/modifiers.js";
-
-
+import { applyEffect } from "../src/effects.js";
 describe("saving and loading rituals and portals", () => {
   it("round-trips a ritual mid-channel, with damaged participants, disruption and assist still pending", () => {
     const { b } = newBattle();
@@ -97,5 +96,67 @@ describe("saving and loading a battle with a holding attached", () => {
     expect(after.modifiers.map((m) => m.source)).toEqual(sourcesBefore);
     expect(after.final).toBe(before.final);
     expect(restoredCtrl.movementAllowance(restoredFoot)).toBe(movBefore);
+  });
+});
+
+describe("saveBattle/loadBattle round-trip process-wide effect flags", () => {
+  it("restores a Formal Duel pairing", () => {
+    const { b, ctrl } = newBattle();
+    const a = deploy(b, "pA", "A", SAM, blob(2, 2));
+    const bb = deploy(b, "pB", "B", SHI, blob(2, 8));
+    const champion = b.unit(a.commanderUid!); const rival = b.unit(bb.commanderUid!);
+    ctrl.commandPhase();
+    applyEffect(b, champion, b.reg.ability("ABL_FORMAL_DUEL"), { target: rival });
+    expect(b.duels.get(rival.uid)).toBe(champion.uid);
+
+    const loaded = loadBattle(b.reg, saveBattle(b));
+    expect(loaded.duels.get(rival.uid)).toBe(champion.uid);
+    expect(loaded.duels.get(champion.uid)).toBe(rival.uid);
+  });
+
+  it("restores a PhaseMove order flag on every platoon member", () => {
+    const { b, ctrl } = newBattle();
+    const a = deploy(b, "pA", "A", SAM, blob(2, 2));
+    const commander = b.unit(a.commanderUid!);
+    ctrl.commandPhase();
+    applyEffect(b, commander, b.reg.ability("ORD_VEIL_CROSSING"), { platoon: b.platoon(a.id) });
+    const foot = a.footUids[0]!;
+    expect(b.orderFlags.get(foot)).toBe("PhaseMove");
+
+    const loaded = loadBattle(b.reg, saveBattle(b));
+    expect(loaded.orderFlags.get(foot)).toBe("PhaseMove");
+  });
+
+  it("restores a Silent Directive hide-after-attack mark", () => {
+    const { b, ctrl } = newBattle();
+    const shinobi = b.spawn("SHI_FOOT_NIGHT-THREAD-OPERATIVE", "A", { q: 5, r: 5 });
+    ctrl.commandPhase();
+    applyEffect(b, shinobi, b.reg.ability("ABL_SILENT_DIRECTIVE"), { target: shinobi });
+    expect(b.hideAfterAttack.has(shinobi.uid)).toBe(true);
+
+    const loaded = loadBattle(b.reg, saveBattle(b));
+    expect(loaded.hideAfterAttack.has(shinobi.uid)).toBe(true);
+  });
+
+  it("restores Oath of Intercession's once-per-round use and Hold the Standard's rout immunity", () => {
+    const { b } = newBattle();
+    b.interceptUsed.add("u1");
+    b.tempPreventRouted.add("u2");
+
+    const loaded = loadBattle(b.reg, saveBattle(b));
+    expect(loaded.interceptUsed.has("u1")).toBe(true);
+    expect(loaded.tempPreventRouted.has("u2")).toBe(true);
+  });
+
+  it("restores unexpired timed terrain (a smoke shell mid-duration)", () => {
+    const { b, ctrl } = newBattle();
+    const mortar = b.spawn("SHI_SIEGE_REED-SMOKE-MORTAR", "A", { q: 2, r: 2 });
+    ctrl.commandPhase();
+    applyEffect(b, mortar, b.reg.ability("ABL_SMOKE_SHELL"), { targetHex: { q: 10, r: 10 } });
+    expect(b.terrainAt({ q: 10, r: 10 })).toBe("Smoke");
+    expect(b.timedTerrain.some((t) => t.key === "10,10")).toBe(true);
+
+    const loaded = loadBattle(b.reg, saveBattle(b));
+    expect(loaded.timedTerrain.some((t) => t.key === "10,10" && t.rounds === 2)).toBe(true);
   });
 });

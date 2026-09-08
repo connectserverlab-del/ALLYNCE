@@ -857,3 +857,16 @@ stay separate, is an owner decision this pass is flagging rather than making.
   waiting on a decision nobody left on the field can make. This gives the rank ladders — already mechanically
   load-bearing in combat — a say in which of the three universal win conditions actually ends a battle, instead
   of leaving Surrender as the one win condition rank never touches.
+
+- 2026-09-07: Proposal — now that a battle's Formal Duel pairings, orders and timed terrain survive a save
+  (this pass; see `core/src/save.ts`), a scenario could seed timed terrain directly at setup instead of only
+  through a mid-battle ability: a bog or smoke bank baked into an uneven battlefield's opening state, placed
+  by role the same way `Q-2` pins objectives, rituals and portals to the generated ground. That would give
+  scenario authors one more tool for the "no even squares" battlefield intent that does not depend on either
+  side rolling the right ability.
+- 2026-09-07: Proposal — Formal Duel currently lets any elite or leader challenge any enemy elite or leader
+  regardless of rank, which sits oddly next to how much mechanical weight the rank ladders already carry
+  elsewhere (command radius, two-sword reactions, castle defense, who may lead a platoon). A low-rank elite
+  challenging an enemy Kage or Shogun to a Formal Duel could cost morale to both sides on issue, or simply be
+  disallowed below a faction-specific rank floor, so the ladders get a say in this mechanic too instead of it
+  being the one privilege-adjacent ability rank never touches.

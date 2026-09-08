@@ -48,6 +48,8 @@ npm test            # 152 tests: combat math, cohesion, composition, succession,
 npm test            # 154 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
 
 npm test            # 152 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
+
+npm test            # 156 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -149,6 +151,8 @@ One Ascendant may be fielded per army.
 - **Replay**: `core/src/replay.ts` steps a cursor through a battle's event log one entry at a time (or jumps
   straight to an index or a round) and narrates each entry by unit name rather than raw id, so a saved or
   finished match can be read back move by move.
+
+- **Save and load**: `core/src/save.ts` round-trips a battle mid-match and a holding, with a version gate, including the per-round effect flags (duels, orders, hidden strikes, rout immunity, timed terrain) that live outside the `Battle` object.
 - **Cards and decks**: a 100-card main deck and a 20-card ritual/fusion side deck, with a 1-to-10 star scale that sets tribute cost, copy limits and ritual requirements. See `docs/cards-and-kingdom.md`.
 - **The holding**: a permanent base with eleven buildings, a twelve-node research tree and three recruitment banners with pity. Everything it grants reaches the battlefield as a named, source-tracked modifier.
 - **Campaign map**: a province of regions (`data/campaign/`), each with its own biome bias and neighbors. A side can only contest ground bordering territory it already holds, fighting for a region is an ordinary generated-field match, and a held region pays its owner named, source-tracked resources per hour into the holding. See `docs/cards-and-kingdom.md`.
