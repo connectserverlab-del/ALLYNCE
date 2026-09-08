@@ -103,6 +103,18 @@ where they conflict.**
 - `moveCard` in `core/src/cards.ts` is the tested, single place a deck list gains or loses one physical copy,
   capped by the same rules the legality panel checks.
 
+### Done in the campaign map pass
+
+- A province is a graph of regions (`data/campaign/samurai_province.json`, six regions from the Ashfall
+  keep-lands to the Iron Vale), each with neighbors, a starting owner and its own biome bias.
+- A side may only contest a region bordering territory it already holds, so a campaign advances as one
+  contiguous front instead of a side reaching across the map.
+- Fighting for a region is an ordinary generated-field match: its biome bias hands straight to
+  `setUpMatch`/`runMatch`, so the same region plays a different, still-legal field every time, the same way
+  `ashfall_crossing` already regenerates per seed.
+- A held region pays its owner resources per hour as a named, source-tracked income line — `"Region: Ashfall
+  Keep Lands"` — folded into the holding capped by the same storage an ordinary building respects.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -159,3 +171,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   roles for a fusion — so a deck built card by card can be steered toward the rite it is meant to feed, rather
   than the two screens being checked against each other by eye. Ritual and Fusion are supposed to be first-class
   functions of the engine; right now they are only checked against the field once a battle has already started.
+
+- 2026-09-05: Proposal — a region held for several campaign ticks in a row could raise a temporary Garrison at
+  its battle anchor for the next fight there: a themed siege emplacement or cavalry picket drawn from the
+  holding side's own faction (a cannon at the Stonebridge bridgehead, a cavalry picket in the Iron Vale), gone
+  again if the region changes hands. This would give long-held ground a defender's edge that reads as the
+  region's own biome and faction rather than a flat number, and would put the campaign map's regions and the
+  faction's themed siege and cavalry pieces to work together instead of each sitting in its own system.

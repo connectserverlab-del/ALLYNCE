@@ -1,0 +1,61 @@
+{
+  "id": "SAMURAI_PROVINCE",
+  "name": "The Ashfall Province",
+  "text": "A six-region strip of contested ground running from the Ashfall keep-lands to the Iron Vale. Each region is fought over on its own generated field; the side that holds it draws its production into their own holding every hour, on top of whatever their buildings already make.",
+  "regions": [
+    {
+      "id": "ASHFALL_KEEP",
+      "name": "Ashfall Keep Lands",
+      "text": "Terraced rice ground under the keep's own walls. The province's breadbasket.",
+      "neighbors": ["REED_SHALLOWS", "IRON_VALE"],
+      "startingOwner": "A",
+      "map": { "name": "Ashfall Keep Lands", "size": 700, "forest": 0.15, "rugged": 0.1, "river": true },
+      "production": { "koku": 60 }
+    },
+    {
+      "id": "REED_SHALLOWS",
+      "name": "Reed Shallows",
+      "text": "Flooded paddies and reed banks along a slow river. Good rice ground, poor footing for a charge.",
+      "neighbors": ["ASHFALL_KEEP", "STONEBRIDGE_PASS"],
+      "startingOwner": null,
+      "map": { "name": "Reed Shallows", "size": 750, "forest": 0.2, "rugged": 0.05, "river": true },
+      "production": { "koku": 40, "timber": 15 }
+    },
+    {
+      "id": "STONEBRIDGE_PASS",
+      "name": "Stonebridge Pass",
+      "text": "A river gorge crossed by one old span. Whoever holds the bridge holds the pass.",
+      "neighbors": ["REED_SHALLOWS", "CINDERPEAK_HEIGHTS"],
+      "startingOwner": null,
+      "map": { "name": "Stonebridge Pass", "size": 800, "forest": 0.1, "rugged": 0.5, "river": true },
+      "production": { "iron": 45 }
+    },
+    {
+      "id": "CINDERPEAK_HEIGHTS",
+      "name": "Cinderpeak Heights",
+      "text": "Bare, ash-grey peaks worked for ore since before the province had a name.",
+      "neighbors": ["STONEBRIDGE_PASS", "SALTMARSH_COAST"],
+      "startingOwner": null,
+      "map": { "name": "Cinderpeak Heights", "size": 850, "forest": 0.05, "rugged": 0.6 },
+      "production": { "iron": 55 }
+    },
+    {
+      "id": "SALTMARSH_COAST",
+      "name": "Saltmarsh Coast",
+      "text": "A tidal trade coast ringed by the ruin of an older harbor town.",
+      "neighbors": ["CINDERPEAK_HEIGHTS", "IRON_VALE"],
+      "startingOwner": null,
+      "map": { "name": "Saltmarsh Coast", "size": 900, "forest": 0.15, "rugged": 0.1, "river": true, "ruins": true },
+      "production": { "silver": 35, "timber": 10 }
+    },
+    {
+      "id": "IRON_VALE",
+      "name": "Iron Vale",
+      "text": "A dug-in vale scarred with old trench lines. The province's other seat of power.",
+      "neighbors": ["SALTMARSH_COAST", "ASHFALL_KEEP"],
+      "startingOwner": "B",
+      "map": { "name": "Iron Vale", "size": 950, "forest": 0.1, "rugged": 0.35, "trenches": true },
+      "production": { "iron": 50, "silver": 20 }
+    }
+  ]
+}
