@@ -1,9 +1,8 @@
-import { describe, it, expect } from "vitest";
-import { newBattle, deploy, SAM, blob } from "./helpers.js";
+import { describe, expect, it } from "vitest";
+import { blob, deploy, newBattle, SAM } from "./helpers.js";
 import { eligibleRecipes } from "../src/fusion.js";
 import { doctrineState } from "../src/composition.js";
-import { hexNeighbors, hexKey } from "../src/hex.js";
-
+import { hexKey, hexNeighbors } from "../src/hex.js";
 describe("fusion", () => {
   it("pairs two foot soldiers into one stronger unit that still fills one slot and costs a Fusion charge", () => {
     const { b, ctrl } = newBattle();

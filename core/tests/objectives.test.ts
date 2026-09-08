@@ -93,9 +93,13 @@ describe("composable objectives", () => {
     expect(evaluateObjective(b, obj).satisfied).toBe(false); // a flier standing on the hex never counts
     b.remove(flier);
     const grounded = b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", hex);
+    // Held rounds advance once per battle round however often the objective is evaluated, so the
+    // round has to turn over between the two checks for the second one to count.
     expect(evaluateObjective(b, obj).satisfied).toBe(false); // held 1 of 2
+    b.round += 1;
     expect(evaluateObjective(b, obj).satisfied).toBe(true); // held 2 of 2
     b.remove(grounded);
+    b.round += 1;
     expect(evaluateObjective(b, obj).satisfied).toBe(false); // vacating resets the count
   });
 

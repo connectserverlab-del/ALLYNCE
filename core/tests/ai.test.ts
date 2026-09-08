@@ -8,7 +8,6 @@ import { attackArc, hexDistance, hexKey, hexNeighbors, hexRing } from "../src/he
 import type { Battle } from "../src/state.js";
 import type { Hex } from "../src/hex.js";
 import { createRitual } from "../src/rituals.js";
-import { duels } from "../src/effects.js";
 
 /** Did the AI actually spend that skill this activation? */
 function used(b: Battle, ability: string): boolean {
@@ -438,18 +437,20 @@ describe("runAiActivation", () => {
     expect(plain.hp).toBe(1250);
   });
 
-  it("will not waste an attack on a decoy clone when the real unit is an equally reachable target", () => {
+  it("takes the copy first when both are equally reachable: killing it hands its share back", () => {
+    // Under the split economy (Q-16) a copy is not a decoy to be waved off. It carries a share of
+    // the original's attack and defence and falls in one hit, so cutting it down shrinks the
+    // original — which is worth more than the same swing spent on the full-strength body.
     const { b, ctrl } = newBattle();
     const u = b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 10, r: 8 });
     const [h1, h2] = hexNeighbors(u.pos!);
-    const real = b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", h1!);
+    b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", h1!);
     const clone = b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", h2!);
     clone.isClone = true;
     ctrl.commandPhase();
     runAiActivation(ctrl, "ind:A", DIFFICULTY.normal);
     const attack = b.events.find((e) => e.type === "Attack");
-    expect(attack?.data["target"]).toBe(real.uid);
-    expect(clone.hp).toBe(1250);
+    expect(attack?.data["target"]).toBe(clone.uid);
   });
 
   it("with no enemy units on the field, marches on an enemy ritual circle as the only goal worth reaching", () => {
@@ -474,10 +475,13 @@ describe("runAiActivation", () => {
     expect(b.events.some((e) => e.type === "AbilityUsed" && e.data["ability"] === "ORD_MEASURED_ADVANCE")).toBe(true);
   });
 
-  it("spends a SpawnClones active on a nearby enemy when it has the room", () => {
+  it("spends a SpawnClones active on nearby enemies when it has the room", () => {
     const { b, ctrl } = newBattle();
     const adept = b.spawn("SHI_ELITE_MIRROR-SHADE-ADEPT", "A", { q: 10, r: 8 }); // ABL_TWIN_ECHO
+    // Splitting is a trade, not a gain (Q-16): copies are worth it to hold ground against a group,
+    // never against one hard hitter, so the AI needs two enemies in reach before it will split.
     b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 13, r: 8 }); // 3 hexes away
+    b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 12, r: 9 });
     ctrl.commandPhase();
     runAiActivation(ctrl, "ind:A", DIFFICULTY.normal);
     const spawned = b.events.find((e) => e.type === "ClonesSpawned");
@@ -491,8 +495,8 @@ describe("runAiActivation", () => {
     const dragoon = b.spawn("KNI_ELITE_SKY-LANCE-DRAGOON", "B", hexNeighbors({ q: 10, r: 8 })[0]!);
     ctrl.commandPhase();
     runAiActivation(ctrl, "ind:A", DIFFICULTY.normal);
-    expect(duels.get(champion.uid)).toBe(dragoon.uid);
-    expect(duels.get(dragoon.uid)).toBe(champion.uid);
+    expect(b.duels.get(champion.uid)).toBe(dragoon.uid);
+    expect(b.duels.get(dragoon.uid)).toBe(champion.uid);
   });
 });
 
