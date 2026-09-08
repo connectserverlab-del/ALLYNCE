@@ -253,6 +253,8 @@ grants still shows up as a named, sourced entry in `computeStat`'s breakdown:
 
 `core/tests/ranks.test.ts` exercises every privilege above against the specific rostered unit that carries it.
 
+| Battlefield generation | `mapgen.ts`, `data/terrain/terrain.json` | Irregular playable outline, rough terrain scatter, river/ford/road; terrain move cost and DEF bonus tables |
+
 ## Worked example (from the brief §7)
 
 Foot soldier 1,500 base ATK, two matching neighbours (+100), full Doctrine (+100), commander order (+150) = 1,850.
@@ -416,6 +418,37 @@ Surrender, in that order per side), then the round limit as a last resort. `core
 all three in isolation with bare battles; `core/tests/battle.test.ts` confirms the full Threefold Invocation
 scenario still runs its full objective/ritual/portal/succession sequence with Wipeout and Surrender both live and
 LeaderKilled correctly inactive.
+
+## Battlefield generator
+
+`generateBattlefield(spec: MapSpec)` (`core/src/mapgen.ts`) produces a `GeneratedMap` (a `playable` set of hex
+keys and a `terrain` map) from one seed:
+
+1. **Irregular outline.** A margin band is reserved as a solid, always-playable core; outside it, a seeded
+   number of random-radius "bites" are carved out of the rectangle's edge. The result is never a plain
+   rectangle when `irregularity > 0`, but the interior a scenario needs for deployment and objectives is never
+   touched.
+2. **Rough terrain scatter.** `Mountain`, `Forest`, `Mud`, `Trench` and `Ruins` are grown as random-walk blobs
+   from seed hexes inside the playable area, sized by each `*Density` knob. A handful of single-hex
+   `Fortification` points are placed last.
+3. **River and road.** A river walks greedily from the playable hex nearest the top edge to the one nearest the
+   bottom edge, marking `Water`, with a configurable number of hexes along it converted to `Ford` (passable to
+   ground units, unlike `Water`). A road walks left-edge to right-edge over whatever terrain the walk crosses,
+   always at cost 1, bridging the river at a `Ford` rather than cutting straight through `Water`.
+
+Every step reuses the existing `Rng` (mulberry32) already used for battle determinism, so the same seed always
+produces the same map. `data/terrain/terrain.json` holds the numbers `mapgen.ts` and the movement/modifier code
+both read (`Registry.terrainRules`):
+
+- `moveCost`: per-terrain ground/cavalry/flying step cost. `Mountain` is 5x for ground, ignored by flying units.
+  `Mud`, `Trench` and `Ford` are 2x. `Road` and `Ruins` are not listed, so they default to the normal cost of 1.
+- `defBonus`: `Fortification` +200, `Trench` +100, `Ruins` +50, applied by `computeStat` in `modifiers.ts` as a
+  `Terrain: <kind>` source, the same slot the existing Fortification and High Ground bonuses already used.
+- `highGroundRangedAtk`: the existing High Ground ranged-ATK bonus, now data-driven instead of hardcoded.
+
+A scenario file can adopt a generated map by calling `generateBattlefield` and copying its `terrain` entries into
+`Battle.terrain` the same way `scenario.ts` already copies a hand-authored `map.terrain` list; no scenario does
+this yet (see `docs/ROADMAP.md`'s Next list).
 
 ## Unity port guidance
 

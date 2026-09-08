@@ -28,6 +28,20 @@ You are working in the ALLYNCE repository, an original tactical army strategy ga
    half-done. If everything is blocked, improve tests, docs or the AI instead.
 3. Implement data-first: numbers in `data/`, rules in `core/src`, tests in `core/tests`. Keep the modifier breakdown
    honest: every new bonus records its source.
+
+1. `docs/ROADMAP.md` (owner intent, the Done/Next lists and the brainstorm log)
+2. `README.md` and `docs/mechanics.md` (how the engine is organised)
+3. `art/prompts/STYLE_GUIDE.md` (approved art direction) if the task touches art
+
+## Each pass
+
+1. `npm install && npm test` must be green before you change anything. Fix red tests first if you find them.
+2. Take the highest-priority item in `docs/ROADMAP.md`'s Next list that is not blocked on an owner decision and
+   is not already claimed by an open pull request (check open PR titles/bodies and `agent/*` branch names first).
+   One pass takes exactly one item. If every item is claimed or blocked, do not invent work: improve tests, docs
+   or the AI, and say so in the pull request.
+3. Implement data-first: numbers in `data/`, rules in `core/src`, tests in `core/tests`. Keep the modifier
+   breakdown honest: every new bonus records its source.
 4. Run `npm test` and `npm run typecheck`. Do not push red.
 5. Commit with a clear message. Keep AI tool names and attribution out of the repository itself — code,
    data, docs, art, PR prose. The owner asked for that and it holds.
@@ -92,6 +106,12 @@ You are working in the ALLYNCE repository, an original tactical army strategy ga
   objectives a scenario declares; see `docs/mechanics.md`'s "Universal win conditions" section before touching
   `evaluateVictory` in `core/src/battle.ts`.
 - Maps are painted straight down from above. Never commission a three-quarter battlefield painting.
+
+6. Push to a new branch and open a draft pull request that explains what changed, why it follows the owner's
+   intent, and what decision (if any) the owner should make next.
+7. Add at least one dated line to the brainstorm log: an idea that follows from the owner's stated intent,
+   marked as a proposal. Update the Next list in the same pull request (move the finished item out, add anything
+   new the pass uncovered).
 
 ## Guardrails
 

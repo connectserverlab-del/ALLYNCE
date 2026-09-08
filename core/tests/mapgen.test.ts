@@ -1,8 +1,8 @@
-import { describe, it, expect } from "vitest";
-import { generateMap, terrainCounts, applyMap, deploymentBalance } from "../src/mapgen.js";
-import { newBattle } from "./helpers.js";
+import { describe, expect, it } from "vitest";
+import { applyMap, deploymentBalance, generateMap, terrainCounts } from "../src/mapgen.js";
+import { newBattle, reg } from "./helpers.js";
 import { hexKey, hexNeighbors } from "../src/hex.js";
-
+import { Battle } from "../src/state.js";
 describe("irregular battlefield generator", () => {
   it("produces odd-shaped, connected, varied fields deterministically", () => {
     const a = generateMap({ seed: 42 }), b = generateMap({ seed: 42 }), c = generateMap({ seed: 7 });
@@ -131,3 +131,8 @@ describe("mountains", () => {
     expect(lancer.chargeMoved).toBe(0);
   });
 });
+
+function serialize(terrain: Map<string, string>): string {
+  return [...terrain.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([k, v]) => `${k}=${v}`).join("|");
+}
+
