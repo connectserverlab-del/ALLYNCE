@@ -129,6 +129,14 @@ function resolveObjective(ctx: MapCtx, used: Set<string>, o: ScenarioObjectiveDe
 
 export function buildScenario(name: string, reg: Registry = loadRegistry(), seedOverride?: number): { ctrl: BattleController; file: ScenarioFile; map: GeneratedMap | null } {
   const file = loadScenario<ScenarioFile>(name);
+  return buildScenarioFromFile(file, reg, seedOverride);
+}
+
+/**
+ * Wires a battle, its armies, rituals and portals from an already-loaded scenario file. Split out of
+ * `buildScenario` so tests can exercise scenario wiring against in-memory fixtures, not just files on disk.
+ */
+export function buildScenarioFromFile(file: ScenarioFile, reg: Registry, seedOverride?: number): { ctrl: BattleController; file: ScenarioFile; map: GeneratedMap | null } {
   const seed = seedOverride ?? file.seed;
   const b = new Battle(reg, {
     seed, sides: Object.entries(file.sides).map(([id, s]) => ({ id, reservePoints: s.reservePoints, armyCapacity: s.armyCapacity, morale: 100 })),

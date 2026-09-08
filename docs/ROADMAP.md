@@ -583,3 +583,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   owning three platoons — is what unlocks the higher tier of organization. Gives the rank ladders the
   mechanical weight the brief asks for beyond the Platoon level, and gives the new alternate Commander cards a
   reason to differ by rank rather than only by name.
+
+- 2026-09-06: Proposal — scenario and ritual leader references resolve by unit defId plus side, which is fine while
+  a side fields exactly one copy of a named commander but breaks once card duplicates or a warrant escort put two
+  copies of the same commander on one side (the resolver finds the first live match, not necessarily the one the
+  scenario meant). Give platoons and rituals an optional unit-instance reference — the platoon's own id, e.g.
+  `leaderPlatoon: "A-1"` meaning "that platoon's commander" — so a scenario keeps pointing at the intended unit
+  once the deck-ownership system lets an army run more than one copy of its own leader.
