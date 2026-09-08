@@ -792,3 +792,12 @@ targeted `main` and PR'd against `main` because that is what it was explicitly a
 implemented here (siege and cavalry data plus two small, additive engine rules) stands on its own regardless of
 which branch it lands on. Whether `main` should be fast-forwarded to that branch, or whether the two are meant to
 stay separate, is an owner decision this pass is flagging rather than making.
+
+- 2026-09-07: Proposal — a registry-wide "round-trip completeness" test that builds one battle exercising the
+  holding, a mid-channel ritual, a queued portal and an in-progress march all at once, then asserts every stat a
+  unit can compute and every side-level number reads identically before and after a save/load cycle. This pass
+  found `Battle.kingdomEffects` missing from `BattleSave` entirely: a saved and reloaded battle silently dropped
+  every "Research: …" and building-level ATK/DEF bonus, plus the kingdom's movement and command-radius grants,
+  because nothing re-ran `applyKingdom` after `loadBattle`. A single completeness test across every carry-over
+  system at once would have caught that the day it was introduced instead of needing a dedicated hunt, and would
+  catch the next one the same way.
