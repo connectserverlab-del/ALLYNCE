@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { newBattle, deploy, ARC, SAM, blob } from "./helpers.js";
-import { moraleBand, changeMorale, commandRadiusRecovery, surroundedPenalty, tempPreventRouted } from "../src/morale.js";
+import { moraleBand, changeMorale, commandRadiusRecovery, surroundedPenalty } from "../src/morale.js";
 
 describe("moraleBand", () => {
   it("bands the 0-100 scale at 70/40/20/1", () => {
@@ -75,13 +75,11 @@ describe("changeMorale", () => {
     expect(b.hasStatus(u, "Routed")).toBe(true);
   });
 
-  afterEach(() => tempPreventRouted.clear());
-
   it("tempPreventRouted keeps a unit off the Routed status even at Broken morale", () => {
     const { b } = newBattle();
     const u = b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 5, r: 5 });
     u.morale = 10;
-    tempPreventRouted.add(u.uid);
+    b.tempPreventRouted.add(u.uid);
     changeMorale(b, u, -10, "test"); // 0: Broken, but prevented
     expect(u.morale).toBe(0);
     expect(b.hasStatus(u, "Routed")).toBe(false);

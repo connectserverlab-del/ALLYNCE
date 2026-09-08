@@ -2,7 +2,6 @@ import type { Battle } from "./state.js";
 import type { UnitState } from "./types.js";
 import { computeStat, arcFor, clearTempMods } from "./modifiers.js";
 import { onUnitDefeated } from "./command.js";
-import { duels, hideAfterAttack } from "./effects.js";
 import { onRitualistDamaged } from "./rituals.js";
 import { changeMorale } from "./morale.js";
 
@@ -13,15 +12,15 @@ export const MIN_DAMAGE = 100;
 /** Damage = max(100, FinalATK - FinalDEF). Integer math, deterministic. */
 export function resolveAttack(b: Battle, attacker: UnitState, target: UnitState, opts: { ranged?: boolean; reaction?: boolean } = {}): AttackResult {
   // Formal Duel: outsiders cannot attack a dueling pair
-  const dueling = duels.get(target.uid);
+  const dueling = b.duels.get(target.uid);
   if (dueling && dueling !== attacker.uid) throw new Error("Target is in a Formal Duel; other units cannot interfere");
 
   // Oath of Intercession: a Knight adjacent to the target may take the melee hit once per round
   let defender = target;
   let intercepted: string | undefined;
   if (!opts.ranged) {
-    const knight = b.adjacentAllies(target).find((k) => !k.isClone && b.def(k).themes.includes("Knight") && !interceptUsed.has(k.uid) && k.uid !== target.uid && b.def(k).roles.includes("FootSoldier") === false && b.hasStatus(k, "Guarded"));
-    if (knight) { defender = knight; intercepted = knight.uid; interceptUsed.add(knight.uid); }
+    const knight = b.adjacentAllies(target).find((k) => !k.isClone && b.def(k).themes.includes("Knight") && !b.interceptUsed.has(k.uid) && k.uid !== target.uid && b.def(k).roles.includes("FootSoldier") === false && b.hasStatus(k, "Guarded"));
+    if (knight) { defender = knight; intercepted = knight.uid; b.interceptUsed.add(knight.uid); }
   }
 
   const arc = arcFor(b, attacker, defender);
@@ -45,12 +44,11 @@ export function resolveAttack(b: Battle, attacker: UnitState, target: UnitState,
   // applied after that reveal, so a unit ordered to Hide after this attack ends up Hidden rather
   // than having its own new status immediately stripped by the reveal it just triggered.
   if (b.hasStatus(attacker, "Hidden")) b.addStatus(attacker, "Revealed", 0, "Attacked");
-  if (hideAfterAttack.has(attacker.uid)) { b.addStatus(attacker, "Hidden", 2, "Silent Directive"); hideAfterAttack.delete(attacker.uid); }
+  if (b.hideAfterAttack.has(attacker.uid)) { b.addStatus(attacker, "Hidden", 2, "Silent Directive"); b.hideAfterAttack.delete(attacker.uid); }
   b.log("Attack", { attacker: attacker.uid, target: defender.uid, atk, def, arc, damage, defeated: result.defeated, intercepted });
   return { damage, atk, def, arc, ...result, intercepted };
 }
 
-export const interceptUsed = new Set<string>();
 
 /** Sum one numeric field across every passive of a given effect kind. */
 function passiveValue(b: Battle, u: UnitState, kind: string, field: string): number {

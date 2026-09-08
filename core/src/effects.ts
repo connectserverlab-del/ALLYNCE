@@ -2,7 +2,7 @@ import type { Battle } from "./state.js";
 import type { UnitState, AbilityDef, PlatoonState, Modifier, Status, Terrain } from "./types.js";
 import type { Hex } from "./hex.js";
 import { hexNeighbors, hexKey, hexDistance } from "./hex.js";
-import { platoonMorale, platoonMembers, tempPreventRouted, changeMorale } from "./morale.js";
+import { platoonMorale, platoonMembers, changeMorale } from "./morale.js";
 import { addTempMod } from "./modifiers.js";
 import { computeStat } from "./modifiers.js";
 import { applyDamage } from "./combat.js";
@@ -47,7 +47,7 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
       return true;
     case "PreventRouted": {
       const radius = commandRadiusOf(b, user);
-      for (const a of b.activeUnits(user.side)) if (b.distance(user, a) <= radius) { tempPreventRouted.add(a.uid); b.removeStatus(a, "Routed"); }
+      for (const a of b.activeUnits(user.side)) if (b.distance(user, a) <= radius) { b.tempPreventRouted.add(a.uid); b.removeStatus(a, "Routed"); }
       b.log("Ability", { ability: ability.id, uid: user.uid });
       return true;
     }
@@ -73,7 +73,7 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
     case "GrantHideAfterAttack":
       if (!ctx.target) return false;
       addTempMod(ctx.target, { source: ability.name, stat: "RANGE", value: 0 }); // marker; consumed by combat
-      hideAfterAttack.add(ctx.target.uid);
+      b.hideAfterAttack.add(ctx.target.uid);
       return true;
     case "GrantStatusAdjacent": {
       const theme = b.reg.factions.get(b.def(user).faction)?.primaryTheme;
@@ -89,13 +89,13 @@ export function applyEffect(b: Battle, user: UnitState, ability: AbilityDef, ctx
     case "PhaseMove":
     case "SequencedMove":
       if (!p) return false;
-      for (const uid of platoonMembers(p)) { const m = b.units.get(uid); if (m && !m.defeated) orderFlags.set(m.uid, e.kind); }
+      for (const uid of platoonMembers(p)) { const m = b.units.get(uid); if (m && !m.defeated) b.orderFlags.set(m.uid, e.kind); }
       if (e.atkVsIsolatedGround) for (const uid of platoonMembers(p)) { const m = b.units.get(uid); if (m && !m.defeated) addTempMod(m, { source: ability.name, stat: "ATK", value: e.atkVsIsolatedGround }); }
       b.log("Ability", { ability: ability.id, uid: user.uid });
       return true;
     case "Duel":
       if (!ctx.target) return false;
-      duels.set(user.uid, ctx.target.uid); duels.set(ctx.target.uid, user.uid);
+      b.duels.set(user.uid, ctx.target.uid); b.duels.set(ctx.target.uid, user.uid);
       b.log("Ability", { ability: ability.id, uid: user.uid, target: ctx.target.uid });
       return true;
     case "SiegeSetup":
@@ -356,7 +356,7 @@ export function applyPlatoonTempMod(b: Battle, p: PlatoonState, stat: "ATK" | "D
 export function spawnTerrainArea(b: Battle, center: Hex, terrain: Terrain, duration: number): number {
   const hexes = [center, ...hexNeighbors(center)].filter((h) => b.inBounds(h) && b.terrainAt(h) !== "Water" && b.terrainAt(h) !== "Mountain");
   let n = 0;
-  for (const h of hexes) { if (!b.terrain.has(hexKey(h)) || b.terrainAt(h) === "Open") { b.terrain.set(hexKey(h), terrain); timedTerrain.push({ key: hexKey(h), rounds: duration }); n++; } }
+  for (const h of hexes) { if (!b.terrain.has(hexKey(h)) || b.terrainAt(h) === "Open") { b.terrain.set(hexKey(h), terrain); b.timedTerrain.push({ key: hexKey(h), rounds: duration }); n++; } }
   return n;
 }
 
@@ -381,10 +381,12 @@ export const EFFECT_KINDS = [
 ] as const;
 export type EffectKind = (typeof EFFECT_KINDS)[number];
 
-export const hideAfterAttack = new Set<string>();
-/** Terrain placed by abilities (smoke) with a lifetime in rounds. */
-export const timedTerrain: Array<{ key: string; rounds: number }> = [];
-export const orderFlags = new Map<string, string>();
-export const duels = new Map<string, string>();
-export function clearRoundEffectFlags(): void { hideAfterAttack.clear(); orderFlags.clear(); duels.clear(); tempPreventRouted.clear(); }
+/**
+ * Per-round effect state lives on the Battle, not on this module. Held here it was shared by every
+ * Battle in the process, so two battles alive at once (a match runner, a test file, the campaign
+ * layer) read and cleared each other's duels, order flags, hidden-after-attack marks and smoke.
+ */
+export function clearRoundEffectFlags(b: Battle): void {
+  b.hideAfterAttack.clear(); b.orderFlags.clear(); b.duels.clear(); b.tempPreventRouted.clear();
+}
 export type { Modifier };

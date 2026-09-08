@@ -5,11 +5,11 @@ import { terrainCostFor } from "./ranks.js";
 import type { Hex } from "./hex.js";
 import { hexDistance as _hd } from "./hex.js";
 import { hexDistance, hexNeighbors, hexKey, directionTo } from "./hex.js";
-import { resolveAttack, interceptUsed, defeat } from "./combat.js";
+import { resolveAttack, defeat } from "./combat.js";
 import { computeStat, clearTempMods, tempMods, revealsHiddenTarget } from "./modifiers.js";
 import { rooted, revealAllRounds, tickExpansionEffects } from "./effects.js";
 import { resolveSuccession, rally as rallyAction } from "./command.js";
-import { applyEffect, clearRoundEffectFlags, orderFlags } from "./effects.js";
+import { applyEffect, clearRoundEffectFlags } from "./effects.js";
 import { tickRitual, releaseRitual, linkedGroup, assistRitual, disruptRitual, type RitualCircle } from "./rituals.js";
 import { tickPortal, checkCaptureInterrupt, attackPortal, captureStep, callPortal, queueReinforcement as enqueueReinforcement, type Portal } from "./portals.js";
 import { commandRadiusRecovery, surroundedPenalty, moraleBand, changeMorale } from "./morale.js";
@@ -17,7 +17,6 @@ import { doctrineState, organizationLevel, companyLeader } from "./composition.j
 import { evaluateObjective, markSynchronized, type ObjectiveDef, type ObjectiveProgress } from "./objectives.js";
 import { mountedMoveBonus, commandRadiusOf, movementTraits } from "./ranks.js";
 import { fuse as fuseUnits, tickFusions } from "./fusion.js";
-import { timedTerrain } from "./effects.js";
 import { effectiveRange } from "./weather.js";
 
 export interface VictoryRules { sides: Record<string, ObjectiveDef[]>; roundLimit: number; roundLimitWinner?: string }
@@ -34,8 +33,8 @@ export class BattleController {
     const b = this.b;
     b.phase = "Command";
     b.log("PhaseStart", { phase: "Command" });
-    clearRoundEffectFlags();
-    interceptUsed.clear();
+    clearRoundEffectFlags(b);
+    b.interceptUsed.clear();
     for (const p of b.platoons.values()) {
       resolveSuccession(b, p);
       p.orderUsedThisRound = false;
@@ -85,7 +84,7 @@ export class BattleController {
   }
 
   endActivation(groupId: string): void {
-    for (const u of this.groupMembers(groupId)) { u.ap = 0; orderFlags.delete(u.uid); }
+    for (const u of this.groupMembers(groupId)) { u.ap = 0; this.b.orderFlags.delete(u.uid); }
     this.b.log("ActivationEnd", { group: groupId });
   }
 
@@ -103,7 +102,7 @@ export class BattleController {
     const out = new Map<string, { hex: Hex; cost: number; labored?: boolean }>();
     if (!u.pos) return out;
     const budget = this.movementAllowance(u);
-    const flag = orderFlags.get(u.uid);
+    const flag = b.orderFlags.get(u.uid);
     const traits = movementTraits(b, u);
     const ignoreZoc = flag === "PhaseMove" || !!traits.ignoreZoc;
     const passAllies = flag === "PhaseMove" || flag === "SequencedMove" || !!d.flying || !!traits.passAllies;
@@ -168,7 +167,7 @@ export class BattleController {
     if (!r) throw new Error(`Hex ${hexKey(to)} not reachable`);
     const zocEnemies = b.adjacentEnemies(u).filter((e) => !b.hasStatus(e, "Routed"));
     const traits = movementTraits(b, u);
-    const ignoreZoc = orderFlags.get(u.uid) === "PhaseMove" || !!traits.ignoreZoc || u.freeMoveHexes > 0;
+    const ignoreZoc = b.orderFlags.get(u.uid) === "PhaseMove" || !!traits.ignoreZoc || u.freeMoveHexes > 0;
     if (r.labored && u.freeMoveHexes <= 0) {
       if (u.movedThisActivation > 0) throw new Error("A labored climb needs a fresh activation");
       if (u.ap < 2) throw new Error("A labored climb costs the whole activation");
@@ -445,7 +444,7 @@ export class BattleController {
     surroundedPenalty(b);
     tickExpansionEffects();
     for (const p of b.portals.values()) checkCaptureInterrupt(b, p);
-    for (let i = timedTerrain.length - 1; i >= 0; i--) { const t = timedTerrain[i]!; t.rounds--; if (t.rounds <= 0) { b.terrain.delete(t.key); timedTerrain.splice(i, 1); } }
+    for (let i = b.timedTerrain.length - 1; i >= 0; i--) { const t = b.timedTerrain[i]!; t.rounds--; if (t.rounds <= 0) { b.terrain.delete(t.key); b.timedTerrain.splice(i, 1); } }
     tickFusions(b);
     this.evaluateVictory();
     if (!b.winner) { b.round++; b.phase = "Command"; }

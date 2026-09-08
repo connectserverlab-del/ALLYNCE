@@ -801,3 +801,11 @@ stay separate, is an owner decision this pass is flagging rather than making.
   because nothing re-ran `applyKingdom` after `loadBattle`. A single completeness test across every carry-over
   system at once would have caught that the day it was introduced instead of needing a dedicated hunt, and would
   catch the next one the same way.
+
+- 2026-09-07: Proposal — now that a battle's duels, order flags, hidden-after-attack marks, intercept use and
+  timed terrain live on the `Battle` instance instead of as module-level state (this pass; see `core/src/state.ts`),
+  `core/src/save.ts` could carry them into `BattleSave` too. Right now a save mid-Formal-Duel, mid-Silent-Directive
+  or with unexpired smoke on the field round-trips clean but silently forgets all four: `saveBattle`/`loadBattle`
+  never mention any of them. A single save-format bump could close all four gaps at once rather than hunting
+  them one at a time, the same way a save/load round-trip has already turned up at least one other silently
+  dropped field on this project.

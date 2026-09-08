@@ -5,7 +5,6 @@ import { assistRitual, createRitual, disruptRitual, tickRitual } from "../src/ri
 import { resolveAttack } from "../src/combat.js";
 import { callPortal, captureStep, queueReinforcement, tickPortal } from "../src/portals.js";
 import { hexNeighbors } from "../src/hex.js";
-import { reg } from "./helpers.js";
 import { BattleController } from "../src/battle.js";
 import { newKingdom, startUpgrade, tick, startResearch, applyKingdom } from "../src/kingdom.js";
 import { computeStat } from "../src/modifiers.js";

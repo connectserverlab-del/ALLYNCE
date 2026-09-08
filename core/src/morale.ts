@@ -29,11 +29,10 @@ export function platoonMembers(p: PlatoonState): string[] {
 /** Routed/Broken statuses follow the morale value unless an order prevents routing. */
 function syncRouted(b: Battle, u: UnitState): void {
   const band = moraleBand(u.morale);
-  const prevented = tempPreventRouted.has(u.uid);
+  const prevented = b.tempPreventRouted.has(u.uid);
   if ((band === "Routed" || band === "Broken") && !prevented) { if (!b.hasStatus(u, "Routed")) b.addStatus(u, "Routed", 99, "Morale"); }
   else b.removeStatus(u, "Routed");
 }
-export const tempPreventRouted = new Set<string>();
 
 /** Morale recovery at round start: +5 inside a live commander's command radius. */
 export function commandRadiusRecovery(b: Battle): void {

@@ -4,10 +4,7 @@ import type { PlatoonBlueprint } from "../src/composition.js";
 import { computeStat } from "../src/modifiers.js";
 import { resolveAttack } from "../src/combat.js";
 import { changeMorale } from "../src/morale.js";
-import {
-  applyEffect, bandOf, enemiesWithin, clearRoundEffectFlags,
-  hideAfterAttack, orderFlags, duels,
-} from "../src/effects.js";
+import { applyEffect, bandOf, enemiesWithin, clearRoundEffectFlags } from "../src/effects.js";
 
 /**
  * `applyEffect` is the shared interpreter behind every order, succession ability and card skill.
@@ -101,11 +98,11 @@ describe("hidden strikes and formal duels", () => {
     const enemy = b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 15, r: 15 });
     ctrl.commandPhase(); ctrl.beginActivation("S");
     ctrl.useAbility(cmdr, "ABL_SILENT_DIRECTIVE", { target: striker });
-    expect(hideAfterAttack.has(striker.uid)).toBe(true);
+    expect(b.hideAfterAttack.has(striker.uid)).toBe(true);
     expect(b.hasStatus(striker, "Hidden")).toBe(false); // not yet, only after the attack lands
     resolveAttack(b, striker, enemy);
     expect(b.hasStatus(striker, "Hidden")).toBe(true);
-    expect(hideAfterAttack.has(striker.uid)).toBe(false); // one-shot
+    expect(b.hideAfterAttack.has(striker.uid)).toBe(false); // one-shot
   });
 
   it("Formal Duel bars everyone but the two combatants from the target", () => {
@@ -116,8 +113,8 @@ describe("hidden strikes and formal duels", () => {
     const bystander = b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "A", { q: rival.pos!.q + 1, r: rival.pos!.r });
     ctrl.commandPhase(); ctrl.beginActivation("S");
     ctrl.useAbility(elite, "ABL_FORMAL_DUEL", { target: rival });
-    expect(duels.get(elite.uid)).toBe(rival.uid);
-    expect(duels.get(rival.uid)).toBe(elite.uid);
+    expect(b.duels.get(elite.uid)).toBe(rival.uid);
+    expect(b.duels.get(rival.uid)).toBe(elite.uid);
     expect(() => resolveAttack(b, bystander, rival)).toThrow(/Formal Duel/);
     expect(() => resolveAttack(b, elite, rival)).not.toThrow();
   });
@@ -131,8 +128,8 @@ describe("phased and sequenced movement orders", () => {
     b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 5, r: 4 }); // adjacent, free hex
     ctrl.commandPhase(); ctrl.beginActivation("S");
     ctrl.useAbility(cmdr, "ORD_VEIL_CROSSING");
-    expect(orderFlags.get(cmdr.uid)).toBe("PhaseMove"); // every platoon member is flagged, not only the caster
-    expect(orderFlags.get(b.unit(p.footUids[0]!).uid)).toBe("PhaseMove");
+    expect(b.orderFlags.get(cmdr.uid)).toBe("PhaseMove"); // every platoon member is flagged, not only the caster
+    expect(b.orderFlags.get(b.unit(p.footUids[0]!).uid)).toBe("PhaseMove");
     const hpBefore = cmdr.hp;
     ctrl.move(cmdr, { q: 2, r: 5 });
     expect(cmdr.hp).toBe(hpBefore); // left the enemy's zone of control without a reaction attack
@@ -147,7 +144,7 @@ describe("phased and sequenced movement orders", () => {
     b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 5, r: 4 }); // adjacent, free hex
     ctrl.commandPhase(); ctrl.beginActivation("D");
     ctrl.useAbility(cmdr, "ORD_WING_DOMINION");
-    expect(orderFlags.get(cmdr.uid)).toBe("SequencedMove");
+    expect(b.orderFlags.get(cmdr.uid)).toBe("SequencedMove");
     expect(computeStat(b, cmdr, "ATK").final).toBe(before + 100);
     const hpBefore = cmdr.hp;
     ctrl.move(cmdr, { q: 2, r: 5 });
@@ -201,10 +198,11 @@ describe("the generic interpreter", () => {
   });
 
   it("clearRoundEffectFlags empties every one-round marker the interpreter keeps", () => {
-    hideAfterAttack.add("x"); orderFlags.set("x", "PhaseMove"); duels.set("x", "y");
-    clearRoundEffectFlags();
-    expect(hideAfterAttack.size).toBe(0);
-    expect(orderFlags.size).toBe(0);
-    expect(duels.size).toBe(0);
+    const { b } = newBattle();
+    b.hideAfterAttack.add("x"); b.orderFlags.set("x", "PhaseMove"); b.duels.set("x", "y");
+    clearRoundEffectFlags(b);
+    expect(b.hideAfterAttack.size).toBe(0);
+    expect(b.orderFlags.size).toBe(0);
+    expect(b.duels.size).toBe(0);
   });
 });
