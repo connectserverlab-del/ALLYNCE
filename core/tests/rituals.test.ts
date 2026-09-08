@@ -92,6 +92,21 @@ describe("rituals", () => {
     expect(s).toBeNull();
   });
 
+  it("collapses the same round its last participant dies to Unstable damage, not one round late", () => {
+    const { b, fast } = setupCircles();
+    const lead = b.unit(fast.leaderUid!);
+    // strip the circle down to its leader alone so a single, predictable HP total decides the death tick
+    for (const u of [...b.activeUnits("A")]) if (u.pos && hexDistance(u.pos, fast.center) <= fast.radius && u.uid !== lead.uid) { u.defeated = true; b.remove(u); }
+    fast.state = "CompletedHeld";
+    expect(computeRitualProgress(b, fast).participants).toEqual([lead.uid]);
+    for (let i = 0; i < 4; i++) tickRitual(b, fast); // stacks 1-4: 100+200+300+400 = 1000 damage, 1200 hp -> 200
+    expect(fast.state).toBe("CompletedHeld");
+    expect(lead.hp).toBe(200);
+    tickRitual(b, fast); // stack 5: 500 damage kills the only participant on this very tick
+    expect(lead.defeated).toBe(true);
+    expect(fast.state).toBe("Collapsed");
+  });
+
   it("collapse resets progress and rewards the enemy morale", () => {
     const { b, fast } = setupCircles();
     const enemy = b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 1, r: 1 });
