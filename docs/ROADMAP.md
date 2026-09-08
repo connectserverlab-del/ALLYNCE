@@ -635,3 +635,8 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   Every battlefield is generated fresh and odd-shaped, so this would not be a fixed puzzle; it would give
   commanders a reason to fight for a specific hex beyond a flat defence bonus, and it would put the map
   generator's variety to work in the one system that currently ignores it.
+
+- 2026-09-06: Proposal — now that the AI actually fuses, `targetScore` should weight an enemy's fused body
+  (`UnitState.fusedFrom` is set) as a priority kill the way it already weights a ritualist or an exposed elite:
+  a fused body carries the value of the two or three cards that went into it, so a smart opponent should want
+  to break it apart before it lands the first swing, not treat it as an ordinary target of the same size.

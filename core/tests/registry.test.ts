@@ -35,6 +35,48 @@ function withPairedLineReplacedBy(broken: FusionRecipe): FusionRecipe[] {
   return [...reg.fusions.values()].map((r) => (r.id === "FUS_PAIRED_LINE" ? broken : r));
 }
 
+const RULES: CompositionRules = {
+  standardPlatoon: {
+    slots: { Commander: 1, Second: 1, Elite: 1, FootSoldier: 5 }, total: 8,
+    doctrine: {
+      full: { atk: 0, def: 0, morale: 0, minFoot: 4 },
+      reduced: { atk: -10, def: -10, morale: -10, minFoot: 2 },
+      broken: { atk: -20, def: -20, morale: -20 },
+    },
+    continuityRounds: 1,
+  },
+  themeCohesion: { perAdjacentAlly: 5, maxConnections: 6, disorderedCap: 0 },
+  limits: { eliteSlotsPerPlatoon: 1, uniqueCopiesPerArmy: 1, bossDeityStartingDeployment: false, wizardsPerPlatoon: 1 },
+};
+
+function makeUnit(overrides: Partial<UnitDef> = {}): UnitDef {
+  return {
+    id: "TEST_UNIT", name: "Test Unit", faction: "SAM",
+    themes: ["Steel"], roles: ["FootSoldier"], rank: "Line", size: "Standard",
+    hp: 100, atk: 100, def: 100, mov: 3, range: 1,
+    initiative: 5, morale: 100, capacityCost: 1,
+    passives: [], actives: [], slots: ["FootSoldier"],
+    unique: false, summonOnly: false, ai: "Balanced",
+    ...overrides,
+  };
+}
+
+function makeAbility(overrides: Partial<AbilityDef> = {}): AbilityDef {
+  return {
+    id: "TEST_ABILITY", name: "Test Ability", category: "Passive",
+    effect: { kind: "Noop" }, text: "Does nothing.",
+    ...overrides,
+  };
+}
+
+function makeFaction(overrides: Partial<FactionDef> = {}): FactionDef {
+  return {
+    id: "SAM", name: "Samurai", identity: "Honor", palette: ["#000"], primaryTheme: "Steel",
+    platoonOrder: null, passiveDoctrine: null, weakness: "None",
+    ...overrides,
+  };
+}
+
 describe("fusion recipes are checked at load time, the same as unit and faction references", () => {
   it("accepts the real fusion table", () => {
     expect(withFusions([...reg.fusions.values()])).not.toThrow();

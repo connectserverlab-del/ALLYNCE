@@ -1,13 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { blob, deploy, KNI, newBattle, reg, SAM } from "./helpers.js";
-import { DIFFICULTY, maybeSurrender, runAiActivation, shouldSurrender } from "../src/ai.js";
+import { DIFFICULTY, maybeSurrender, runAiActivation, shouldSurrender, tryFusion } from "../src/ai.js";
 import { computeStat } from "../src/modifiers.js";
 import { defeat } from "../src/combat.js";
 import { doctrineState } from "../src/composition.js";
 import { attackArc, hexDistance, hexKey, hexRing } from "../src/hex.js";
 import type { Battle } from "../src/state.js";
 import type { Hex } from "../src/hex.js";
-
 /** Did the AI actually spend that skill this activation? */
 function used(b: Battle, ability: string): boolean {
   return b.events.some((e) => e.type === "AbilityUsed" && e.data["ability"] === ability);
@@ -209,6 +208,57 @@ describe("the AI fights the ground it is standing on", () => {
     expect(b.unit(p.commanderUid!).defeated).toBe(false);
     expect(b.sides.get("A")!.surrendered).toBeFalsy();
     expect(b.winner).toBeNull();
+  });
+});
+
+describe("the AI reaches for Fusion once it is worth the bodies it costs", () => {
+  it("fuses two adjacent foot soldiers into a stronger single body once a fight is close enough to matter", () => {
+    const { b, ctrl } = newBattle();
+    const a = b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 5, r: 5 });
+    const c = b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 6, r: 5 });
+    b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 11, r: 5 });   // six hexes off: within reach
+    b.sides.get("A")!.fusionCharges = 1;
+    ctrl.commandPhase(); ctrl.beginActivation("ind:A");
+    expect(tryFusion(ctrl, a)).toBe(true);
+    expect(b.events.some((e) => e.type === "Fusion" && e.data["recipe"] === "FUS_PAIRED_LINE")).toBe(true);
+    expect(a.defeated).toBe(true);
+    expect(c.defeated).toBe(true);
+    expect(b.sides.get("A")!.fusionCharges).toBe(0);
+  });
+
+  it("does not thin the line for a fight nobody is near", () => {
+    const { b, ctrl } = newBattle();
+    const a = b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 5, r: 5 });
+    b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 6, r: 5 });
+    b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 20, r: 5 });   // far past the fusion gate
+    b.sides.get("A")!.fusionCharges = 1;
+    ctrl.commandPhase(); ctrl.beginActivation("ind:A");
+    expect(tryFusion(ctrl, a)).toBe(false);
+    expect(a.defeated).toBe(false);
+    expect(b.sides.get("A")!.fusionCharges).toBe(1);
+  });
+
+  it("will not spend a Fusion charge the holding has not granted", () => {
+    const { b, ctrl } = newBattle();
+    const a = b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 5, r: 5 });
+    b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 6, r: 5 });
+    b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 11, r: 5 });
+    ctrl.commandPhase(); ctrl.beginActivation("ind:A");
+    expect(tryFusion(ctrl, a)).toBe(false);
+    expect(a.defeated).toBe(false);
+  });
+
+  it("a full activation spends a spare second AP on the fusion instead of standing idle", () => {
+    const { b, ctrl } = newBattle();
+    const a = b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 5, r: 5 });
+    const c = b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 6, r: 5 });
+    b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 11, r: 5 });
+    pocket(b, { q: 5, r: 5 }, []); pocket(b, { q: 6, r: 5 }, []);   // sealed in: there is nowhere to march
+    b.terrain.set(hexKey({ q: 5, r: 5 }), "Open"); b.terrain.set(hexKey({ q: 6, r: 5 }), "Open");
+    b.sides.get("A")!.fusionCharges = 1;
+    ctrl.commandPhase();
+    runAiActivation(ctrl, "ind:A", DIFFICULTY.normal);
+    expect(b.events.some((e) => e.type === "Fusion")).toBe(true);
   });
 });
 
