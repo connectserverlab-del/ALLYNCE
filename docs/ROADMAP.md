@@ -379,6 +379,14 @@ built.
   (Sky-Lance Dragoon); Dragon Host's roster is all-flying already and was left without a dedicated ground
   Cavalry unit — see the brainstorm log.
 
+- Direct test coverage for `ai.ts` (`core/tests/ai.test.ts`): target selection under the utility scorer
+  (ritualist priority, clone avoidance), moving toward the only real goal on the field when no enemy unit
+  exists but an enemy ritual does, a platoon leader auto-issuing its faction order once an enemy is in range,
+  the two "immediate value" active abilities (a clone-spawning skill, a duel challenge against an adjacent
+  elite), and both branches of `holdForSyncPolicy` (holds a linked group until every member is held, releases
+  the whole group early once one member crosses the instability danger threshold). None of this had a direct
+  test before; it was previously exercised only incidentally through full-match tests.
+
 ## Next, in priority order
 
 1. Irregular battlefield generator: mountains, valleys, rivers, fords, trenches, mud, roads, ruins on top of the
@@ -392,6 +400,10 @@ built.
    the new siege and cavalry units in an actual battle rather than only in isolated tests.
 4. Decide whether Dragon Host gets a dedicated ground/anchor Cavalry unit or stays without one by design (see
    brainstorm log below) — this one is an owner call, not something to resolve by implementing it either way.
+
+3. Siege and cavalry rosters for the four combat factions (Samurai, Shinobi, Knight, Dragon Host), fitting each
+   faction's theme, per the owner's standing intent.
+4. A second scenario, to prove the objective/AI systems generalize beyond `Threefold Invocation`.
 
 ## Brainstorm log
 
@@ -782,6 +794,18 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   ability of its own (a dive, not a lance) so the faction's mobility identity gets the same charge-risk/reward
   mechanic without adding a redundant non-flying unit that contradicts "Dragon Host is an aerial force."
 
+- 2026-09-07 (proposal): `holdForSyncPolicy` (`core/src/ai.ts`) only ever considers rituals that carry a
+  `linkGroup` — the grouping loop skips any ritual whose `linkGroup` is `null` before it can reach the release
+  check, so a side's unlinked, single-circle ritual can never appear in the policy's output. Once such a ritual
+  completes and enters `CompletedHeld`, this AI policy holds it forever: there is nothing to synchronize with,
+  so the "wait for the whole group, or bail out under `unstableStacks >= 3` danger" logic that protects a linked
+  group never gets a chance to run for it, and it would ride out instability indefinitely under AI control.
+  Proposal: give `holdForSyncPolicy` a second branch alongside the grouped one — any live `CompletedHeld` ritual
+  with `linkGroup === null` releases immediately, since a single circle has no synchronization to wait for and
+  the point of holding at all was to wait for sibling circles that, in this case, do not exist. This keeps
+  Ritual as a first-class, AI-playable function of the engine rather than one with a policy gap that only shows
+  up when a scenario author chooses not to link a circle.
+
 ## A note on branches
 
 `main` is behind `claude/dragon-art-style-examples-qdjeb6`, which carries its own `docs/AGENT_BRIEF.md`,
@@ -878,3 +902,8 @@ stay separate, is an owner decision this pass is flagging rather than making.
   new mechanic: it reads the same per-hex counters `CaptureHold` already keeps, just several of them at once.
   Would need each named `Escort` and `CaptureHold` win state to log which of its component hexes is still
   contested, the way a multi-part objective ought to explain itself on the HUD.
+
+implemented here (direct test coverage for the existing AI, no gameplay change) stands on its own regardless of
+which branch it lands on. Whether `main` should be fast-forwarded to that branch, or whether the two are meant to
+stay separate, is an owner decision this pass is flagging rather than making — a prior pass
+(`agent/2026-09-07-siege-cavalry-rosters`) flagged the same thing; it is still open.
