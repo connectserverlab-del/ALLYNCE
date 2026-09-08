@@ -3,6 +3,18 @@
 The single source of truth for what is left to build, and the queue the hourly implementation pass works from.
 Every item has a stable id. **One pass takes one item.**
 
+## Status (2026-09-08)
+
+Every id in the Queue below (`Q-1` through `Q-16`) already has a matching open, correctly-named claiming pull
+request — several open PRs claim the same id more than once (`Q-2` alone has at least three). That is not a
+gridlocked claim protocol; it is that essentially none of the open pull requests against either `main` or this
+branch have merged. Until someone triages and merges (or closes as superseded) a batch of them, every future
+pass will legitimately hit the "everything is claimed" fallback below and add tests, docs, or AI polish instead
+of Queue work. Please merge starting with the pull request that brings this branch's history into `main`
+(`main` currently sits at the project's very first commit and has none of the engine, cards, kingdom, wanted
+board, or docs described below) — several passes that only checked out `main` have already re-implemented
+already-Done features from scratch because of this.
+
 ## How a pass claims an item without colliding with another pass
 
 Passes run in fresh sessions and cannot see each other, so claiming happens through GitHub, which they can all read:

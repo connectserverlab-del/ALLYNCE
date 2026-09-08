@@ -102,3 +102,8 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-08: Proposal — let a Fusion recipe optionally spend a ritual's leftover Unstable stacks as a named
+  material ("Unstable Residue") instead of only fixed unit ingredients. A circle about to collapse would still
+  feed the engine something back rather than being pure loss, at the cost of a source-tracked risk modifier
+  (e.g. "Unstable Residue x2": -DEF for a few rounds) carried onto whatever the fusion produces. Ties Ritual and
+  Fusion together as the brief asks without adding a new resource type.
