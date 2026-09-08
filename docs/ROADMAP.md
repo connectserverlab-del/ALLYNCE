@@ -468,3 +468,11 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   numbers. A follow-on pass could give one or two of them a genuinely new effect (a Cobalt Conclave ward that
   shields the whole platoon for a round, a Cutpurse Court cavalry withdrawal that hides the rider on retreat)
   once the plain versions have been played and found wanting.
+
+- 2026-09-06: Proposal — right now only the Samurai ladder's Hatamoto rank carries a morale privilege (`banner`,
+  +5 Morale to the platoon in the Command Phase); Knight, Dragon Host and Ritual Cult commanders recover the base
+  +5 only and have no equivalent. When those three ladders land (see Next, item 2), give each top command rank
+  its own morale-facing privilege in the same slot Hatamoto uses, distinct in flavor per faction (a Knight banner
+  bearer rallying broken lines, a Dragon Host commander's roar steadying nearby wings, a Ritual Cult overseer
+  suppressing panic through the circle) so mechanical weight at the top of the ladder is consistent across
+  factions rather than a Samurai-only bonus.
