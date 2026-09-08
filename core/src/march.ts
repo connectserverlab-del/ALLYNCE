@@ -201,6 +201,22 @@ export function squadOf(field: MarchField, id: string): Squad {
   return s;
 }
 
+/**
+ * Remove a unit from whatever squad it currently belongs to. A departure that empties a squad disbands it,
+ * so nothing keeps chasing an anchor that belongs to a unit which walked off to lead a life elsewhere; a
+ * departure that costs a squad its leader promotes the next member in `memberIds`.
+ */
+function leaveSquad(field: MarchField, u: MarchUnit): void {
+  if (!u.squadId) return;
+  const prev = field.squads.get(u.squadId);
+  u.squadId = null;
+  if (!prev) return;
+  const idx = prev.memberIds.indexOf(u.id);
+  if (idx !== -1) prev.memberIds.splice(idx, 1);
+  if (prev.memberIds.length === 0) { field.squads.delete(prev.id); return; }
+  if (prev.leaderId === u.id) prev.leaderId = prev.memberIds[0]!;
+}
+
 /** Form a squad. The leader takes the centre slot and everyone else falls in around it. */
 export function formSquad(field: MarchField, opts: { leaderId: string; memberIds?: string[]; id?: string; name?: string }): Squad {
   const leader = unitOf(field, opts.leaderId);
@@ -209,7 +225,9 @@ export function formSquad(field: MarchField, opts: { leaderId: string; memberIds
     id: opts.id ?? `sq${++field.seq}`, name: opts.name ?? `Squad ${field.squads.size + 1}`,
     side: leader.side, leaderId: leader.id, memberIds: ids, destination: null,
   };
-  for (const id of ids) unitOf(field, id).squadId = s.id;
+  // a unit reused from another squad leaves it first, so that squad's bookkeeping (memberIds, leaderId,
+  // pace, formation slots) never carries a member who has actually fallen in somewhere else
+  for (const id of ids) { const m = unitOf(field, id); leaveSquad(field, m); m.squadId = s.id; }
   field.squads.set(s.id, s);
   return s;
 }
@@ -593,6 +611,7 @@ function tryJoin(field: MarchField, u: MarchUnit): void {
   if (!s) { u.order = null; return; }
   const anchor = squadAnchor(field, s);
   if (Math.hypot(anchor.x - u.pos.x, anchor.y - u.pos.y) > field.rules.joinRadius) return;
+  leaveSquad(field, u); // clear any prior squad before this one claims it, or the old one drags a phantom member
   s.memberIds.push(u.id);
   u.squadId = s.id;
   const slot = formationSlot(field, s.memberIds.length - 1);

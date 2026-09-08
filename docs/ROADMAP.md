@@ -102,3 +102,7 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-08: Proposal — marching squads now promote a replacement leader by list order the instant the old one is
+  reused or peels off elsewhere; that promotion could read rank instead, so the highest-ranked member left in a
+  Samurai or Knight column takes over the same way a promoted second inherits command in the Command Phase. Would
+  give the rank ladders another place their mechanical weight actually shows.
