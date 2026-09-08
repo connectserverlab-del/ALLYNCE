@@ -1347,3 +1347,12 @@ passes; this one doesn't resolve it either.
   already a first-class, source-tracked system; using it to break a stalemate gives a long battle a reason
   besides the clock, and a scenario that truly wants a coin-flip draw could still opt out by leaving
   `roundLimitWinner` unset only when both averages tie.
+
+- 2026-09-08: Proposal — give each faction's siege piece a portal-specific breaching trait instead of the one
+  shared `ABL_BREACHING_SHOT` bonus every cannon gets today: the Dragon Host's Siegewyrm collapses a still-telegraphing
+  portal outright with its concussive blast (denying the reinforcement before it ever opens), the Knight trebuchet
+  only chips a portal's hp at range but ignores its def entirely, the Samurai cannon halves the refund the defender
+  gets on a kill (nothing walks away clean), and the Shinobi's piece can't dent a portal's hp at all but auto-wins
+  any capture contest it assists. Read against `attackPortal` in `core/src/portals.ts`, which this pass caught doing
+  no side check at all (a unit could "attack" and destroy its own portal) — worth widening the review to whether the
+  four cannons should differ in more than raw numbers once that path gets more traffic.

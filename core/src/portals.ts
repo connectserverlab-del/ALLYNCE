@@ -59,6 +59,8 @@ export function tickPortal(b: Battle, p: Portal): UnitState[] {
 }
 
 export function attackPortal(b: Battle, attacker: UnitState, p: Portal, finalAtk: number): boolean {
+  // Nothing attacks its own portal, and a portal already down or taken is not a target any more.
+  if (attacker.side === p.side || p.state === "Destroyed" || p.state === "Captured") return false;
   if (!attacker.pos || hexDistance(attacker.pos, p.pos) > effectiveRange(b, attacker)) return false;
   const dmg = Math.max(100, finalAtk - p.def);
   p.hp -= dmg;
