@@ -18,7 +18,7 @@ export interface BattleSave {
   weather: WeatherId; timeOfDay: TimeOfDayId;
   terrain: Array<[string, Terrain]>; elevation: Array<[string, number]>;
   units: UnitState[]; platoons: PlatoonState[];
-  sides: Array<{ id: string; reservePoints: number; armyCapacity: number; morale: number; leaderUid?: string | null; surrendered?: boolean; fusionCharges?: number }>;
+  sides: Array<{ id: string; reservePoints: number; armyCapacity: number; morale: number; leaderUid?: string | null; surrendered?: boolean; fusionCharges?: number; companyOrderUsedThisRound?: boolean }>;
   rituals: Array<Omit<RitualCircle, "damagedThisRound"> & { damagedThisRound: string[] }>;
   portals: Portal[];
   decks: Array<{ side: string; list: DeckList; drawPile: string[]; hand: string[]; graveyard: string[]; sideDeck: string[]; usedSide: string[] }>;

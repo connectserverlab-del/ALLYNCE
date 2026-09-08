@@ -29,6 +29,11 @@ export const KNI: Omit<PlatoonBlueprint, "id" | "side"> = {
 export const DRG: Omit<PlatoonBlueprint, "id" | "side"> = {
   faction: "DRG", commander: "DRG_COMMANDER_RIFTWING-DOMINANT", second: "DRG_SECOND_STORMCLAW-WINGSECOND", elite: "DRG_ELITE_OBSIDIAN-MAW",
   foot: Array(5).fill("DRG_FOOT_SLATEWING-DRAKE"),
+
+/** A division with no rank ladder and no faction signature order (`platoonOrder: null`). */
+export const ANG: Omit<PlatoonBlueprint, "id" | "side"> = {
+  faction: "ANG", commander: "ANG_COMMANDER_THRONE-ARCHON", second: "ANG_SECOND_WARDING-SERAPH", elite: "ANG_ELITE_SWORD-OF-THE-SEVENTH-GATE",
+  foot: Array(5).fill("ANG_FOOT_LAMPBEARER-CHORISTER"),
 };
 
 /** A compact 8-hex blob around (q,r): leader row + foot line. */
