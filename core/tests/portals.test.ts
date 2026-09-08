@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { newBattle } from "./helpers.js";
-import { callPortal, queueReinforcement, tickPortal, destroyPortal, captureStep, checkCaptureInterrupt } from "../src/portals.js";
+import { callPortal, queueReinforcement, tickPortal, destroyPortal, captureStep, checkCaptureInterrupt, attackPortal } from "../src/portals.js";
 import { hexNeighbors } from "../src/hex.js";
 
 describe("reinforcement portals", () => {
@@ -47,5 +47,22 @@ describe("reinforcement portals", () => {
     captureStep(b, keeper, p); captureStep(b, keeper, p);
     expect(p.state).toBe("Open");
     expect(p.side).toBe("A");
+  });
+
+  it("attacking a portal damages an enemy's but is rejected against one's own or an already-destroyed one", () => {
+    const { b } = newBattle();
+    const p = callPortal(b, "B", { q: 5, r: 5 }, { telegraph: 0, hp: 5000, def: 400 })!;
+    const owner = b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 6, r: 5 });
+    expect(attackPortal(b, owner, p, 2000)).toBe(false); // can't attack your own side's portal
+    expect(p.hp).toBe(5000);
+
+    const enemy = b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "A", { q: 4, r: 5 });
+    expect(attackPortal(b, enemy, p, 2000)).toBe(true);
+    expect(p.hp).toBe(3400); // 5000 - max(100, 2000 - 400)
+    expect(enemy.attackedThisActivation).toBe(true);
+
+    destroyPortal(b, p, enemy.uid);
+    expect(attackPortal(b, enemy, p, 2000)).toBe(false); // already destroyed, nothing left to hit
+    expect(p.state).toBe("Destroyed");
   });
 });
