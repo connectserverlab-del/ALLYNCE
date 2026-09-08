@@ -13,8 +13,9 @@ universal win conditions three times; the rank ladders twice.
 
 That is resolved. All eighty-five branches were merged into `claude/merge-85-prs-ec3ca0`, which shipped as
 pull request #88 on 2026-09-08 — carrying the eighty-seven branches, the AAA retarget, and `Q-19` to `Q-21`
-of the netcode line. The branch was then restarted from `main` and is now **pull request #90**, where work
-continues. The branch name is reused on purpose: every routine pushes to it, so a merge does not rewire them.
+of the netcode line. #90 followed the same day. The branch is restarted from `main` after each
+merge and always has exactly one open pull request; the branch name is reused on purpose, so a merge does not
+rewire the routines. No document here hard-codes the number — see `docs/AGENT_BRIEF.md` for how to find it.
 
 **Every pass branches from, and pushes to, `claude/merge-85-prs-ec3ca0`. No pass opens a new pull request.**
 See `docs/AGENT_BRIEF.md` for the mechanics. Consolidating those branches cost more than the features in them

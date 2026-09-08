@@ -10,7 +10,9 @@ You are working in the ALLYNCE repository, an original tactical army strategy ga
 
 ## Where work goes
 
-**Every pass works on the integration branch `claude/merge-85-prs-ec3ca0`, which is pull request #90.**
+**Every pass works on the integration branch `claude/merge-85-prs-ec3ca0`.** It always has exactly one
+open pull request against `main`; find it with `gh pr list --head claude/merge-85-prs-ec3ca0` or the
+repository's pull request list. The number changes each cycle, so nothing in this repository hard-codes it.
 
 Eighty-five parallel branches were open at once before this rule existed. Each was green alone and
 several were not green together: two branches implemented the same checklist item four different ways,
@@ -18,10 +20,9 @@ one moved a fix another branch had just made, and one silently overwrote a hand-
 every regeneration. Consolidating them cost more than the features did. One branch, reviewed as one
 pull request, is what replaced that.
 
-That first integration pull request (#88) merged on 2026-09-08, carrying the eighty-seven branches, the
-AAA retarget, and `Q-19` to `Q-21` of the netcode line. The branch name is deliberately reused: it was
-restarted from `main` and now tracks #90, so nothing that pushes here needs rewiring each time a
-pull request lands.
+The first integration pull request (#88) merged on 2026-09-08, carrying the eighty-seven branches, the
+AAA retarget and `Q-19` to `Q-21` of the netcode line; #90 followed the same day. The branch name is
+deliberately reused across those cycles, so nothing that pushes here needs rewiring when one lands.
 
 So:
 
@@ -34,9 +35,10 @@ So:
 - If the branch is red when you arrive, fixing it *is* your item for the pass.
 
 When the current pull request merges, the branch has done its job for that cycle: restart it from
-`main` (`git fetch origin main && git checkout -B claude/merge-85-prs-ec3ca0 origin/main`), open one
-fresh pull request for it, and update this section and `docs/CHECKLIST.md` to name the new number.
-Keep the branch name — every routine pushes to it, and changing it means rewiring them all.
+`main` (`git fetch origin main && git checkout -B claude/merge-85-prs-ec3ca0 origin/main`) and open one
+fresh pull request for it. Keep the branch name — every routine pushes to it, and changing it means
+rewiring them all. GitHub refuses a pull request with no commits, so the restart needs one commit before
+it can be opened; your pass's own work is that commit.
 
 ## The target
 
