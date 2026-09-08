@@ -56,6 +56,7 @@ export interface KingdomState {
   wanted: WantedState;                  // warrants posted, in hand and settled
   seed: number;
   elapsed: number;
+  draws: number;                        // total cards ever drawn from any banner; keeps each draw's roll unique
 }
 
 export const BUILDING_IDS: BuildingId[] = ["KEEP", "GRANARY", "MINE", "SAWPIT", "BARRACKS", "RESEARCH_HALL", "RECRUITMENT_HALL", "FORGE", "STABLE", "WALL", "SHRINE"];
@@ -66,7 +67,7 @@ export function newKingdom(reg: Registry, faction: string, opts: { name?: string
     name: opts.name ?? "Ashfall Hold", faction,
     resources: { ...reg.kingdom.startingResources },
     levels, buildQueue: [], research: { done: [], active: null },
-    collection: {}, pity: {}, wanted: newWantedState(), seed: opts.seed ?? 1, elapsed: 0,
+    collection: {}, pity: {}, wanted: newWantedState(), seed: opts.seed ?? 1, elapsed: 0, draws: 0,
   };
 }
 
@@ -201,7 +202,13 @@ export function drawFromBanner(reg: Registry, k: KingdomState, bannerId: string,
   if (!banner) return { ok: false, reason: `Unknown banner ${bannerId}`, cards: [] };
   if (k.levels.RECRUITMENT_HALL < 1) return { ok: false, reason: "Raise a Recruitment Hall first", cards: [] };
   const cards: DrawResult[] = [];
-  const rng = new Rng(k.seed + k.elapsed + Object.keys(k.collection).length * 7919);
+  // `elapsed` and the collection's own size are not enough on their own: two draws called back to back,
+  // with no time passing and both landing on a card already owned, would otherwise reseed identically and
+  // repeat the exact same pull every time (verified: it can lock onto one card for dozens of draws in a
+  // row once the easy stars are all duplicates). `draws` is a plain monotonic counter, so every call gets
+  // a seed no earlier call ever used, while staying exactly reproducible for a given save.
+  const rng = new Rng(k.seed + k.elapsed + Object.keys(k.collection).length * 7919 + k.draws * 104729);
+  k.draws++;
   const floorBonus = (reg.kingdom.buildings.RECRUITMENT_HALL.effect?.drawFloor ?? 0) * k.levels.RECRUITMENT_HALL;
   for (let i = 0; i < n; i++) {
     if (!canAfford(k, banner.cost)) return { ok: cards.length > 0, reason: "Not enough resources for the next draw", cards };

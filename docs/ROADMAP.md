@@ -814,3 +814,10 @@ stay separate, is an owner decision this pass is flagging rather than making.
   unit that has held the same trench or high-ground hex for two full rounds gets a "dug in" arc widening
   (its rear arc shrinks, front widens) so odd-shaped ground rewards patience, not just position. Would sit
   next to the existing rank ladders as one more mechanically weighty privilege rather than a new system.
+
+- 2026-09-07: Proposal — now that a banner draw's roll cannot repeat itself for lack of a changed seed, let a
+  faction's own rank ladder lean on the same Recruitment Hall a player already levels: the apex rank of a
+  ladder could shave a fixed number of draws off that faction's own banner's pity counter once earned, so
+  reaching the top of a ladder pays into the economy loop and not only into battle. Ties rank ladders'
+  "mechanical weight" to the holding the same way Company-tier leadership already ties it to the battlefield,
+  without touching any banner's published odds table.

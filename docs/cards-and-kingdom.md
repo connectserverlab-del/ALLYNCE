@@ -141,7 +141,10 @@ A permanent base that persists between battles.
 - **Research**: twelve studies in four tiers, gated by the Research Hall's level and by prerequisites. One study
   runs at a time.
 - **Recruitment**: three banners with weighted star tables and a pity counter that guarantees the banner's floor.
-  The Recruitment Hall's level lifts the odds of the higher stars.
+  The Recruitment Hall's level lifts the odds of the higher stars. Each draw's roll is seeded from the holding's
+  seed, elapsed time, collection size and a running `draws` counter together, so a holding replays identically
+  from a save but two separate draws never collide onto the same roll just because a duplicate card in between
+  left the collection's size and the clock both unchanged.
 
 Everything the holding grants arrives in battle as a **named, source-tracked modifier**. "Forge 2" and
 "Research: Forged Edge" appear as their own lines in the attack breakdown, so any number on the field can be

@@ -104,3 +104,4 @@ Three things bite:
 | `D-49` | Named biomes (Ashfall, Marsh, Highland Pass) as data-defined presets over the battlefield generator, with a `wetness` knob and per-battle overrides |
 | `D-50` | Knight rank ladder (14 ranks, Page to King), with its own lance-charge ATK privilege alongside mounted movement, banner and castle; Dragon Host and Ritual Cult ladders remain |
 | `D-51` | Dragon Host rank ladder (9 ranks, wing dive keyed to altitude lost) and Ritual Cult rank ladder (5 ranks, ritual mastery and instability ceiling, no leadership privilege) |
+| `D-52` | Fixed `drawFromBanner` reseeding identically across separate calls once elapsed time and collection size both hold still (a run of duplicate pulls could lock a banner onto one card for dozens of draws in a row); added a monotonic `KingdomState.draws` counter to the seed and a regression test |
