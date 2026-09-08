@@ -213,6 +213,8 @@ export function drawFromBanner(reg: Registry, k: KingdomState, bannerId: string,
     const pool = [...reg.units.values()].filter((d) => (d.stars ?? 1) === stars && !d.summonOnly && d.faction !== "DIV");
     const themed = pool.filter((d) => d.faction === k.faction);
     const choose = (themed.length && rng.next() < 0.7 ? themed : pool.length ? pool : themed);
+    // Registry validation guarantees every rate.stars has a recruitable unit, so pool is never empty here;
+    // this guards a payment already taken (see below) from being spent on nothing if that invariant ever slips.
     if (!choose.length) { i--; continue; }
     const pick = choose[rng.int(choose.length)]!;
     const duplicate = (k.collection[pick.id] ?? 0) > 0;
