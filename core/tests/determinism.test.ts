@@ -23,6 +23,22 @@ describe("determinism harness", () => {
     expect(hashes.size).toBe(4);
   });
 
+  it("refuses an event carrying a value JSON.stringify would flatten to {}", () => {
+    // The failure this guards against is silent: a Set logged as `duels` or `interceptUsed` would
+    // stringify to "{}" and the hash would simply stop seeing that field.
+    const events = scriptedMatch(41).battle.events;
+    const withSet = [{ ...events[0]!, data: { ...events[0]!.data, uids: new Set(["u1"]) } }];
+    expect(() => hashEvents(withSet)).toThrow(/flattens to/);
+    const withNested = [{ ...events[0]!, data: { ...events[0]!.data, at: { hexes: new Map() } } }];
+    expect(() => hashEvents(withNested)).toThrow(/at\.hexes/);
+  });
+
+  it("accepts the plain shapes events actually use", () => {
+    const events = scriptedMatch(41).battle.events;
+    const plain = [{ ...events[0]!, data: { a: 1, b: "s", c: true, d: null, e: [1, "2", { f: 3 }], g: undefined } }];
+    expect(() => hashEvents(plain)).not.toThrow();
+  });
+
   it("the hash itself is sensitive to a single changed event field", () => {
     const events = scriptedMatch(41).battle.events;
     const before = hashEvents(events);

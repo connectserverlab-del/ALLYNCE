@@ -15,10 +15,37 @@ export function hashString(s: string): string {
 }
 
 /**
+ * Every value an event may carry. `JSON.stringify` renders anything outside this set as `{}` — a
+ * `Set`, a `Map`, a class instance — which would make the hash silently blind to the field rather
+ * than fail. Since the whole point of the hash is to catch what nobody meant to change, being blind
+ * is worse than being strict.
+ */
+function assertPlain(value: unknown, where: string): void {
+  if (value === null || value === undefined) return;
+  const t = typeof value;
+  if (t === "string" || t === "number" || t === "boolean") return;
+  if (Array.isArray(value)) {
+    value.forEach((v, i) => assertPlain(v, `${where}[${i}]`));
+    return;
+  }
+  if (t === "object" && Object.getPrototypeOf(value) === Object.prototype) {
+    for (const [k, v] of Object.entries(value as Record<string, unknown>)) assertPlain(v, `${where}.${k}`);
+    return;
+  }
+  throw new Error(
+    `Event field ${where} is a ${Object.prototype.toString.call(value)}, which JSON.stringify flattens to "{}". ` +
+    `Log a plain value instead (spread a Set or Map into an array first), or the determinism hash cannot see it.`,
+  );
+}
+
+/**
  * Hashes a battle's event log for equality comparison across runs. `GameEvent.data` is a plain,
  * JSON-serialisable record built the same way on every run of the same seed, so its key order is
  * stable; this is the same shape `Q-20`'s per-round `RoundHash` will hash a slice of.
+ *
+ * Throws if any event carries a value the hash could not actually see.
  */
 export function hashEvents(events: readonly GameEvent[]): string {
+  for (const e of events) assertPlain(e.data, `${e.type}.data`);
   return hashString(JSON.stringify(events));
 }
