@@ -870,3 +870,11 @@ stay separate, is an owner decision this pass is flagging rather than making.
   challenging an enemy Kage or Shogun to a Formal Duel could cost morale to both sides on issue, or simply be
   disallowed below a faction-specific rank floor, so the ladders get a say in this mechanic too instead of it
   being the one privilege-adjacent ability rank never touches.
+
+- 2026-09-07: Proposal — `CaptureHold` targets one fixed hex, but an odd-shaped map usually has two chokepoints
+  worth holding (both fords on a river map, both passes on a highland map), and a defender's real objective is
+  "hold them together", not either alone. A composite `CaptureHoldAll` that lists several hexes and is satisfied
+  only once every one of them individually reaches its own round count would express a pincer defense without a
+  new mechanic: it reads the same per-hex counters `CaptureHold` already keeps, just several of them at once.
+  Would need each named `Escort` and `CaptureHold` win state to log which of its component hexes is still
+  contested, the way a multi-part objective ought to explain itself on the HUD.
