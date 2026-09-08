@@ -12,6 +12,7 @@ export function validateArmy(reg: Registry, army: ArmyBlueprint): ValidationResu
   const errors: string[] = [];
   const slots = reg.rules.standardPlatoon.slots;
   let capacity = 0;
+  let hasCompanyLeader = false;
   const uniqueSeen = new Map<string, number>();
   const count = (id: string) => { const d = reg.unit(id); capacity += d.capacityCost; if (d.unique) uniqueSeen.set(id, (uniqueSeen.get(id) ?? 0) + 1); return d; };
   const require = (d: UnitDef, slot: string, pid: string) => {
@@ -25,14 +26,20 @@ export function validateArmy(reg: Registry, army: ArmyBlueprint): ValidationResu
     if (p.foot.length !== slots["FootSoldier"]) errors.push(`${p.id}: needs exactly ${slots["FootSoldier"]} foot soldiers, has ${p.foot.length}`);
     for (const f of p.foot) require(count(f), "FootSoldier", p.id);
     const cd = reg.unit(p.commander);
-    if (!canLead(reg.ranks.get(cd.faction), cd.factionRank, "Platoon")) errors.push(`${p.id}: rank ${cd.factionRank ?? "none"} of ${cd.id} may not lead a Platoon`);
+    const ladder = reg.ranks.get(cd.faction);
+    if (!canLead(ladder, cd.factionRank, "Platoon")) errors.push(`${p.id}: rank ${cd.factionRank ?? "none"} of ${cd.id} may not lead a Platoon`);
     const sd = reg.unit(p.second);
     if (!canLead(reg.ranks.get(sd.faction), sd.factionRank, "Platoon")) errors.push(`${p.id}: second ${sd.id} holds rank ${sd.factionRank ?? "none"} and could not assume platoon command`);
+    if (canLead(ladder, cd.factionRank, "Company") || canLead(reg.ranks.get(sd.faction), sd.factionRank, "Company")) hasCompanyLeader = true;
     const factions = new Set([p.commander, p.second, p.elite, ...p.foot].map((id) => reg.unit(id).faction));
     if (factions.size > 1) errors.push(`${p.id}: mixed factions ${[...factions].join(",")}`);
     const wizards = [p.commander, p.second, p.elite].filter((id) => reg.unit(id).rank === "Wizard").length;
     if (wizards > reg.rules.limits.wizardsPerPlatoon) errors.push(`${p.id}: too many Wizards`);
   }
+  // Fielding more than one platoon is a Company in the field, not just a Platoon: rank ladders declare
+  // which ranks may lead a Company for exactly this reason (see `docs/samurai-ranks.md`), but nothing
+  // checked it before now, so any Platoon-rank commander could nominally field a whole army.
+  if (army.platoons.length > 1 && !hasCompanyLeader) errors.push(`Army fields ${army.platoons.length} platoons but no commander or second holds a rank that may lead a Company`);
   for (const s of army.specialists) {
     const d = count(s);
     if (d.roles.includes("Commander") || d.roles.includes("Elite")) errors.push(`Specialist teams cannot unlock extra commanders or elites: ${s}`);
