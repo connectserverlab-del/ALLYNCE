@@ -17,17 +17,24 @@
 .hex.threat { stroke: #a35145; }
 
 .pawn { cursor: pointer; }
-.pawn .disc { stroke-width: 1; }
-.pawn.player .disc { fill: #223142; stroke: #6f9cc4; }
-.pawn.enemy .disc { fill: #372129; stroke: #b4685c; }
-.pawn.active .disc { stroke: var(--accent); stroke-width: 2; }
+/* .disc sits under the art as a fill fallback while it loads; .disc-ring is the border, drawn on top of the art. */
+.pawn .disc { stroke: none; }
+.pawn.player .disc { fill: #223142; }
+.pawn.enemy .disc { fill: #372129; }
+.pawn .pawn-initials { font-family: var(--display); font-size: 8px; fill: var(--text); text-anchor: middle; }
+.pawn .disc-ring { fill: none; stroke-width: 1; }
+.pawn.player .disc-ring { stroke: #6f9cc4; }
+.pawn.enemy .disc-ring { stroke: #b4685c; }
+.pawn.active .disc-ring { stroke: var(--accent); stroke-width: 2; }
 .pawn.spent { opacity: .45; }
-.pawn .initial { font-family: var(--display); font-size: 8px; fill: var(--text); text-anchor: middle; }
 .pawn .hpbar { fill: #0d1014; }
 .pawn .hpfill { fill: #6f9f74; }
 .pawn.enemy .hpfill { fill: #b4685c; }
-.pawn .star { fill: var(--accent); font-size: 5px; text-anchor: middle; font-family: var(--mono); }
-.pawn.ascendant .disc { stroke: var(--accent); stroke-dasharray: 3 2; }
+.pawn .star {
+  fill: var(--accent); font-size: 5px; text-anchor: middle; font-family: var(--mono);
+  paint-order: stroke; stroke: #05070a; stroke-width: 1.6px; stroke-linejoin: round;
+}
+.pawn.ascendant .disc-ring { stroke: var(--accent); stroke-dasharray: 3 2; }
 
 .hit-shake { animation: shake .38s ease-out; transform-box: fill-box; transform-origin: center; }
 @keyframes shake {

@@ -15,6 +15,32 @@ const corners = (c) => Array.from({ length: 6 }, (_, i) => {
   return `${(c.x + SIZE * Math.cos(a)).toFixed(1)},${(c.y + SIZE * Math.sin(a)).toFixed(1)}`;
 }).join(" ");
 
+/**
+ * A unit's own painted concept art (the same plate the Deck and Armoury screens show),
+ * cropped into the token. Concept art is preferred over the cutout here: the cutout is
+ * a transparent silhouette meant to sit on a card's own background, and a small
+ * circular token has no such background behind it.
+ *
+ * A unit still unpainted (`data/art/awaiting-art.json`, 90 of the roster) has no image
+ * to show. The generated per-card portrait (`art.js`'s `portrait()`) is tuned to read
+ * at card size, 200x260; cropped into a ~37px token it collapses into a near-black
+ * blob, an ugly rendering artefact rather than a placeholder. Initials on the token's
+ * own side-coloured disc stay legible at any size, so that is the fallback here — a
+ * plain marker to work from, not a broken attempt at art.
+ */
+function pawnArt(def, r) {
+  const painted = def.art?.concept ?? def.art?.cutout;
+  if (painted) {
+    return `<image href="../${painted}" x="${-r}" y="${-r}" width="${r * 2}" height="${r * 2}"
+      preserveAspectRatio="xMidYMid slice"/>`;
+  }
+  return `<text class="pawn-initials" y="1">${esc(initials(def.name))}</text>`;
+}
+
+function initials(name) {
+  return name.replace(/[^A-Za-z ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+}
+
 export function battleView(root, { data, params, go, toast }) {
   const deck = save.deck();
   if (deck.units.length < 8) {
@@ -86,10 +112,13 @@ export function battleView(root, { data, params, go, toast }) {
       const hpPct = Math.max(0, u.hp / u.maxHp);
       const targetable = selected && selected.side === "player" && selected.ap > 0
         && game.targets(selected).includes(u);
+      const r = SIZE * 0.62;
       return `<g class="pawn ${u.side}${selected?.uid === u.uid ? " active" : ""}${u.ap === 0 && u.side === "player" ? " spent" : ""}${u.def.stars === 10 ? " ascendant" : ""}"
           data-uid="${u.uid}" transform="translate(${c.x},${c.y})" tabindex="0">
-        <circle class="disc" r="${SIZE * 0.62}" ${targetable ? 'stroke="#e0a"' : ""}/>
-        <text class="initial" y="1">${esc(initials(u.def.name))}</text>
+        <defs><clipPath id="clip-${u.uid}"><circle r="${r}"/></clipPath></defs>
+        <circle class="disc" r="${r}"/>
+        <g clip-path="url(#clip-${u.uid})">${pawnArt(u.def, r)}</g>
+        <circle class="disc-ring" r="${r}" ${targetable ? 'stroke="#e0a"' : ""}/>
         <text class="star" y="${SIZE * 0.48}">${u.def.stars}★</text>
         <rect class="hpbar" x="${-SIZE * 0.46}" y="${-SIZE * 0.74}" width="${SIZE * 0.92}" height="3.4" rx="1.7"/>
         <rect class="hpfill" x="${-SIZE * 0.46}" y="${-SIZE * 0.74}" width="${(SIZE * 0.92 * hpPct).toFixed(1)}" height="3.4" rx="1.7"/>
@@ -281,10 +310,6 @@ export function battleView(root, { data, params, go, toast }) {
 }
 
 /* ------------------------------------------------------------------ setup */
-function initials(name) {
-  return name.replace(/[^A-Za-z ]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
-}
-
 /** Terrain is derived from the node so each objective plays differently. */
 function terrainFor(node) {
   const t = [];
