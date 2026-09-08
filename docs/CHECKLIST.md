@@ -48,7 +48,6 @@ Three things bite:
 | Id | Item | Why it matters |
 |---|---|---|
 | `Q-1` | Second art pass on weak cutouts: any unit whose card still reads "no art yet", plus re-cuts where the flood fill left a panel edge | Blank cards are the most visible gap in the game |
-| `Q-7` | Duplicate-card reforge: spend copies to raise a card's star by one | Duplicates now arrive from warrants as well as recruitment and need a sink beyond deck depth |
 | `Q-8` | Stratagem cards as a third side-deck kind, one-round battlefield effects | Fills out the side deck beyond ritual and fusion |
 | `Q-9` | Unity port scaffolding: ScriptableObject importer for `data/`, and the C# module skeleton in `docs/mechanics.md` | The engine target the brief names |
 | `Q-10` | Replay viewer: step through a saved event log | The event log already exists and is unused |
@@ -93,3 +92,4 @@ Three things bite:
 | `D-29` | Deck editor in the sample page: every card that could ever sleeve, browsable and editable card by card in both the main and side deck, with a live legality panel that mirrors `validateDeck` |
 | `D-30` | Weather and time of day as round modifiers: rolled once per battle from the seed; Rain turns Open ground beside Water and Fords to Mud, Fog cuts ranged range by one hex (AI, siege stand-off and portal attacks all read the same effective range), Night is a named −25 ATK on ranged attacks |
 | `D-31` | Knight (8 ranks), Dragon Host (7 ranks) and Ritual Cult (4 ranks) rank ladders, each escalating one mechanical trait per rank (surefoot, climber, waterwalk respectively), matching the Samurai and Shinobi ladders already in place |
+| `D-32` | Duplicate-card reforge: spend several copies of a card for one copy of a same-faction card one star above it |

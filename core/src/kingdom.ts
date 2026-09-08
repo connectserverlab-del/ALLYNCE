@@ -1,5 +1,5 @@
 import type { Registry } from "./data.js";
-import type { Role, Modifier } from "./types.js";
+import type { Role, Modifier, UnitDef } from "./types.js";
 import type { Battle } from "./state.js";
 import { Rng } from "./rng.js";
 import { newWantedState, type WantedState } from "./wanted.js";
@@ -228,6 +228,43 @@ function pickStars(rng: Rng, banner: BannerDef, floorBonus: number): number {
   let roll = rng.next() * total;
   for (const r of rates) { roll -= r.weight; if (roll <= 0) return r.stars; }
   return rates[rates.length - 1]!.stars;
+}
+
+// ---------------------------------------------------------------- reforge
+
+/**
+ * Same-faction cards exactly one star above `sourceId`. A duplicate copy has nowhere else to go once a deck
+ * already runs the star's copy limit, so reforging is the sink: trade several of a card up for one of a rarer
+ * one instead of leaving it dead weight in the collection.
+ */
+export function reforgeTargets(reg: Registry, sourceId: string): UnitDef[] {
+  const source = reg.units.get(sourceId);
+  if (!source) return [];
+  const nextStar = (source.stars ?? 1) + 1;
+  return [...reg.units.values()].filter((d) =>
+    d.faction === source.faction && d.faction !== "DIV" && !d.summonOnly && (d.stars ?? 1) === nextStar);
+}
+
+/** Copies of `sourceId` a reforge consumes, keyed by the source card's own star. Zero means it cannot be spent. */
+export function reforgeCost(reg: Registry, sourceId: string): number {
+  const source = reg.units.get(sourceId);
+  if (!source) return 0;
+  return reg.deckRules.reforgeCostByStar[String(source.stars ?? 1)] ?? 0;
+}
+
+/** Spend `reforgeCost` copies of `sourceId` for one copy of `targetId`, a valid target from `reforgeTargets`. */
+export function reforge(reg: Registry, k: KingdomState, sourceId: string, targetId: string): ActionResult {
+  const source = reg.units.get(sourceId);
+  if (!source) return { ok: false, reason: `Unknown card ${sourceId}` };
+  const cost = reforgeCost(reg, sourceId);
+  if (cost <= 0) return { ok: false, reason: `${source.name} cannot be reforged further` };
+  const owned = k.collection[sourceId] ?? 0;
+  if (owned < cost) return { ok: false, reason: `Reforging ${source.name} takes ${cost} cop${cost === 1 ? "y" : "ies"}; you hold ${owned}` };
+  const target = reforgeTargets(reg, sourceId).find((d) => d.id === targetId);
+  if (!target) return { ok: false, reason: `${targetId} is not a ${source.faction} card one star above ${source.name}` };
+  k.collection[sourceId] = owned - cost;
+  k.collection[targetId] = (k.collection[targetId] ?? 0) + 1;
+  return { ok: true };
 }
 
 // ---------------------------------------------------------------- battle carry-over

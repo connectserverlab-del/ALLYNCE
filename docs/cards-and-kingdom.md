@@ -54,6 +54,21 @@ soldiers arrive whole, their specialists at half, their champions at a third, an
 above arrives at all. That is exactly enough to sleeve a legal hundred on day one, and not one card more.
 Everything past it is drawn at the Recruitment Hall or taken off the field on a warrant.
 
+### Reforging duplicates
+
+A banner draw or a warrant can hand you a card you already own past what a hundred-card deck can ever run at
+that star. `reforge(reg, k, sourceId, targetId)` gives duplicates a sink: spend several copies of one card for
+one copy of a same-faction card exactly one star above it.
+
+- **Cost is set by the source's star**, not the target's — `reforgeCostByStar` in `data/cards/deck_rules.json`,
+  five copies at one star down to two at nine. `reforgeCost` reads it; `reforgeTargets` lists every card one
+  faction, one star up.
+- Ten-star cards are never a valid source or target: a ten-star card cannot be reforged further, and the only
+  ten-star cards in most factions are summon-only Kage, shoguns and deities, which `reforgeTargets` excludes the
+  same way the Recruitment Hall and the wanted board already do.
+- A faction with a gap at the next star (no card sits at exactly source-star-plus-one) simply has no target yet;
+  reforging isn't a way to skip a hole in the roster.
+
 ## The wanted board
 
 Warrants are the deliberate way to deepen a line. The board posts five at a time, rotating on the hour, and it

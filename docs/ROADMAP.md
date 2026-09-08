@@ -64,6 +64,8 @@ where they conflict.**
   research tree, three recruitment banners with pity, and carry-over into battle as named modifiers.
 - New top-down painted maps (campaign, Samurai province), painted stronghold, card frames, card back, icon set.
 - Redesigned interface: Field, Deck, Rites, Hold and Lands screens built on the painted assets.
+- Duplicate-card reforge: spend several copies of a card for one copy of a same-faction card one star above it,
+  so a duplicate a deck can no longer use still has somewhere to go.
 
 ### Done in the scenario-authoring pass
 
@@ -216,3 +218,7 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   own — a high-tier retainer holding formation on a Road (a marching-order movement bonus, or an ATK/DEF bonus
   while the whole platoon is aligned on one) — so the last host faction's ladder carries the same kind of
   mechanical weight as the four that now have one.
+
+- 2026-09-05: Proposal — gate which reforge targets show up by how far the holding's own faction has climbed its
+  rank ladder (a holding that has never fielded a Marshal could not reforge toward one), so the rank ladders and
+  the card collection reinforce each other instead of running as separate systems.
