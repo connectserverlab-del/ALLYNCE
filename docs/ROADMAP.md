@@ -946,3 +946,12 @@ stay separate, is an owner decision this pass is flagging rather than making —
   riders cross Mountains at a rider's normal cost rather than the sixfold penalty cavalry pay elsewhere, the way
   Shinobi already outrun Knights through Forest. Gives the faction's themed cavalry a rank-gated answer to the
   terrain system rather than a flat stat bonus.
+
+- 2026-09-07: Proposal — field promotion: defeating an enemy that holds a named rank (Samurai, Shinobi, Knight,
+  Dragon Host or Ritual Cult) grants the unit that lands the killing blow a one-step, battle-only privilege from
+  its own faction's next rank up (e.g. a Samurai Ashigaru that kills a ranked officer fights the rest of that
+  battle as if promoted one rung, then reverts after). It gives the rank ladders mechanical weight in the moment
+  a kill happens rather than only between battles, costs nothing to add per faction since it reads the existing
+  ladder data, and stays a temporary in-battle modifier so it cannot be confused with the holding's own
+  permanent advancement. Needs an owner call on whether the promotion should be visible to the enemy (a bright
+  tell versus a quiet buff) and whether a Deity kill should grant more than one step.
