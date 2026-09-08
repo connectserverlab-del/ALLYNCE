@@ -357,3 +357,13 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-06: Proposal — once regions exist for the Q-5 campaign map, run the same `deploymentBalance` check
   per region at campaign-generation time rather than only for a single stand-alone battle, so a chain of
   regions can't quietly hand one side an easier stretch of the whole province.
+
+- 2026-09-06: Proposal — Unseen Network's relay could extend past targeting: once a holding researches a
+  "Signal Beacon" study, a Hidden Shinobi standing beside an enemy could call in a strike from an allied siege
+  piece anywhere on the field for the round, turning the doctrine from a sniping trick into real indirect fire.
+- 2026-09-06: Proposal — have the registry check, at load, that every ability `effect.kind` appearing in
+  `data/abilities/abilities.json` is one the engine actually dispatches somewhere (`applyEffect`, the modifier
+  pipeline, combat, or movement). This pass found Unseen Network (Shinobi's faction doctrine) declared for
+  months without ever being wired to anything — a silent no-op that only `docs/CHECKLIST.md`'s per-item review
+  or a dedicated test would ever catch by hand. A load-time check would catch the next one the day it's added,
+  the same way `validate()` already catches a unit naming a missing ability.
