@@ -3,6 +3,27 @@
 The single source of truth for what is left to build, and the queue the hourly implementation pass works from.
 Every item has a stable id. **One pass takes one item.**
 
+## Integration is now the bottleneck, not the queue (2026-09-08)
+
+As of this pass, every `Q-` id in the Queue below already has a matching open, correctly-named claiming PR —
+several since 2026-09-05 (`Q-16` is PR #12, `Q-9` is PR #14, `Q-2` alone has three: PR #3, #46, #70). The
+claim protocol is doing its job: nothing here is actually gridlocked by false claims. The real problem is
+upstream of the queue: **none of the ~75 open pull requests have merged since the project's first PR.** That
+includes PR #2, `claude/dragon-art-style-examples-qdjeb6` itself against `main` — the actual trunk this
+checklist and roadmap live on. Until an owner (or a pass explicitly asked to merge) starts landing PRs,
+`main` stays frozen at its first commit and every future automated pass will legitimately hit the "everything
+claimed" fallback and can only add polish, because the queue genuinely has been worked through once already.
+
+A second, smaller cost of the backlog: at least a handful of open PRs targeted `main` directly instead of this
+branch and reimplemented features already Done here from scratch (three win conditions: PR #33, #69, #76;
+rank ladders: PR #8, #72; siege/cavalry rosters: PR #31, #53) — because `main` lacks `docs/AGENT_BRIEF.md` and
+looks like a nearly-empty project to a pass that only checks out `main`. Merging PR #2 first would remove that
+trap along with everything else.
+
+Recommendation for the owner: triage and merge (or close as superseded) a batch of the open PRs, starting with
+PR #2, before scheduling more automated passes — otherwise the pile keeps growing every hour with more
+duplicate risk and nothing new reaches `main`.
+
 ## How a pass claims an item without colliding with another pass
 
 Passes run in fresh sessions and cannot see each other, so claiming happens through GitHub, which they can all read:

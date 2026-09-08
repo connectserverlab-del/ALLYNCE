@@ -67,7 +67,7 @@ export function loadBattle(reg: Registry, save: BattleSave): Battle {
   for (const r of save.rituals) b.rituals.set(r.id, { ...r, damagedThisRound: new Set(r.damagedThisRound) } as RitualCircle);
   for (const p of save.portals) b.portals.set(p.id, { ...p, queue: p.queue.map((q) => ({ ...q })) });
   for (const d of save.decks) {
-    const deck = new DeckState(d.list, new Rng(save.seed), reg.deckRules);
+    const deck = new DeckState(d.list, new Rng(save.seed), reg.deckRules, false);
     deck.drawPile = [...d.drawPile]; deck.hand = [...d.hand]; deck.graveyard = [...d.graveyard];
     deck.side = [...d.sideDeck]; deck.usedSide = [...d.usedSide];
     b.decks.set(d.side, deck);
