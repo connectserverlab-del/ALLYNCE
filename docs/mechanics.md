@@ -24,6 +24,8 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 | Campaign map | `campaign.ts`, `data/campaign/` | Regions on a province map, each with its own biome bias for `setUpMatch`; a held region's production is a named, source-tracked income line into the holding (see below) |
 | Weather and time of day | `weather.ts`, `data/rules/weather.json` | Round modifiers rolled once per battle from the match seed; Rain reshapes terrain at setup, Fog and Night are named, source-tracked combat modifiers (see below) |
 
+| Replay | `replay.ts` | `Replay` steps a cursor through `Battle.events` one at a time (or jumps by round/index); `describeEvent` narrates each entry by name, resolved from `Battle.units` |
+
 ## Card skills
 
 Every card at four stars and above carries one ability it can spend an action on. Six kinds cover the roster,
@@ -220,3 +222,7 @@ Run `npm run unity:scaffold` and commit the result after changing any of those t
 `npm run assets` is re-run after an art or building-tier change. `core/tests/unityExport.test.ts` and
 `core/tests/effect_kinds.test.ts` fail if the generated output or the ability data drift from the reference
 TypeScript, so a forgotten regeneration shows up as a red test rather than a silent gap on the Unity side.
+
+- `Replay` / `describeEvent` → a `ReplayController` MonoBehaviour holding the same cursor position, and a
+  `switch` on `GameEvent.type` for narration; both are presentation-adjacent but stay data-only, no `UnityEngine`
+  types needed until something actually draws the step.

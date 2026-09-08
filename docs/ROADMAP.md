@@ -43,6 +43,8 @@ where they conflict.**
   shot, smoke shell, concussive blast). Cavalry (lance charge, hit and fade).
 - 17 unit concepts with cutouts, 2 battlefield paintings, 1 HUD material sheet.
 - Interactive map + HUD sample (see `docs/ui-sample.md`).
+- Replay: a cursor over a battle's event log (`core/src/replay.ts`) that steps forward, back, or straight to a
+  round, and narrates every event by unit name. No screen consumes it yet; it is the engine half of `Q-10`.
 
 ### Done in the scale and tier pass
 
@@ -278,3 +280,9 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   their own Fortification/Ruins/Mountain density presets in the generator, so each painted region keeps a
   distinct silhouette at a glance — the way the approved Samurai province reads as Samurai before a single
   unit is on the field — rather than three regions that only differ by name and palette.
+
+- 2026-09-05: Proposal — now that `replay.ts` can narrate a whole battle by unit name, a won region on the
+  future campaign map (`Q-5`) could post its three or four loudest lines (the leader falling, a ritual
+  synchronizing, the surrender) to the holding as a short after-action report, the way a real campaign log
+  reads. No new art or UI chrome needed: it is the existing replay narration filtered to the high-weight event
+  types and shown as text beside the reward screen.
