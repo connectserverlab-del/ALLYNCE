@@ -17,7 +17,10 @@ from PIL import Image
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Longest edge each class of asset is drawn at, with a little headroom for high-density screens.
-SIZES = {"token": 440, "frame": 620, "icon": 96, "star": 96, "tier": 560, "art": 1500}
+SIZES = {"token": 440, "frame": 620, "icon": 96, "star": 96, "tier": 560, "art": 1500,
+         # Interface textures sit behind text under a darkening gradient, so they carry the
+         # grain and the foxing and nothing that needs to be legible. Small is enough.
+         "texture": 720}
 
 
 def uri(rel, kind):
@@ -69,6 +72,15 @@ def main(out_path):
             "hold": uri("art/concepts/BASE_STRONGHOLD-TOPDOWN_CONCEPT_V01.jpg", "art"),
             "holdAngle": uri("art/concepts/BASE_STRONGHOLD-ANGLED_CONCEPT_V01.jpg", "art"),
             "cardback": uri(f"{UI}/CARD-BACK-PAPER_V01.png", "frame"),
+            # Painted interface chrome. These were made for the web client and never reached this
+            # page, so every panel here was flat CSS colour while the same textures sat unused on
+            # disk. Each is laid under a darkening gradient at use, never raw, or the text on top
+            # of it stops being readable.
+            "panelTexture": uri(f"{UI}/UI_PANEL-PARCHMENT_V01.jpg", "texture"),
+            "bannerTexture": uri(f"{UI}/UI_TOPBAR-BANNER_V01.jpg", "texture"),
+            "boardGround": uri(f"{UI}/UI_BOARD-GROUND_V01.jpg", "texture"),
+            # A second painted ground, so the field is not the mountain pass on every map.
+            "groundMarsh": uri("art/concepts/MAP_DROWNED-MARSH_CONCEPT_V01.jpg", "art"),
         },
         "tiers": {},
         "tokens": {},

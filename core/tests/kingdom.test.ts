@@ -146,13 +146,22 @@ describe("building tiers", () => {
     expect(buildingArt(reg, "KEEP", 0)).toBeNull();
     expect(buildingArt(reg, "KEEP", 2)).toMatch(/KEEP_T1/);
     expect(buildingArt(reg, "WALL", 9)).toMatch(/WALL_T3/);
-    // the Barracks has no tier-two painting yet, so level 5 keeps showing tier one rather than blanking
-    expect(buildingArt(reg, "BARRACKS", 5)).toMatch(/BARRACKS_T1/);
     expect(buildingArt(reg, "BARRACKS", 9)).toMatch(/BARRACKS_T3/);
-    // a building with no art at all stays null without throwing
-    expect(buildingArt(reg, "SHRINE", 5)).toBeNull();
     const k = newKingdom(reg, "KNI");
-    expect(buildingArt(reg, "GRANARY", k.levels.GRANARY)).toBeNull();
+    expect(buildingArt(reg, "GRANARY", k.levels.GRANARY)).toBeNull();  // level 0, not yet built
     void startUpgrade; void tick;
+
+    // The fallback and the no-art case are checked against deliberate holes rather than against
+    // whichever tiers the roster happens to be missing. They were written the other way, over the
+    // Barracks' unpainted tier two and the Shrine's empty art list, and painting those buildings
+    // broke a rules test that had nothing to do with the art: a data gap is not a fixture.
+    const holed = { ...reg, kingdom: { ...reg.kingdom, buildings: { ...reg.kingdom.buildings,
+      GAPPED: { ...reg.kingdom.buildings.BARRACKS, art: ["art/x/GAPPED_T1.jpg", null, "art/x/GAPPED_T3.jpg"] },
+      UNPAINTED: { ...reg.kingdom.buildings.BARRACKS, art: [null, null, null] },
+    } } } as unknown as typeof reg;
+    expect(buildingArt(holed, "GAPPED" as never, 2)).toMatch(/GAPPED_T1/);
+    expect(buildingArt(holed, "GAPPED" as never, 5)).toMatch(/GAPPED_T1/);   // tier 2 unpainted, holds at tier 1
+    expect(buildingArt(holed, "GAPPED" as never, 9)).toMatch(/GAPPED_T3/);
+    expect(buildingArt(holed, "UNPAINTED" as never, 5)).toBeNull();          // nothing painted at all
   });
 });

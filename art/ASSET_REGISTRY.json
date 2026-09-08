@@ -1,8 +1,8 @@
 {
   "generated": "npm run assets",
   "total": {
-    "present": 213,
-    "missing": 118
+    "present": 238,
+    "missing": 93
   },
   "summary": {
     "Units": {
@@ -11,8 +11,8 @@
       "derived": 0
     },
     "Buildings": {
-      "present": 8,
-      "missing": 25,
+      "present": 33,
+      "missing": 0,
       "derived": 0
     },
     "Side cards": {
@@ -2458,8 +2458,8 @@
       "id": "GRANARY_T1",
       "label": "Granary tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_GRANARY_T1_V01.jpg",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2467,8 +2467,8 @@
       "id": "GRANARY_T2",
       "label": "Granary tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_GRANARY_T2_V01.jpg",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2476,8 +2476,8 @@
       "id": "GRANARY_T3",
       "label": "Granary tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_GRANARY_T3_V01.jpg",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2485,8 +2485,8 @@
       "id": "MINE_T1",
       "label": "Iron Mine tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_MINE_T1_V01.jpg",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2494,8 +2494,8 @@
       "id": "MINE_T2",
       "label": "Iron Mine tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_MINE_T2_V01.jpg",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2503,8 +2503,8 @@
       "id": "MINE_T3",
       "label": "Iron Mine tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_MINE_T3_V01.jpg",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2512,8 +2512,8 @@
       "id": "SAWPIT_T1",
       "label": "Sawpit tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_SAWPIT_T1_V01.jpg",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2521,8 +2521,8 @@
       "id": "SAWPIT_T2",
       "label": "Sawpit tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_SAWPIT_T2_V01.jpg",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2530,8 +2530,8 @@
       "id": "SAWPIT_T3",
       "label": "Sawpit tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_SAWPIT_T3_V01.jpg",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2548,8 +2548,8 @@
       "id": "BARRACKS_T2",
       "label": "Barracks tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_BARRACKS_T2_V01.jpg",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2566,8 +2566,8 @@
       "id": "RESEARCH_HALL_T1",
       "label": "Research Hall tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_RESEARCH_HALL_T1_V01.jpg",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2575,8 +2575,8 @@
       "id": "RESEARCH_HALL_T2",
       "label": "Research Hall tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_RESEARCH_HALL_T2_V01.jpg",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2584,8 +2584,8 @@
       "id": "RESEARCH_HALL_T3",
       "label": "Research Hall tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_RESEARCH_HALL_T3_V01.jpg",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2593,8 +2593,8 @@
       "id": "RECRUITMENT_HALL_T1",
       "label": "Recruitment Hall tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_RECRUITMENT_HALL_T1_V01.jpg",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2602,8 +2602,8 @@
       "id": "RECRUITMENT_HALL_T2",
       "label": "Recruitment Hall tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_RECRUITMENT_HALL_T2_V01.jpg",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2611,8 +2611,8 @@
       "id": "RECRUITMENT_HALL_T3",
       "label": "Recruitment Hall tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_RECRUITMENT_HALL_T3_V01.jpg",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2620,8 +2620,8 @@
       "id": "FORGE_T1",
       "label": "Forge tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_FORGE_T1_V01.jpg",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2629,8 +2629,8 @@
       "id": "FORGE_T2",
       "label": "Forge tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_FORGE_T2_V01.jpg",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2638,8 +2638,8 @@
       "id": "FORGE_T3",
       "label": "Forge tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_FORGE_T3_V01.jpg",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2647,8 +2647,8 @@
       "id": "STABLE_T1",
       "label": "Stable tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_STABLE_T1_V01.jpg",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2656,8 +2656,8 @@
       "id": "STABLE_T2",
       "label": "Stable tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_STABLE_T2_V01.jpg",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2665,8 +2665,8 @@
       "id": "STABLE_T3",
       "label": "Stable tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_STABLE_T3_V01.jpg",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2701,8 +2701,8 @@
       "id": "SHRINE_T1",
       "label": "Ritual Shrine tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_SHRINE_T1_V01.jpg",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2710,8 +2710,8 @@
       "id": "SHRINE_T2",
       "label": "Ritual Shrine tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_SHRINE_T2_V01.jpg",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2719,8 +2719,8 @@
       "id": "SHRINE_T3",
       "label": "Ritual Shrine tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_SHRINE_T3_V01.jpg",
+      "status": "present",
       "note": "levels 8-10"
     },
     {

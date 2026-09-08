@@ -55,9 +55,9 @@
         "koku": 120
       },
       "art": [
-        null,
-        null,
-        null
+        "art/buildings/BLD_GRANARY_T1_V01.jpg",
+        "art/buildings/BLD_GRANARY_T2_V01.jpg",
+        "art/buildings/BLD_GRANARY_T3_V01.jpg"
       ]
     },
     "MINE": {
@@ -75,9 +75,9 @@
         "iron": 80
       },
       "art": [
-        null,
-        null,
-        null
+        "art/buildings/BLD_MINE_T1_V01.jpg",
+        "art/buildings/BLD_MINE_T2_V01.jpg",
+        "art/buildings/BLD_MINE_T3_V01.jpg"
       ]
     },
     "SAWPIT": {
@@ -95,9 +95,9 @@
         "timber": 100
       },
       "art": [
-        null,
-        null,
-        null
+        "art/buildings/BLD_SAWPIT_T1_V01.jpg",
+        "art/buildings/BLD_SAWPIT_T2_V01.jpg",
+        "art/buildings/BLD_SAWPIT_T3_V01.jpg"
       ]
     },
     "BARRACKS": {
@@ -117,7 +117,7 @@
       },
       "art": [
         "art/buildings/BLD_BARRACKS_T1_V01.jpg",
-        null,
+        "art/buildings/BLD_BARRACKS_T2_V01.jpg",
         "art/buildings/BLD_BARRACKS_T3_V01.jpg"
       ]
     },
@@ -139,9 +139,9 @@
         "researchTier": 1
       },
       "art": [
-        null,
-        null,
-        null
+        "art/buildings/BLD_RESEARCH_HALL_T1_V01.jpg",
+        "art/buildings/BLD_RESEARCH_HALL_T2_V01.jpg",
+        "art/buildings/BLD_RESEARCH_HALL_T3_V01.jpg"
       ]
     },
     "RECRUITMENT_HALL": {
@@ -161,9 +161,9 @@
         "drawFloor": 0.2
       },
       "art": [
-        null,
-        null,
-        null
+        "art/buildings/BLD_RECRUITMENT_HALL_T1_V01.jpg",
+        "art/buildings/BLD_RECRUITMENT_HALL_T2_V01.jpg",
+        "art/buildings/BLD_RECRUITMENT_HALL_T3_V01.jpg"
       ]
     },
     "FORGE": {
@@ -182,9 +182,9 @@
         "atk": 10
       },
       "art": [
-        null,
-        null,
-        null
+        "art/buildings/BLD_FORGE_T1_V01.jpg",
+        "art/buildings/BLD_FORGE_T2_V01.jpg",
+        "art/buildings/BLD_FORGE_T3_V01.jpg"
       ]
     },
     "STABLE": {
@@ -203,9 +203,9 @@
         "cavalryAtk": 15
       },
       "art": [
-        null,
-        null,
-        null
+        "art/buildings/BLD_STABLE_T1_V01.jpg",
+        "art/buildings/BLD_STABLE_T2_V01.jpg",
+        "art/buildings/BLD_STABLE_T3_V01.jpg"
       ]
     },
     "WALL": {
@@ -247,9 +247,9 @@
         "ritualProgress": 1
       },
       "art": [
-        null,
-        null,
-        null
+        "art/buildings/BLD_SHRINE_T1_V01.jpg",
+        "art/buildings/BLD_SHRINE_T2_V01.jpg",
+        "art/buildings/BLD_SHRINE_T3_V01.jpg"
       ]
     }
   },
