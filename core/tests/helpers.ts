@@ -6,6 +6,8 @@ import type { PlatoonBlueprint } from "../src/composition.js";
 import type { Hex } from "../src/hex.js";
 import { newKingdom, startUpgrade, tick, startResearch, type KingdomState } from "../src/kingdom.js";
 
+import { newKingdom, startUpgrade, startResearch, tick, type KingdomState } from "../src/kingdom.js";
+
 export const reg = loadRegistry();
 
 export function newBattle(seed = 1): { b: Battle; ctrl: BattleController } {
@@ -59,5 +61,19 @@ export function kingdomWithResearch(faction: string, ids: string[]): KingdomStat
   for (let i = 0; i < 4; i++) { startUpgrade(reg, k, "KEEP"); tick(reg, k, 100000); }
   for (let i = 0; i < 5; i++) { startUpgrade(reg, k, "RESEARCH_HALL"); tick(reg, k, 100000); }
   for (const id of ids) { startResearch(reg, k, id); tick(reg, k, 100000); }
+
+/** A holding with unlimited resources, a Research Hall tall enough for `researchIds`' highest tier, and every id in the chain completed in order. */
+export function kingdomWithResearch(faction: string, researchIds: string[]): KingdomState {
+  const k = newKingdom(reg, faction);
+  k.resources = { koku: 9999999, iron: 9999999, timber: 9999999, silver: 9999999 };
+  for (let i = 0; i < 7; i++) {
+    startUpgrade(reg, k, "KEEP"); tick(reg, k, 1000000);
+    startUpgrade(reg, k, "RESEARCH_HALL"); tick(reg, k, 1000000);
+  }
+  for (const id of researchIds) {
+    const started = startResearch(reg, k, id);
+    if (!started.ok) throw new Error(`${id}: ${started.reason}`);
+    tick(reg, k, 1000000);
+  }
   return k;
 }

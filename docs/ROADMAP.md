@@ -836,3 +836,9 @@ stay separate, is an owner decision this pass is flagging rather than making.
   rank its role is allowed to hold. This gives campaign wins the same mechanical weight on the rank ladder that a
   won region is meant to give the holding's production, without touching the battle-time privilege tables
   (`data/factions/ranks/*.json`) that already carry the source-tracked bonuses.
+
+- 2026-09-07: Proposal — `BuildingDef.effect` already carries `atk`, `def` and `cavalryAtk`, but no building grants
+  morale the way the Hearthfire research does; only a study can. A Shrine-flavoured morale line (a chaplain's
+  blessing before the march, say) would let the holding's morale contribution grow steadily with a building level
+  the way its other stats do, instead of waiting on one late-tier study. Proposal only; no building data changed
+  here.
