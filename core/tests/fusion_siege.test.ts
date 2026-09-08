@@ -41,6 +41,30 @@ describe("fusion", () => {
     expect(cal.defeated).toBe(true);
     expect(b.events.some((e) => e.type === "FusionDissolved")).toBe(true);
   });
+  it("the Calamity Form's arrival converges its three Sovereigns' effects: reveal, fear and one revival", () => {
+    const { b, ctrl } = newBattle();
+    b.sides.get("A")!.fusionCharges = 2;
+    const m = b.spawn("DIV_BOSS_SOVEREIGN-OF-MEMORY", "A", { q: 8, r: 8 });
+    const t = b.spawn("DIV_BOSS_SOVEREIGN-OF-TORMENT", "A", { q: 9, r: 8 });
+    const r = b.spawn("DIV_BOSS_SOVEREIGN-OF-REINCARNATION", "A", { q: 8, r: 9 });
+    const hidden = b.spawn("SHI_FOOT_NIGHT-THREAD-OPERATIVE", "B", { q: 10, r: 8 });
+    b.addStatus(hidden, "Hidden", 0, "test");
+    const near = b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 11, r: 8 });
+    const nearMorale = near.morale;
+    const fallenAlly = b.spawn("SAM_FOOT_EMBERLINE-ASHIGARU", "A", { q: 3, r: 3 });
+    fallenAlly.defeated = true; b.remove(fallenAlly);
+    ctrl.commandPhase(); ctrl.beginActivation("ind:A");
+    const cal = ctrl.fuse([m, t, r], "FUS_CALAMITY");
+    // Memory's reveal
+    expect(b.hasStatus(hidden, "Hidden")).toBe(false);
+    // Torment's fear, felt within range
+    expect(near.morale).toBe(nearMorale - 15);
+    // Reincarnation's revival, and the one manifestation charge it costs
+    expect(fallenAlly.defeated).toBe(false);
+    expect(fallenAlly.hp).toBe(Math.floor(b.def(fallenAlly).hp / 2));
+    expect(cal.divine!.manifestation).toBe(2);
+    expect(b.events.some((e) => e.type === "DivineManifested" && e.data["arrival"] === "Convergence")).toBe(true);
+  });
 });
 
 describe("siege pieces and cavalry", () => {

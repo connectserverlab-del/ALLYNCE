@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { newBattle } from "./helpers.js";
-import { createRitual, computeRitualProgress, tickRitual, releaseRitual, disruptRitual, collapse } from "../src/rituals.js";
+import { createRitual, computeRitualProgress, tickRitual, releaseRitual, disruptRitual, collapse, assistRitual } from "../src/rituals.js";
 import { resolveAttack } from "../src/combat.js";
 import { hexDistance } from "../src/hex.js";
 
@@ -78,6 +78,23 @@ describe("rituals", () => {
     fast.state = "CompletedHeld";
     const s = releaseRitual(b, fast, { synchronized: true });
     expect(s).toBeNull();
+  });
+
+  it("a non-ritualist ally can assist a circle from just outside it, but not from further out or the other side", () => {
+    const { b, fast } = setupCircles();
+    const assistant = b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "A", { q: 10, r: 3 }); // radius 1 + 1 = reaches out to distance 2
+    expect(hexDistance(assistant.pos!, fast.center)).toBe(2);
+    expect(assistRitual(b, fast, assistant)).toBe(true);
+    expect(fast.assistBonus).toBe(1);
+    expect(computeRitualProgress(b, fast).assist).toBe(1);
+
+    const tooFar = b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "A", { q: 10, r: 2 });
+    expect(assistRitual(b, fast, tooFar)).toBe(false);
+    expect(fast.assistBonus).toBe(1); // unchanged
+
+    const enemy = b.spawn("KNI_FOOT_BASTION-MAN-AT-ARMS", "B", { q: 10, r: 4 });
+    expect(assistRitual(b, fast, enemy)).toBe(false);
+    expect(fast.assistBonus).toBe(1); // unchanged
   });
 
   it("collapse resets progress and rewards the enemy morale", () => {
