@@ -606,3 +606,13 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   read those tags for objectives, rituals and portals; reusing the same role tags for fusion/ritual eligibility
   would make an odd-shaped battlefield part of the decision to commit an already-costly play, not just scenery
   around it, and would cost little once Q-2 lands the underlying lookup.
+
+- 2026-09-06: Proposal — let a rank ladder's apex rank gate a named variant of the faction's own themed cannon or
+  cavalry piece (same stats and skill, a different name and a small mechanical rider such as one extra hex of
+  minimum range or one extra hex of charge distance) so the top of a ladder buys a unique piece of hardware
+  instead of only a title, keeping rank ladders and themed siege/cavalry the same source-tracked system rather
+  than adding a second one.
+- 2026-09-06: Proposal — have the map generator flag any single ford, bridge, or one-hex-wide pass it lays down
+  between two large landmasses as a named chokepoint, so a scenario can spawn a "Hold the Crossing" objective on
+  it automatically instead of an author picking the hex by hand; this only fires on battlefields irregular enough
+  to produce a genuine chokepoint; open, even ground would spawn nothing.
