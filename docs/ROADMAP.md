@@ -286,3 +286,12 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   synchronizing, the surrender) to the holding as a short after-action report, the way a real campaign log
   reads. No new art or UI chrome needed: it is the existing replay narration filtered to the high-weight event
   types and shown as text beside the reward screen.
+
+- 2026-09-05: Proposal — resolve `OWN-3` by splitting rather than picking one side. Keep the five sworn companies
+  capped exactly as their `weakness` text already promises ("not an army"): they stay hire-only, one card deep
+  per slot, forever. Let the divisions grow into full factions on a visible schedule instead of case-by-case
+  patching — the next one up, in card-count order, is Ridge Kin (Sasquatch), which is missing only a second
+  distinct foot line the same way Choir Militant, Ashpit Legion and Winter Famine were before this pass. Chaos
+  Warband keeps its missing Second permanently: "no second plan" is the joke, and giving it one would flatten it
+  into an ordinary platoon. Half-Born Host keeps its four cards too — "few in number and impossible to replace"
+  is the whole identity, and depth there should mean better abilities on what exists, not more bodies.

@@ -42,14 +42,13 @@ Three things bite:
 | `OWN-1` | Scale the remaining building tier art (25 paintings) | Confirmation that building portraits stay at a low angle rather than strictly top-down |
 | `OWN-2` | Raise the deck faction minimum from 40 toward 60 | Needs 15-20 distinct cards per faction. The roster is now 88 cards across 18 factions, but the four host armies still hold only 8-9 each, so the minimum stays at 40 |
 | `OWN-3` | Let a side's designated army leader pass to a successor (update `leaderUid` in `resolveSuccession`), and delay the "army leader killed" win check until Continuity's succession attempt has actually run, instead of ending the match at the End Phase of the same round the leader fell | Changes when a match can end and how much the succession/Continuity system actually protects an army; also decides whether the new AI surrender policy (`Q-3`) ever gets a chance to fire in a standard match, since it is currently always shadowed by the instant leader-killed check |
+| `OWN-3` | Let the five sworn companies (Cobalt Conclave, Thorn Coven, Cutpurse Court, Windmarch Host, Dunewake Compact) field a full platoon of their own, the way three divisions now can (see D-26) | Each company's `weakness` text in `data/factions/factions.json` names this directly as the point ("Sworn company, not an army: cannot lead a host of its own" and similar). Giving them the cards to do it anyway is a lore change, not a data fix, and needs a call on whether that weakness still stands. Chaos Warband (`CHR`) is a second case: its own text puns on the gap ("no line, no discipline, no second plan" — it has no card that can fill the Second slot at all) and reads as deliberate rather than missing |
 
 ## Queue
 
 | Id | Item | Why it matters |
 |---|---|---|
 | `Q-1` | Second art pass on weak cutouts: any unit whose card still reads "no art yet", plus re-cuts where the flood fill left a panel edge | Blank cards are the most visible gap in the game |
-| `Q-11` | Warrant board screen in the sample page: read the posted writs, take one, and see which of them close the gaps in the current deck | The board exists in the core and has no interface |
-| `Q-12` | Give the sworn companies and the seven divisions depth: each has four cards, enough to hire but not to lead | A division is a flavour of ally until it can field a line of its own |
 | `Q-15` | A division's own doctrine and platoon order, so a Choir or a Swarm can lead a deck instead of only joining one | Seven divisions is a lot of flavour with no army identity behind it |
 
 ## Done
@@ -94,3 +93,5 @@ Three things bite:
 | `D-36` | AI now spends all six card skills, not only clones, charges and duels: self and band attack buffs before a swing, haste to close ground its base movement cannot, and area debuffs on whoever is already close enough to hit back |
 | `D-37` | Unity port scaffold: `unity/Runtime` and `unity/Editor` C# skeleton matching `docs/mechanics.md`'s guidance, plus a generator (`npm run unity:scaffold`) that mirrors `EFFECT_KINDS` and `TERRAIN_RULES` into checked-in C#, tested against the TypeScript reference so the two cannot silently drift |
 | `D-38` | Replay: `core/src/replay.ts` steps a cursor through `Battle.events` by index or round and narrates every event type by unit name; `Q-10` |
+| `D-39` | Q-11, found already done: the Wanted Board screen (`Writs` in the sample page rail, `renderWrits`/`openWrit` in `web/sample/template.html`) shipped in the same pass as the wanted-board core (D-17) but was never moved off the queue. Verified against the current data pipeline and left as-is; this entry just corrects the bookkeeping |
+| `D-40` | Q-12, the achievable slice: Choir Militant, Ashpit Legion and Winter Famine each gained a second, distinct FootSoldier card sharing its sibling's theme, so a deck built around one can field a real five-foot line instead of one body five times. Winter Famine also had no card able to fill the Second slot at all (two Elites, no Second) and gets one, `WEN_SECOND_RIME-ANTLER-WARDEN`. `core/tests/companies.test.ts` proves each of the three now validates a legal, varied platoon on its own. The other four divisions and all five sworn companies are unchanged — see `OWN-3` |
