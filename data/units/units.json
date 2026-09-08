@@ -10,6 +10,7 @@
       "Commander"
     ],
     "rank": "Commander",
+    "rankId": "JOSHU_DAIMYO",
     "size": "Standard",
     "hp": 1500,
     "atk": 1750,
@@ -48,6 +49,7 @@
       "Second"
     ],
     "rank": "Second",
+    "rankId": "CHURO",
     "size": "Standard",
     "hp": 1350,
     "atk": 1600,
@@ -86,6 +88,7 @@
       "Elite"
     ],
     "rank": "Elite",
+    "rankId": "KOSHOGUMI_RETAINER",
     "size": "Standard",
     "hp": 1800,
     "atk": 2350,
@@ -123,6 +126,7 @@
       "FootSoldier"
     ],
     "rank": "Foot",
+    "rankId": "KOYAKUNIN",
     "size": "Standard",
     "hp": 1100,
     "atk": 1400,
@@ -160,6 +164,7 @@
       "Commander"
     ],
     "rank": "Commander",
+    "rankId": "JOUNIN",
     "size": "Standard",
     "hp": 1300,
     "atk": 1800,
@@ -198,6 +203,7 @@
       "Second"
     ],
     "rank": "Second",
+    "rankId": "CHUNIN",
     "size": "Standard",
     "hp": 1250,
     "atk": 1550,
@@ -236,6 +242,7 @@
       "Elite"
     ],
     "rank": "Elite",
+    "rankId": "ANBU",
     "size": "Standard",
     "hp": 1400,
     "atk": 2100,
@@ -273,6 +280,7 @@
       "FootSoldier"
     ],
     "rank": "Foot",
+    "rankId": "GENIN",
     "size": "Standard",
     "hp": 950,
     "atk": 1500,

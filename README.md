@@ -58,6 +58,8 @@ npm test            # 151 tests: combat math, cohesion, composition, succession,
 npm test            # 44 tests: combat math, cohesion, composition, succession, clones, rituals, portals, victory conditions, AI positioning, full scenario
 
 npm test            # combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
+
+npm test            # 44 tests: combat math, cohesion, composition, succession, clones, rituals, portals, rank ladders, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -139,6 +141,7 @@ One Ascendant may be fielded per army.
 - **Theme Cohesion**: `min(4, adjacentMatchingAllies) × 50`, clones excluded, Disordered morale caps at +100, graph edges exposed for the overlay.
 - **Composition**: army validator (slots, five foot soldiers, one elite per platoon, unique limit, boss/deity exclusion, specialist limits, capacity). Doctrine states Full / Reduced / Broken with Continuity after a commander falls.
 - **Command**: strongest-aura-only rule, succession in the Command Phase, promoted second inherits orders and keeps its own ability, Succession-category abilities fire (Last Oath, Smoke Relay, Inherited Wall, Slipstream).
+- **Rank ladders**: per-faction ladders of named rungs, each with source-tracked mechanical privileges (aura reach, reaction-attack bonus, mounted movement, Fortification bonus, Forest movement, hiding, zone-of-control immunity). Samurai (19 rungs) and Shinobi (6 rungs) are seeded in `data/factions/ranks/`; Knight, Dragon Host and Ritual Cult have none yet.
 - **Combat**: `max(100, ATK − DEF)`, flank −10% / rear −25% DEF, Defend +150, Fortification +200, high ground for ranged, Oath of Intercession, Formal Duel lockout, reaction attacks, Overwatch, Disengage.
 - **Siege and cavalry**: every combat faction (Samurai, Shinobi, Knight, Dragon Host) has a themed Siege specialist with a `minRange` that keeps it from firing point-blank and a shared Breaching Volley bonus against Fortification terrain, plus a Cavalry Elite option with a `ChargeBonus`-driven charge ability. See `docs/mechanics.md`.
 - **Morale**: 0–100 with Steady / Shaken / Disordered / Routed / Broken bands, all brief-listed loss and recovery sources, AI-controlled routed retreat.

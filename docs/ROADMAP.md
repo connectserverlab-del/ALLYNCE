@@ -365,6 +365,8 @@ built.
   quality", "more grunge". Round 4 in `art/samples` is the approved bar. Never credit any AI tool in repo content.
 
 This file is the working brief for anyone, human or agent, picking up the next piece of the game on this branch.
+
+This file is the working brief for anyone, human or agent, picking up the next piece of the game on `main`.
 **Decisions here override earlier notes where they conflict.**
 
 ## A note on scope
@@ -378,6 +380,15 @@ open as pull request #2 at time of writing) has built on top of an earlier snaps
 dozens of passes stacked on top of that branch. Whether and when to merge that branch into `main` is an owner
 decision this file does not make; until that happens, treat the two as separate roadmaps, and pick items from
 this one only if you are actually working from `main`.
+
+This roadmap describes the codebase actually present on `main`: the rules-engine vertical slice (hex grid, terrain,
+modifiers, cohesion, doctrine, succession, combat, morale, effects, clones, rituals, Divine Entities, portals,
+objectives, utility AI) plus the Samurai and Shinobi rank ladders added in this pass. It does not describe the much
+larger card game, holding/economy, warrant board, seven themed divisions, or march-and-camera interface that a
+long-running branch (`claude/dragon-art-style-examples-qdjeb6`) has built on top of an earlier snapshot of this same
+engine, nor the dozens of passes stacked on top of that branch or on top of other unmerged branches based on `main`.
+Whether and when to merge any of that into `main` is an owner decision this file does not make; until that happens,
+treat them as separate roadmaps, and pick items from this one only if you are actually working from `main`.
 
 ## Owner's standing intent (in their words, paraphrased where needed)
 
@@ -484,6 +495,35 @@ worth a look when time allows.
 4. **Cavalry beyond the one Dragoon.** Only `KNI_ELITE_SKY-LANCE-DRAGOON` carries the `Cavalry` role today; the
    new flank-routing AI only has one unit to exercise it. Cavalry for Samurai, Shinobi and Ritual Cult would
    match the owner's "cannons and cavalry that fit its theme" intent and broaden that AI path.
+
+- **This pass**: Samurai (`data/factions/ranks/SAM.json`, 19 rungs, Koyakunin to Shogun) and Shinobi
+  (`data/factions/ranks/SHI.json`, 6 rungs, Apprentice to Kage) rank ladders. `Registry.rankOf` resolves a unit's
+  optional `rankId` to a rung with named, source-tracked privileges wired into the existing modifier pipeline and
+  movement code rather than bolted on beside it: `twoSwords` (+50 ATK on a reaction attack), `mounted` (+1
+  Movement, conditional on a nearby enemy for "war"), `commandRadiusBonus` (extends the aura, morale recovery and
+  `PreventRouted` radius alike), `banner` (+5 further Morale recovery), `castle` (+100 further DEF on
+  Fortification), `canopy` (Forest costs 1 Movement instead of 2), `hideOnForestStop`, and `ignoreZoc`
+  /`passAllies`/`bonusMov`. Only the rungs the current roster actually occupies are exercised in battle; the
+  higher Samurai tiers and Shinobi's Kage (with a declared but unwired Shadow Step) are real rungs reserved for
+  units not yet rostered. See `docs/mechanics.md`'s "Rank ladders" section and `core/tests/ranks.test.ts`.
+
+## Next, in priority order
+
+1. **Knight, Dragon Host and Ritual Cult rank ladders**, extending the Samurai/Shinobi pattern above. Knight
+   privileges likely mirror Samurai's mounted/castle vocabulary (a defensive, cavalry-supporting faction); Dragon
+   Host is airborne and mostly ignores terrain, so its ladder probably weights aura and reaction-attack privileges
+   over movement ones; Ritual Cult has no Commander/Second today (`RIT_LEADER_AFFILIATED-SUMMONER` is a
+   `Specialist`), so its ladder may need a leadership slot decision first.
+2. **Three universal win conditions.** `main` only has the implicit wipeout (`alive.length === 0`) and each
+   scenario's own objectives; "kill their army leader" and "force a surrender" (concede when the whole chain of
+   command is gone and morale has collapsed) are not implemented yet. `VictoryRules` in `battle.ts` has no leader
+   or surrender concept to hang either on.
+3. **Siege pieces.** `Role: "Siege"` exists in `types.ts`, but no unit in `data/units/units.json` uses it. One
+   siege unit per combat faction (Samurai, Shinobi, Knight, Dragon Host), each with a minimum range so it cannot
+   fire adjacent, would give the roster a real target for that role.
+4. **Cavalry beyond the one Dragoon.** Only `KNI_ELITE_SKY-LANCE-DRAGOON` carries the `Cavalry` role today.
+   Cavalry for Samurai, Shinobi and Ritual Cult would match the owner's "cannons and cavalry that fit its theme"
+   intent, and would be a natural fit for the Samurai `mounted` rank privilege above.
 5. **Irregular battlefield generator.** `Threefold Invocation`'s map is hand-authored; the owner's "never a
    cookie-cutter map" intent (trenches, mud, mountains, valleys, rivers) has no generator on `main` yet, and no
    `Trench`/`Mud` terrain types exist in `types.ts` to generate.
@@ -1054,3 +1094,12 @@ stay separate, is an owner decision this pass is flagging rather than making —
 - 2026-09-07: Proposal — a "flank" role pair (the passable hex on each side of the road, offset from the
   midpoint) so a scenario can pin an ambush or a flanking reinforcement point without hand-picking a hex,
   the same way rituals and portals now pin to the ruins or the ford.
+
+- 2026-09-08: **Proposal** — once a faction's rank ladder reaches its top rungs (Shogun for Samurai, Kage for
+  Shinobi), let the scenario file name that unit as the side's `leader` for the win-condition system above
+  (Next #2), so "kill the army leader" always resolves to the highest-ranked living unit in the chain of command
+  rather than a separately-authored field that can drift out of sync with the ladder.
+- 2026-09-08: **Proposal** — a `demoted` flag for a unit whose commander/second falls and is not replaced before
+  Continuity expires: rather than the platoon simply losing its aura, the highest-tier surviving unit on the rank
+  ladder could inherit a partial aura scaled to its own rung, giving the ladder mechanical weight during a
+  succession crisis and not only while the chain of command is intact.
