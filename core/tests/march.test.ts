@@ -3,10 +3,11 @@ import { loadRegistry } from "../src/data.js";
 import type { GeneratedMap, MapHex } from "../src/mapgen.js";
 import type { Terrain } from "../src/types.js";
 import {
-  newMarchField, enlist, formSquad, orderUnit, orderSquad, followSquad, step, travelSeconds,
-  squadTravelSeconds, poseOf, poses, hexAtPoint, pointOfHex, terrainAt, soloPace, formationSlot,
+  newMarchField, enlist, enlistFromBattle, formSquad, orderUnit, orderSquad, followSquad, halt, step,
+  travelSeconds, squadTravelSeconds, poseOf, poses, hexAtPoint, pointOfHex, terrainAt, soloPace, formationSlot,
   type MarchField, type Vec2,
 } from "../src/march.js";
+import { newBattle, deploy, blob, SAM } from "./helpers.js";
 
 const reg = loadRegistry();
 
@@ -280,5 +281,46 @@ describe("marching", () => {
     expect(poseOf(f, u.id).facing).toBeCloseTo(Math.atan2(14 - turn.y, 4 - turn.x), 6);
     step(f, 0.5);
     expect(poseOf(f, u.id).facing).toBeGreaterThan(Math.PI / 2); // south and a little back west
+  });
+
+  it("mirrors a deployed battle onto the field, live units only", () => {
+    const { b } = newBattle();
+    const platoon = deploy(b, "P1", "A", SAM, blob(0, 0));
+    const casualty = b.unit(platoon.footUids[0]!);
+    b.remove(casualty); // a fallen unit should not walk onto the march field
+
+    const f = testField();
+    const enlisted = enlistFromBattle(f, b);
+
+    const active = [...b.activeUnits()];
+    expect(enlisted).toHaveLength(active.length);
+    expect(enlisted.some((u) => u.id === casualty.uid)).toBe(false);
+    for (const src of active) {
+      const u = f.units.get(src.uid)!;
+      expect(u).toBeDefined();
+      expect(u.defId).toBe(src.defId);
+      expect(u.side).toBe(src.side);
+      expect(u.pos).toEqual(pointOfHex(src.pos!));
+    }
+  });
+
+  it("halts a marching unit where it stands, and does nothing to one already stopped", () => {
+    const f = testField();
+    const u = enlist(f, REF, { x: 5, y: 5 });
+    orderUnit(f, u.id, { x: 45, y: 5 });
+    run(f, 2);
+    expect(u.order).not.toBeNull();
+    const stopped = { x: u.pos.x, y: u.pos.y };
+
+    halt(f, u.id);
+    expect(u.order).toBeNull();
+    expect(f.events.some((e) => e.type === "Halted" && e.data.unit === u.id)).toBe(true);
+    step(f, 1); // no order left to advance, so another tick must not move it
+    expect(u.pos).toEqual(stopped);
+
+    const before = f.events.length;
+    halt(f, u.id); // already stopped: a no-op, not a second event
+    expect(u.order).toBeNull();
+    expect(f.events.length).toBe(before);
   });
 });

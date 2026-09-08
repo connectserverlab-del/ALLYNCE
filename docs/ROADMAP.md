@@ -616,3 +616,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   between two large landmasses as a named chokepoint, so a scenario can spawn a "Hold the Crossing" objective on
   it automatically instead of an author picking the hex by hand; this only fires on battlefields irregular enough
   to produce a genuine chokepoint; open, even ground would spawn nothing.
+
+- 2026-09-06: Proposal — `enlistFromBattle` only bridges one way, mirroring a finished battle's survivors onto
+  the march field so they can walk off it. The reverse bridge would close the loop: a squad marching within a
+  scenario's engagement radius of an enemy body triggers a new Battle deployed on the ground it is standing on,
+  so a campaign region plays as continuous movement with hex combat as an event the ground itself provokes,
+  rather than a separate screen the player opens by hand. Feeds the campaign map work (Q-5) once that exists;
+  not a decision to make yet on its own.
