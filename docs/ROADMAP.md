@@ -102,3 +102,7 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-08: Proposal — now that capturing an enemy reinforcement portal counts toward `DestroyPortals` in its
+  own right, a themed cavalry trait ("Portal Raider": one steppe or dragon-cavalry unit per faction captures in a
+  single uninterrupted action instead of two) would give cavalry a distinct siege-adjacent job on odd-shaped maps
+  where portals sit behind rough ground infantry cannot reach in time.
