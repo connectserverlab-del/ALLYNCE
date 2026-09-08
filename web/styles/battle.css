@@ -4,30 +4,41 @@
 
 .board-frame {
   border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden;
-  background: radial-gradient(120% 90% at 50% 0%, #1b2027, #101318 70%);
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(27, 32, 39, .55), rgba(16, 19, 24, .8) 70%),
+    url(../../art/ui/UI_BOARD-GROUND_V01.jpg) center / cover;
   position: relative;
 }
 .board { display: block; width: 100%; height: auto; }
-.hex { fill: #171b22; stroke: #232a34; stroke-width: .6; transition: fill .12s; }
+/* Translucent terrain tint over the painted ground image drawn beneath the grid (see
+   battle.js's `ground`), rather than an opaque flat fill hiding it entirely. */
+.hex { fill: #171b22; fill-opacity: .62; stroke: #3a4250; stroke-width: .7; transition: fill .12s, fill-opacity .12s; }
 .hex.Forest { fill: #1a2320; } .hex.HighGround { fill: #232830; }
-.hex.Fortification { fill: #262a33; } .hex.Water { fill: #16202b; }
+.hex.Fortification { fill: #262a33; } .hex.Water { fill: #16202b; fill-opacity: .78; }
 .hex.AntiAir { fill: #2a2027; }
-.hex.move { fill: #1f2c35; stroke: #4a7f9e; cursor: pointer; }
-.hex.move:hover { fill: #2b3f4d; }
+.hex.move { fill: #1f2c35; fill-opacity: .72; stroke: #4a7f9e; cursor: pointer; }
+.hex.move:hover { fill: #2b3f4d; fill-opacity: .82; }
 .hex.threat { stroke: #a35145; }
 
 .pawn { cursor: pointer; }
-.pawn .disc { stroke-width: 1; }
-.pawn.player .disc { fill: #223142; stroke: #6f9cc4; }
-.pawn.enemy .disc { fill: #372129; stroke: #b4685c; }
-.pawn.active .disc { stroke: var(--accent); stroke-width: 2; }
+/* .disc sits under the art as a fill fallback while it loads; .disc-ring is the border, drawn on top of the art. */
+.pawn .disc { stroke: none; }
+.pawn.player .disc { fill: #223142; }
+.pawn.enemy .disc { fill: #372129; }
+.pawn .pawn-initials { font-family: var(--display); font-size: 8px; fill: var(--text); text-anchor: middle; }
+.pawn .disc-ring { fill: none; stroke-width: 1; }
+.pawn.player .disc-ring { stroke: #6f9cc4; }
+.pawn.enemy .disc-ring { stroke: #b4685c; }
+.pawn.active .disc-ring { stroke: var(--accent); stroke-width: 2; }
 .pawn.spent { opacity: .45; }
-.pawn .initial { font-family: var(--display); font-size: 8px; fill: var(--text); text-anchor: middle; }
 .pawn .hpbar { fill: #0d1014; }
 .pawn .hpfill { fill: #6f9f74; }
 .pawn.enemy .hpfill { fill: #b4685c; }
-.pawn .star { fill: var(--accent); font-size: 5px; text-anchor: middle; font-family: var(--mono); }
-.pawn.ascendant .disc { stroke: var(--accent); stroke-dasharray: 3 2; }
+.pawn .star {
+  fill: var(--accent); font-size: 5px; text-anchor: middle; font-family: var(--mono);
+  paint-order: stroke; stroke: #05070a; stroke-width: 1.6px; stroke-linejoin: round;
+}
+.pawn.ascendant .disc-ring { stroke: var(--accent); stroke-dasharray: 3 2; }
 
 .hit-shake { animation: shake .38s ease-out; transform-box: fill-box; transform-origin: center; }
 @keyframes shake {
