@@ -162,6 +162,19 @@ where they conflict.**
   attack buff before it swings, haste when its own goal sits farther off than its base movement reaches, and
   an area debuff on whoever is already close enough to hit back, win or lose the exchange this round.
 
+### Done in the division doctrine pass
+
+- The seven themed divisions (Choir Militant, Ashpit Legion, Spiral Warband, Half-Born Host, Winter Famine,
+  Ridge Kin, Formic Swarm) each carry a `platoonOrder` and a `passiveDoctrine`, the same two fields the four
+  host armies have had since the rank-ladder pass, and can now fill Commander, Second, Elite and five foot from
+  their own four cards — a division can lead a deck instead of only being hired into one. Spiral Warband and
+  Winter Famine were each missing any card that could stand in the Second slot; rather than invent a new one,
+  their existing Cavalry/Elite card widened to cover it, the same way Formic Swarm's one Elite already covered
+  both Elite and Second with a second physical copy.
+- The warrant board screen described in `docs/ui-sample.md` (posted writs, what each pays, the deck's
+  remaining gaps) turned out to already be built, in the card-and-holding pass; it just was never checked off
+  the Queue, so a future pass would have spent a cycle rediscovering it. Fixed in `docs/CHECKLIST.md`.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -295,3 +308,9 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   Warband keeps its missing Second permanently: "no second plan" is the joke, and giving it one would flatten it
   into an ordinary platoon. Half-Born Host keeps its four cards too — "few in number and impossible to replace"
   is the whole identity, and depth there should mean better abilities on what exists, not more bodies.
+
+- 2026-09-05: Proposal — now that every division can lead its own platoon (doctrine and order), give each of the
+  seven a themed siege piece and cavalry unit of its own, the way the four host armies already have one of
+  each. Only Spiral Warband has a cavalry card today; none of the seven has a siege piece. Without one, a
+  division leading its own deck still has to leave two of the battlefield roles the brief calls for — cannons
+  and cavalry that fit the theme — entirely empty.

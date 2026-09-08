@@ -2780,6 +2780,7 @@
     ],
     "slots": [
       "FootSoldier",
+      "Second",
       "Specialist"
     ],
     "unique": false,
@@ -3150,6 +3151,7 @@
     ],
     "slots": [
       "Elite",
+      "Second",
       "Specialist"
     ],
     "unique": false,

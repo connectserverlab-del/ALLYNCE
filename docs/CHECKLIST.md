@@ -49,7 +49,6 @@ Three things bite:
 | Id | Item | Why it matters |
 |---|---|---|
 | `Q-1` | Second art pass on weak cutouts: any unit whose card still reads "no art yet", plus re-cuts where the flood fill left a panel edge | Blank cards are the most visible gap in the game |
-| `Q-15` | A division's own doctrine and platoon order, so a Choir or a Swarm can lead a deck instead of only joining one | Seven divisions is a lot of flavour with no army identity behind it |
 
 ## Done
 
@@ -95,3 +94,5 @@ Three things bite:
 | `D-38` | Replay: `core/src/replay.ts` steps a cursor through `Battle.events` by index or round and narrates every event type by unit name; `Q-10` |
 | `D-39` | Q-11, found already done: the Wanted Board screen (`Writs` in the sample page rail, `renderWrits`/`openWrit` in `web/sample/template.html`) shipped in the same pass as the wanted-board core (D-17) but was never moved off the queue. Verified against the current data pipeline and left as-is; this entry just corrects the bookkeeping |
 | `D-40` | Q-12, the achievable slice: Choir Militant, Ashpit Legion and Winter Famine each gained a second, distinct FootSoldier card sharing its sibling's theme, so a deck built around one can field a real five-foot line instead of one body five times. Winter Famine also had no card able to fill the Second slot at all (two Elites, no Second) and gets one, `WEN_SECOND_RIME-ANTLER-WARDEN`. `core/tests/companies.test.ts` proves each of the three now validates a legal, varied platoon on its own. The other four divisions and all five sworn companies are unchanged — see `OWN-3` |
+| `D-41` | Warrant board screen in the sample page: posted writs, what each pays, the escort standing in the way, and the current deck's gaps below it — turned out already built in the card-and-holding pass (`c57816b`), just never checked off. Q-11 removed from the Queue rather than left to be reopened by a future pass. |
+| `D-42` | A division's own doctrine and platoon order: the seven themed divisions can now fill Commander, Second, Elite and five foot from their own four cards and carry a faction Order plus a passive Doctrine the way the four host armies do, so a Choir or a Swarm can lead a deck instead of only joining one. Widened `SlotName` on one existing card each for Spiral Warband and Winter Famine (their only Second-eligible member); no new cards, no new art. |

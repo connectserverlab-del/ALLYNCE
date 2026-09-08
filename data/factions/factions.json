@@ -149,8 +149,8 @@
       "tarnished gold"
     ],
     "primaryTheme": "Celestial",
-    "platoonOrder": null,
-    "passiveDoctrine": null,
+    "platoonOrder": "ORD_JUDGEMENT_HYMN",
+    "passiveDoctrine": "DOC_ANGELIC_WARD",
     "weakness": "Bound to its orders: slow to change target once committed, and its wings are easy meat for massed shot."
   },
   "DEM": {
@@ -163,8 +163,8 @@
       "sulphur yellow"
     ],
     "primaryTheme": "Infernal",
-    "platoonOrder": null,
-    "passiveDoctrine": null,
+    "platoonOrder": "ORD_ASHEN_WARCRY",
+    "passiveDoctrine": "DOC_ASHEN_TOLL",
     "weakness": "Burns itself to strike hard: a legion that fights long enough loses to its own price."
   },
   "CHR": {
@@ -177,8 +177,8 @@
       "oxidised copper"
     ],
     "primaryTheme": "Chaos",
-    "platoonOrder": null,
-    "passiveDoctrine": null,
+    "platoonOrder": "ORD_BROKEN_CHARGE",
+    "passiveDoctrine": "DOC_NO_SECOND_PLAN",
     "weakness": "No line, no discipline, no second plan; it wins in the first three rounds or not at all."
   },
   "DMG": {
@@ -191,8 +191,8 @@
       "grey wool"
     ],
     "primaryTheme": "Demigod",
-    "platoonOrder": null,
-    "passiveDoctrine": null,
+    "platoonOrder": "ORD_ASCENDANT_PUSH",
+    "passiveDoctrine": "DOC_MORTAL_WEIGHT",
     "weakness": "Few in number and impossible to replace; every loss is permanent to the host."
   },
   "WEN": {
@@ -205,8 +205,8 @@
       "dull frost-white"
     ],
     "primaryTheme": "Famine",
-    "platoonOrder": null,
-    "passiveDoctrine": null,
+    "platoonOrder": "ORD_CRAWLING_COLD",
+    "passiveDoctrine": "DOC_STARVELING_BITE",
     "weakness": "Starving by nature: brittle, thin-boned, and undone by anything that closes fast and hits once."
   },
   "SAS": {
@@ -219,8 +219,8 @@
       "dull amber"
     ],
     "primaryTheme": "Ridge",
-    "platoonOrder": null,
-    "passiveDoctrine": null,
+    "platoonOrder": "ORD_STONE_STAND",
+    "passiveDoctrine": "DOC_LONE_HUNT",
     "weakness": "Refuses open ground and cannot be made to hold a line it did not choose."
   },
   "FMC": {
@@ -233,8 +233,8 @@
       "pale resin"
     ],
     "primaryTheme": "Swarm",
-    "platoonOrder": null,
-    "passiveDoctrine": null,
+    "platoonOrder": "ORD_SWARM_CONVERGENCE",
+    "passiveDoctrine": "DOC_ONE_WILL",
     "weakness": "Everything it does runs through the Empress; cut her out and the swarm is only insects."
   }
 }
