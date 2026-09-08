@@ -317,11 +317,16 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 .holdmap img.ground{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.7) brightness(.42)}
 .plotgrid{position:absolute;inset:0;display:grid;padding:66px 16px 64px;z-index:2}
 .plot{position:relative;border:1px dashed transparent;border-radius:2px}
+.plot:hover{border-color:rgba(207,195,166,.22)}
 .plot.over{border-color:var(--star);background:rgba(217,164,65,.12)}
-.city .bldg{position:absolute;inset:4%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
-  cursor:grab;user-select:none}
+/* A plot is the unit of placement, not the unit of drawing: a building is painted half again as
+   wide as its plot and overflows it, which is how it reads at all on a twelve-column grid. Only
+   the plot decides where it stands. */
+.city .bldg{position:absolute;left:-28%;right:-28%;top:-34%;bottom:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-end;cursor:grab;user-select:none;z-index:2}
+.city .bldg:hover{z-index:4;filter:brightness(1.12)}
 .city .bldg.dragging{opacity:.55;cursor:grabbing}
-.city .bldg img{width:100%;height:auto;max-height:78%;object-fit:contain;filter:drop-shadow(0 3px 6px rgba(0,0,0,.75))}
+.city .bldg img{width:100%;height:auto;max-height:84%;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.8))}
 .city .bldg .cap{font-family:"Alegreya SC";font-size:10.5px;letter-spacing:.03em;background:rgba(10,12,16,.82);
   border:1px solid var(--edge);padding:0 5px;color:var(--bone);white-space:nowrap;margin-top:-2px}
 .city .bldg .lv{position:absolute;right:6%;top:2%;background:#12141a;border:1px solid var(--edge-2);color:var(--star);

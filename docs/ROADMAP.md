@@ -872,3 +872,13 @@ passes; this one doesn't resolve it either.
   Also open: a shine is capped at five merges and a border is a single purchase, so a card has a small,
   finite set of appearances. That is deliberate, but it means the sink for a very rich player is shallow;
   the roadmap should decide whether there is a deeper one before anything is priced against real money.
+
+- 2026-09-08 proposal: repainting the buildings as true isometric assets exposed a coupling nobody had written
+  down — the prompt has to know how the asset will be *composited*, not just what it depicts. The eight plates
+  approved before this pass were painted against a pale grey ground, which was harmless while they were shown
+  as opaque JPEGs in a panel and destructive the moment they were cut to alpha for the city grid: the flood
+  fill could not separate pale masonry from pale background and ate the buildings. The style guide now states
+  the background requirement as part of the building prompt. Proposal: `scripts/audit-cutouts.py` should cover
+  `art/buildings/` as well as `art/samples/`, and `npm run check` should run it, so a plate that cuts badly
+  fails the build rather than being found by eye on a screenshot. The same arithmetic already exists; it is
+  only pointed at one directory.

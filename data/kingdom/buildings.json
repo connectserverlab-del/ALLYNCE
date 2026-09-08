@@ -49,9 +49,9 @@
         "silver": 40
       },
       "art": [
-        "art/buildings/BLD_KEEP_T1_V01.jpg",
-        "art/buildings/BLD_KEEP_T2_V01.jpg",
-        "art/buildings/BLD_KEEP_T3_V01.jpg"
+        "art/buildings/BLD_KEEP_T1_V01.png",
+        "art/buildings/BLD_KEEP_T2_V01.png",
+        "art/buildings/BLD_KEEP_T3_V01.png"
       ],
       "plot": [
         5,
@@ -73,9 +73,9 @@
         "koku": 120
       },
       "art": [
-        "art/buildings/BLD_GRANARY_T1_V01.jpg",
-        "art/buildings/BLD_GRANARY_T2_V01.jpg",
-        "art/buildings/BLD_GRANARY_T3_V01.jpg"
+        "art/buildings/BLD_GRANARY_T1_V01.png",
+        "art/buildings/BLD_GRANARY_T2_V01.png",
+        "art/buildings/BLD_GRANARY_T3_V01.png"
       ],
       "plot": [
         2,
@@ -97,9 +97,9 @@
         "iron": 80
       },
       "art": [
-        "art/buildings/BLD_MINE_T1_V01.jpg",
-        "art/buildings/BLD_MINE_T2_V01.jpg",
-        "art/buildings/BLD_MINE_T3_V01.jpg"
+        "art/buildings/BLD_MINE_T1_V01.png",
+        "art/buildings/BLD_MINE_T2_V01.png",
+        "art/buildings/BLD_MINE_T3_V01.png"
       ],
       "requires": [
         {
@@ -127,9 +127,9 @@
         "timber": 100
       },
       "art": [
-        "art/buildings/BLD_SAWPIT_T1_V01.jpg",
-        "art/buildings/BLD_SAWPIT_T2_V01.jpg",
-        "art/buildings/BLD_SAWPIT_T3_V01.jpg"
+        "art/buildings/BLD_SAWPIT_T1_V01.png",
+        "art/buildings/BLD_SAWPIT_T2_V01.png",
+        "art/buildings/BLD_SAWPIT_T3_V01.png"
       ],
       "plot": [
         1,
@@ -152,9 +152,9 @@
         "armyCapacity": 12
       },
       "art": [
-        "art/buildings/BLD_BARRACKS_T1_V01.jpg",
-        "art/buildings/BLD_BARRACKS_T2_V01.jpg",
-        "art/buildings/BLD_BARRACKS_T3_V01.jpg"
+        "art/buildings/BLD_BARRACKS_T1_V01.png",
+        "art/buildings/BLD_BARRACKS_T2_V01.png",
+        "art/buildings/BLD_BARRACKS_T3_V01.png"
       ],
       "requires": [
         {
@@ -185,9 +185,9 @@
         "researchTier": 1
       },
       "art": [
-        "art/buildings/BLD_RESEARCH_HALL_T1_V01.jpg",
-        "art/buildings/BLD_RESEARCH_HALL_T2_V01.jpg",
-        "art/buildings/BLD_RESEARCH_HALL_T3_V01.jpg"
+        "art/buildings/BLD_RESEARCH_HALL_T1_V01.png",
+        "art/buildings/BLD_RESEARCH_HALL_T2_V01.png",
+        "art/buildings/BLD_RESEARCH_HALL_T3_V01.png"
       ],
       "requires": [
         {
@@ -217,9 +217,9 @@
         "drawFloor": 0.2
       },
       "art": [
-        "art/buildings/BLD_RECRUITMENT_HALL_T1_V01.jpg",
-        "art/buildings/BLD_RECRUITMENT_HALL_T2_V01.jpg",
-        "art/buildings/BLD_RECRUITMENT_HALL_T3_V01.jpg"
+        "art/buildings/BLD_RECRUITMENT_HALL_T1_V01.png",
+        "art/buildings/BLD_RECRUITMENT_HALL_T2_V01.png",
+        "art/buildings/BLD_RECRUITMENT_HALL_T3_V01.png"
       ],
       "requires": [
         {
@@ -248,9 +248,9 @@
         "atk": 10
       },
       "art": [
-        "art/buildings/BLD_FORGE_T1_V01.jpg",
-        "art/buildings/BLD_FORGE_T2_V01.jpg",
-        "art/buildings/BLD_FORGE_T3_V01.jpg"
+        "art/buildings/BLD_FORGE_T1_V01.png",
+        "art/buildings/BLD_FORGE_T2_V01.png",
+        "art/buildings/BLD_FORGE_T3_V01.png"
       ],
       "requires": [
         {
@@ -279,9 +279,9 @@
         "cavalryAtk": 15
       },
       "art": [
-        "art/buildings/BLD_STABLE_T1_V01.jpg",
-        "art/buildings/BLD_STABLE_T2_V01.jpg",
-        "art/buildings/BLD_STABLE_T3_V01.jpg"
+        "art/buildings/BLD_STABLE_T1_V01.png",
+        "art/buildings/BLD_STABLE_T2_V01.png",
+        "art/buildings/BLD_STABLE_T3_V01.png"
       ],
       "requires": [
         {
@@ -310,9 +310,9 @@
         "def": 10
       },
       "art": [
-        "art/buildings/BLD_WALL_T1_V01.jpg",
-        "art/buildings/BLD_WALL_T2_V01.jpg",
-        "art/buildings/BLD_WALL_T3_V01.jpg"
+        "art/buildings/BLD_WALL_T1_V01.png",
+        "art/buildings/BLD_WALL_T2_V01.png",
+        "art/buildings/BLD_WALL_T3_V01.png"
       ],
       "requires": [
         {
@@ -343,9 +343,9 @@
         "ritualProgress": 1
       },
       "art": [
-        "art/buildings/BLD_SHRINE_T1_V01.jpg",
-        "art/buildings/BLD_SHRINE_T2_V01.jpg",
-        "art/buildings/BLD_SHRINE_T3_V01.jpg"
+        "art/buildings/BLD_SHRINE_T1_V01.png",
+        "art/buildings/BLD_SHRINE_T2_V01.png",
+        "art/buildings/BLD_SHRINE_T3_V01.png"
       ],
       "requires": [
         {
@@ -380,9 +380,9 @@
         }
       ],
       "art": [
-        "art/buildings/BLD_SHOP_T1_V01.jpg",
-        "art/buildings/BLD_SHOP_T2_V01.jpg",
-        "art/buildings/BLD_SHOP_T3_V01.jpg"
+        "art/buildings/BLD_SHOP_T1_V01.png",
+        "art/buildings/BLD_SHOP_T2_V01.png",
+        "art/buildings/BLD_SHOP_T3_V01.png"
       ],
       "plot": [
         7,
@@ -415,9 +415,9 @@
         }
       ],
       "art": [
-        "art/buildings/BLD_ARMORY_T1_V01.jpg",
-        "art/buildings/BLD_ARMORY_T2_V01.jpg",
-        "art/buildings/BLD_ARMORY_T3_V01.jpg"
+        "art/buildings/BLD_ARMORY_T1_V01.png",
+        "art/buildings/BLD_ARMORY_T2_V01.png",
+        "art/buildings/BLD_ARMORY_T3_V01.png"
       ],
       "plot": [
         9,

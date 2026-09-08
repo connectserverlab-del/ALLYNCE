@@ -564,189 +564,276 @@
   ],
   "buildings": [
     {
-      "buildingTier": "BARRACKS_T2",
-      "file": "art/buildings/BLD_BARRACKS_T2_V01.jpg",
-      "jobId": "ef450794-6a28-4e22-8225-2fc9d8e87f78",
-      "approved": false
-    },
-    {
-      "buildingTier": "FORGE_T1",
-      "file": "art/buildings/BLD_FORGE_T1_V01.jpg",
-      "jobId": "f131b000-53d5-42fd-a7e4-1e8a60b14161",
-      "approved": false
-    },
-    {
-      "buildingTier": "FORGE_T2",
-      "file": "art/buildings/BLD_FORGE_T2_V01.jpg",
-      "jobId": "6a1214fd-7458-4cb4-b8b5-6b5ea085ada4",
-      "approved": false
-    },
-    {
-      "buildingTier": "FORGE_T3",
-      "file": "art/buildings/BLD_FORGE_T3_V01.jpg",
-      "jobId": "60a8995e-831e-4a03-8921-6375ac7df737",
-      "approved": false
-    },
-    {
-      "buildingTier": "GRANARY_T1",
-      "file": "art/buildings/BLD_GRANARY_T1_V01.jpg",
-      "jobId": "3231cdac-0f57-4f23-b6aa-fc266bfbb1e4",
-      "approved": false
-    },
-    {
-      "buildingTier": "GRANARY_T2",
-      "file": "art/buildings/BLD_GRANARY_T2_V01.jpg",
-      "jobId": "76240a5c-667c-461c-894e-4d3273a28f1a",
-      "approved": false
-    },
-    {
-      "buildingTier": "GRANARY_T3",
-      "file": "art/buildings/BLD_GRANARY_T3_V01.jpg",
-      "jobId": "7d5c99d5-78ac-4f74-94d6-8d365db97cb5",
-      "approved": false
-    },
-    {
-      "buildingTier": "MINE_T1",
-      "file": "art/buildings/BLD_MINE_T1_V01.jpg",
-      "jobId": "93770ec6-6e4d-419f-acb6-77596f1cb9b6",
-      "approved": false
-    },
-    {
-      "buildingTier": "MINE_T2",
-      "file": "art/buildings/BLD_MINE_T2_V01.jpg",
-      "jobId": "7cdb61e8-3329-4b52-bda0-8c3b6f6ab474",
-      "approved": false
-    },
-    {
-      "buildingTier": "MINE_T3",
-      "file": "art/buildings/BLD_MINE_T3_V01.jpg",
-      "jobId": "a032a517-6444-4bc4-a2ab-3be41c09cea4",
-      "approved": false
-    },
-    {
-      "buildingTier": "RECRUITMENT_HALL_T1",
-      "file": "art/buildings/BLD_RECRUITMENT_HALL_T1_V01.jpg",
-      "jobId": "a42847d9-c604-4b86-b172-bc540118fae8",
-      "approved": false
-    },
-    {
-      "buildingTier": "RECRUITMENT_HALL_T2",
-      "file": "art/buildings/BLD_RECRUITMENT_HALL_T2_V01.jpg",
-      "jobId": "7ddd2c80-2336-48b5-9b2f-c3a59801ec37",
-      "approved": false
-    },
-    {
-      "buildingTier": "RECRUITMENT_HALL_T3",
-      "file": "art/buildings/BLD_RECRUITMENT_HALL_T3_V01.jpg",
-      "jobId": "ca6e8e42-1ddc-4cfb-87c1-5edc1293f747",
-      "approved": false
-    },
-    {
-      "buildingTier": "RESEARCH_HALL_T1",
-      "file": "art/buildings/BLD_RESEARCH_HALL_T1_V01.jpg",
-      "jobId": "fcb5f530-3bde-4634-8bd2-f0f30bf1dc64",
-      "approved": false
-    },
-    {
-      "buildingTier": "RESEARCH_HALL_T2",
-      "file": "art/buildings/BLD_RESEARCH_HALL_T2_V01.jpg",
-      "jobId": "c07b1317-215c-4018-ae05-35204302de80",
-      "approved": false
-    },
-    {
-      "buildingTier": "RESEARCH_HALL_T3",
-      "file": "art/buildings/BLD_RESEARCH_HALL_T3_V01.jpg",
-      "jobId": "0a2654fa-0d29-455d-8dac-1c0537c8c7cf",
-      "approved": false
-    },
-    {
-      "buildingTier": "SAWPIT_T1",
-      "file": "art/buildings/BLD_SAWPIT_T1_V01.jpg",
-      "jobId": "27557a3f-2bc2-43b6-ab12-35c2f6779a9f",
-      "approved": false
-    },
-    {
-      "buildingTier": "SAWPIT_T2",
-      "file": "art/buildings/BLD_SAWPIT_T2_V01.jpg",
-      "jobId": "bc7cf0a7-a2a5-4fa5-8778-5cfb131db4a2",
-      "approved": false
-    },
-    {
-      "buildingTier": "SAWPIT_T3",
-      "file": "art/buildings/BLD_SAWPIT_T3_V01.jpg",
-      "jobId": "7823fec9-0f60-4360-a706-ba95de5e9e36",
-      "approved": false
-    },
-    {
-      "buildingTier": "SHRINE_T1",
-      "file": "art/buildings/BLD_SHRINE_T1_V01.jpg",
-      "jobId": "cc9a2e8e-6d95-4d0e-b9ab-dfab9113d865",
-      "approved": false
-    },
-    {
-      "buildingTier": "SHRINE_T2",
-      "file": "art/buildings/BLD_SHRINE_T2_V01.jpg",
-      "jobId": "8eb1e09b-2223-48be-bf00-8c1339f0a6af",
-      "approved": false
-    },
-    {
-      "buildingTier": "SHRINE_T3",
-      "file": "art/buildings/BLD_SHRINE_T3_V01.jpg",
-      "jobId": "7a2ced10-907b-4934-be24-7f3fc8fc8c2c",
-      "approved": false
-    },
-    {
-      "buildingTier": "STABLE_T1",
-      "file": "art/buildings/BLD_STABLE_T1_V01.jpg",
-      "jobId": "7a19f8b0-6269-4510-8ed0-07634a027a80",
-      "approved": false
-    },
-    {
-      "buildingTier": "STABLE_T2",
-      "file": "art/buildings/BLD_STABLE_T2_V01.jpg",
-      "jobId": "8889d65a-5298-47e1-abcb-0b171c26f669",
-      "approved": false
-    },
-    {
-      "buildingTier": "STABLE_T3",
-      "file": "art/buildings/BLD_STABLE_T3_V01.jpg",
-      "jobId": "2fa0851f-8d44-47c3-99c0-d4e5decdb2dc",
-      "approved": false
-    },
-    {
-      "buildingTier": "SHOP_T1",
-      "file": "art/buildings/BLD_SHOP_T1_V01.jpg",
-      "jobId": "cdc4d80f-f987-477f-9446-82b2c0c10c8e",
-      "approved": false
-    },
-    {
-      "buildingTier": "SHOP_T2",
-      "file": "art/buildings/BLD_SHOP_T2_V01.jpg",
-      "jobId": "b919b8a7-0d9d-45a2-99b6-718eeb9c1d0c",
-      "approved": false
-    },
-    {
-      "buildingTier": "SHOP_T3",
-      "file": "art/buildings/BLD_SHOP_T3_V01.jpg",
-      "jobId": "5a24b490-8149-4ad7-8831-306b44e39574",
-      "approved": false
-    },
-    {
       "buildingTier": "ARMORY_T1",
-      "file": "art/buildings/BLD_ARMORY_T1_V01.jpg",
-      "jobId": "1305bbad-0f0d-4fcd-b5a3-b808e134b1e0",
+      "file": "art/buildings/BLD_ARMORY_T1_V01.png",
+      "jobId": "889bc9f4-bb00-4620-9839-16cf478ac137",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
       "approved": false
     },
     {
       "buildingTier": "ARMORY_T2",
-      "file": "art/buildings/BLD_ARMORY_T2_V01.jpg",
-      "jobId": "fa6965e2-2101-40e3-99c6-368aa5feea5e",
+      "file": "art/buildings/BLD_ARMORY_T2_V01.png",
+      "jobId": "902b01f4-9969-4954-b00b-6d0d07956ca3",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
       "approved": false
     },
     {
       "buildingTier": "ARMORY_T3",
-      "file": "art/buildings/BLD_ARMORY_T3_V01.jpg",
-      "jobId": "faddda4f-df00-4730-8efd-9fde6218b07f",
+      "file": "art/buildings/BLD_ARMORY_T3_V01.png",
+      "jobId": "6814d3b5-241b-44de-8abe-54f04efb7ef0",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "BARRACKS_T1",
+      "file": "art/buildings/BLD_BARRACKS_T1_V01.png",
+      "jobId": "3050939a-b797-4027-810c-9a3ac9132d9a",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "BARRACKS_T2",
+      "file": "art/buildings/BLD_BARRACKS_T2_V01.png",
+      "jobId": "a6ebd355-90e5-41e4-9f70-71367501933e",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "BARRACKS_T3",
+      "file": "art/buildings/BLD_BARRACKS_T3_V01.png",
+      "jobId": "420b1d7e-f80d-4230-9983-427a434140db",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "FORGE_T1",
+      "file": "art/buildings/BLD_FORGE_T1_V01.png",
+      "jobId": "b82abc76-358a-4d79-9dce-a19e57d92a1a",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "FORGE_T2",
+      "file": "art/buildings/BLD_FORGE_T2_V01.png",
+      "jobId": "9c18d77a-f05e-4fb1-bdd3-7f93c6d9f0e3",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "FORGE_T3",
+      "file": "art/buildings/BLD_FORGE_T3_V01.png",
+      "jobId": "50d6ecdf-31cf-4f1d-b0f3-639864f4edb0",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "GRANARY_T1",
+      "file": "art/buildings/BLD_GRANARY_T1_V01.png",
+      "jobId": "7cc1b13a-e5af-408c-90a1-31434c11f42d",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "GRANARY_T2",
+      "file": "art/buildings/BLD_GRANARY_T2_V01.png",
+      "jobId": "4c64cb7c-a941-4a7e-893e-e343689ae24c",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "GRANARY_T3",
+      "file": "art/buildings/BLD_GRANARY_T3_V01.png",
+      "jobId": "1d6a2f67-c8b4-416e-8822-909c0c7c6f04",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "KEEP_T1",
+      "file": "art/buildings/BLD_KEEP_T1_V01.png",
+      "jobId": "77539ea1-d585-4e70-ab74-7ea9cef74723",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "KEEP_T2",
+      "file": "art/buildings/BLD_KEEP_T2_V01.png",
+      "jobId": "6a1c1bc6-af2a-4a69-a2d7-5e44fe94e3c4",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "KEEP_T3",
+      "file": "art/buildings/BLD_KEEP_T3_V01.png",
+      "jobId": "b9f6e3a6-30e0-48e0-9cec-71c71028dcf0",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "MINE_T1",
+      "file": "art/buildings/BLD_MINE_T1_V01.png",
+      "jobId": "5aa2783d-02e3-4db2-865c-deed92caf0e9",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "MINE_T2",
+      "file": "art/buildings/BLD_MINE_T2_V01.png",
+      "jobId": "27d56eac-edfe-4894-8549-03eb0eea411b",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "MINE_T3",
+      "file": "art/buildings/BLD_MINE_T3_V01.png",
+      "jobId": "85f48083-3676-449b-9fd8-8e08374b6acd",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "RECRUITMENT_HALL_T1",
+      "file": "art/buildings/BLD_RECRUITMENT_HALL_T1_V01.png",
+      "jobId": "d5682a50-96c0-4e68-a109-b6120aab31bd",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "RECRUITMENT_HALL_T2",
+      "file": "art/buildings/BLD_RECRUITMENT_HALL_T2_V01.png",
+      "jobId": "ea9ddb09-1e02-465d-876f-05beef55499e",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "RECRUITMENT_HALL_T3",
+      "file": "art/buildings/BLD_RECRUITMENT_HALL_T3_V01.png",
+      "jobId": "0cdc4e3a-1808-4b88-ac6c-4440ff81c57c",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "RESEARCH_HALL_T1",
+      "file": "art/buildings/BLD_RESEARCH_HALL_T1_V01.png",
+      "jobId": "a32bd52c-a9ad-4e15-b3d0-27bf824de8e0",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "RESEARCH_HALL_T2",
+      "file": "art/buildings/BLD_RESEARCH_HALL_T2_V01.png",
+      "jobId": "5e30e08b-6dd8-4f31-97aa-ce294ce86018",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "RESEARCH_HALL_T3",
+      "file": "art/buildings/BLD_RESEARCH_HALL_T3_V01.png",
+      "jobId": "4f3f29d9-8ed6-4ca8-94d1-3529027a7a4f",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SAWPIT_T1",
+      "file": "art/buildings/BLD_SAWPIT_T1_V01.png",
+      "jobId": "3cca48ea-bab5-4cc3-8f85-86932fc37eb8",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SAWPIT_T2",
+      "file": "art/buildings/BLD_SAWPIT_T2_V01.png",
+      "jobId": "b789f337-2295-4422-be8b-110cd951e671",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SAWPIT_T3",
+      "file": "art/buildings/BLD_SAWPIT_T3_V01.png",
+      "jobId": "57fc1bc7-2cb9-48f6-8600-e7a4610ac067",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SHOP_T1",
+      "file": "art/buildings/BLD_SHOP_T1_V01.png",
+      "jobId": "c4dddaef-f5ab-45af-8f84-a766c6874fed",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SHOP_T2",
+      "file": "art/buildings/BLD_SHOP_T2_V01.png",
+      "jobId": "04691d94-6727-4ff4-a24b-0168d503cc26",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SHOP_T3",
+      "file": "art/buildings/BLD_SHOP_T3_V01.png",
+      "jobId": "4f8eafa2-a2d5-4963-b613-738fe202a0b1",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SHRINE_T1",
+      "file": "art/buildings/BLD_SHRINE_T1_V01.png",
+      "jobId": "06732883-de87-4e89-9d95-e70e3d05f5dc",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SHRINE_T2",
+      "file": "art/buildings/BLD_SHRINE_T2_V01.png",
+      "jobId": "f847b3a1-1403-4d9e-9f8d-50ff1a991725",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SHRINE_T3",
+      "file": "art/buildings/BLD_SHRINE_T3_V01.png",
+      "jobId": "c69a7f9a-c200-4834-b502-652d4ae65ac7",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "STABLE_T1",
+      "file": "art/buildings/BLD_STABLE_T1_V01.png",
+      "jobId": "0de0f256-fe35-47ae-b7cc-e6e04a275d7b",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "STABLE_T2",
+      "file": "art/buildings/BLD_STABLE_T2_V01.png",
+      "jobId": "aeaf0222-fb71-40d9-85a9-22f21098504c",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "STABLE_T3",
+      "file": "art/buildings/BLD_STABLE_T3_V01.png",
+      "jobId": "4e3077ac-ba0f-4f31-84f9-d40f5ce87963",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "WALL_T1",
+      "file": "art/buildings/BLD_WALL_T1_V01.png",
+      "jobId": "7a9f5f80-2ab3-4dd4-9097-7444c62df1d3",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "WALL_T2",
+      "file": "art/buildings/BLD_WALL_T2_V01.png",
+      "jobId": "606010c3-9ab5-4c74-bf0e-2a59e8868964",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "WALL_T3",
+      "file": "art/buildings/BLD_WALL_T3_V01.png",
+      "jobId": "3a4bb70a-cd1b-4b56-8d97-f1b7a03921b0",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
       "approved": false
     }
   ],
