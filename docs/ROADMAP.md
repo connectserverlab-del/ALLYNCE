@@ -537,3 +537,8 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   every ritual circle and portal they own, for a set number of rounds, surrenders even at moderate morale. This
   ties the "odd-shaped battlefields" intent to the win-condition layer so terrain itself can decide a fight, not
   only attrition.
+
+- 2026-09-06: Proposal — give the banner rank privilege more mechanical weight: a leader whose rank carries `banner`
+  already doubles morale recovery at the start of each round, but the manual Rally action still heals a flat 10
+  regardless of rank. Let `banner` leaders Rally for 15 instead, so climbing a faction's rank ladder keeps paying off
+  in the moment a platoon calls on its commander, not only between rounds.
