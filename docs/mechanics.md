@@ -268,6 +268,17 @@ draws from a different derived seed. An earlier `Battle.rng` field followed the 
 anything and has been removed; if a future subsystem wants battle-scoped randomness it should derive its own
 `Rng` from `seed` the same way the others do, not resurrect a shared instance.
 
+### Determinism harness
+
+`core/src/determinism.ts` exports `hashEvents`, a dependency-free hash over a battle's event log.
+`core/tests/determinism.test.ts` runs a scripted match twice from the same seed and asserts the hashes are
+equal, and runs several different seeds and asserts they diverge. This is the acceptance test for the
+determinism guarantee this section claims: lockstep multiplayer, replays and server-side validation all rest
+on the same seed always producing the same event log, and this is what fails loudly, in the suite every
+`npm run check` runs, the first time a change reaches for `Math.random()`, wall-clock time, or iteration order
+that depends on object identity. `Q-20`'s per-round `RoundHash` reuses `hashEvents` over a slice of the log
+rather than inventing a second hash.
+
 ## Worked example (from the brief §7)
 
 Foot soldier 1,500 base ATK, two matching neighbours (+100), full Doctrine (+100), commander order (+150) = 1,850.

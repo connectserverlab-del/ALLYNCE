@@ -792,3 +792,10 @@ passes; this one doesn't resolve it either.
   number of hexes per named biome as a gun pit or firing step (cheaper to occupy and set up from, for siege pieces
   only), so an odd-shaped, generated battlefield rewards the themed cannon a faction already brings instead of
   siege placement being anywhere-is-as-good-as-anywhere on open ground.
+- 2026-09-08: Proposal — once `Q-20`'s per-round `RoundHash` lands on top of `Q-19`'s new `hashEvents`
+  (`core/src/determinism.ts`), wire the same hash into `core/src/replay.ts`'s cursor and surface it on the
+  replay screen the way `D-38` already narrates events by unit name: a small per-round badge that reads clean
+  while the cursor's own re-derived hash matches the logged one, and flags the exact round where it stops
+  matching. That gives a QA pass — and, later, a real multiplayer client comparing hashes with a peer — the
+  same "which round diverged" answer a desync detector needs, off tooling the replay screen already has rather
+  than a new debug surface. Proposal only; depends on `Q-20` existing first.
