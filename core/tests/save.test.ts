@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { blob, deploy, KNI, newBattle, reg, SAM, SHI } from "./helpers.js";
 import { loadBattle, SAVE_VERSION, saveBattle } from "../src/save.js";
+import { applyCommand } from "../src/commands.js";
 import { assistRitual, createRitual, disruptRitual, tickRitual } from "../src/rituals.js";
 import { resolveAttack } from "../src/combat.js";
 import { callPortal, captureStep, queueReinforcement, tickPortal } from "../src/portals.js";
@@ -162,6 +163,33 @@ describe("saveBattle/loadBattle round-trip process-wide effect flags", () => {
 });
 
 const BLOB = [{ q: 2, r: 2 }, { q: 3, r: 2 }, { q: 4, r: 2 }, { q: 2, r: 3 }, { q: 3, r: 3 }, { q: 4, r: 3 }, { q: 5, r: 3 }, { q: 6, r: 3 }];
+
+describe("the command log survives a save/load round trip", () => {
+  it("carries every applied command, in order, so a loaded battle can still be rebuilt from it", () => {
+    const { b, ctrl } = newBattle();
+    const p = deploy(b, "P1", "A", SAM, blob(5, 5));
+    deploy(b, "P2", "B", KNI, blob(12, 5));
+    applyCommand(ctrl, { kind: "CommandPhase" });
+    applyCommand(ctrl, { kind: "BeginActivation", groupId: p.id });
+    const mover = b.unit(p.footUids[0]!);
+    applyCommand(ctrl, { kind: "Defend", uid: mover.uid });
+    expect(b.commands.length).toBe(3);
+
+    const loaded = loadBattle(b.reg, saveBattle(b));
+    expect(loaded.commands).toEqual(b.commands);
+    // and it is a copy, not the same array: mutating one must not move the other
+    loaded.commands.push({ kind: "EndPhase" });
+    expect(b.commands.length).toBe(3);
+  });
+
+  it("a command that threw was never applied, so it is never saved either", () => {
+    const { b, ctrl } = newBattle();
+    deploy(b, "P1", "A", SAM, blob(5, 5));
+    expect(() => applyCommand(ctrl, { kind: "Attack", uid: "no-such-uid", targetUid: "also-none" })).toThrow();
+    expect(b.commands).toEqual([]);
+    expect(loadBattle(b.reg, saveBattle(b)).commands).toEqual([]);
+  });
+});
 
 describe("temporary stat modifiers survive a save/load round trip", () => {
   it("carries a unit's addTempMod entries across saveBattle/loadBattle", () => {

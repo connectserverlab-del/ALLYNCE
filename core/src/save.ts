@@ -8,9 +8,10 @@ import { Rng } from "./rng.js";
 import type { RitualCircle } from "./rituals.js";
 import type { Portal } from "./portals.js";
 import type { Capture } from "./state.js";
+import type { Command } from "./commands.js";
 import type { WeatherId, TimeOfDayId } from "./weather.js";
 
-export const SAVE_VERSION = 6;
+export const SAVE_VERSION = 7;
 
 export interface BattleSave {
   version: number; seed: number; round: number; phase: string;
@@ -23,6 +24,13 @@ export interface BattleSave {
    * saved mid-duel, mid-order or under unexpired smoke forgets all of it silently on load, the same
    * way one saved mid-ritual would without `rituals`.
    */
+  /**
+   * Every command `applyCommand` has applied, in order. A battle that loses this on save cannot be
+   * rebuilt from its command log (`Q-22`), replayed by a client that joined late, or validated
+   * server-side after a reconnect — the same way losing `duels` or `kingdomEffects` silently dropped
+   * state that only surfaced much later.
+   */
+  commands: Command[];
   duels: Array<[string, string]>; orderFlags: Array<[string, string]>;
   hideAfterAttack: string[]; interceptUsed: string[]; tempPreventRouted: string[];
   timedTerrain: Array<{ key: string; rounds: number }>;
@@ -47,6 +55,7 @@ export function saveBattle(b: Battle): BattleSave {
     version: SAVE_VERSION, seed: b.seed, round: b.round, phase: b.phase,
     width: b.width, height: b.height, mask: b.mask ? [...b.mask] : null,
     weather: b.weather, timeOfDay: b.timeOfDay,
+    commands: b.commands.map((c) => ({ ...c })),
     duels: [...b.duels.entries()], orderFlags: [...b.orderFlags.entries()],
     hideAfterAttack: [...b.hideAfterAttack], interceptUsed: [...b.interceptUsed], tempPreventRouted: [...b.tempPreventRouted],
     timedTerrain: b.timedTerrain.map((t) => ({ ...t })),
@@ -98,6 +107,7 @@ export function loadBattle(reg: Registry, save: BattleSave): Battle {
   for (const [side, ids] of save.wanted ?? []) b.wanted.set(side, new Set(ids));
   // These now live on the Battle, so a load fills in this battle's own flags and leaves any other
   // battle alive in the process untouched.
+  for (const c of save.commands ?? []) b.commands.push(c);
   for (const [k, v] of save.duels ?? []) b.duels.set(k, v);
   for (const [k, v] of save.orderFlags ?? []) b.orderFlags.set(k, v);
   for (const uid of save.hideAfterAttack ?? []) b.hideAfterAttack.add(uid);

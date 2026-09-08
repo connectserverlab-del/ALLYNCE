@@ -303,6 +303,11 @@ command's uid references to live units, portals and rituals and calls the one me
 owns that mutation. `Battle.commands` is the resulting log: every command `applyCommand` has actually
 applied, in order. A command that throws is never appended, since it never mutated the battle.
 
+`BattleSave` carries the command log (save version 7). A battle that lost it on save could not be
+rebuilt from its commands (`Q-22`), replayed by a client that joined late, or validated server-side
+after a reconnect — the same silent-drop this codebase has already paid for twice, with `kingdomEffects`
+and with the per-round effect flags.
+
 This is `Q-21`, the netcode line's foundation: lockstep sends commands, not state, so a command has to
 survive `JSON.stringify`/`parse` and a network hop unchanged, which is why every field is a uid string
 or a plain `Hex`, never a live object reference. `applyCommand` does not replace the named
