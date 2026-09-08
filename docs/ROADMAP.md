@@ -102,3 +102,8 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-08: Proposal — scale the Rally order's heal and radius by the caster's rank, not a flat +10/2 hexes for
+  every Commander or Second regardless of ladder position. A fresh Ashigaru sergeant and a seasoned Daimyo already
+  diverge in command radius through the rank privilege table; giving Rally the same per-rank privilege (say
+  `rallyBonus`) would make climbing a ladder matter in the same battle it is fought, not only between them, and the
+  bonus would sit beside `commandRadiusBonus` as a second named, source-tracked use of that table.
