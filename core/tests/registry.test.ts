@@ -186,8 +186,9 @@ function readJson(rel: string) {
 /** Every table `loadRegistry` reads, so a test can hand `new Registry` one deliberately-broken table. */
 function loadTables() {
   return {
-    units: readJson("units/units.json"),
-    abilities: readJson("abilities/abilities.json"),
+    // Mirrors loadRegistry: the expansion roster ships as its own file and is loaded alongside.
+    units: [...(readJson("units/units.json") as unknown[]), ...(readJson("units/expansion.json") as unknown[])],
+    abilities: [...(readJson("abilities/abilities.json") as unknown[]), ...(readJson("abilities/expansion.json") as unknown[])],
     factions: readJson("factions/factions.json"),
     rules: readJson("compositions/platoon.json"),
     ladders: ["SAM", "SHI", "KNI", "DRG", "RIT"]
@@ -200,6 +201,7 @@ function loadTables() {
     research: readJson("kingdom/research.json"),
     wanted: readJson("missions/wanted.json"),
     march: readJson("movement/march.json"),
+    weather: readJson("rules/weather.json"),
   };
 }
 
@@ -209,7 +211,7 @@ function buildWithBanners(banners: unknown[]): Registry {
   const t = loadTables();
   return new AnyRegistry(
     t.units, t.abilities, t.factions, t.rules, t.ladders, t.fusions,
-    t.deckRules, t.sideCards, t.kingdom, t.research, banners, t.wanted, t.march,
+    t.deckRules, t.sideCards, t.kingdom, t.research, banners, t.wanted, t.march, t.weather,
   );
 }
 

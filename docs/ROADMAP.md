@@ -1331,3 +1331,8 @@ passes; this one doesn't resolve it either.
   to vouch for them. Ties the rank ladders' "mechanical weight" directly to recruitment instead of leaving
   ranks and banners as two systems that never talk to each other. Not implemented; needs a call on whether the
   cap should be per-banner or per-faction, and whether it should ease as more of the ladder is filled.
+
+- 2026-09-08: Proposal — now that capturing an enemy reinforcement portal counts toward `DestroyPortals` in its
+  own right, a themed cavalry trait ("Portal Raider": one steppe or dragon-cavalry unit per faction captures in a
+  single uninterrupted action instead of two) would give cavalry a distinct siege-adjacent job on odd-shaped maps
+  where portals sit behind rough ground infantry cannot reach in time.
