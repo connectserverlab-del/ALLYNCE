@@ -102,3 +102,13 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-08: The Calamity Form's `Convergence` arrival was data-defined (`data/units/units.json`) but had no
+  matching case in the engine, and Fusion never triggered a Divine Entity's arrival at all — only ritual release
+  did. Fixed by routing Fusion's divine results through the same `arrivalEffect` ritual release already uses,
+  and giving `Convergence` the only reading its own fusion text supports: Memory's reveal, Torment's fear pulse
+  and Reincarnation's one revival landing together, since the card text says the Calamity Form only exists
+  because those three stood together. Proposal, not implemented — worth an owner look regardless of the bug fix:
+  the Calamity Form's `FusionDissolved` end (`tickFusions` in `core/src/fusion.ts`) currently "leaves nothing
+  behind", which now reads as the convergence's arrival mattering and its unwinding not. A small departure
+  effect — perhaps the same fear pulse in reverse, a morale boost to nearby allies as the pressure lifts — would
+  make the three-round clock feel like it costs something at both ends instead of only the one.

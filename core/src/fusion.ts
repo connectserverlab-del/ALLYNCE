@@ -1,6 +1,7 @@
 import type { Battle } from "./state.js";
 import type { UnitState, UnitDef, Role, Size, SlotName } from "./types.js";
 import { platoonMembers } from "./morale.js";
+import { arrivalEffect } from "./rituals.js";
 
 export interface FusionInput { defId?: string; roles?: Role[] }
 export interface FusionResult {
@@ -99,6 +100,8 @@ export function fuse(b: Battle, units: UnitState[], recipeId: string): UnitState
   fused.fusedFrom = units.map((u) => u.uid);
   if (r.result.rounds) fused.fusionRoundsLeft = r.result.rounds;
   b.place(fused, pos);
+  // a fused Divine Entity (the Calamity Form) arrives the same way a ritual-summoned one does
+  if (b.def(fused).divine) arrivalEffect(b, fused);
   // platoon bookkeeping: the fused unit takes the anchor's slot; other inputs leave the roster
   if (platoonId) {
     const p = b.platoon(platoonId);
