@@ -201,6 +201,14 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 /* the copy badge moved to the foot: the top of the card belongs to the name now */
 .card .cnt{position:absolute;left:8%;bottom:10%;background:#12141a;border:1px solid var(--edge-2);color:var(--parch);font-family:"JetBrains Mono";font-size:10px;padding:1px 5px;box-shadow:0 2px 5px rgba(0,0,0,.6)}
 .card.locked{opacity:.55}
+/* the sleeve/pull stepper on the Deck and Rites screens; kept off the card body so it never fights
+   the frame art for space, and stops its own clicks reaching the card's open-detail handler */
+.card .step{position:absolute;right:6%;bottom:9%;display:flex;gap:3px;cursor:default}
+.card .step button{width:18px;height:18px;padding:0;line-height:16px;font-family:"JetBrains Mono";font-size:12px;
+  background:#12141a;border:1px solid var(--edge-2);color:var(--parch);cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,.6)}
+.card .step button:hover:not(:disabled){background:#1c1f28;border-color:var(--dim)}
+.card .step button:disabled{opacity:.3;cursor:default}
+.deckerrs{border:1px solid var(--bad);color:var(--bad);font-size:12px;padding:8px 10px;margin-bottom:14px;display:flex;flex-direction:column;gap:3px;font-family:"JetBrains Mono"}
 .detail{position:fixed;inset:0;background:rgba(6,7,9,.78);display:none;align-items:center;justify-content:center;z-index:40;padding:24px}
 .detail.on{display:flex}
 .detail .box{max-width:760px;width:100%;display:grid;grid-template-columns:260px 1fr;gap:0}
@@ -355,8 +363,10 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 
 <script>__MARCH_ENGINE__</script>
 <script>__WRITS_ENGINE__</script>
+<script>__CARDS_ENGINE__</script>
 <script>
 const D = __DATA__, A = __ASSETS__;
+const C = window.CARDS;
 const $ = (id)=>document.getElementById(id);
 const cssv = (n)=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 // Accent per faction. New factions borrow the nearest existing hue rather than adding a new one,
@@ -925,23 +935,35 @@ function initMarch() {
 
 /* ---------------- deck ---------------- */
 let deckFilter='all', deckSort='stars';
+/**
+ * The main deck the page edits. It starts as the baked starter list, but from here on it is the
+ * page's own copy: sleeving or pulling a card mutates this array and nothing else, and every render
+ * re-checks it against the real engine rather than trusting the last answer.
+ */
+let deckMain=[...D.deck.main], deckSide=[...D.deck.sideIds];
+const countIn=(arr,id)=>arr.reduce((n,x)=>x===id?n+1:n,0);
+/** Re-validate the deck as it stands right now, through the same `validateDeck` a battle would use. */
+const deckValidation=()=>C.validateDeck(C.reg, { id:D.deck.id, name:D.deck.name, faction:D.deck.faction, main:deckMain, side:deckSide }, { collection:D.deck.collection });
 function renderDeck(){
-  const V=D.deck.validation, R=D.rules;
-  const cards=D.deck.cards.filter(c=> deckFilter==='all' || (deckFilter==='own'? c.faction===D.deck.faction : deckFilter===String(c.faction)))
-    .sort((a,b)=> deckSort==='stars'? a.stars-b.stars||a.name.localeCompare(b.name) : deckSort==='count'? b.count-a.count : a.name.localeCompare(b.name));
+  const V=deckValidation(), R=D.rules;
+  const shown=D.deck.pool.filter(c=> deckFilter==='all' || (deckFilter==='own'? c.faction===D.deck.faction : deckFilter===String(c.faction)))
+    .sort((a,b)=> deckSort==='stars'? a.stars-b.stars||a.name.localeCompare(b.name) : deckSort==='count'? countIn(deckMain,b.id)-countIn(deckMain,a.id) : a.name.localeCompare(b.name));
   const curve=Object.entries(V.starCurve).sort((a,b)=>+a[0]-+b[0]);
-  const maxC=Math.max(...curve.map(c=>c[1]));
-  const factions=[...new Set(D.deck.cards.map(c=>c.faction))];
+  const maxC=curve.length?Math.max(...curve.map(c=>c[1])):1;
+  const factions=[...new Set(D.deck.pool.map(c=>c.faction))];
+  const distinct=D.deck.pool.filter(c=>countIn(deckMain,c.id)>0).length;
+  const mineTotal=D.deck.pool.filter(c=>c.faction===D.deck.faction).reduce((s,c)=>s+countIn(deckMain,c.id),0);
   $('deckpane').innerHTML=`
    <div class="head">
      <div><h2 class="sc">${esc(D.deck.name)}</h2>
        <p>One hundred cards, led by the ${FACNAME[D.deck.faction]}. Stars set what a card costs to bring out: up to three summon free, four to six take one tribute from the field, seven and eight take two, nine takes three, and ten never comes from this deck at all.</p>
-       <p class="faint" style="font-size:13px">Every copy sleeved here is a card the hold physically owns. The copy limit is a ceiling, not a grant: hold one and you may run one. More copies come from the recruitment bell, or off the field on a warrant.</p></div>
+       <p class="faint" style="font-size:13px">Every copy sleeved here is a card the hold physically owns. The copy limit is a ceiling, not a grant: hold one and you may run one. More copies come from the recruitment bell, or off the field on a warrant. Click + to sleeve a copy, − to pull one.</p></div>
      <div style="text-align:right">
        <div class="mono" style="font-size:22px">${V.mainCount}<span class="faint" style="font-size:14px"> / ${R.mainDeckSize}</span></div>
-       <div class="faint" style="font-size:12px">${V.ok?'Legal for play':'Illegal'} · ${D.deck.cards.length} distinct · ${D.deck.main.filter(id=>true).length&&''}${(D.deck.cards.filter(c=>c.faction===D.deck.faction).reduce((s,c)=>s+c.count,0))} ${FACNAME[D.deck.faction]}</div>
+       <div class="faint" style="font-size:12px">${V.ok?'Legal for play':'Illegal'} · ${distinct} distinct · ${mineTotal} ${FACNAME[D.deck.faction]}</div>
      </div>
    </div>
+   ${V.errors.length?`<div class="deckerrs">${V.errors.slice(0,8).map(e=>`<div>${esc(e)}</div>`).join('')}${V.errors.length>8?`<div>… and ${V.errors.length-8} more</div>`:''}</div>`:''}
    <div style="display:flex;gap:22px;align-items:flex-end;flex-wrap:wrap;margin-bottom:14px">
      <div><div class="hd" style="margin-bottom:16px">Star curve</div>
        <div class="curve">${curve.map(([s,n])=>`<div style="height:${Math.max(4,n/maxC*44)}px"><b>${n}</b><em>${s}★</em></div>`).join('')}</div></div>
@@ -952,20 +974,37 @@ function renderDeck(){
      <div><div class="hd" style="margin-bottom:5px">Sort</div><div class="chips">
        ${[['stars','Stars'],['count','Copies'],['name','Name']].map(([k,l])=>`<button class="chip ${deckSort===k?'on':''}" data-s="${k}">${l}</button>`).join('')}</div></div>
    </div>
-   <div class="grid">${cards.map(cardHTML).join('')}</div>`;
+   <div class="grid">${shown.map(c=>cardHTML(c,countIn(deckMain,c.id))).join('')}</div>`;
   $('deckpane').querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{deckFilter=b.dataset.f;renderDeck();});
   $('deckpane').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{deckSort=b.dataset.s;renderDeck();});
-  $('deckpane').querySelectorAll('.card').forEach(c=>c.onclick=()=>openCard(D.deck.cards.find(x=>x.id===c.dataset.id)));
+  $('deckpane').querySelectorAll('.card').forEach(c=>c.onclick=(e)=>{ if(e.target.closest('.step'))return; openCard(D.deck.pool.find(x=>x.id===c.dataset.id)); });
+  $('deckpane').querySelectorAll('[data-add]').forEach(b=>b.onclick=(e)=>{e.stopPropagation();addMain(b.dataset.add);});
+  $('deckpane').querySelectorAll('[data-rm]').forEach(b=>b.onclick=(e)=>{e.stopPropagation();rmMain(b.dataset.rm);});
 }
-function cardHTML(c){
+/** Sleeve one more copy: never past what the hold owns, the card's star limit, or a hundred cards. */
+function addMain(id){
+  if(countIn(deckMain,id)>=C.effectiveCopyLimit(C.reg,id,D.deck.collection) || deckMain.length>=D.rules.mainDeckSize) return;
+  deckMain.push(id); renderDeck();
+}
+function rmMain(id){
+  const i=deckMain.indexOf(id);
+  if(i<0) return;
+  deckMain.splice(i,1); renderDeck();
+}
+function cardHTML(c,n){
   const t=A.tokens[c.id];
+  const cap=C.effectiveCopyLimit(C.reg,c.id,D.deck.collection);
   return `<div class="card" data-id="${c.id}" style="${frameVars(c)}">
     <img class="fr" src="${FRAME(c).img()}" alt="">
     <div class="pips">${starRow(c.stars)}</div>
     <div class="art">${t?`<img src="${t}" alt="">`:'<span class="none">no art yet</span>'}</div>
     <div class="nm">${esc(c.name)}</div>
     <div class="nums">${statRow(c)}</div>
-    ${c.count>1?`<div class="cnt">×${c.count}</div>`:''}
+    ${n>0?`<div class="cnt">×${n}</div>`:''}
+    <div class="step">
+      <button data-rm="${c.id}" ${n<=0?'disabled':''} aria-label="Pull a copy" title="Pull a copy">−</button>
+      <button data-add="${c.id}" ${n>=cap||deckMain.length>=D.rules.mainDeckSize?'disabled':''} aria-label="Sleeve a copy" title="${cap<=0?'None held':n>=cap?'Star limit or copies held reached':'Sleeve a copy'}">+</button>
+    </div>
   </div>`;
 }
 /**
@@ -983,7 +1022,7 @@ const formulaRow = (f)=> Object.entries(STAT_ICON).map(([k,[icon,label]])=>
 const tributeMark = (c)=> c.tribute===null ? ' · rite only' : c.tribute ? ` · tribute ${c.tribute}` : '';
 
 /** How many of this card the hold owns, so the deck screen never shows copies out of thin air. */
-const ownedOf = (id)=> (D.deck.owned||{})[id] ?? 0;
+const ownedOf = (id)=> D.deck.pool.find(c=>c.id===id)?.ownedN ?? 0;
 function openCard(c){
   if(!c)return;
   const t=A.tokens[c.id];
@@ -1014,16 +1053,19 @@ addEventListener('keydown',e=>{if(e.key==='Escape')$('detail').classList.remove(
 
 /* ---------------- rites (side deck) ---------------- */
 function renderRites(){
-  const side=D.deck.side, total=side.reduce((s,c)=>s+c.count,0);
+  const V=deckValidation();
   const ready=new Set(D.battle.playableSide.map(p=>p.id));
+  const distinct=D.deck.sidePool.filter(c=>countIn(deckSide,c.id)>0).length;
   $('ritespane').innerHTML=`
    <div class="head"><div><h2 class="sc">Rites and Convergences</h2>
-     <p>Twenty cards that never enter the draw pile. They are played straight from the side deck when the field already holds what they demand: a ritual burns your own units for their star total, a fusion locks named units together into one body. Nothing here is drawn, and nothing here is free.</p></div>
-     <div style="text-align:right"><div class="mono" style="font-size:22px">${total}<span class="faint" style="font-size:14px"> / ${D.rules.sideDeckSize}</span></div>
-     <div class="faint" style="font-size:12px">${side.length} distinct · ${ready.size} playable right now</div></div></div>
-   <div class="grid">${side.map(c=>{
-     const fc=c.faceCard, t=fc?A.tokens[fc.id]:null, isReady=ready.has(c.id);
+     <p>Twenty cards that never enter the draw pile. They are played straight from the side deck when the field already holds what they demand: a ritual burns your own units for their star total, a fusion locks named units together into one body. Nothing here is drawn, and nothing here is free. Click + to sleeve a copy, − to pull one.</p></div>
+     <div style="text-align:right"><div class="mono" style="font-size:22px">${deckSide.length}<span class="faint" style="font-size:14px"> / ${D.rules.sideDeckSize}</span></div>
+     <div class="faint" style="font-size:12px">${V.ok?'Legal for play':'Illegal'} · ${distinct} distinct · ${ready.size} playable right now</div></div></div>
+   ${V.errors.length?`<div class="deckerrs">${V.errors.slice(0,8).map(e=>`<div>${esc(e)}</div>`).join('')}${V.errors.length>8?`<div>… and ${V.errors.length-8} more</div>`:''}</div>`:''}
+   <div class="grid">${D.deck.sidePool.map(c=>{
+     const n=countIn(deckSide,c.id), fc=c.faceCard, t=fc?A.tokens[fc.id]:null, isReady=ready.has(c.id);
      const stock={ ...c, stock: c.kind==='ritual'?'RITE':'FUSION' };
+     const capReached=n>=c.copyLimit||deckSide.length>=D.rules.sideDeckSize;
      return `<div class="card ${isReady?'':'locked'}" data-rid="${c.id}" style="${frameVars(stock)}">
        <img class="fr" src="${FRAME(stock).img()}" alt="">
        <div class="pips">${starRow(c.stars)}</div>
@@ -1032,10 +1074,26 @@ function renderRites(){
        ${c.faceStats?`<div class="nums pale">${statRow(c.faceStats)}</div>`
         : c.resultFormula?`<div class="nums pale">${formulaRow(c.resultFormula)}</div>`
         :`<div class="pair pale"><span>${c.kind==='ritual'?c.starCost+'★':'materials'}</span><span class="faint">${c.kind==='ritual'?(c.theme||'any'):''}</span></div>`}
-       ${c.count>1?`<div class="cnt">×${c.count}</div>`:''}</div>`;}).join('')}</div>`;
-  $('ritespane').querySelectorAll('[data-rid]').forEach(el2=>el2.onclick=()=>openRite(side.find(x=>x.id===el2.dataset.rid)));
+       ${n>0?`<div class="cnt">×${n}</div>`:''}
+       <div class="step">
+         <button data-rrm="${c.id}" ${n<=0?'disabled':''} aria-label="Pull a copy" title="Pull a copy">−</button>
+         <button data-radd="${c.id}" ${capReached?'disabled':''} aria-label="Sleeve a copy" title="Sleeve a copy">+</button>
+       </div></div>`;}).join('')}</div>`;
+  $('ritespane').querySelectorAll('.card').forEach(c=>c.onclick=(e)=>{ if(e.target.closest('.step'))return; openRite(D.deck.sidePool.find(x=>x.id===c.dataset.rid),countIn(deckSide,c.dataset.rid)); });
+  $('ritespane').querySelectorAll('[data-radd]').forEach(b=>b.onclick=(e)=>{e.stopPropagation();addSide(b.dataset.radd);});
+  $('ritespane').querySelectorAll('[data-rrm]').forEach(b=>b.onclick=(e)=>{e.stopPropagation();rmSide(b.dataset.rrm);});
 }
-function openRite(c){
+function addSide(id){
+  const c=D.deck.sidePool.find(x=>x.id===id);
+  if(!c || countIn(deckSide,id)>=c.copyLimit || deckSide.length>=D.rules.sideDeckSize) return;
+  deckSide.push(id); renderRites();
+}
+function rmSide(id){
+  const i=deckSide.indexOf(id);
+  if(i<0) return;
+  deckSide.splice(i,1); renderRites();
+}
+function openRite(c,n){
   const rc=c.resultCard, t=rc?A.tokens[rc.id]:null;
   const ready=D.battle.playableSide.find(p=>p.id===c.id);
   const stock={ ...c, stock: c.kind==='ritual'?'RITE':'FUSION' };
@@ -1045,7 +1103,7 @@ function openRite(c){
       <div class="nm">${esc(c.name)}</div><div class="sub">${c.kind==='ritual'?'Ritual':'Fusion'}</div></div>
     <div style="position:relative"><button class="close">×</button>
       <h3 class="sc">${esc(c.name)}</h3>
-      <div class="faint" style="font-size:13px;margin-bottom:8px">${c.stars}★ ${c.kind} card · ${c.count} in the side deck</div>
+      <div class="faint" style="font-size:13px;margin-bottom:8px">${c.stars}★ ${c.kind} card · ${n} in the side deck · limit ${c.copyLimit}</div>
       <p style="font-size:14px;color:var(--dim);margin:0 0 8px">${esc(c.text)}</p>
       <div class="req">
         ${c.kind==='ritual'?`

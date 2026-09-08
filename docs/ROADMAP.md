@@ -821,3 +821,10 @@ stay separate, is an owner decision this pass is flagging rather than making.
   reaching the top of a ladder pays into the economy loop and not only into battle. Ties rank ladders'
   "mechanical weight" to the holding the same way Company-tier leadership already ties it to the battlefield,
   without touching any banner's published odds table.
+
+- 2026-09-07: Proposal — now that the Deck screen sleeves and pulls live, let it write the edited list back
+  into the holding as the deck the next match actually plays, instead of a build the sample page throws
+  away on reload. Ties the "beyond match-to-match battles" holding straight to the "100-card deck" it is
+  supposed to own, and gives a rank ladder's privileges somewhere to land: a ladder could raise what a
+  faction's own leadership lets a mixed deck field, rather than every deck answering to the same flat
+  40-card primary-faction minimum regardless of who leads it.
