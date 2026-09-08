@@ -102,3 +102,8 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-08: Proposal — when a battle hits its round limit with nothing decisive, let the side with the higher
+  average morale (`moraleSummary`) win the field instead of only a flat draw or a scenario-set default. Morale is
+  already a first-class, source-tracked system; using it to break a stalemate gives a long battle a reason
+  besides the clock, and a scenario that truly wants a coin-flip draw could still opt out by leaving
+  `roundLimitWinner` unset only when both averages tie.
