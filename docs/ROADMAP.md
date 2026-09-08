@@ -102,3 +102,9 @@ Append dated notes here. Ideas are proposals until the owner approves them.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.
+- 2026-09-08: Proposal — gate a banner's top rate behind the holding's own rank ladder: the highest star a
+  faction's banner can draw would be capped by the highest living rank the holding currently fields in that
+  faction, so pulling a named lord or a sovereign requires already having someone in the field senior enough
+  to vouch for them. Ties the rank ladders' "mechanical weight" directly to recruitment instead of leaving
+  ranks and banners as two systems that never talk to each other. Not implemented; needs a call on whether the
+  cap should be per-banner or per-faction, and whether it should ease as more of the ladder is filled.
