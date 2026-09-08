@@ -82,6 +82,8 @@ export interface UnitState {
   ap: number;
   statuses: StatusInstance[];
   cooldowns: Record<string, number>;
+  /** Temporary stat modifiers from orders, charges and card skills: cleared by their own expiry rule, not by round end. */
+  tempMods: Modifier[];
   isClone: boolean;
   cloneOf?: string;
   cloneRoundsLeft?: number;

@@ -9,7 +9,7 @@ import type { RitualCircle } from "./rituals.js";
 import type { Portal } from "./portals.js";
 import type { Capture } from "./state.js";
 
-export const SAVE_VERSION = 5;
+export const SAVE_VERSION = 6;
 
 export interface BattleSave {
   version: number; seed: number; round: number; phase: string;
@@ -34,7 +34,7 @@ export function saveBattle(b: Battle): BattleSave {
     version: SAVE_VERSION, seed: b.seed, round: b.round, phase: b.phase,
     width: b.width, height: b.height, mask: b.mask ? [...b.mask] : null,
     terrain: [...b.terrain.entries()], elevation: [...b.elevation.entries()],
-    units: [...b.units.values()].map((u) => ({ ...u, statuses: u.statuses.map((s) => ({ ...s })), cooldowns: { ...u.cooldowns } })),
+    units: [...b.units.values()].map((u) => ({ ...u, statuses: u.statuses.map((s) => ({ ...s })), cooldowns: { ...u.cooldowns }, tempMods: u.tempMods.map((m) => ({ ...m })) })),
     platoons: [...b.platoons.values()].map((p) => ({ ...p, footUids: [...p.footUids] })),
     sides: [...b.sides.values()].map((s) => ({ ...s })),
     rituals: [...b.rituals.values()].map((r) => ({ ...r, damagedThisRound: [...r.damagedThisRound], participantUids: [...r.participantUids] })),
@@ -56,7 +56,7 @@ export function loadBattle(reg: Registry, save: BattleSave): Battle {
   for (const [k, e] of save.elevation) b.elevation.set(k, e);
   let maxUid = 0;
   for (const u of save.units) {
-    const copy: UnitState = { ...u, statuses: u.statuses.map((s) => ({ ...s })), cooldowns: { ...u.cooldowns } };
+    const copy: UnitState = { ...u, statuses: u.statuses.map((s) => ({ ...s })), cooldowns: { ...u.cooldowns }, tempMods: u.tempMods.map((m) => ({ ...m })) };
     b.units.set(copy.uid, copy);
     if (copy.pos && !copy.defeated) b.occupancy.set(`${copy.pos.q},${copy.pos.r}`, copy.uid);
     const n = Number(copy.uid.replace(/\D+/g, ""));

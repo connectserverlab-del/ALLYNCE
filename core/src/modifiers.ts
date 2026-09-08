@@ -132,11 +132,12 @@ function abilityModifiers(b: Battle, u: UnitState, stat: "ATK" | "DEF", ctx: Com
   return out;
 }
 
-const TEMP = new WeakMap<UnitState, Modifier[]>();
-export function tempMods(u: UnitState): Modifier[] { return TEMP.get(u) ?? []; }
-export function addTempMod(u: UnitState, m: Modifier): void { TEMP.set(u, [...tempMods(u), m]); }
+// Stored on the unit itself (like statuses/cooldowns) rather than a side map, so a save/load round trip
+// or a fresh object built from a save carries these forward instead of losing them by object identity.
+export function tempMods(u: UnitState): Modifier[] { return u.tempMods; }
+export function addTempMod(u: UnitState, m: Modifier): void { u.tempMods = [...u.tempMods, m]; }
 export function clearTempMods(u: UnitState, predicate?: (m: Modifier) => boolean): void {
-  if (!predicate) TEMP.delete(u); else TEMP.set(u, tempMods(u).filter((m) => !predicate(m)));
+  u.tempMods = predicate ? u.tempMods.filter((m) => !predicate(m)) : [];
 }
 
 export function arcFor(b: Battle, attacker: UnitState, defender: UnitState): AttackArc {
