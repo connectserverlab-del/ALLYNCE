@@ -850,3 +850,10 @@ stay separate, is an owner decision this pass is flagging rather than making.
   movement or banner-morale privilege the commander's rank carried. Rank ladders are meant to have mechanical
   weight; a fusion shouldn't be a way to launder it away by accident. A generic recipe could instead keep the
   higher-ranked input's rank explicitly (by ladder position, not by raw stats) unless the recipe names otherwise.
+
+- 2026-09-07: Proposal — tie the Surrender win condition to rank instead of leaving it a free choice: a side may
+  only offer surrender while a unit of at least Company-leading rank (per its own faction's ladder) is standing,
+  and once the army leader is dead and no such rank survives, surrender should fire automatically rather than
+  waiting on a decision nobody left on the field can make. This gives the rank ladders — already mechanically
+  load-bearing in combat — a say in which of the three universal win conditions actually ends a battle, instead
+  of leaving Surrender as the one win condition rank never touches.
