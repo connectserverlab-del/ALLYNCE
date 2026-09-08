@@ -16,7 +16,7 @@ This repository currently holds three things:
 
 ```bash
 npm install
-npm test            # 85 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
+npm test            # 98 tests: combat math, cohesion, composition, succession, clones, rituals, portals, scenarios
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -38,7 +38,10 @@ npm run assets      # rebuilds the asset registry from the data and from disk
 - **Objectives**: eleven composable objective types, evaluated per side every End Phase.
 - **Turn machine**: Command → alternating Activation (2 AP per unit) → Objective → End, seeded RNG, serializable event log for save, replay and tests.
 - **AI**: goal-oriented utility scoring (objective urgency, kill potential, formation gain or loss, isolation risk, commander caution), a release policy that holds for synchronization until instability forces a decision, and difficulty profiles that change risk and planning depth only.
-- **Scenario**: `Threefold Invocation` fully data-defined and playable start to finish.
+- **Scenario**: `Threefold Invocation` fully data-defined and playable start to finish. Scenarios can also run on a
+  generated field: `data/scenarios/ashfall_crossing.json` pins objectives, rituals and portals by role (deployment
+  anchor, a point between two positions, a ring around one) instead of fixed coordinates, so the same file plays
+  out on a different, still-legal battlefield every seed. See `docs/mechanics.md`.
 - **A full match**: `runMatch` takes two decks, generates a field, deploys legal armies, plays every round with a card-playing AI and pays spoils into the holdings. Deterministic per seed. See `core/src/match.ts`.
 - **Save and load**: `core/src/save.ts` round-trips a battle mid-match and a holding, with a version gate.
 - **Cards and decks**: a 100-card main deck and a 20-card ritual/fusion side deck, with a 1-to-10 star scale that sets tribute cost, copy limits and ritual requirements. See `docs/cards-and-kingdom.md`.
