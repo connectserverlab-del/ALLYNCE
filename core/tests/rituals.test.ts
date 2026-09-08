@@ -1,10 +1,9 @@
-import { describe, it, expect } from "vitest";
-import { newBattle, kingdomWithResearch } from "./helpers.js";
-import { createRitual, computeRitualProgress, tickRitual, releaseRitual, disruptRitual, collapse } from "../src/rituals.js";
+import { describe, expect, it } from "vitest";
+import { kingdomWithResearch, newBattle } from "./helpers.js";
+import { assistRitual, collapse, computeRitualProgress, createRitual, disruptRitual, releaseRitual, tickRitual } from "../src/rituals.js";
 import { resolveAttack } from "../src/combat.js";
 import { hexDistance } from "../src/hex.js";
 import { applyKingdom } from "../src/kingdom.js";
-
 function setupCircles() {
   const { b, ctrl } = newBattle();
   const fast = createRitual(b, { id: "fast", side: "A", center: { q: 10, r: 5 }, radius: 1, required: 30, leaderUid: null, summonDefId: "DIV_BOSS_SOVEREIGN-OF-MEMORY", linkGroup: "g" });

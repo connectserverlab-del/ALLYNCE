@@ -157,21 +157,37 @@ export function releaseRitual(b: Battle, r: RitualCircle, opts: { synchronized: 
   return summon;
 }
 
-/** A Divine Entity's arrival changes the battlefield rather than only adding a big number. */
-function arrivalEffect(b: Battle, div: UnitState): void {
+function revealHidden(b: Battle, div: UnitState): void {
+  for (const u of b.activeUnits()) if (u.side !== div.side) b.addStatus(u, "Revealed", 0, "Sovereign of Memory");
+}
+function fearPulse(b: Battle, div: UnitState): void {
+  for (const u of b.activeUnits()) if (u.side !== div.side && b.distance(div, u) <= 6) changeMorale(b, u, -15, "Sovereign of Torment manifests");
+}
+function returnFallen(b: Battle, div: UnitState): void {
+  const fallen = [...b.units.values()].filter((u) => u.defeated && u.side === div.side && !u.isClone && !u.divine).slice(0, 2);
+  for (const f of fallen) {
+    const spot = b.adjacentUnits(div).length < 6 ? [...Array(6).keys()].map((i) => ({ q: div.pos!.q + [1, 1, 0, -1, -1, 0][i]!, r: div.pos!.r + [0, -1, -1, 0, 1, 1][i]! })).find((h) => b.isFree(h)) : undefined;
+    if (spot) { f.defeated = false; f.hp = Math.floor(b.def(f).hp / 2); f.morale = 50; b.place(f, spot); b.log("Reincarnated", { uid: f.uid }); }
+  }
+  if (div.divine) div.divine.manifestation = Math.max(0, div.divine.manifestation - 1);
+}
+
+/**
+ * A Divine Entity's arrival changes the battlefield rather than only adding a big number. Exported because a
+ * Divine Entity can also arrive by Fusion (the Calamity Form), not only by ritual release; both call this.
+ */
+export function arrivalEffect(b: Battle, div: UnitState): void {
   const kind = b.def(div).divine?.arrival;
   switch (kind) {
-    case "RevealHidden": for (const u of b.activeUnits()) if (u.side !== div.side) b.addStatus(u, "Revealed", 0, "Sovereign of Memory"); break;
-    case "FearPulse": for (const u of b.activeUnits()) if (u.side !== div.side && b.distance(div, u) <= 6) changeMorale(b, u, -15, "Sovereign of Torment manifests"); break;
-    case "ReturnFallen": {
-      const fallen = [...b.units.values()].filter((u) => u.defeated && u.side === div.side && !u.isClone && !u.divine).slice(0, 2);
-      for (const f of fallen) {
-        const spot = b.adjacentUnits(div).length < 6 ? [...Array(6).keys()].map((i) => ({ q: div.pos!.q + [1, 1, 0, -1, -1, 0][i]!, r: div.pos!.r + [0, -1, -1, 0, 1, 1][i]! })).find((h) => b.isFree(h)) : undefined;
-        if (spot) { f.defeated = false; f.hp = Math.floor(b.def(f).hp / 2); f.morale = 50; b.place(f, spot); b.log("Reincarnated", { uid: f.uid }); }
-      }
-      if (div.divine) div.divine.manifestation = Math.max(0, div.divine.manifestation - 1);
+    case "RevealHidden": revealHidden(b, div); break;
+    case "FearPulse": fearPulse(b, div); break;
+    case "ReturnFallen": returnFallen(b, div); break;
+    case "Convergence":
+      // The Calamity Form only exists because the Sovereigns of Memory, Torment and Reincarnation stood
+      // together (see FUS_CALAMITY); its arrival is the same three arrivals landing at once, not a new
+      // effect invented for it.
+      revealHidden(b, div); fearPulse(b, div); returnFallen(b, div);
       break;
-    }
   }
   b.log("DivineManifested", { uid: div.uid, def: div.defId, arrival: kind });
 }

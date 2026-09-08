@@ -1,6 +1,7 @@
 import type { Battle } from "./state.js";
 import type { UnitState, UnitDef, Role, Size, SlotName } from "./types.js";
 import { platoonMembers } from "./morale.js";
+import { arrivalEffect } from "./rituals.js";
 
 export interface FusionInput { defId?: string; roles?: Role[] }
 export interface FusionResult {
@@ -99,6 +100,8 @@ export function fuse(b: Battle, units: UnitState[], recipeId: string): UnitState
   fused.fusedFrom = units.map((u) => u.uid);
   if (r.result.rounds) fused.fusionRoundsLeft = r.result.rounds;
   b.place(fused, pos);
+  // A fused Divine Entity (the Calamity Form) arrives the same way a ritual-summoned one does.
+  if (b.def(fused).divine) arrivalEffect(b, fused);
   // The army leader may be fused whether or not it belongs to a platoon, so keep leaderUid pointing
   // at a live unit before any platoon bookkeeping, or an unplatooned leader reads as killed.
   if (side.leaderUid && units.some((u) => u.uid === side.leaderUid)) side.leaderUid = fused.uid;
