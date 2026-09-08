@@ -80,11 +80,12 @@ where they conflict.**
 3. Remaining unit art (see `pending` in `art/ASSET_MANIFEST.json`), then construction sheets for approved units.
 4. Map generator: named biomes (Ashfall, Marsh, Highland pass), scenario-authored overrides on top of generated ground,
    deployment-zone balance check (path cost between anchors within 10 percent both ways).
-5. AI: use trenches and high ground, siege positioning behind the line, cavalry flank routing, surrender when the
-   leader is dead and average morale is below 20.
-6. Army builder validation UI in the sample page (drag units into slots, live doctrine and capacity readout).
-7. Formation Sandbox mode as a page: place units, see cohesion and doctrine live.
-8. Unity port scaffolding once the owner confirms the engine target (see `docs/mechanics.md`).
+5. Army builder validation UI in the sample page (drag units into slots, live doctrine and capacity readout).
+6. Formation Sandbox mode as a page: place units, see cohesion and doctrine live.
+7. Unity port scaffolding once the owner confirms the engine target (see `docs/mechanics.md`).
+
+AI use of trenches and high ground, siege positioning behind the line, cavalry flank routing, and surrender when
+the leader is dead and morale has collapsed is done (see `docs/CHECKLIST.md` D-22) and is dropped from this list.
 
 ## Brainstorm log
 
@@ -99,6 +100,15 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   holding's resource production, and losing a region costs the buildings raised there.
 - 2026-09-05: Proposal — duplicate cards from recruitment could feed a "reforge" that raises a card's star by
   one, giving duplicates a purpose instead of dead weight.
+- 2026-09-08: Proposal — tie rank privileges to the terrain generator instead of only to combat stats, so a rank
+  ladder pays off on the uneven ground it was built for rather than only in a straight fight. Concretely: a
+  Knight rank at or above (say) Banneret ignores the Mud movement penalty picked up after rain (see the weather
+  proposal above); a Dragon Host rank at or above their mounted tier treats Mountain hexes as home ground, adding
+  a fixed ATK bonus there instead of only paying the labored-climb cost like everyone else. Every such privilege
+  would still be a single named, source-tracked modifier through the existing pipeline, same as every other rank
+  privilege today, so it costs nothing new in the modifier system, only new terrain-conditional entries in
+  `data/factions/ranks`. Worth doing once the Knight and Dragon Host ladders currently in flight land, so the privilege
+  table has real ranks to attach to.
 - 2026-09-05: Proposal — the side deck could hold a third card kind, a Stratagem, played from the side deck for a
   one-round battlefield effect (a forced march, a smokescreen, a false retreat), keeping the twenty-card cap.
 - 2026-09-05: Fusion charges as a scenario resource: defenders start with 2, attackers 1, to make late fusions a comeback tool.

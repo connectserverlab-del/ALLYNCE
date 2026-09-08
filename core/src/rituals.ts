@@ -73,9 +73,16 @@ export function tickRitual(b: Battle, r: RitualCircle): void {
     r.heldRounds++;
     r.unstableStacks++;
     const dmg = 100 * r.unstableStacks;
-    for (const uid of calc.participants) { const u = b.unit(uid); b.addStatus(u, "Unstable", 1, r.id); applyDamage(b, u, dmg, `Unstable ritual ${r.id}`); }
+    let survivors = 0;
+    for (const uid of calc.participants) {
+      const u = b.unit(uid);
+      b.addStatus(u, "Unstable", 1, r.id);
+      if (!applyDamage(b, u, dmg, `Unstable ritual ${r.id}`).defeated) survivors++;
+    }
     b.log("RitualHeld", { ritual: r.id, heldRounds: r.heldRounds, unstable: r.unstableStacks, damage: dmg });
-    if (calc.participants.length === 0) collapse(b, r, "All ritualists lost while holding");
+    // check who is actually still standing after this tick's own damage, not the pre-damage snapshot,
+    // or a hold that kills its last ritualist outright limps on as Held for one extra, undeserved round
+    if (survivors === 0) collapse(b, r, "All ritualists lost while holding");
     r.damagedThisRound.clear(); r.disruption = 0; r.assistBonus = 0;
     return;
   }
