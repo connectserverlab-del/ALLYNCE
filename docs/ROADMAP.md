@@ -32,7 +32,7 @@ where they conflict.**
 - The stronghold's buildings and walls are upgradable and change their look as they rise, which means a growing
   asset list that has to be tracked.
 
-## Done
+## Status
 
 - Rules engine (TypeScript reference, 54 tests): hex grid, terrain rules table, elevation, modifier pipeline, cohesion,
   doctrine, succession, combat, morale, effects, clones, rituals, divine entities, portals, objectives, utility AI.
@@ -314,6 +314,11 @@ where they conflict.**
 8. Army builder validation UI in the sample page (drag units into slots, live doctrine and capacity readout).
 9. Formation Sandbox mode as a page: place units, see cohesion and doctrine live.
 10. Unity port scaffolding once the owner confirms the engine target (see `docs/mechanics.md`).
+
+The done list, the priority queue and what is blocked on an owner decision now live in `docs/CHECKLIST.md`,
+which is what each implementation pass reads and claims from. Keeping that accounting in one file stops this
+one from drifting out of sync with it, as its own "Done" and "Next" sections once did. This file stays the
+place for the owner's standing intent, above, and the brainstorm log, below.
 
 ## Brainstorm log
 
@@ -623,3 +628,10 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   so a campaign region plays as continuous movement with hex combat as an event the ground itself provokes,
   rather than a separate screen the player opens by hand. Feeds the campaign map work (Q-5) once that exists;
   not a decision to make yet on its own.
+
+- 2026-09-06: Proposal — tie some ritual and fusion recipes to the terrain the irregular map generator already
+  lays down, instead of leaving them terrain-blind. A Ritual Cult sovereign invocation could require its circle
+  stand on Ruins, a Dragon Host fusion could require High Ground, a Knight fusion could require a Fortification.
+  Every battlefield is generated fresh and odd-shaped, so this would not be a fixed puzzle; it would give
+  commanders a reason to fight for a specific hex beyond a flat defence bonus, and it would put the map
+  generator's variety to work in the one system that currently ignores it.

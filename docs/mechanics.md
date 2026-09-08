@@ -30,6 +30,16 @@ Each brief section maps to a module in `core/src`. All balance values live in `d
 
 | Replay | `replay.ts` | `Replay` steps a cursor through `Battle.events` one at a time (or jumps by round/index); `describeEvent` narrates each entry by name, resolved from `Battle.units` |
 
+| Irregular battlefields | `mapgen.ts` | Seeded playable-mask carve, elevation, rivers with fords, trenches, mud, roads, ruins and fortifications; fourteen terrain types |
+| Cards and decks | `cards.ts`, `data/cards/` | 100-card main deck, 20-card ritual/fusion side deck, star scale, tribute/ritual/fusion summoning; see `docs/cards-and-kingdom.md` |
+| The holding | `kingdom.ts`, `data/kingdom/` | Buildings, research tree, recruitment banners, carry-over into battle as named modifiers; see `docs/cards-and-kingdom.md` |
+| The wanted board | `wanted.ts`, `data/missions/wanted.json` | Rotating warrants, subdue-not-kill capture, escort composition; see `docs/cards-and-kingdom.md` |
+| Fusion | `fusion.ts` | Recipe-driven merges of adjacent units, paid with Fusion charges |
+| Faction rank ladders | `ranks.ts` | Per-faction privilege ladders with mechanical traits; see `docs/samurai-ranks.md` |
+| Data loading and validation | `registry.ts`, `data.ts` | Cross-reference checks at load (units, abilities, factions, fusion recipes) so a bad reference fails before a match starts |
+| Save and load | `save.ts` | Round-trips a battle mid-match and a holding, with a version gate |
+| The match loop | `match.ts` | Connects a holding and its decks to a generated battle and back; see `docs/cards-and-kingdom.md` |
+
 ## Card skills
 
 Every card at four stars and above carries one ability it can spend an action on. Six kinds cover the roster,
