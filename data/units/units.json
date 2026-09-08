@@ -301,7 +301,7 @@
   },
   {
     "id": "KNI_COMMANDER_SOLAR-BASTION-MARSHAL",
-    "factionRank": "MARSHAL",
+    "factionRank": "BARON",
     "name": "Solar Bastion Marshal",
     "faction": "KNI",
     "themes": [
@@ -339,7 +339,7 @@
   },
   {
     "id": "KNI_SECOND_OATHBOUND-CASTELLAN",
-    "factionRank": "CASTELLAN",
+    "factionRank": "KNIGHT_BANNERET",
     "name": "Oathbound Castellan",
     "faction": "KNI",
     "themes": [
@@ -377,7 +377,7 @@
   },
   {
     "id": "KNI_ELITE_SKY-LANCE-DRAGOON",
-    "factionRank": "KNIGHT_BANNERET",
+    "factionRank": "VISCOUNT",
     "name": "Sky-Lance Dragoon",
     "faction": "KNI",
     "themes": [
@@ -695,7 +695,7 @@
   },
   {
     "id": "KNI_SUPPORT_PORTAL-KEEPER",
-    "factionRank": "SERGEANT_AT_ARMS",
+    "factionRank": "KNIGHT_ERRANT",
     "name": "Bastion Portal Keeper",
     "faction": "KNI",
     "themes": [
@@ -1013,7 +1013,7 @@
   },
   {
     "id": "KNI_SIEGE_BASTION-BOMBARD",
-    "factionRank": "SERGEANT_AT_ARMS",
+    "factionRank": "KNIGHT_ERRANT",
     "name": "Bastion Bombard",
     "faction": "KNI",
     "themes": [
@@ -1057,7 +1057,7 @@
   },
   {
     "id": "KNI_CAVALRY_DAWN-LANCER",
-    "factionRank": "KNIGHT_ERRANT",
+    "factionRank": "KNIGHT_BACHELOR",
     "name": "Dawn Lancer",
     "faction": "KNI",
     "themes": [
@@ -1521,7 +1521,7 @@
   },
   {
     "id": "KNI_KING_OATHBREAKER-KING",
-    "factionRank": "OATHBREAKER_KING",
+    "factionRank": "KING",
     "name": "Oathbreaker King",
     "faction": "KNI",
     "themes": [
@@ -4098,7 +4098,7 @@
     "summonOnly": false,
     "ai": "leader_hold",
     "stars": 6,
-    "factionRank": "MARSHAL"
+    "factionRank": "BARON"
   },
   {
     "id": "KNI_COMMANDER_VIGIL-BASTION-LORD",
@@ -4132,7 +4132,7 @@
     "summonOnly": false,
     "ai": "leader_hold",
     "stars": 5,
-    "factionRank": "MARSHAL"
+    "factionRank": "BARON"
   },
   {
     "id": "KNI_SECOND_DAWNGUARD-LIEUTENANT",
@@ -4166,7 +4166,7 @@
     "summonOnly": false,
     "ai": "leader_support",
     "stars": 4,
-    "factionRank": "CASTELLAN"
+    "factionRank": "KNIGHT_BANNERET"
   },
   {
     "id": "KNI_SECOND_OATH-SHIELD-KNIGHT",
@@ -4200,7 +4200,7 @@
     "summonOnly": false,
     "ai": "leader_support",
     "stars": 5,
-    "factionRank": "CASTELLAN"
+    "factionRank": "KNIGHT_BANNERET"
   },
   {
     "id": "KNI_ELITE_STORMBREAKER-PALADIN",

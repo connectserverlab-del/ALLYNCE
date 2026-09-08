@@ -1913,7 +1913,7 @@
       "Oath"
     ],
     "commandRadius": 2,
-    "factionRank": "CASTELLAN"
+    "factionRank": "KNIGHT_BANNERET"
   },
   {
     "id": "KNI_SUPPORT_SUN-CHAPEL-CHAPLAIN",
@@ -1991,7 +1991,7 @@
       "Oath"
     ],
     "commandRadius": 3,
-    "factionRank": "MARSHAL"
+    "factionRank": "BARON"
   },
   {
     "id": "KNI_ELITE_OATHBREAKER-HUNTER",
@@ -2151,7 +2151,7 @@
       "Oath"
     ],
     "commandRadius": 4,
-    "factionRank": "MARSHAL"
+    "factionRank": "BARON"
   },
   {
     "id": "KNI_COLOSSUS_CHAMPION-OF-THE-STANDING-WALL",
@@ -2271,7 +2271,7 @@
       "Oath"
     ],
     "commandRadius": 4,
-    "factionRank": "MARSHAL"
+    "factionRank": "BARON"
   },
   {
     "id": "KNI_GUARD_AURELANE-THE-UNBREAKABLE-DAWN",

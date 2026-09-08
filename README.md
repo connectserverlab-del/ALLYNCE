@@ -36,6 +36,8 @@ npm test            # 40 tests: combat math, cohesion, composition, succession, 
 npm test            # 160 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
 
 npm test            # combat math, cohesion, composition, succession, clones, rituals, portals, cards, the holding, marching, full scenario
+
+npm test            # 155 tests: combat math, cohesion, composition, succession, clones, rituals, portals, full scenario
 npm run sim:demo    # runs Threefold Invocation with AI on both sides and prints the round log
 npm run typecheck
 npm run assets      # rebuilds the asset registry from the data and from disk
@@ -164,6 +166,8 @@ One Ascendant may be fielded per army.
 into `data/units/expansion.json` and `data/abilities/expansion.json` through one stat model, so
 hundreds of units stay reviewable and the curves stay consistent. The hand-authored core roster in
 `units.json` is never rewritten — the registry merges both files.
+
+- **Faction rank ladders**: the Samurai ladder (nineteen ranks, Koyakunin to Shogun) drives two-sword reaction bonuses, mounted movement, command radius, banner morale, castle defense and who may lead a platoon, company or army. The Knight ladder (fourteen ranks, Page to King) reuses that same engine and adds a lance-charge ATK bonus of its own. See `docs/samurai-ranks.md` and `docs/knight-ranks.md`; Dragon Host and Ritual Cult ladders are next.
 
 ## Engine note
 

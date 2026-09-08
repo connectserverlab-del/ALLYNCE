@@ -3,7 +3,7 @@ import type { UnitState, Terrain } from "./types.js";
 import { TERRAIN_RULES } from "./types.js";
 
 export type Organization = "Patrol" | "Platoon" | "Company" | "Battalion" | "Army";
-export interface RankPrivileges { twoSwords?: boolean; mounted?: "war" | "always"; commandRadiusBonus?: number; banner?: boolean; castle?: boolean; supreme?: boolean }
+export interface RankPrivileges { twoSwords?: boolean; mounted?: "war" | "always"; commandRadiusBonus?: number; banner?: boolean; castle?: boolean; chargeBonus?: number; supreme?: boolean }
 export interface RankDef { id: string; title: string; tier: number; description: string; koku?: [number, number | null]; privileges: RankPrivileges; canLead: Organization[]; movement?: MovementTraits }
 export interface RankLadder { faction: string; notes?: string; ranks: RankDef[]; privilegeRules: Record<string, string> }
 
@@ -48,6 +48,9 @@ export function terrainCostFor(b: Battle, u: UnitState, t: Terrain): number | nu
   if (t === "Mountain" && traits.climber && cost !== null) cost = Math.min(cost, 3);
   return cost;
 }
+
+/** Hexes a unit must have advanced this activation, without the charge breaking, for a rank's chargeBonus to apply. */
+export const CHARGE_BONUS_MIN_HEXES = 2;
 
 export interface MovementTraits { canopy?: boolean; surefoot?: boolean; waterwalk?: boolean; climber?: boolean; ignoreZoc?: boolean; passAllies?: boolean; hideOnForestStop?: boolean; bonusMov?: number; shadowStep?: number }
 export function movementTraits(b: Battle, u: UnitState): MovementTraits { return (rankOf(b, u)?.movement ?? {}) as MovementTraits; }
