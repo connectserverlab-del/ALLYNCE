@@ -1341,3 +1341,9 @@ passes; this one doesn't resolve it either.
   reused or peels off elsewhere; that promotion could read rank instead, so the highest-ranked member left in a
   Samurai or Knight column takes over the same way a promoted second inherits command in the Command Phase. Would
   give the rank ladders another place their mechanical weight actually shows.
+
+- 2026-09-08: Proposal — when a battle hits its round limit with nothing decisive, let the side with the higher
+  average morale (`moraleSummary`) win the field instead of only a flat draw or a scenario-set default. Morale is
+  already a first-class, source-tracked system; using it to break a stalemate gives a long battle a reason
+  besides the clock, and a scenario that truly wants a coin-flip draw could still opt out by leaving
+  `roundLimitWinner` unset only when both averages tie.
