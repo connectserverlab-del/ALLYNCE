@@ -314,3 +314,8 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   each. Only Spiral Warband has a cavalry card today; none of the seven has a siege piece. Without one, a
   division leading its own deck still has to leave two of the battlefield roles the brief calls for — cannons
   and cavalry that fit the theme — entirely empty.
+
+- 2026-09-05: Proposal — scale a warrant's escort by the target's rank on its own faction ladder rather than
+  star count alone, so a Samurai target standing at Ashigaru carries a lighter escort than one standing at
+  Hatamoto. Rank already carries mechanical weight in a platoon; the wanted board is the one place it still
+  reads as flavour text.

@@ -162,6 +162,22 @@ export function resolveContract(reg: Registry, k: KingdomState, contract: Contra
 /** A fresh warrant ledger for a new holding. */
 export function newWantedState(): WantedState { return { cycle: 0, accepted: [], completed: [] }; }
 
+export interface DeckGap { unitId: string; name: string; stars: number; need: number; owned: number }
+export interface ContractRelief { unitId: string; need: number; owned: number; pays: number; closesFully: boolean }
+
+/**
+ * Whether filling a warrant would actually help this deck, and by how much. The board posts by
+ * shortfall already, but a player reading five warrants still has to work out which of them the
+ * current deck is actually asking for; this answers that directly instead of making them cross-reference
+ * the gap list themselves. `null` means the target is not one of this deck's gaps at all — the warrant
+ * may still be worth taking for a future deck, but this one has enough copies already.
+ */
+export function contractRelief(contract: Pick<Contract, "targetId" | "copies">, gaps: DeckGap[]): ContractRelief | null {
+  const gap = gaps.find((g) => g.unitId === contract.targetId);
+  if (!gap) return null;
+  return { unitId: gap.unitId, need: gap.need, owned: gap.owned, pays: contract.copies, closesFully: contract.copies >= gap.need };
+}
+
 /**
  * Everything the deck asks for that the collection cannot cover, worst gap first. The deck screen
  * uses this to tell a player what to go and capture.
