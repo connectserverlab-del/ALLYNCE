@@ -3,41 +3,38 @@
 The single source of truth for what is left to build, and the queue the hourly implementation pass works from.
 Every item has a stable id. **One pass takes one item.**
 
-## Integration is now the bottleneck, not the queue (2026-09-08)
+## All work goes through one branch (2026-09-08)
 
-As of this pass, every `Q-` id in the Queue below already has a matching open, correctly-named claiming PR —
-several since 2026-09-05 (`Q-16` is PR #12, `Q-9` is PR #14, `Q-2` alone has three: PR #3, #46, #70). The
-claim protocol is doing its job: nothing here is actually gridlocked by false claims. The real problem is
-upstream of the queue: **none of the ~75 open pull requests have merged since the project's first PR.** That
-includes PR #2, `claude/dragon-art-style-examples-qdjeb6` itself against `main` — the actual trunk this
-checklist and roadmap live on. Until an owner (or a pass explicitly asked to merge) starts landing PRs,
-`main` stays frozen at its first commit and every future automated pass will legitimately hit the "everything
-claimed" fallback and can only add polish, because the queue genuinely has been worked through once already.
+An earlier pass diagnosed the real bottleneck correctly: the queue was never gridlocked, but none of the
+~85 open pull requests had merged, so `main` stayed frozen at its first commit and every hour added another
+branch. Passes that checked out `main` saw a nearly-empty project — `main` has no `docs/AGENT_BRIEF.md` — and
+reimplemented finished features from scratch. `Q-2` was built four separate times that way; the three
+universal win conditions three times; the rank ladders twice.
 
-A second, smaller cost of the backlog: at least a handful of open PRs targeted `main` directly instead of this
-branch and reimplemented features already Done here from scratch (three win conditions: PR #33, #69, #76;
-rank ladders: PR #8, #72; siege/cavalry rosters: PR #31, #53) — because `main` lacks `docs/AGENT_BRIEF.md` and
-looks like a nearly-empty project to a pass that only checks out `main`. Merging PR #2 first would remove that
-trap along with everything else.
+That is resolved. All eighty-five branches are merged into **`claude/merge-85-prs-ec3ca0`, pull request #88**,
+and that branch is now where work happens.
 
-Recommendation for the owner: triage and merge (or close as superseded) a batch of the open PRs, starting with
-PR #2, before scheduling more automated passes — otherwise the pile keeps growing every hour with more
-duplicate risk and nothing new reaches `main`.
+**Every pass branches from, and pushes to, `claude/merge-85-prs-ec3ca0`. No pass opens a new pull request.**
+See `docs/AGENT_BRIEF.md` for the mechanics. Consolidating those branches cost more than the features in them
+did, and the duplication was not carelessness — it was the predictable result of parallel passes that could
+not see each other's work. One branch removes the cause.
 
 ## How a pass claims an item without colliding with another pass
 
-Passes run in fresh sessions and cannot see each other, so claiming happens through GitHub, which they can all read:
+Passes run in fresh sessions and cannot see each other, so claiming happens through what they can all read:
+the integration branch's commit log, and open pull requests.
 
-1. List open pull requests and remote branches matching `agent/*`.
-2. An item is **claimed** if its id appears in an open PR title, an open PR body, or a branch name. Treat claimed
-   items as taken even if the PR is a draft.
+1. Fetch `claude/merge-85-prs-ec3ca0` and read its recent commit subjects.
+2. An item is **claimed** if its id appears in a commit subject on that branch, or in an open pull request
+   title or body. Treat claimed items as taken even if the pull request is a draft.
 3. Take the highest unclaimed item that is not blocked on an owner decision.
-4. Name the branch `agent/<yyyy-mm-dd>-<ITEM-ID>` and put the item id in the PR title. That is what makes the
-   claim visible to the next pass.
-5. When the work merges, move the item to Done in this file in the same PR.
+4. Put the item id in your commit subject. On a shared branch that is what makes the claim visible.
+5. Move the item to Done in this file in the same commit.
+6. Pull before you push (`git pull --rebase=false origin claude/merge-85-prs-ec3ca0`) so a concurrent pass is
+   merged rather than clobbered. Never force-push the integration branch.
 
 If every item is claimed or blocked, do not invent work: improve tests, tighten docs, or sharpen the AI, and say
-so in the PR.
+so in the commit.
 
 ## Running two passes at once
 
