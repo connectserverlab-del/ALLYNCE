@@ -54,15 +54,20 @@ step("browser checks", () => run(["run", "test:ui"]));
 
 /* Roster invariants worth watching as content grows. */
 step("roster invariants", () => {
-  const units = [
-    ...JSON.parse(readFileSync(resolve(ROOT, "data/units/units.json"), "utf8")),
-    ...JSON.parse(readFileSync(resolve(ROOT, "data/units/expansion.json"), "utf8")),
-  ];
+  const core = JSON.parse(readFileSync(resolve(ROOT, "data/units/units.json"), "utf8"));
+  const expansion = JSON.parse(readFileSync(resolve(ROOT, "data/units/expansion.json"), "utf8"));
+  const units = [...core, ...expansion];
   const problems = [];
-  const ten = units.filter((u) => u.stars === 10);
+  // The Ascendant convention (an explicit one-copy limit and a named signature) is the expansion's.
+  // The hand-authored ten-stars predate it and hold the same line through `unique`, which
+  // composition already enforces, so each roster is checked against its own rule.
+  const ten = expansion.filter((u) => u.stars === 10);
   for (const u of ten) {
     if (u.uniqueLimit !== 1) problems.push(`${u.id}: ten-star without a one-copy limit`);
     if (!u.signature) problems.push(`${u.id}: ten-star without a signature ability`);
+  }
+  for (const u of core.filter((u) => u.stars === 10)) {
+    if (!u.unique) problems.push(`${u.id}: hand-authored ten-star that is not unique`);
   }
   for (const a of units.filter((u) => u.faction === "ANG")) {
     if (!a.flying) problems.push(`${a.id}: angel that does not fly`);

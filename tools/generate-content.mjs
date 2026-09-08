@@ -28,12 +28,6 @@ const NEW_FACTIONS = {
     platoonOrder: "ORD_CREEPING_BRIAR", passiveDoctrine: "DOC_THORN_TITHE",
     weakness: "Slow to reposition; loses its terrain advantage on open, burned or flooded ground.",
   },
-  ANG: {
-    id: "ANG", name: "Angelic Host", identity: "Airborne judgement in a fixed hierarchy",
-    palette: ["bleached gold", "cold white", "deep vermilion"], primaryTheme: "Angelic",
-    platoonOrder: "ORD_CHOIR_ASCENDANT", passiveDoctrine: "DOC_HOST_ALOFT",
-    weakness: "Every unit flies, so anti-air ground and binding rituals hit the whole army at once. Archangels are one copy each.",
-  },
   STM: {
     id: "STM", name: "Stormbound Clan", identity: "A bloodline of warriors and stormcallers",
     palette: ["storm violet", "wet slate", "fulgurite white"], primaryTheme: "Storm",
@@ -68,6 +62,31 @@ const units = [
   ...DIVINE,
 ];
 
+/* ------------------------------------------------------- faction rank ladders */
+/**
+ * A Commander or Second in a faction that has a rank ladder must hold a rung that may lead a
+ * Platoon, or `validateArmy` rejects every platoon it leads. The expansion roster carries no
+ * ranks of its own, so each unit takes the rung its hand-authored counterpart already holds.
+ */
+function assignFactionRanks(units) {
+  const core = JSON.parse(readFileSync(resolve(DATA, "units/units.json"), "utf8"));
+  const conv = new Map();
+  for (const u of core) {
+    for (const role of ["Commander", "Second"]) {
+      const key = `${u.faction}:${role}`;
+      if (u.roles.includes(role) && u.factionRank && !conv.has(key)) conv.set(key, u.factionRank);
+    }
+  }
+  for (const u of units) {
+    if (u.factionRank) continue;
+    for (const role of ["Commander", "Second"]) {
+      const rank = conv.get(`${u.faction}:${role}`);
+      if (u.roles.includes(role) && rank) { u.factionRank = rank; break; }
+    }
+  }
+}
+assignFactionRanks(units);
+
 /* ------------------------------------------------------------------ checks */
 const core = JSON.parse(readFileSync(resolve(DATA, "units/units.json"), "utf8"));
 const coreAbilities = JSON.parse(readFileSync(resolve(DATA, "abilities/abilities.json"), "utf8"));
@@ -97,6 +116,10 @@ if (problems.length) {
 }
 
 /* ------------------------------------------------------------------- write */
+// This file is both an input and an output, so the expansion must declare only faction ids
+// nothing else owns. `ANG` is deliberately absent: the Choir Militant division is hand-authored
+// in data/factions/factions.json, with the platoon order and doctrine core/tests/divisions.test.ts
+// asserts, and the expansion's angels fly under that banner rather than replacing it.
 const merged = { ...factions, ...NEW_FACTIONS };
 writeFileSync(resolve(DATA, "units/expansion.json"), JSON.stringify(units, null, 2) + "\n");
 writeFileSync(resolve(DATA, "abilities/expansion.json"), JSON.stringify(EXPANSION_ABILITIES, null, 2) + "\n");

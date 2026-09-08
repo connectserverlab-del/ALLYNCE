@@ -50,8 +50,10 @@ export const SHARED = [
     "Move up to 3 hexes ignoring zone of control, then become Hidden.", { apCost: 1, cooldown: 3 }),
   A("ABL_X_POISONED_EDGE", "Poisoned Edge", "Passive", { kind: "Bleed", damage: 150, rounds: 2 },
     "Wounds inflicted by this unit deal a further 150 damage at the end of each of the next 2 rounds."),
-  A("ABL_X_FALSE_TRAIL", "False Trail", "Active", { kind: "SpawnClones", count: 1, duration: 2, atkPercent: 30, hp: 1 },
-    "Leave one decoy for two rounds; it has 30% ATK, 1 HP, and cannot capture.", { apCost: 1, cooldown: 3 }),
+  // Copies divide the body rather than adding to it (D-21), so a clone effect carries no
+  // atkPercent or hp of its own: the share is derived from the count.
+  A("ABL_X_FALSE_TRAIL", "False Trail", "Active", { kind: "SpawnClones", count: 1, duration: 2 },
+    "Leave one decoy for two rounds; it takes an equal share of your attack and defence, and cannot capture.", { apCost: 1, cooldown: 3 }),
   A("ABL_X_THROAT_OF_NIGHT", "Throat of Night", "Passive", { kind: "ConditionalAtk", atk: 250, vsIsolated: true },
     "+250 ATK against an enemy with no adjacent allies."),
 
@@ -146,8 +148,8 @@ export const SIGNATURES = [
     "One draw, three hexes, nine hundred damage along the line."),
   SIG("ABL_S_MOONLESS_VERDICT", "Moonless Verdict", { kind: "Execute", threshold: 40, damage: 1200, range: 2 },
     "1200 damage to one enemy within 2; an enemy already below 40% hit points is removed outright."),
-  SIG("ABL_S_HUNDRED_SHADOWS", "Hundred Shadows", { kind: "SpawnClones", count: 4, duration: 3, atkPercent: 60, hp: 1 },
-    "Four shadows for three rounds at 60% ATK; they cannot capture and grant no cohesion."),
+  SIG("ABL_S_HUNDRED_SHADOWS", "Hundred Shadows", { kind: "SpawnClones", count: 4, duration: 3 },
+    "Four shadows for three rounds; they cannot capture, grant no cohesion, and each takes an equal share of your attack and defence."),
   SIG("ABL_S_UNBREAKABLE_DAWN", "Unbreakable Dawn", { kind: "Ward", def: 900, rounds: 2, radius: 2 },
     "The wall holds: this unit and allies within 2 gain +900 DEF for two rounds."),
   SIG("ABL_S_LANCE_OF_THE_LAST_KING", "Lance of the Last King", { kind: "ChargeBonus", minHexesMoved: 3, atk: 1500 },

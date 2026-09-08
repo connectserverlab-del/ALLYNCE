@@ -3890,8 +3890,7 @@
     "keywords": [
       "Channeling"
     ],
-    "commandRadius": 2,
-    "factionRank": "GRAND_RITUALIST"
+    "commandRadius": 2
   },
   {
     "id": "RIT_SUPPORT_HOLLOW-CHOIR",
@@ -4092,8 +4091,7 @@
       "language": 6,
       "affinity": 5,
       "channeling": 6
-    },
-    "factionRank": "GRAND_RITUALIST"
+    }
   },
   {
     "id": "RIT_MAGE_THE-UNFINISHED-SENTENCE",

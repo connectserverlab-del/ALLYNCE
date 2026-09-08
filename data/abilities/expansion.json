@@ -653,7 +653,7 @@
       "count": 4,
       "duration": 3
     },
-    "text": "Four shadows for three rounds at 60% ATK; they cannot capture and grant no cohesion; each copy takes an equal share of your attack and defence.",
+    "text": "Four shadows for three rounds; they cannot capture, grant no cohesion, and each takes an equal share of your attack and defence.",
     "apCost": 1,
     "cooldown": 4
   },
