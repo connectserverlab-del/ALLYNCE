@@ -93,3 +93,4 @@ Three things bite:
 | `D-33` | Stratagem cards as a third side-deck kind: Forced March, Smokescreen and False Retreat, each a one-round effect on a targeted platoon or hex, validated and spent through `checkStratagem`/`playStratagem` |
 | `D-34` | Escort composition for warrants: a sworn company's target is escorted by its own company, not a borrowed host starter deck |
 | `D-35` | AI splitting as a trade: only spawns copies when a crowd of enemies is closing in, never against a single hard hitter, and treats an enemy copy as a hunt-worthy kill that shrinks the original |
+| `D-36` | AI now spends all six card skills, not only clones, charges and duels: self and band attack buffs before a swing, haste to close ground its base movement cannot, and area debuffs on whoever is already close enough to hit back |

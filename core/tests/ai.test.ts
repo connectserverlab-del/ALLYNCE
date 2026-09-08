@@ -1,10 +1,10 @@
-import { describe, it, expect } from "vitest";
-import { newBattle, deploy, KNI, SAM, blob } from "./helpers.js";
-import { runAiActivation, shouldSurrender, maybeSurrender, DIFFICULTY } from "../src/ai.js";
+import { describe, expect, it } from "vitest";
+import { blob, deploy, KNI, newBattle, reg, SAM } from "./helpers.js";
+import { DIFFICULTY, maybeSurrender, runAiActivation, shouldSurrender } from "../src/ai.js";
 import { computeStat } from "../src/modifiers.js";
 import { defeat } from "../src/combat.js";
 import { doctrineState } from "../src/composition.js";
-import { hexDistance, hexKey, hexRing, attackArc } from "../src/hex.js";
+import { attackArc, hexDistance, hexKey, hexRing } from "../src/hex.js";
 import type { Battle } from "../src/state.js";
 import type { Hex } from "../src/hex.js";
 
@@ -350,3 +350,4 @@ describe("AI treats splitting as a trade, not a free gain", () => {
     expect(b.events.some((e) => e.type === "SplitShareReclaimed")).toBe(true);
   });
 });
+

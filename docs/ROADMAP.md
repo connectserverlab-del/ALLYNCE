@@ -156,6 +156,10 @@ where they conflict.**
   ground or baiting), never against a single hard hitter, and treats an enemy's own copy as a hunt-worthy
   kill that shrinks the original back down.
 
+- The AI now spends all six card skills instead of leaning on clones, charges and duels alone: a self or band
+  attack buff before it swings, haste when its own goal sits farther off than its base movement reaches, and
+  an area debuff on whoever is already close enough to hit back, win or lose the exchange this round.
+
 ## Next, in priority order
 
 1. **Owner review of the redesigned interface and the new maps.** The earlier three-quarter map paintings are
@@ -256,3 +260,7 @@ Append dated notes here. Ideas are proposals until the owner approves them.
   every Shinobi within 3 hexes once it has taken its first hit after splitting. Splitting already trades stat
   weight for presence; this would give one faction's rank ladder a mechanical answer that turns the hunt for
   the original from a computed tiebreaker into a visible, playable duel.
+
+- 2026-09-05: Proposal — give a high Samurai or Knight rank a privilege that halves a self-sacrifice skill's
+  health cost for anyone it commands within its radius. The rank ladders are meant to carry mechanical weight
+  beyond morale and succession, and the six card skills are a lever nothing in a rank ladder reaches yet.
