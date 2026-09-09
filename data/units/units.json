@@ -763,7 +763,9 @@
     "passives": [
       "ABL_BREACHING_VOLLEY"
     ],
-    "actives": [],
+    "actives": [
+      "ABL_SIEGE_SETUP"
+    ],
     "slots": [
       "Specialist"
     ],
@@ -773,7 +775,8 @@
     "art": {
       "concept": "art/samples/SAM_SIEGE_CINDERTHROAT-BATTERY_CONCEPT_V01.jpg",
       "cutout": "art/samples/SAM_SIEGE_CINDERTHROAT-BATTERY_CUTOUT_V01.png"
-    }
+    },
+    "stars": 5
   },
   {
     "id": "SHI_SIEGE_HOLLOW-REED-MORTAR",
@@ -811,7 +814,8 @@
     "art": {
       "concept": "art/samples/SHI_SIEGE_HOLLOW-REED-MORTAR_CONCEPT_V01.jpg",
       "cutout": "art/samples/SHI_SIEGE_HOLLOW-REED-MORTAR_CUTOUT_V01.png"
-    }
+    },
+    "stars": 5
   },
   {
     "id": "KNI_SIEGE_WARDENS-BOMBARD",
@@ -837,7 +841,9 @@
     "passives": [
       "ABL_BREACHING_VOLLEY"
     ],
-    "actives": [],
+    "actives": [
+      "ABL_SIEGE_SETUP"
+    ],
     "slots": [
       "Specialist"
     ],
@@ -847,7 +853,8 @@
     "art": {
       "concept": "art/samples/KNI_SIEGE_WARDENS-BOMBARD_CONCEPT_V01.jpg",
       "cutout": "art/samples/KNI_SIEGE_WARDENS-BOMBARD_CUTOUT_V01.png"
-    }
+    },
+    "stars": 5
   },
   {
     "id": "DRG_SIEGE_BONEFORGE-BALLISTA",
@@ -873,7 +880,9 @@
     "passives": [
       "ABL_BREACHING_VOLLEY"
     ],
-    "actives": [],
+    "actives": [
+      "ABL_SIEGE_SETUP"
+    ],
     "slots": [
       "Specialist"
     ],
@@ -883,7 +892,8 @@
     "art": {
       "concept": "art/samples/DRG_SIEGE_BONEFORGE-BALLISTA_CONCEPT_V01.jpg",
       "cutout": "art/samples/DRG_SIEGE_BONEFORGE-BALLISTA_CUTOUT_V01.png"
-    }
+    },
+    "stars": 5
   },
   {
     "id": "SAM_CAVALRY_CHARWIND-LANCERS",
@@ -919,7 +929,8 @@
     "art": {
       "concept": "art/samples/SAM_CAVALRY_CHARWIND-LANCERS_CONCEPT_V01.jpg",
       "cutout": "art/samples/SAM_CAVALRY_CHARWIND-LANCERS_CUTOUT_V01.png"
-    }
+    },
+    "stars": 6
   },
   {
     "id": "SHI_CAVALRY_REED-MARSH-OUTRIDERS",
@@ -955,7 +966,8 @@
     "art": {
       "concept": "art/samples/SHI_CAVALRY_REED-MARSH-OUTRIDERS_CONCEPT_V01.jpg",
       "cutout": "art/samples/SHI_CAVALRY_REED-MARSH-OUTRIDERS_CUTOUT_V01.png"
-    }
+    },
+    "stars": 6
   },
   {
     "id": "DIV_BOSS_SOVEREIGN-OF-MEMORY",

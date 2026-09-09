@@ -900,3 +900,36 @@ passes; this one doesn't resolve it either.
   whose threshold came from one population and is later pointed at another deserves the same suspicion: the
   roster invariants and the 16 MB page budget are both numbers of that kind, and neither has been re-derived
   since the content around them changed.
+
+- 2026-09-09: both numbers named above have now been re-derived, and neither turned out to be a threshold
+  problem. The 16 MB page budget is not a picked number at all — it is the artifact ceiling the single-page
+  build has to fit under, so there was nothing to re-derive. What was wrong is that nothing ever ran it:
+  `build:standalone` was in neither `npm run check` nor CI, so the refusal guarded a command a person had to
+  remember to type. Built properly the page is 9.07 MB, 57% of the ceiling, with real headroom. Built with
+  Playwright missing it is 28.57 MB, because the thumbnail step degrades by embedding the print-resolution
+  plates instead — the ceiling catches that, and no one was there to see it. `npm run check` now runs the
+  build, and the over-budget message names which of the two faults it is, since they want opposite fixes.
+
+- 2026-09-09: the roster invariants re-derived differently again. None of them is dead — they examine 31
+  Ascendants, 7 hand-authored ten-stars, 37 angels and 9 archangels — so the suspicion that they had stopped
+  binding was wrong. The hole was scope. `stars` is optional on the unit type and every consumer in the engine
+  reads it as `stars ?? 1`, so a unit with no star is not an error anywhere; it is silently a one-star. Six
+  core units had none. That put four siege pieces and two unique Elite riders, 1900 to 2300 attack, into the
+  Muster Call's one-star pool — weight 34, the most common roll on the cheapest banner — against a real
+  one-star ceiling of 1100 attack. Six of that pool's thirty entries were ringers and nothing failed.
+  The invariant now requires an explicit star of every unit, and the six were given one derived from the
+  roster's own peer bands rather than chosen: the four siege Specialists sit at capacity cost 8-9 and 1900-2050
+  attack, which is the 5-star siege band almost exactly (Ember Ozutsu Battery, same faction and rank, is cost 9
+  / 1900), and the two cavalry sit at cost 11 between the 5-star Dawn Lancer and the 7-star Sky-Lance Dragoon
+  with attack at the 6-star ceiling, so 5 and 6. Those two figures are the owner's to confirm; the derivation
+  is above so it can be argued with.
+
+- 2026-09-09: promoting those six exposed a second gap the same default had been hiding. `skills.test.ts`
+  requires every unit at four stars and above to carry an active it can spend an action on, and three of the
+  newly-promoted siege pieces carried none — invisible while they were nominally one-stars. They were not
+  added to the awaiting-skill register, because the roster already answers the question: every other 5-star
+  siege piece in the game carries Set Up, including Ember Ozutsu Battery and Bastion Bombard, the same-faction
+  pieces at the same star. They were given it. The general point is worth keeping separate from the cut-out
+  one: a mis-scoped threshold lets bad data through a check, but a `?? default` makes missing data
+  indistinguishable from present data, so there is no check to get through. Both were invisible for the same
+  reason and only one of them looks like a threshold.

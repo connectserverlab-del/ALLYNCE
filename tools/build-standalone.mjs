@@ -116,7 +116,8 @@ const units = [...data["units/units.json"], ...data["units/expansion.json"]];
 const plates = [...new Set(units.map((u) => u.art?.concept).filter(Boolean))]
   .filter((p) => { try { readFileSync(resolve(ROOT, p)); return true; } catch { return false; } });
 
-const art = await buildThumbnails(plates, { log: console.log })
+const thumbs = await buildThumbnails(plates, { log: console.log });
+const art = thumbs
   ?? Object.fromEntries(plates.map((p) =>
     [p, `data:image/jpeg;base64,${readFileSync(resolve(ROOT, p)).toString("base64")}`]));
 
@@ -172,9 +173,18 @@ mkdirSync(resolve(ROOT, "dist"), { recursive: true });
 const target = resolve(ROOT, artifactMode ? "dist/allynce.artifact.html" : "dist/allynce.html");
 writeFileSync(target, out);
 
-console.log(`${relative(ROOT, target)}  ${(out.length / 1_048_576).toFixed(2)} MB`);
-console.log(`  ${ordered.length} modules, ${units.length} units, ${Object.keys(art).length} painted plates`);
-if (out.length > 16 * 1_048_576) {
-  console.error("  ! over the 16 MB single-page budget — the plates need a smaller thumbnail size");
+const BUDGET = 16 * 1_048_576;
+console.log(`${relative(ROOT, target)}  ${(out.length / 1_048_576).toFixed(2)} MB`
+  + `  (${Math.round((out.length / BUDGET) * 100)}% of the 16 MB budget)`);
+console.log(`  ${ordered.length} modules, ${units.length} units, ${Object.keys(art).length} painted plates`
+  + `${thumbs ? "" : " — ORIGINALS, not thumbnails"}`);
+if (out.length > BUDGET) {
+  // Two different faults land here and they want opposite fixes, so say which one this is: without
+  // thumbnails the page is carrying print-resolution plates and the answer is to make thumbnailing
+  // work, not to shrink a thumbnail that was never made.
+  console.error(thumbs
+    ? "  ! over the 16 MB single-page budget — the plates need a smaller thumbnail size"
+    : "  ! over the 16 MB single-page budget because thumbnailing did not run and the originals were"
+      + " embedded — install the Playwright browser (or set PLAYWRIGHT_CHROMIUM_PATH) and build again");
   process.exit(1);
 }
