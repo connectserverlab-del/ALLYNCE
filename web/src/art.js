@@ -223,15 +223,36 @@ export function crest(factionId, size = 22) {
     ${arms}<circle cx="16" cy="16" r="3.4" fill="${mid}"/></svg>`;
 }
 
-/** Painted concept art when the unit has one, otherwise the generated portrait. */
-export function artFor(unit, opts) {
-  // The standalone build inlines the painted plates as data URIs keyed by their path.
+/**
+ * The `src` for a unit's painted plate, or null if it has none.
+ *
+ * Every screen that draws a unit has to go through here. The standalone build inlines the
+ * plates as data URIs keyed by their repository path, so a caller that reaches for
+ * `unit.art.concept` itself is correct when served from disk and silently broken in the
+ * single-file build — which is exactly what the battle board's tokens did: they requested
+ * six files that build has no external access to and drew nothing at all, leaving painted
+ * units looking worse than unpainted ones, which at least fall back to initials.
+ */
+export function plateFor(unit, { prefer = "cutout", prefix = "../" } = {}) {
+  const order = prefer === "concept"
+    ? [unit.art?.concept, unit.art?.cutout]
+    : [unit.art?.cutout, unit.art?.concept];
   const inlined = globalThis.__ALLYNCE_ART__;
+  // Cards have always shown the cutout when served from disk and the concept when inlined,
+  // because the build only inlines concepts; the board wants the concept either way, since a
+  // cutout is a transparent silhouette and a token has no card behind it. Both orders are kept
+  // rather than unified, so this refactor changes no screen's appearance.
   const painted = inlined
     ? inlined[unit.art?.concept] ?? inlined[unit.art?.cutout]
-    : unit.art?.cutout ?? unit.art?.concept;
-  if (painted) {
-    const src = painted.startsWith("data:") ? painted : `../${painted}`;
+    : order.find(Boolean);
+  if (!painted) return null;
+  return painted.startsWith("data:") ? painted : `${prefix}${painted}`;
+}
+
+/** Painted concept art when the unit has one, otherwise the generated portrait. */
+export function artFor(unit, opts) {
+  const src = plateFor(unit);
+  if (src) {
     return `<img class="card-art-img" src="${src}" alt="${escapeAttr(unit.name)}" loading="lazy"
       onerror="this.replaceWith(document.createRange().createContextualFragment(this.dataset.fallback))"
       data-fallback="${escapeAttr(portrait(unit, opts))}">`;

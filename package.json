@@ -16,7 +16,8 @@
     "test:ui": "node tools/ui-smoke.mjs",
     "check": "node tools/health-check.mjs",
     "build:standalone": "node tools/build-standalone.mjs",
-    "audit:art": "python3 scripts/audit-cutouts.py"
+    "audit:art": "python3 scripts/audit-cutouts.py",
+    "test:standalone": "node tools/standalone-smoke.mjs"
   },
   "repository": {
     "type": "git",
