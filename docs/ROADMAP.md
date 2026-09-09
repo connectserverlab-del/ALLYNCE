@@ -892,3 +892,11 @@ passes; this one doesn't resolve it either.
   data question rather than a drawing one. Proposal: if the boundary is wanted, `layout` gains an explicit
   perimeter rather than the city view inferring one, so the engine can eventually decide what expanding the
   hold means.
+
+- 2026-09-09: the cut-out audit proposal above is done — `npm run check` runs it over all five groups of cut
+  assets. The part worth carrying forward is why one threshold was not enough. The old floor was picked from
+  unit cutouts, where a lone figure on white leaves roughly a fifth to two thirds of its frame standing, and it
+  was then applied to buildings, which fill far more of theirs. Eight destroyed plates passed it. Any check
+  whose threshold came from one population and is later pointed at another deserves the same suspicion: the
+  roster invariants and the 16 MB page budget are both numbers of that kind, and neither has been re-derived
+  since the content around them changed.

@@ -5,8 +5,8 @@
  *   npm run check
  *
  * Runs everything that can silently rot: generated data drifting from the authored rosters,
- * the type check, the rules tests and the browser checks. Intended for CI and for the
- * scheduled routine; safe to run locally at any time.
+ * the type check, the rules tests, the browser checks and the cut-out art audit. Intended for CI
+ * and for the scheduled routine; safe to run locally at any time.
  */
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
@@ -51,6 +51,12 @@ step("generated data is in sync with tools/content", () => {
 step("typecheck", () => run(["run", "typecheck"]));
 step("rules tests", () => run(["test"]));
 step("browser checks", () => run(["run", "test:ui"]));
+
+/* Every cut-out asset must actually have been cut. A plate that kept its background or lost its
+   subject is a file the registry happily counts as present: one fully opaque unit cutout sat on the
+   deck screen for several passes, and cutting the approved building plates against a pale ground
+   once ate them outright. Arithmetic catches both; the eye did not. */
+step("cutouts", () => execFileSync("python3", [resolve(ROOT, "scripts/audit-cutouts.py")], { cwd: ROOT, stdio: "inherit" }));
 
 /* Roster invariants worth watching as content grows. */
 step("roster invariants", () => {
