@@ -882,3 +882,13 @@ passes; this one doesn't resolve it either.
   `art/buildings/` as well as `art/samples/`, and `npm run check` should run it, so a plate that cuts badly
   fails the build rather than being found by eye on a screenshot. The same arithmetic already exists; it is
   only pointed at one directory.
+
+- 2026-09-09 proposal: drawing the hold isometrically cost nothing in the engine — `moveBuilding` and the plot
+  grid were already the right model, and only the projection changed — which is the argument for keeping
+  placement rules and placement *drawing* as far apart as they are. Two things the reference has that this does
+  not, both deliberate for now and both worth a decision: its palette is bright and saturated where ours is
+  deliberately grimdark (the owner asked to keep our style, so only the layout was matched), and its city has a
+  drawn boundary wall with terrain outside it. A wall ring would need the hold to know its own edge, which is a
+  data question rather than a drawing one. Proposal: if the boundary is wanted, `layout` gains an explicit
+  perimeter rather than the city view inferring one, so the engine can eventually decide what expanding the
+  hold means.

@@ -315,26 +315,48 @@ svg.map{position:absolute;inset:0;width:100%;height:100%}
 .powerbreak .line{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:1.5px 0}
 
 .holdmap img.ground{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.7) brightness(.42)}
-.plotgrid{position:absolute;inset:0;display:grid;padding:66px 16px 64px;z-index:2}
-.plot{position:relative;border:1px dashed transparent;border-radius:2px}
-.plot:hover{border-color:rgba(207,195,166,.22)}
-.plot.over{border-color:var(--star);background:rgba(217,164,65,.12)}
-/* A plot is the unit of placement, not the unit of drawing: a building is painted half again as
-   wide as its plot and overflows it, which is how it reads at all on a twelve-column grid. Only
-   the plot decides where it stands. */
-.city .bldg{position:absolute;left:-28%;right:-28%;top:-34%;bottom:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:flex-end;cursor:grab;user-select:none;z-index:2}
-.city .bldg:hover{z-index:4;filter:brightness(1.12)}
-.city .bldg.dragging{opacity:.55;cursor:grabbing}
-.city .bldg img{width:100%;height:auto;max-height:84%;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.8))}
-.city .bldg .cap{font-family:"Alegreya SC";font-size:10.5px;letter-spacing:.03em;background:rgba(10,12,16,.82);
-  border:1px solid var(--edge);padding:0 5px;color:var(--bone);white-space:nowrap;margin-top:-2px}
-.city .bldg .lv{position:absolute;right:6%;top:2%;background:#12141a;border:1px solid var(--edge-2);color:var(--star);
-  font-family:"JetBrains Mono";font-size:10px;padding:0 4px}
-.city .bldg.empty img{filter:grayscale(1) brightness(.42)}
-.city .bldg.empty .cap{color:var(--faint)}
-.city .bldg.locked .cap{color:var(--bad);border-color:var(--bad)}
-.city .bldg.busy .cap{color:var(--warn);border-color:var(--warn)}
+/* ---------- the hold as an isometric city ----------------------------------
+   Plots are the same 12x8 grid the engine stores; only the projection changes.
+   A tile at (x,y) lands at ((x-y)*TW/2, (x+y)*TH/2) in scene space, which is
+   the standard 2:1 isometric mapping, and everything is depth-sorted on x+y so
+   a nearer building draws over a farther one. `clip-path` makes each tile a
+   real diamond for hit-testing as well as for looks, so dropping a building
+   onto a tile means dropping it onto the diamond you can see. */
+.isoworld{position:absolute;inset:0;overflow:hidden;z-index:2}
+.isoscene{position:absolute;left:50%;top:50%;transform-origin:50% 50%}
+.tile{position:absolute;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);
+  background-size:220% 220%;background-position:center;transition:filter .1s}
+.tile.earth{background-image:linear-gradient(150deg,rgba(74,63,48,.92),rgba(52,44,34,.95)),var(--tex-ground,none)}
+.tile.grass{background-image:linear-gradient(150deg,rgba(63,71,50,.9),rgba(44,52,36,.94)),var(--tex-ground,none)}
+.tile.road{background-image:linear-gradient(150deg,rgba(110,98,76,.95),rgba(84,74,57,.97)),var(--tex-ground,none)}
+.tile.water{background-image:linear-gradient(150deg,rgba(44,68,80,.95),rgba(30,48,58,.97))}
+.tile::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(160deg,rgba(255,255,255,.055),transparent 55%)}
+.tile.drop{filter:brightness(1.9) saturate(1.3)}
+.tile.hot{filter:brightness(1.25)}
+
+.iso .bldg{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  cursor:grab;user-select:none;pointer-events:auto}
+.iso .bldg img{width:100%;height:auto;object-fit:contain;
+  filter:drop-shadow(0 5px 9px rgba(0,0,0,.85));pointer-events:none}
+.iso .bldg:hover img{filter:drop-shadow(0 5px 9px rgba(0,0,0,.85)) brightness(1.14)}
+.iso .bldg.dragging{opacity:.5;cursor:grabbing}
+.iso .bldg .cap{font-family:"Alegreya SC";font-size:10px;letter-spacing:.03em;background:rgba(10,12,16,.86);
+  border:1px solid var(--edge);padding:0 5px;color:var(--bone);white-space:nowrap;margin-top:-6px;pointer-events:none}
+.iso .bldg .lv{position:absolute;right:4%;top:-2%;background:#12141a;border:1px solid var(--edge-2);color:var(--star);
+  font-family:"JetBrains Mono";font-size:10px;padding:0 4px;pointer-events:none}
+.iso .bldg.empty img{filter:grayscale(.85) brightness(.75) contrast(.85);opacity:.4}
+.iso .bldg.empty .cap{color:var(--faint)}
+.iso .bldg.locked .cap{color:var(--bad);border-color:var(--bad)}
+.iso .bldg.busy .cap{color:var(--warn);border-color:var(--warn)}
+.iso .prop{position:absolute;pointer-events:none}
+.iso .prop img{width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 3px 6px rgba(0,0,0,.7))}
+
+.zoombar{position:absolute;right:14px;bottom:26px;z-index:6;display:flex;gap:4px;padding:5px 6px}
+.zoombar button{border:1px solid var(--edge);color:var(--faint);font-family:"JetBrains Mono";font-size:13px;
+  width:26px;height:22px;line-height:1}
+.zoombar button:hover{color:var(--text);border-color:var(--dim);background:rgba(255,255,255,.05)}
+
 .hint-drag{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-size:11px;color:var(--faint);pointer-events:none;z-index:3;
   text-shadow:0 1px 3px #000}
 
@@ -486,7 +508,7 @@ let screen='field';
 function renderRail(){
   $('rail').innerHTML = `<div class="crest" style="background-image:url('${A.art.cardback}')"></div>` +
     SCREENS.map(([id,label,icon])=>`<button data-s="${id}" class="${id===screen?'on':''}"><img src="${A.icons[icon]}" alt=""><span>${label}</span></button>`).join('');
-  $('rail').querySelectorAll('button').forEach(b=>b.onclick=()=>{screen=b.dataset.s;renderRail();document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='p-'+screen));if(screen==='field')drawMap(); if(screen==='march')fitCanvas();});
+  $('rail').querySelectorAll('button').forEach(b=>b.onclick=()=>{screen=b.dataset.s;renderRail();document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='p-'+screen));if(screen==='field')drawMap(); if(screen==='march')fitCanvas(); if(screen==='hold')fitCity();});
 }
 
 /* ---------------- field ---------------- */
@@ -1447,25 +1469,121 @@ function renderPower(){
     </div>`;
 }
 
+/* --------------------------------------------------------------- the city
+ * The engine stores a 12x8 grid of plots and knows nothing about how it is
+ * drawn. This renders that grid isometrically: tile (x,y) lands at
+ * ((x-y)*TW/2, (x+y)*TH/2), everything is depth-sorted on x+y so a nearer
+ * building overlaps a farther one, and each tile is a real clipped diamond so
+ * the thing you drop a building onto is the shape you can see.
+ *
+ * Roads and props are decoration and live here rather than in the engine, but
+ * they are *deterministic* — seeded from the tile's own coordinates — so a
+ * re-render after a drag does not reshuffle the scenery.
+ */
+const TW = 132, TH = 66;                 // 2:1 isometric tile, in scene pixels
+let cityScale = 1;
+
+const isoPos = (x, y) => ({ sx: (x - y) * TW / 2, sy: (x + y) * TH / 2 });
+
+/** A small deterministic hash, so scenery is stable across renders. */
+function tileHash(x, y, salt){
+  let h = (x * 73856093) ^ (y * 19349663) ^ ((salt||0) * 83492791);
+  h = (h ^ (h >>> 13)) >>> 0;
+  return (h % 1000) / 1000;
+}
+
+/** Streets: two avenues through the middle and a ring one tile inside the edge. */
+function isRoad(x, y, cols, rows){
+  const midX = Math.floor(cols / 2) - 1, midY = Math.floor(rows / 2) - 1;
+  if (x === midX || y === midY) return true;
+  if (x === 1 || y === 1 || x === cols - 2 || y === rows - 2) return true;
+  return false;
+}
+
+function tileKind(x, y, cols, rows){
+  if (isRoad(x, y, cols, rows)) return 'road';
+  const h = tileHash(x, y, 7);
+  if (h > 0.86) return 'grass';
+  return 'earth';
+}
+
+const PROPS = ['TREE','TREES','BRAZIER','BANNER','WELL','CART','CRATES','RUBBLE','DUMMIES','BASIN','AWNING','STEPS'];
+
+/** Which prop, if any, stands on an empty non-road tile. Deterministic. */
+function propFor(x, y, cols, rows){
+  if (isRoad(x, y, cols, rows)) return null;
+  const h = tileHash(x, y, 31);
+  if (h > 0.62) return null;                       // some ground stays bare, most gets something
+  const pick = PROPS[Math.floor(tileHash(x, y, 53) * PROPS.length)];
+  return (A.props && A.props[pick]) ? pick : null;
+}
+
 function renderCity(){
   const { cols, rows } = HE.layoutSize(HREG);
-  const rowsById = Object.fromEntries(holdRows().map(r=>[r.id,r]));
-  let cells='';
-  for(let y=0;y<rows;y++) for(let x=0;x<cols;x++){
-    const id=HE.BUILDING_IDS.find(b=>HK.layout[b].x===x&&HK.layout[b].y===y);
-    const r=id?rowsById[id]:null;
-    const art=id?bldArt(id):null;
-    cells+=`<div class="plot" data-x="${x}" data-y="${y}">${r?`
-      <div class="bldg ${r.level?'':'empty'} ${r.building?'busy':''} ${!r.level&&r.unmet.length?'locked':''}" draggable="true" data-b="${r.id}">
-        ${art?`<img src="${art}" alt="">`:(A.icons[BICON[r.id]]?`<img src="${A.icons[BICON[r.id]]}" alt="">`:'')}
-        ${r.level?`<span class="lv">${r.level}</span>`:''}
-        <span class="cap">${esc(r.name)}${r.level?'':' · unbuilt'}</span>
-      </div>`:''}</div>`;
+  const rowsById = Object.fromEntries(holdRows().map(r => [r.id, r]));
+  const occupied = {};
+  for (const b of HE.BUILDING_IDS) occupied[`${HK.layout[b].x},${HK.layout[b].y}`] = b;
+
+  // Scene extent, so it can be centred without measuring the DOM.
+  const w = (cols + rows) * TW / 2, h = (cols + rows) * TH / 2;
+  const ox = (rows - 1) * TW / 2;                  // shift so the leftmost tile starts at 0
+  // Buildings and props are pinned by their *base* to the tile they stand on, so a tall plate grows
+  // upward rather than sinking into the ground. That means measuring from the bottom of the scene.
+  const SCENE_H = h + TH + TW * 0.95;              // room for the tallest plate to grow into
+
+  const parts = [];
+  for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
+    const { sx, sy } = isoPos(x, y);
+    const kind = tileKind(x, y, cols, rows);
+    const depth = (x + y) * 10;
+    parts.push(`<div class="tile ${kind}" data-x="${x}" data-y="${y}"
+      style="left:${sx + ox - TW/2}px;top:${sy - TH/2}px;width:${TW}px;height:${TH}px;z-index:${depth}"></div>`);
+
+    const id = occupied[`${x},${y}`];
+    if (id) {
+      const r = rowsById[id], art = bldArt(id);
+      const bw = TW * 1.42;                         // a little wider than its tile, as in the reference
+      parts.push(`<div class="bldg ${r.level ? '' : 'empty'} ${r.building ? 'busy' : ''} ${!r.level && r.unmet.length ? 'locked' : ''}"
+        draggable="true" data-b="${id}"
+        style="left:${sx + ox - bw/2}px;bottom:${SCENE_H - (sy + TH*0.60)}px;width:${bw}px;z-index:${depth + 5}">
+        ${art ? `<img src="${art}" alt="">` : ''}
+        ${r.level ? `<span class="lv">${r.level}</span>` : ''}
+        <span class="cap">${esc(r.name)}${r.level ? '' : ' · unbuilt'}</span>
+      </div>`);
+    } else {
+      const prop = propFor(x, y, cols, rows);
+      if (prop) {
+        const pw = TW * (0.42 + tileHash(x, y, 97) * 0.22);
+        parts.push(`<div class="prop" style="left:${sx + ox - pw/2}px;bottom:${SCENE_H - (sy + TH*0.55)}px;width:${pw}px;z-index:${depth + 3}">
+          <img src="${A.props[prop]}" alt=""></div>`);
+      }
+    }
   }
-  return `<img class="ground" src="${A.art.hold}" alt="The hold seen from above">
-    <div class="vig"></div>
-    <div class="plotgrid city" id="plotgrid" style="grid-template-columns:repeat(${cols},1fr);grid-template-rows:repeat(${rows},1fr)">${cells}</div>
-    <div class="hint-drag">Drag a building to another plot &middot; dropping it on one that is taken swaps them</div>`;
+
+  return `<div class="isoworld iso" id="isoworld">
+      <div class="isoscene" id="isoscene"
+           style="width:${w}px;height:${SCENE_H}px;margin-left:${-w/2}px;margin-top:${-SCENE_H/2}px;transform:scale(${cityScale})">
+        ${parts.join('')}
+      </div>
+    </div>
+    <div class="panel rivet zoombar">
+      <button data-czoom="-1" title="Zoom out">−</button>
+      <button data-czoom="0" title="Fit">◇</button>
+      <button data-czoom="1" title="Zoom in">+</button>
+    </div>
+    <div class="hint-drag">Drag a building to another tile &middot; dropping it on one that is taken swaps them</div>`;
+}
+
+/** Scale the scene so the whole hold is on screen. Measured, not guessed: the grid size comes
+ *  from the data and the viewport is whatever the window happens to be. */
+function fitCity(){
+  const world=$('isoworld'), sc=$('isoscene');
+  if(!world||!sc) return;
+  const pad=56;
+  const w=sc.offsetWidth, h=sc.offsetHeight;
+  if(!w||!h) return;
+  cityScale=Math.min((world.clientWidth-pad*2)/w,(world.clientHeight-pad*2)/h,1.4);
+  sc.style.transform=`scale(${cityScale})`;
 }
 
 function renderRegion(){
@@ -1561,20 +1679,38 @@ function wireHold(){
     renderHold();
   });
 
-  // Drag a building from one plot to another. `moveBuilding` and `swapBuildings` decide whether it
-  // is allowed; this only reports what they say.
+  // Zoom. The scene is one transform, so this costs nothing and never re-renders.
+  $('holdpane').querySelectorAll('[data-czoom]').forEach(btn=>btn.onclick=()=>{
+    const d=+btn.dataset.czoom;
+    if(d===0){ fitCity(); return; }
+    cityScale = Math.min(2.6, Math.max(0.4, cityScale + d*0.18));
+    const sc=$('isoscene'); if(sc) sc.style.transform=`scale(${cityScale})`;
+  });
+  fitCity();
+  const world=$('isoworld');
+  if(world) world.addEventListener('wheel',e=>{
+    e.preventDefault();
+    cityScale = Math.min(2.6, Math.max(0.4, cityScale + (e.deltaY>0?-0.1:0.1)));
+    const sc=$('isoscene'); if(sc) sc.style.transform=`scale(${cityScale})`;
+  },{passive:false});
+
+  // Drag a building from one tile to another. `moveBuilding` and `swapBuildings`
+  // decide whether it is allowed; this only reports what they say. The drop target
+  // is the clipped diamond, so the tile you can see is the tile you hit.
   let held=null;
   $('holdpane').querySelectorAll('.bldg').forEach(elm=>{
     elm.addEventListener('dragstart',e=>{held=elm.dataset.b;elm.classList.add('dragging');
       try{e.dataTransfer.setData('text/plain',held);e.dataTransfer.effectAllowed='move';}catch{}});
     elm.addEventListener('dragend',()=>{held=null;elm.classList.remove('dragging');
-      $('holdpane').querySelectorAll('.plot.over').forEach(p=>p.classList.remove('over'));});
+      $('holdpane').querySelectorAll('.tile.drop').forEach(t=>t.classList.remove('drop'));});
   });
-  $('holdpane').querySelectorAll('.plot').forEach(cell=>{
-    cell.addEventListener('dragover',e=>{if(held){e.preventDefault();cell.classList.add('over');}});
-    cell.addEventListener('dragleave',()=>cell.classList.remove('over'));
+  $('holdpane').querySelectorAll('.tile').forEach(cell=>{
+    cell.addEventListener('mouseenter',()=>{ if(!held) cell.classList.add('hot'); });
+    cell.addEventListener('mouseleave',()=>cell.classList.remove('hot'));
+    cell.addEventListener('dragover',e=>{if(held){e.preventDefault();cell.classList.add('drop');}});
+    cell.addEventListener('dragleave',()=>cell.classList.remove('drop'));
     cell.addEventListener('drop',e=>{
-      e.preventDefault(); cell.classList.remove('over');
+      e.preventDefault(); cell.classList.remove('drop');
       if(!held) return;
       const to={x:+cell.dataset.x,y:+cell.dataset.y};
       const sitting=HE.BUILDING_IDS.find(b=>HK.layout[b].x===to.x&&HK.layout[b].y===to.y);
@@ -1607,9 +1743,9 @@ function renderLands(){
 }
 
 /* Painted chrome, from the packed plates. Set before the first paint so nothing flashes flat. */
-for(const [prop,key] of [['--tex-panel','panelTexture'],['--tex-banner','bannerTexture']])
+for(const [prop,key] of [['--tex-panel','panelTexture'],['--tex-banner','bannerTexture'],['--tex-ground','boardGround']])
   if(A.art[key]) document.documentElement.style.setProperty(prop,`url("${A.art[key]}")`);
 renderRail(); renderField(); renderCam(); renderDeck(); renderRites(); renderWrits(); renderHold(); renderLands(); initMarch();
 requestAnimationFrame(drawMap);
-addEventListener('resize',()=>{if(screen==='field')drawMap();});
+addEventListener('resize',()=>{if(screen==='field')drawMap(); if(screen==='hold')fitCity();});
 </script>

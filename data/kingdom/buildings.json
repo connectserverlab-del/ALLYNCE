@@ -54,7 +54,7 @@
         "art/buildings/BLD_KEEP_T3_V01.png"
       ],
       "plot": [
-        5,
+        4,
         3
       ]
     },
@@ -79,7 +79,7 @@
       ],
       "plot": [
         2,
-        2
+        0
       ]
     },
     "MINE": {
@@ -108,8 +108,8 @@
         }
       ],
       "plot": [
-        9,
-        2
+        8,
+        0
       ]
     },
     "SAWPIT": {
@@ -132,8 +132,8 @@
         "art/buildings/BLD_SAWPIT_T3_V01.png"
       ],
       "plot": [
-        1,
-        5
+        0,
+        4
       ]
     },
     "BARRACKS": {
@@ -163,8 +163,8 @@
         }
       ],
       "plot": [
-        3,
-        5
+        2,
+        4
       ]
     },
     "RESEARCH_HALL": {
@@ -196,8 +196,8 @@
         }
       ],
       "plot": [
-        3,
-        1
+        0,
+        0
       ]
     },
     "RECRUITMENT_HALL": {
@@ -228,8 +228,8 @@
         }
       ],
       "plot": [
-        7,
-        1
+        6,
+        0
       ]
     },
     "FORGE": {
@@ -260,7 +260,7 @@
       ],
       "plot": [
         8,
-        4
+        3
       ]
     },
     "STABLE": {
@@ -290,7 +290,7 @@
         }
       ],
       "plot": [
-        6,
+        4,
         6
       ]
     },
@@ -322,7 +322,7 @@
       ],
       "plot": [
         0,
-        7
+        6
       ]
     },
     "SHRINE": {
@@ -354,7 +354,7 @@
         }
       ],
       "plot": [
-        10,
+        8,
         6
       ]
     },
@@ -385,8 +385,8 @@
         "art/buildings/BLD_SHOP_T3_V01.png"
       ],
       "plot": [
-        7,
-        3
+        4,
+        4
       ]
     },
     "ARMORY": {
@@ -420,8 +420,8 @@
         "art/buildings/BLD_ARMORY_T3_V01.png"
       ],
       "plot": [
-        9,
-        5
+        6,
+        4
       ]
     }
   },
@@ -468,9 +468,9 @@
     "text": "Every distinct ten-star unit in the collection raises grain, ore and timber production by 20%."
   },
   "layout": {
-    "cols": 12,
-    "rows": 8,
-    "text": "The hold is a grid of plots. A building occupies one plot and may be moved to any free plot."
+    "cols": 9,
+    "rows": 7,
+    "text": "The hold is a grid of plots. A building occupies one plot and may be moved to any free plot. The city view draws avenues down the middle and a ring one tile inside the edge; the plots a hold is founded on sit off those, so a new hold reads as a town with streets rather than as buildings on a field."
   },
   "power": {
     "perBuildingLevel": 40,

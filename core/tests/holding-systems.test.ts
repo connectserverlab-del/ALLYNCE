@@ -421,7 +421,18 @@ describe("holdings written by an older build", () => {
   it("carries the new fields through a save and back", () => {
     const k = newKingdom(reg, "SAM");
     k.collection.X = 0;
-    moveBuilding(reg, k, "SHOP", { x: 11, y: 7 });
+    // A free plot, found rather than written down: this test is about a save round trip, and a
+    // hard-coded coordinate tied it to whatever the grid happened to be. Shrinking the grid first
+    // put the plot out of bounds and then landed it on the Shrine, and both times the move was
+    // refused and the assertion below silently compared a building that had never moved.
+    const { cols, rows } = layoutSize(reg);
+    const corner = (() => {
+      for (let y = rows - 1; y >= 0; y--) for (let x = cols - 1; x >= 0; x--)
+        if (!BUILDING_IDS.some((b) => k.layout[b].x === x && k.layout[b].y === y)) return { x, y };
+      throw new Error("no free plot");
+    })();
+    const moved = moveBuilding(reg, k, "SHOP", corner);
+    expect(moved.ok, moved.reason).toBe(true);
     k.resources = fill(1e6);
     const id = [...reg.units.values()][0]!.id;
     k.collection[id] = 2;
@@ -429,7 +440,7 @@ describe("holdings written by an older build", () => {
     mergeDuplicate(reg, k, id);
 
     const back = loadGame(reg, saveGame(null, k)).kingdom!;
-    expect(back.layout.SHOP).toEqual({ x: 11, y: 7 });
+    expect(back.layout.SHOP).toEqual(corner);
     expect(back.cosmetics![id]).toEqual({ border: "gold", shine: 1 });
     expect(back.resources.gold).toBe(k.resources.gold);
     expect(back.resources.ruby).toBe(k.resources.ruby);

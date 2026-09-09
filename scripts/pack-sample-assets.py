@@ -20,7 +20,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SIZES = {"token": 440, "frame": 620, "icon": 96, "star": 96, "tier": 560, "art": 1500,
          # Interface textures sit behind text under a darkening gradient, so they carry the
          # grain and the foxing and nothing that needs to be legible. Small is enough.
-         "texture": 720}
+         "texture": 720,
+         # Scenery and terrain marks are drawn small — a prop is about 90px on screen and a
+         # terrain symbol about 40 — and packing them at token size pushed the page over its
+         # 16 MB budget for detail nobody can see.
+         "prop": 300, "symbol": 200}
 
 
 def uri(rel, kind):
@@ -54,6 +58,11 @@ ICONS = ["BLD-BARRACKS", "BLD-BUILD", "BLD-FORGE", "BLD-KEEP", "BLD-RECRUIT", "B
 # mountain, four little wedges for a wood — which is what a map looks like before anyone paints it.
 MAP_SYMBOLS = ["FOREST", "TREE", "MOUNTAIN", "HILL", "BRIDGE", "RIVER", "FORD",
                "RUINS", "PALISADE", "ROAD", "MARSH", "WATCHTOWER"]
+
+# Scenery for the city's isometric tiles. Not gameplay: a hold with nothing between its
+# buildings but bare ground reads as a spreadsheet, and these are what fill it.
+PROPS = ["TREE", "TREES", "BRAZIER", "BANNER", "WELL", "CART", "CRATES",
+         "RUBBLE", "DUMMIES", "BASIN", "AWNING", "STEPS"]
 
 
 def main(out_path):
@@ -91,9 +100,14 @@ def main(out_path):
         "tiers": {},
         "tokens": {},
         "map": {},
+        "props": {},
     }
+    for pr in PROPS:
+        u = uri(f"art/props/PROP_{pr}_V01.png", "prop")
+        if u:
+            assets["props"][pr] = u
     for m in MAP_SYMBOLS:
-        u = uri(f"art/map/MAP_{m}_V01.png", "token")
+        u = uri(f"art/map/MAP_{m}_V01.png", "symbol")
         if u:
             assets["map"][m] = u
     for i in ICONS:
@@ -130,7 +144,7 @@ def main(out_path):
     size = os.path.getsize(out_path) / 1e6
     print(f"packed {len(assets['tokens'])} tokens ({len(units)} units + stratagem emblems), "
           f"{len(assets['tiers'])} building tiers, {len(assets['icons'])} icons, "
-          f"{len(assets['map'])} map symbols "
+          f"{len(assets['map'])} map symbols, {len(assets['props'])} props "
           f"({size:.1f} MB)")
 
 

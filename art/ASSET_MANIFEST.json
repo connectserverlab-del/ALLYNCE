@@ -962,5 +962,91 @@
       "jobId": "d47b08e4-b65d-42a8-be76-a818427f3251",
       "approved": false
     }
+  ],
+  "props": [
+    {
+      "id": "PROP_AWNING",
+      "file": "art/props/PROP_AWNING_V01.png",
+      "jobId": "9fcf65bd-527d-40da-9b3d-c7c914c651ac",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_BANNER",
+      "file": "art/props/PROP_BANNER_V01.png",
+      "jobId": "d463d747-53c6-4bbe-9d9e-bfb2d01f1705",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_BASIN",
+      "file": "art/props/PROP_BASIN_V01.png",
+      "jobId": "458c3e21-fba0-411b-94b0-f49d70c63c6c",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_BRAZIER",
+      "file": "art/props/PROP_BRAZIER_V01.png",
+      "jobId": "8d8ff87d-a350-4ca1-b3c7-41514a665c36",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_CART",
+      "file": "art/props/PROP_CART_V01.png",
+      "jobId": "128acf34-ec67-4bb1-b8a4-acfb99684315",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_CRATES",
+      "file": "art/props/PROP_CRATES_V01.png",
+      "jobId": "ec6d855e-2919-49fd-867a-2be90f1f3ad1",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_DUMMIES",
+      "file": "art/props/PROP_DUMMIES_V01.png",
+      "jobId": "45b1bbb7-4294-473e-8902-2a39689e9a96",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_RUBBLE",
+      "file": "art/props/PROP_RUBBLE_V01.png",
+      "jobId": "beca691f-de7c-4c2a-9eaf-dc6e913839d1",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_STEPS",
+      "file": "art/props/PROP_STEPS_V01.png",
+      "jobId": "7769e748-6fc8-4a0c-a63b-af68a49918b1",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_TREE",
+      "file": "art/props/PROP_TREE_V01.png",
+      "jobId": "a04026b4-5ced-404c-993e-fbda13f634c5",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_TREES",
+      "file": "art/props/PROP_TREES_V01.png",
+      "jobId": "413127b9-078c-4409-9d28-5173a506ade8",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_WELL",
+      "file": "art/props/PROP_WELL_V01.png",
+      "jobId": "7594c7c6-41a9-456b-813f-0863f6abd058",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    }
   ]
 }
