@@ -1,0 +1,9 @@
+# Python dependencies for the art pipeline.
+#
+# Three scripts have needed this since the first cutting round and none of them said so:
+# scripts/cutout.py lifts a generated plate off its ground, scripts/pack-sample-assets.py
+# downscales and encodes every plate into the sample page, and scripts/audit-cutouts.py checks
+# that a cut actually cut. The gap stayed invisible while nothing in `npm run check` imported it;
+# adding the cutout audit to that command surfaced it as a CI failure on a machine that had never
+# needed Pillow before.
+Pillow>=10.0

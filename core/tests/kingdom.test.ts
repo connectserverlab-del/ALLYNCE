@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { newBattle, deploy, KNI, blob, reg, kingdomWithResearch } from "./helpers.js";
+import { newBattle, deploy, KNI, blob, reg, kingdomWithResearch, fill, enable } from "./helpers.js";
 import { newKingdom, startUpgrade, upgradeCost, upgradeSeconds, tick, startResearch, researchable, drawFromBanner, kingdomEffects, applyKingdom, storageCap } from "../src/kingdom.js";
 import { computeStat } from "../src/modifiers.js";
 
@@ -7,13 +7,16 @@ describe("the holding", () => {
   it("starts with a level-one Keep and nothing else, and the Keep gates every other building", () => {
     const k = newKingdom(reg, "KNI");
     expect(k.levels.KEEP).toBe(1);
-    expect(k.levels.FORGE).toBe(0);
-    expect(startUpgrade(reg, k, "FORGE").ok).toBe(true);   // level 0 -> 1 is allowed under a level-1 Keep
+    expect(k.levels.SAWPIT).toBe(0);
+    // The Sawpit has no prerequisites of its own, so what stops it is only the seat's level. The
+    // Forge used to stand here and cannot any more: it needs a level-two Mine, which needs a
+    // level-two seat, so the Forge can no longer show "0 -> 1 under a level-one seat" at all.
+    expect(startUpgrade(reg, k, "SAWPIT").ok).toBe(true);
     tick(reg, k, 100000);
-    expect(k.levels.FORGE).toBe(1);
-    const blocked = startUpgrade(reg, k, "FORGE");
+    expect(k.levels.SAWPIT).toBe(1);
+    const blocked = startUpgrade(reg, k, "SAWPIT");
     expect(blocked.ok).toBe(false);
-    expect(blocked.reason).toMatch(/Raise the Keep past level 1/);
+    expect(blocked.reason).toMatch(/Raise the City Hall past level 1/);
   });
 
   it("charges resources, runs a build timer, and refuses what you cannot pay for", () => {
@@ -30,6 +33,7 @@ describe("the holding", () => {
     expect(r.finishedBuildings).toContain("GRANARY");
     expect(k.levels.GRANARY).toBe(1);
     k.resources.koku = 0; k.resources.timber = 0;
+    enable(reg, k, "MINE");
     expect(startUpgrade(reg, k, "MINE").reason).toMatch(/Not enough/);
   });
 
@@ -46,8 +50,9 @@ describe("the holding", () => {
 
   it("gates research behind the Research Hall and prerequisites, then completes it on a timer", () => {
     const k = newKingdom(reg, "KNI");
-    k.resources = { koku: 99999, iron: 99999, timber: 99999, silver: 99999 };
+    k.resources = fill(99999);
     expect(startResearch(reg, k, "RES_FORGED_EDGE").reason).toMatch(/higher Research Hall/);
+    enable(reg, k, "RESEARCH_HALL");
     startUpgrade(reg, k, "RESEARCH_HALL"); tick(reg, k, 100000);
     expect(researchable(reg, k).map((r) => r.id)).toContain("RES_FORGED_EDGE");
     expect(researchable(reg, k).map((r) => r.id)).not.toContain("RES_LONG_MARCH"); // tier 2 needs a bigger hall
@@ -61,8 +66,9 @@ describe("the holding", () => {
   it("recruitment draws cards, spends silver, records duplicates and honours pity", () => {
     const k = newKingdom(reg, "SAM");
     expect(drawFromBanner(reg, k, "BANNER_MUSTER", 1).reason).toMatch(/Recruitment Hall/);
+    enable(reg, k, "RECRUITMENT_HALL");
     startUpgrade(reg, k, "RECRUITMENT_HALL"); tick(reg, k, 100000);
-    k.resources.silver = 100000; k.resources.koku = 100000; k.resources.iron = 100000;
+    k.resources = fill(100000);   // the rite banner is priced in gold and ruby as well as silver
     const res = drawFromBanner(reg, k, "BANNER_MUSTER", 10);
     expect(res.ok).toBe(true);
     expect(res.cards).toHaveLength(10);
@@ -84,8 +90,9 @@ describe("the holding", () => {
     // than the batch draws above, which share one Rng instance across the whole batch and never hit this)
     // is what exposes it.
     const k = newKingdom(reg, "SAM", { seed: 42 });
+    enable(reg, k, "RECRUITMENT_HALL");
     startUpgrade(reg, k, "RECRUITMENT_HALL"); tick(reg, k, 100000);
-    k.resources = { koku: 1e9, iron: 1e9, timber: 1e9, silver: 1e9 };
+    k.resources = fill(1e9);
     const cards: string[] = [];
     for (let i = 0; i < 80; i++) cards.push(drawFromBanner(reg, k, "BANNER_MUSTER", 1).cards[0]!.unitId);
     let longestRun = 1, run = 1;
@@ -98,14 +105,18 @@ describe("the holding", () => {
     const { b } = newBattle();
     const p = deploy(b, "K", "A", KNI, blob(5, 5));
     const k = newKingdom(reg, "KNI");
-    k.resources = { koku: 999999, iron: 999999, timber: 999999, silver: 999999 };
-    for (const bld of ["FORGE", "WALL", "BARRACKS", "RESEARCH_HALL", "STABLE"] as const) { startUpgrade(reg, k, bld); tick(reg, k, 100000); }
+    k.resources = fill(999999);
+    for (const bld of ["FORGE", "WALL", "BARRACKS", "RESEARCH_HALL", "STABLE"] as const) { enable(reg, k, bld); startUpgrade(reg, k, bld); tick(reg, k, 100000); }
     startResearch(reg, k, "RES_FORGED_EDGE"); tick(reg, k, 100000);
     const e = kingdomEffects(reg, k);
-    expect(e.armyCapacity).toBe(12);
+    // A Stable needs a level-two Barracks, so reaching one carries the other up with it and army
+    // capacity is two levels' worth, not one. Read from the data rather than restating the number.
+    const perLevel = reg.kingdom.buildings.BARRACKS.effect!.armyCapacity!;
+    expect(k.levels.BARRACKS).toBe(2);
+    expect(e.armyCapacity).toBe(perLevel * 2);
     const capBefore = b.sides.get("A")!.armyCapacity;
     applyKingdom(b, "A", k);
-    expect(b.sides.get("A")!.armyCapacity).toBe(capBefore + 12);
+    expect(b.sides.get("A")!.armyCapacity).toBe(capBefore + perLevel * 2);
     const foot = b.unit(p.footUids[0]!);
     const atk = computeStat(b, foot, "ATK");
     const sources = atk.modifiers.map((m) => m.source);
@@ -146,13 +157,22 @@ describe("building tiers", () => {
     expect(buildingArt(reg, "KEEP", 0)).toBeNull();
     expect(buildingArt(reg, "KEEP", 2)).toMatch(/KEEP_T1/);
     expect(buildingArt(reg, "WALL", 9)).toMatch(/WALL_T3/);
-    // the Barracks has no tier-two painting yet, so level 5 keeps showing tier one rather than blanking
-    expect(buildingArt(reg, "BARRACKS", 5)).toMatch(/BARRACKS_T1/);
     expect(buildingArt(reg, "BARRACKS", 9)).toMatch(/BARRACKS_T3/);
-    // a building with no art at all stays null without throwing
-    expect(buildingArt(reg, "SHRINE", 5)).toBeNull();
     const k = newKingdom(reg, "KNI");
-    expect(buildingArt(reg, "GRANARY", k.levels.GRANARY)).toBeNull();
+    expect(buildingArt(reg, "GRANARY", k.levels.GRANARY)).toBeNull();  // level 0, not yet built
     void startUpgrade; void tick;
+
+    // The fallback and the no-art case are checked against deliberate holes rather than against
+    // whichever tiers the roster happens to be missing. They were written the other way, over the
+    // Barracks' unpainted tier two and the Shrine's empty art list, and painting those buildings
+    // broke a rules test that had nothing to do with the art: a data gap is not a fixture.
+    const holed = { ...reg, kingdom: { ...reg.kingdom, buildings: { ...reg.kingdom.buildings,
+      GAPPED: { ...reg.kingdom.buildings.BARRACKS, art: ["art/x/GAPPED_T1.jpg", null, "art/x/GAPPED_T3.jpg"] },
+      UNPAINTED: { ...reg.kingdom.buildings.BARRACKS, art: [null, null, null] },
+    } } } as unknown as typeof reg;
+    expect(buildingArt(holed, "GAPPED" as never, 2)).toMatch(/GAPPED_T1/);
+    expect(buildingArt(holed, "GAPPED" as never, 5)).toMatch(/GAPPED_T1/);   // tier 2 unpainted, holds at tier 1
+    expect(buildingArt(holed, "GAPPED" as never, 9)).toMatch(/GAPPED_T3/);
+    expect(buildingArt(holed, "UNPAINTED" as never, 5)).toBeNull();          // nothing painted at all
   });
 });

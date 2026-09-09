@@ -821,3 +821,115 @@ passes; this one doesn't resolve it either.
   file needs, with no second code path to keep in sync. Proposal only — depends on `Q-22`/`Q-23` first, and on
   a decision that the AI should be the thing generating commands rather than a UI layer that does not exist
   yet (see `OWN-4`).
+
+- 2026-09-08 proposal: `Q-22` landed — `core/tests/rebuild.test.ts` proves a fresh battle replayed from
+  another one's `Battle.commands` alone reaches the same event log and round hashes, and that a mutation
+  which bypasses `applyCommand` is exactly the kind of gap that proof would catch. That test only ever
+  exercises hand-scripted command streams (the same style `commands.test.ts` already uses); it does not touch
+  `runMatch`'s own output, because the AI still calls `BattleController` methods directly (see the proposal
+  above this one). Once that follow-on lands and a full seeded match's `battle.commands` is a complete log by
+  construction, the same rebuild assertion this item just proved by hand — replay the log into a fresh
+  `setUpMatch` of the same `MatchSpec`, compare `hashEvents` and `roundHashes` — could run as one more check
+  inside `core/tests/match.test.ts`'s existing "is deterministic for a seed" test, giving `Q-22`'s guarantee
+  end-to-end coverage over a real, AI-played battle rather than only a scripted one. Proposal only; depends on
+  the AI-emits-commands follow-on above.
+
+- 2026-09-08 proposal: the sample page had been shipping dead — a registry the browser bundle built from a
+  hand-copied list of data files that had drifted from `loadRegistry` on three axes at once, throwing at load
+  and leaving the static panels standing around an empty field. The repair was to delete the copy rather than
+  correct it, so the bundle and the loader read the same files. The pattern is worth generalising: every place
+  a browser bundle needs something `node:fs` gives the engine is a candidate for the same silent divergence,
+  and the March, Writs and Deck screens were only the ones that existed to drift. Proposal: before any further
+  screen is bundled for the page, `scripts/gamedata-plugin.mjs` becomes the only route from `data/` into a
+  bundle, and `core/tests/gamedata.test.ts` grows an assertion per new data file rather than a new list.
+  Related, and the sharper lesson: `npm run check` was green through all of it, because nothing opened the
+  page the check was supposed to be protecting. A build artefact nobody loads is not tested by the suite that
+  produced it — `tools/ui-smoke.mjs` now opens every page under `docs/samples/`, and the same question is
+  owed to `dist/allynce.html` and the published artifact, which are still checked by nothing.
+
+- 2026-09-08 proposal: the art gap turned out to be two different gaps wearing one number. 118 assets read as
+  "missing" in the registry, but 16 of them were already painted and sitting on disk unreferenced — three
+  interface textures made for the web client that never reached the sample page, three stat icons packed into
+  every build and drawn by nothing, and a second painted ground. Generating art before checking what already
+  exists would have paid twice for six of them. Proposal: `npm run assets` should report a third state
+  alongside present and missing — *unused*, meaning a file exists under `art/` that no data file, script or
+  template references — so the difference between "not painted" and "painted and forgotten" is visible before
+  anyone spends on it. Related: `art/ASSET_MANIFEST.json` now carries an `approved` flag per asset and
+  everything landed this pass is `false`. The registry counts a file as present because it exists, which is
+  how a fully opaque cutout once shipped; approval is the owner's, and the manifest should be what the
+  contact sheet is built from, so an unapproved plate is visible as unapproved rather than merely present.
+
+- 2026-09-08 proposal: the holding gained currencies, power, plots, prerequisites and card cosmetics, and the
+  type system paid for itself on the first of those. Widening `ResourceId` by two broke nine files — every
+  place that had written out a full resource bag as a literal — and each one was a place a new currency would
+  otherwise have been silently missing. The fix was `NO_RESOURCES` and `RESOURCE_IDS`, one canonical spelling.
+  Proposal: the same treatment for the other bags that are still written out by hand, `Reward` having just
+  been converted; a full-record literal is a silent-drop waiting for the next field.
+  Related, and open: `power()` is deterministic and derived only from durable state precisely so a server can
+  recompute a client's claim, but nothing checks that today. When `OWN-5` settles the multiplayer shape, the
+  first thing the server should do is verify power the same way `Q-20`'s round hash verifies a battle — the
+  region view already shows neighbours' power, and today those neighbours are local stand-ins.
+  Also open: a shine is capped at five merges and a border is a single purchase, so a card has a small,
+  finite set of appearances. That is deliberate, but it means the sink for a very rich player is shallow;
+  the roadmap should decide whether there is a deeper one before anything is priced against real money.
+
+- 2026-09-08 proposal: repainting the buildings as true isometric assets exposed a coupling nobody had written
+  down — the prompt has to know how the asset will be *composited*, not just what it depicts. The eight plates
+  approved before this pass were painted against a pale grey ground, which was harmless while they were shown
+  as opaque JPEGs in a panel and destructive the moment they were cut to alpha for the city grid: the flood
+  fill could not separate pale masonry from pale background and ate the buildings. The style guide now states
+  the background requirement as part of the building prompt. Proposal: `scripts/audit-cutouts.py` should cover
+  `art/buildings/` as well as `art/samples/`, and `npm run check` should run it, so a plate that cuts badly
+  fails the build rather than being found by eye on a screenshot. The same arithmetic already exists; it is
+  only pointed at one directory.
+
+- 2026-09-09 proposal: drawing the hold isometrically cost nothing in the engine — `moveBuilding` and the plot
+  grid were already the right model, and only the projection changed — which is the argument for keeping
+  placement rules and placement *drawing* as far apart as they are. Two things the reference has that this does
+  not, both deliberate for now and both worth a decision: its palette is bright and saturated where ours is
+  deliberately grimdark (the owner asked to keep our style, so only the layout was matched), and its city has a
+  drawn boundary wall with terrain outside it. A wall ring would need the hold to know its own edge, which is a
+  data question rather than a drawing one. Proposal: if the boundary is wanted, `layout` gains an explicit
+  perimeter rather than the city view inferring one, so the engine can eventually decide what expanding the
+  hold means.
+
+- 2026-09-09: the cut-out audit proposal above is done — `npm run check` runs it over all five groups of cut
+  assets. The part worth carrying forward is why one threshold was not enough. The old floor was picked from
+  unit cutouts, where a lone figure on white leaves roughly a fifth to two thirds of its frame standing, and it
+  was then applied to buildings, which fill far more of theirs. Eight destroyed plates passed it. Any check
+  whose threshold came from one population and is later pointed at another deserves the same suspicion: the
+  roster invariants and the 16 MB page budget are both numbers of that kind, and neither has been re-derived
+  since the content around them changed.
+
+- 2026-09-09: both numbers named above have now been re-derived, and neither turned out to be a threshold
+  problem. The 16 MB page budget is not a picked number at all — it is the artifact ceiling the single-page
+  build has to fit under, so there was nothing to re-derive. What was wrong is that nothing ever ran it:
+  `build:standalone` was in neither `npm run check` nor CI, so the refusal guarded a command a person had to
+  remember to type. Built properly the page is 9.07 MB, 57% of the ceiling, with real headroom. Built with
+  Playwright missing it is 28.57 MB, because the thumbnail step degrades by embedding the print-resolution
+  plates instead — the ceiling catches that, and no one was there to see it. `npm run check` now runs the
+  build, and the over-budget message names which of the two faults it is, since they want opposite fixes.
+
+- 2026-09-09: the roster invariants re-derived differently again. None of them is dead — they examine 31
+  Ascendants, 7 hand-authored ten-stars, 37 angels and 9 archangels — so the suspicion that they had stopped
+  binding was wrong. The hole was scope. `stars` is optional on the unit type and every consumer in the engine
+  reads it as `stars ?? 1`, so a unit with no star is not an error anywhere; it is silently a one-star. Six
+  core units had none. That put four siege pieces and two unique Elite riders, 1900 to 2300 attack, into the
+  Muster Call's one-star pool — weight 34, the most common roll on the cheapest banner — against a real
+  one-star ceiling of 1100 attack. Six of that pool's thirty entries were ringers and nothing failed.
+  The invariant now requires an explicit star of every unit, and the six were given one derived from the
+  roster's own peer bands rather than chosen: the four siege Specialists sit at capacity cost 8-9 and 1900-2050
+  attack, which is the 5-star siege band almost exactly (Ember Ozutsu Battery, same faction and rank, is cost 9
+  / 1900), and the two cavalry sit at cost 11 between the 5-star Dawn Lancer and the 7-star Sky-Lance Dragoon
+  with attack at the 6-star ceiling, so 5 and 6. Those two figures are the owner's to confirm; the derivation
+  is above so it can be argued with.
+
+- 2026-09-09: promoting those six exposed a second gap the same default had been hiding. `skills.test.ts`
+  requires every unit at four stars and above to carry an active it can spend an action on, and three of the
+  newly-promoted siege pieces carried none — invisible while they were nominally one-stars. They were not
+  added to the awaiting-skill register, because the roster already answers the question: every other 5-star
+  siege piece in the game carries Set Up, including Ember Ozutsu Battery and Bastion Bombard, the same-faction
+  pieces at the same star. They were given it. The general point is worth keeping separate from the cut-out
+  one: a mis-scoped threshold lets bad data through a check, but a `?? default` makes missing data
+  indistinguishable from present data, so there is no check to get through. Both were invisible for the same
+  reason and only one of them looks like a threshold.

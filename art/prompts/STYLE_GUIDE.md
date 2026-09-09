@@ -83,9 +83,28 @@ cards and for every rite in the side deck.
 
 ## Two views of a building
 
-The stronghold overview is painted **straight down**. Individual building portraits are painted at a **low angle**
-so their walls, roofs and towers read. Both are correct; use the overview for the map and the portrait for the
-upgrade panels.
+The stronghold overview is painted **straight down**. Individual buildings are painted as **true isometric game
+assets**: the camera sits high, at a 45-degree elevation looking down, so the whole roof plane reads as a surface
+and exactly two side walls are visible. The building has to read as a solid volume with depth and thickness, never
+as a flat front-on elevation, because it is composited onto a plot grid beside twelve others and a flat one looks
+pasted on.
+
+The first round of these was painted at a low angle — you saw the walls and almost none of the roof — and read as
+flat on the city screen. Every prompt now carries: *TRUE ISOMETRIC GAME BUILDING ASSET: camera high above at a
+45-degree elevation looking down, so the entire roof plane reads as a surface and exactly two side walls are
+visible … it sits squarely on a compact patch of churned mud drawn in the same isometric projection, with a clear
+cast shadow so it sits rather than floats.*
+
+### Buildings are cut out, and the background must be dark enough to cut
+
+Building plates are stored as **PNG with alpha**, cut with `scripts/cutout.py`, so they sit on the painted ground
+of the hold rather than in a grey box.
+
+That puts a requirement on the prompt: **the background must be a flat mid-to-dark neutral grey, clearly darker
+and cooler than any stonework in the building.** The first eight plates were generated against a pale grey that
+matched their own masonry; the flood fill could not tell them apart and ate the building, leaving 14–29% of the
+frame standing where a healthy cut leaves 40–65%. Check every batch with the same arithmetic the unit cutouts use
+before committing them.
 
 ## Background removal on toned grounds
 

@@ -5,7 +5,7 @@ import { generateMap, applyMap, type MapSpec, type GeneratedMap } from "./mapgen
 import { deployPlatoon } from "./deploy.js";
 import { DeckState, type DeckList, summonFromHand, summonZone, tributeCost, starOf, playableSideCards, ritualSummon, fusionSummon, playStratagem } from "./cards.js";
 import { runAiActivation, holdForSyncPolicy, maybeSurrender, DIFFICULTY, type AiProfile } from "./ai.js";
-import { applyKingdom, type KingdomState, type ResourceId } from "./kingdom.js";
+import { applyKingdom, RESOURCE_IDS, Resources, type KingdomState, type ResourceId } from "./kingdom.js";
 import { markWanted, resolveContract, type Contract, type ContractOutcome } from "./wanted.js";
 import { buildStarterDeck } from "./cards.js";
 import type { Capture } from "./state.js";
@@ -21,7 +21,9 @@ export interface MatchSpec {
   weather?: WeatherId; timeOfDay?: TimeOfDayId;
   A: SideSetup; B: SideSetup;
 }
-export interface Reward { koku: number; iron: number; timber: number; silver: number; cards: string[] }
+/** A match payout. `Required<Resources>` rather than four named fields, so a new currency reaches
+ *  rewards by widening one type instead of being quietly left out of them. */
+export interface Reward extends Required<Resources> { cards: string[] }
 export interface MatchResult {
   winner: string | null; reason: string | null; rounds: number;
   survivors: Record<string, number>; starsLost: Record<string, number>;
@@ -160,12 +162,15 @@ export function spoils(b: Battle, side: string, won: boolean, enemyStarsBroken: 
     const pool = [...b.reg.units.values()].filter((d) => !d.summonOnly && d.faction !== "DIV" && (d.stars ?? 1) <= (broken >= 20 ? 7 : 5));
     if (pool.length) cards.push(pool[rng.int(pool.length)]!.id);
   }
-  return { koku: amount(1.1), iron: amount(0.8), timber: amount(0.9), silver: amount(1.3), cards };
+  // Gold comes off the field at a quarter of the common rate: playing should pay for the summoning
+  // bell eventually, but not as fast as it pays for a granary. Ruby is not a match reward at all —
+  // nothing produces it and nothing routine drops it, which is the whole of what makes it rare.
+  return { koku: amount(1.1), iron: amount(0.8), timber: amount(0.9), silver: amount(1.3), gold: amount(0.25), ruby: 0, cards };
 }
 
 /** Pay a match reward into a holding. */
 export function collectReward(k: KingdomState, reward: Reward): void {
-  for (const r of ["koku", "iron", "timber", "silver"] as ResourceId[]) k.resources[r] += reward[r];
+  for (const r of RESOURCE_IDS) k.resources[r] += reward[r];
   for (const c of reward.cards) k.collection[c] = (k.collection[c] ?? 0) + 1;
 }
 export type { Hex, UnitState };

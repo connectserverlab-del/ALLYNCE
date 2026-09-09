@@ -58,7 +58,9 @@ button { font: inherit; color: inherit; }
 .topbar {
   display: flex; align-items: center; gap: 20px;
   padding: 0 18px; height: 54px;
-  background: linear-gradient(var(--panel), var(--panel-2));
+  background:
+    linear-gradient(rgba(10, 12, 16, .45), rgba(10, 12, 16, .6)),
+    url(../../art/ui/UI_TOPBAR-BANNER_V01.jpg) center / cover, var(--panel);
   border-bottom: 1px solid var(--line);
   position: sticky; top: 0; z-index: 40;
 }
@@ -90,7 +92,12 @@ button { font: inherit; color: inherit; }
 .rule { height: 1px; background: var(--line); margin: 18px 0; border: 0; }
 
 /* ------------------------------------------------------------------ panels */
-.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-md); }
+.panel {
+  background:
+    linear-gradient(rgba(16, 14, 14, .5), rgba(16, 14, 14, .5)),
+    url(../../art/ui/UI_PANEL-PARCHMENT_V01.jpg) center / cover, var(--panel);
+  border: 1px solid var(--line); border-radius: var(--r-md);
+}
 .panel-head { padding: 12px 14px; border-bottom: 1px solid var(--line-soft); display: flex; align-items: center; gap: 10px; }
 .panel-body { padding: 14px; }
 

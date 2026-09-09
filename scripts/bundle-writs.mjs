@@ -15,6 +15,7 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { statSync } from "node:fs";
 import esbuild from "esbuild";
+import { gamedataPlugin } from "./gamedata-plugin.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const out = process.argv[2];
@@ -25,6 +26,7 @@ await esbuild.build({
   bundle: true, format: "iife", globalName: "WRITS", platform: "browser",
   target: "es2020", minify: true, legalComments: "none",
   loader: { ".json": "json" },
+  plugins: [gamedataPlugin(ROOT)],
   outfile: out,
 });
 console.log(`bundled writs engine (${(statSync(out).size / 1e3).toFixed(0)} kB)`);

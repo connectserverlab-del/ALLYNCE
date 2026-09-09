@@ -116,14 +116,36 @@ const units = [...data["units/units.json"], ...data["units/expansion.json"]];
 const plates = [...new Set(units.map((u) => u.art?.concept).filter(Boolean))]
   .filter((p) => { try { readFileSync(resolve(ROOT, p)); return true; } catch { return false; } });
 
-const art = await buildThumbnails(plates, { log: console.log })
+const thumbs = await buildThumbnails(plates, { log: console.log });
+const art = thumbs
   ?? Object.fromEntries(plates.map((p) =>
     [p, `data:image/jpeg;base64,${readFileSync(resolve(ROOT, p)).toString("base64")}`]));
 
+/* The battle board's ground texture is an <image> battle.js writes into the SVG at
+   render time rather than a static <img> src, so it isn't a plate and it isn't in any
+   stylesheet either — CSS inlining above never sees it. Same registry, same reason: no
+   external request once this file is open. */
+const UI_GROUND = "art/ui/UI_BOARD-GROUND_V01.jpg";
+art[UI_GROUND] = `data:image/jpeg;base64,${readFileSync(resolve(ROOT, UI_GROUND)).toString("base64")}`;
+
 /* ---------------------------------------------------------------- assemble */
 const html = readFileSync(resolve(WEB, "index.html"), "utf8");
-const styles = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)">/g)]
+const rawStyles = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)">/g)]
   .map((m) => `/* ${m[1]} */\n${readFileSync(resolve(WEB, m[1]), "utf8")}`).join("\n");
+
+/* A stylesheet's own background-image plates (art/ui/...) are inlined the same way a
+   unit's painted plate is: the standalone build's whole point is no external requests,
+   and a CSS url() left as a relative path would silently break that once the file is
+   opened from somewhere that isn't served alongside art/. */
+const styles = rawStyles.replace(/url\(([^)]+)\)/g, (whole, ref) => {
+  const clean = ref.trim().replace(/^["']|["']$/g, "");
+  if (!clean.includes("art/ui/")) return whole;
+  try {
+    const buf = readFileSync(resolve(WEB, "styles", clean));
+    const mime = clean.toLowerCase().endsWith(".png") ? "image/png" : "image/jpeg";
+    return `url(data:${mime};base64,${buf.toString("base64")})`;
+  } catch { return whole; }
+});
 
 const payload =
   `<script>window.__ALLYNCE_DATA__ = ${JSON.stringify(data)};\n` +
@@ -151,9 +173,18 @@ mkdirSync(resolve(ROOT, "dist"), { recursive: true });
 const target = resolve(ROOT, artifactMode ? "dist/allynce.artifact.html" : "dist/allynce.html");
 writeFileSync(target, out);
 
-console.log(`${relative(ROOT, target)}  ${(out.length / 1_048_576).toFixed(2)} MB`);
-console.log(`  ${ordered.length} modules, ${units.length} units, ${Object.keys(art).length} painted plates`);
-if (out.length > 16 * 1_048_576) {
-  console.error("  ! over the 16 MB single-page budget — the plates need a smaller thumbnail size");
+const BUDGET = 16 * 1_048_576;
+console.log(`${relative(ROOT, target)}  ${(out.length / 1_048_576).toFixed(2)} MB`
+  + `  (${Math.round((out.length / BUDGET) * 100)}% of the 16 MB budget)`);
+console.log(`  ${ordered.length} modules, ${units.length} units, ${Object.keys(art).length} painted plates`
+  + `${thumbs ? "" : " — ORIGINALS, not thumbnails"}`);
+if (out.length > BUDGET) {
+  // Two different faults land here and they want opposite fixes, so say which one this is: without
+  // thumbnails the page is carrying print-resolution plates and the answer is to make thumbnailing
+  // work, not to shrink a thumbnail that was never made.
+  console.error(thumbs
+    ? "  ! over the 16 MB single-page budget — the plates need a smaller thumbnail size"
+    : "  ! over the 16 MB single-page budget because thumbnailing did not run and the originals were"
+      + " embedded — install the Playwright browser (or set PLAYWRIGHT_CHROMIUM_PATH) and build again");
   process.exit(1);
 }

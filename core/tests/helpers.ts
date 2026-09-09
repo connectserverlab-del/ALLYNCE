@@ -4,7 +4,31 @@ import { loadRegistry } from "../src/data.js";
 import { deployPlatoon } from "../src/deploy.js";
 import type { PlatoonBlueprint } from "../src/composition.js";
 import type { Hex } from "../src/hex.js";
-import { newKingdom, startUpgrade, tick, startResearch, type KingdomState } from "../src/kingdom.js";
+import { newKingdom, startUpgrade, tick, startResearch, RESOURCE_IDS, type KingdomState, type Resources, type BuildingId } from "../src/kingdom.js";
+import type { Registry } from "../src/registry.js";
+
+/**
+ * Raise whatever a building needs so that `startUpgrade` on it is legal, without going through the
+ * build queue.
+ *
+ * Buildings gained prerequisites when the hold got a readable build order (no forge before a mine,
+ * no stable before a barracks). A test about build timers or recruitment does not want to restate
+ * that tree; it wants the building to be raisable. Levels are set directly, which is setup rather
+ * than play — `core/tests/holding-systems.test.ts` is where the requirement rule itself is proved.
+ */
+export function enable(reg: Registry, k: KingdomState, building: BuildingId, level = 1): void {
+  for (const r of reg.kingdom.buildings[building].requires ?? []) {
+    enable(reg, k, r.building, r.level);
+    if (k.levels[r.building] < r.level) k.levels[r.building] = r.level;
+  }
+  const need = Math.max(level, k.levels[building] + 1);
+  if (building !== "KEEP" && k.levels.KEEP < need) k.levels.KEEP = need;
+}
+
+/** Every resource at `n`. Tests want "enough of everything"; spelling the bag out in each
+ *  one meant a new currency broke seven files that did not care about it. */
+export const fill = (n: number): Required<Resources> =>
+  Object.fromEntries(RESOURCE_IDS.map((r) => [r, n])) as Required<Resources>;
 
 export const reg = loadRegistry();
 
@@ -55,7 +79,7 @@ export function deploy(b: Battle, id: string, side: string, bp: Omit<PlatoonBlue
 /** A holding with unlimited resources, a Research Hall tall enough for `researchIds`' highest tier, and every id in the chain completed in order. */
 export function kingdomWithResearch(faction: string, researchIds: string[]): KingdomState {
   const k = newKingdom(reg, faction);
-  k.resources = { koku: 9999999, iron: 9999999, timber: 9999999, silver: 9999999 };
+  k.resources = fill(9999999);
   for (let i = 0; i < 7; i++) {
     startUpgrade(reg, k, "KEEP"); tick(reg, k, 1000000);
     startUpgrade(reg, k, "RESEARCH_HALL"); tick(reg, k, 1000000);

@@ -38,18 +38,21 @@ const assetPath = join(scratch, "assets.json");
 const marchPath = join(scratch, "march.js");
 const writsPath = join(scratch, "writs.js");
 const cardsPath = join(scratch, "cards.js");
+const holdPath = join(scratch, "hold.js");
 try {
   execFileSync("python3", [p("scripts/pack-sample-assets.py"), assetPath], { cwd: ROOT, stdio: "inherit" });
   execFileSync("node", [p("scripts/bundle-march.mjs"), marchPath], { cwd: ROOT, stdio: "inherit" });
   execFileSync("node", [p("scripts/bundle-writs.mjs"), writsPath], { cwd: ROOT, stdio: "inherit" });
   execFileSync("node", [p("scripts/bundle-cards.mjs"), cardsPath], { cwd: ROOT, stdio: "inherit" });
+  execFileSync("node", [p("scripts/bundle-hold.mjs"), holdPath], { cwd: ROOT, stdio: "inherit" });
   execFileSync("npx", ["tsx", p("web/sample/data.mts"), statePath], { cwd: ROOT, stdio: "inherit" });
   const html = readFileSync(p("web/sample/template.html"), "utf8")
     .replace("__DATA__", () => readFileSync(statePath, "utf8"))
     .replace("__ASSETS__", () => readFileSync(assetPath, "utf8"))
     .replace("__MARCH_ENGINE__", () => readFileSync(marchPath, "utf8"))
     .replace("__WRITS_ENGINE__", () => readFileSync(writsPath, "utf8"))
-    .replace("__CARDS_ENGINE__", () => readFileSync(cardsPath, "utf8"));
+    .replace("__CARDS_ENGINE__", () => readFileSync(cardsPath, "utf8"))
+    .replace("__HOLD_ENGINE__", () => readFileSync(holdPath, "utf8"));
   const out = p("docs/samples/ashfall-hold.html");
   writeFileSync(out, html);
   console.log(`wrote ${out} (${(html.length / 1e6).toFixed(1)} MB)`);

@@ -5,26 +5,47 @@ import { Rng } from "./rng.js";
 import { newWantedState, type WantedState } from "./wanted.js";
 import { changeMorale } from "./morale.js";
 
-export type ResourceId = "koku" | "iron" | "timber" | "silver";
+/**
+ * Grain, ore, timber and silver are produced by buildings and stockpiled against the City Hall's
+ * storage. Gold and ruby are not: gold is what the summoning bell and the shop want, ruby is rarer
+ * still and no building makes it. `KingdomData.uncappedResources` says which ignore the cap.
+ */
+export type ResourceId = "koku" | "iron" | "timber" | "silver" | "gold" | "ruby";
 export type Resources = Partial<Record<ResourceId, number>>;
 export type BuildingId =
   | "KEEP" | "GRANARY" | "MINE" | "SAWPIT" | "BARRACKS" | "RESEARCH_HALL"
-  | "RECRUITMENT_HALL" | "FORGE" | "STABLE" | "WALL" | "SHRINE";
+  | "RECRUITMENT_HALL" | "FORGE" | "STABLE" | "WALL" | "SHRINE" | "SHOP" | "ARMORY";
+
+/** A plot on the hold's grid. The player may move any building to any free plot. */
+export interface Plot { x: number; y: number }
 
 export interface BuildingDef {
   name: string; maxLevel: number; text: string;
   cost: Resources; costGrowth: number; buildSeconds: number; timeGrowth: number;
   produces?: Resources;
+  /** Other buildings that must already be at a level before this one may be raised at all. */
+  requires?: Array<{ building: BuildingId; level: number }>;
+  /** Where this building sits when a hold is founded, before the player moves it. */
+  plot?: [number, number];
   art?: Array<string | null>;
   effect?: { armyCapacity?: number; researchSpeed?: number; researchTier?: number; drawFloor?: number; atk?: number; cavalryAtk?: number; def?: number; fusionChargesPer?: number; ritualProgress?: number };
 }
 export interface TierBand { tier: number; fromLevel: number; toLevel: number; text: string }
 export interface KingdomData {
   tierBands: TierBand[];
-  resources: Record<ResourceId, { name: string; text: string }>;
+  resources: Record<ResourceId, { name: string; text: string; kind?: string }>;
   buildings: Record<BuildingId, BuildingDef>;
   startingResources: Required<Resources>;
   storagePerKeepLevel: number;
+  /** Resources the City Hall's storage does not cap. */
+  uncappedResources?: ResourceId[];
+  /** Every distinct ten-star unit owned raises production of these resources by `bonusPerUnit`. */
+  tenStarProduction?: { bonusPerUnit: number; resources: ResourceId[]; text?: string };
+  layout?: { cols: number; rows: number; text?: string };
+  /** Weights for `core/src/power.ts`. Balance, so it lives in data. */
+  power?: Partial<import("./power.js").PowerWeights>;
+  /** Buyable card borders. Display only, and priced in gold and ruby. */
+  borders?: import("./cosmetics.js").BorderDef[];
 }
 export interface ResearchDef {
   id: string; name: string; tier: number; text: string; cost: Resources; seconds: number; requires: string[];
@@ -52,7 +73,11 @@ export interface KingdomState {
   levels: Record<BuildingId, number>;
   buildQueue: BuildJob[];
   research: { done: string[]; active: ResearchJob | null };
+  /** Which plot each building stands on. The player may move any of them; see `moveBuilding`. */
+  layout: Record<BuildingId, Plot>;
   collection: Record<string, number>;   // unit id -> copies owned
+  /** Bought borders and earned shine, by unit id. Display only; see `core/src/cosmetics.ts`. */
+  cosmetics?: import("./cosmetics.js").Cosmetics;
   pity: Record<string, number>;         // banner id -> draws since a high-star result
   wanted: WantedState;                  // warrants posted, in hand and settled
   seed: number;
@@ -60,7 +85,21 @@ export interface KingdomState {
   draws: number;                        // total cards ever drawn from any banner; keeps each draw's roll unique
 }
 
-export const BUILDING_IDS: BuildingId[] = ["KEEP", "GRANARY", "MINE", "SAWPIT", "BARRACKS", "RESEARCH_HALL", "RECRUITMENT_HALL", "FORGE", "STABLE", "WALL", "SHRINE"];
+/** Every resource at zero. The single place a full bag is spelled out, so adding a currency is one
+ *  edit rather than a hunt through every literal that happened to list them all. */
+export const NO_RESOURCES: Required<Resources> = { koku: 0, iron: 0, timber: 0, silver: 0, gold: 0, ruby: 0 };
+
+/** `NO_RESOURCES` as a fresh object, safe to call from a module that this one imports. `wanted.ts`
+ *  is loaded by this file, so a module-scope `{ ...NO_RESOURCES }` there reads the binding before it
+ *  is initialised; calling a function defers that read until the cycle has settled. */
+export function emptyResources(): Required<Resources> {
+  return { koku: 0, iron: 0, timber: 0, silver: 0, gold: 0, ruby: 0 };
+}
+
+/** All resource ids, in the order the data declares them. */
+export const RESOURCE_IDS: ResourceId[] = ["koku", "iron", "timber", "silver", "gold", "ruby"];
+
+export const BUILDING_IDS: BuildingId[] = ["KEEP", "GRANARY", "MINE", "SAWPIT", "BARRACKS", "RESEARCH_HALL", "RECRUITMENT_HALL", "FORGE", "STABLE", "WALL", "SHRINE", "SHOP", "ARMORY"];
 
 export function newKingdom(reg: Registry, faction: string, opts: { name?: string; seed?: number } = {}): KingdomState {
   const levels = Object.fromEntries(BUILDING_IDS.map((b) => [b, b === "KEEP" ? 1 : 0])) as Record<BuildingId, number>;
@@ -68,8 +107,74 @@ export function newKingdom(reg: Registry, faction: string, opts: { name?: string
     name: opts.name ?? "Ashfall Hold", faction,
     resources: { ...reg.kingdom.startingResources },
     levels, buildQueue: [], research: { done: [], active: null },
+    layout: defaultLayout(reg),
+    cosmetics: {},
     collection: {}, pity: {}, wanted: newWantedState(), seed: opts.seed ?? 1, elapsed: 0, draws: 0,
   };
+}
+
+/** The plots a hold is founded on, straight from the data. */
+export function defaultLayout(reg: Registry): Record<BuildingId, Plot> {
+  const out = {} as Record<BuildingId, Plot>;
+  for (const b of BUILDING_IDS) {
+    const p = reg.kingdom.buildings[b].plot;
+    out[b] = p ? { x: p[0], y: p[1] } : { x: 0, y: 0 };
+  }
+  return out;
+}
+
+/** The hold's grid, or a sane default if the data does not say. */
+export function layoutSize(reg: Registry): { cols: number; rows: number } {
+  return { cols: reg.kingdom.layout?.cols ?? 12, rows: reg.kingdom.layout?.rows ?? 8 };
+}
+
+/**
+ * Move a building to a free plot.
+ *
+ * A hold the player cannot arrange is a list, not a place. The rules are only that a plot is on the
+ * grid and that two buildings never share one — the grid is cosmetic, so nothing here touches
+ * production, cost or `kingdomEffects`. A build in progress does not pin a building down; you can
+ * rearrange while the scaffolding is up.
+ */
+export function moveBuilding(reg: Registry, k: KingdomState, building: BuildingId, to: Plot): ActionResult {
+  const { cols, rows } = layoutSize(reg);
+  if (!Number.isInteger(to.x) || !Number.isInteger(to.y)) return { ok: false, reason: "A plot is a whole square" };
+  if (to.x < 0 || to.y < 0 || to.x >= cols || to.y >= rows) return { ok: false, reason: "That plot is outside the hold" };
+  const occupant = BUILDING_IDS.find((b) => b !== building && k.layout[b].x === to.x && k.layout[b].y === to.y);
+  if (occupant) return { ok: false, reason: `${reg.kingdom.buildings[occupant].name} already stands there` };
+  k.layout[building] = { x: to.x, y: to.y };
+  return { ok: true };
+}
+
+/** Swap two buildings' plots. Dragging one onto another reads as a swap, not as an error. */
+export function swapBuildings(k: KingdomState, a: BuildingId, b: BuildingId): ActionResult {
+  if (a === b) return { ok: false, reason: "A building cannot swap with itself" };
+  const pa = k.layout[a];
+  k.layout[a] = k.layout[b];
+  k.layout[b] = pa;
+  return { ok: true };
+}
+
+/**
+ * Repair a holding that was built by an older shape of this file.
+ *
+ * `saveGame` deep-clones the whole `KingdomState`, so nothing new is *dropped* on the way out. The
+ * risk runs the other way: a holding written before a field existed comes back without it, and the
+ * first thing to touch `k.layout[b].x` or `k.resources.gold` gets a crash or a NaN rather than an
+ * error anyone can read. Every field added here since has a default, and this is where they are
+ * applied. It is idempotent, so calling it on a current holding does nothing.
+ */
+export function normalizeKingdom(reg: Registry, k: KingdomState): KingdomState {
+  for (const r of RESOURCE_IDS) if (typeof k.resources[r] !== "number") k.resources[r] = reg.kingdom.startingResources[r] ?? 0;
+  k.layout ??= defaultLayout(reg);
+  const fallback = defaultLayout(reg);
+  for (const b of BUILDING_IDS) {
+    if (typeof k.levels[b] !== "number") k.levels[b] = 0;
+    const p = k.layout[b];
+    if (!p || typeof p.x !== "number" || typeof p.y !== "number") k.layout[b] = fallback[b];
+  }
+  k.cosmetics ??= {};
+  return k;
 }
 
 const scale = (base: number, growth: number, level: number) => Math.round(base * Math.pow(growth, Math.max(0, level)));
@@ -107,12 +212,37 @@ export function startUpgrade(reg: Registry, k: KingdomState, building: BuildingI
   const level = k.levels[building];
   if (level >= d.maxLevel) return { ok: false, reason: `${d.name} is already at its maximum level` };
   if (k.buildQueue.some((j) => j.building === building)) return { ok: false, reason: `${d.name} is already being raised` };
-  if (building !== "KEEP" && level + 1 > k.levels.KEEP) return { ok: false, reason: `Raise the Keep past level ${k.levels.KEEP} before ${d.name} level ${level + 1}` };
+  if (building !== "KEEP" && level + 1 > k.levels.KEEP) return { ok: false, reason: `Raise the ${reg.kingdom.buildings.KEEP.name} past level ${k.levels.KEEP} before ${d.name} level ${level + 1}` };
+  const unmet = unmetRequirements(reg, k, building);
+  if (unmet.length) {
+    const first = unmet[0]!;
+    return { ok: false, reason: `${d.name} needs ${reg.kingdom.buildings[first.building].name} level ${first.level}` };
+  }
   const cost = upgradeCost(reg, k, building);
   if (!canAfford(k, cost)) return { ok: false, reason: `Not enough ${(Object.entries(cost) as Array<[ResourceId, number]>).filter(([r, v]) => k.resources[r] < v).map(([r]) => reg.kingdom.resources[r].name).join(" and ")}` };
   pay(k, cost);
   k.buildQueue.push({ building, toLevel: level + 1, secondsLeft: upgradeSeconds(reg, k, building) });
   return { ok: true };
+}
+
+/**
+ * The prerequisites a building has not met yet, in the order the data lists them.
+ *
+ * The City Hall's level gate is separate and applies to everything; these are the per-building
+ * requirements that make a hold grow in a readable order — no forge before a mine, no stable before
+ * a barracks. Exported because a UI wants to show the requirement on a row it has greyed out, and
+ * recomputing it there would be a second copy of this rule.
+ */
+export function unmetRequirements(reg: Registry, k: KingdomState, building: BuildingId): Array<{ building: BuildingId; level: number }> {
+  return (reg.kingdom.buildings[building].requires ?? []).filter((r) => k.levels[r.building] < r.level);
+}
+
+/** Whether the player could start this upgrade right now, ignoring cost. */
+export function canUpgrade(reg: Registry, k: KingdomState, building: BuildingId): boolean {
+  const d = reg.kingdom.buildings[building];
+  if (k.levels[building] >= d.maxLevel) return false;
+  if (building !== "KEEP" && k.levels[building] + 1 > k.levels.KEEP) return false;
+  return unmetRequirements(reg, k, building).length === 0;
 }
 
 export function researchable(reg: Registry, k: KingdomState): ResearchDef[] {
@@ -133,21 +263,54 @@ export function startResearch(reg: Registry, k: KingdomState, id: string): Actio
   return { ok: true };
 }
 
+/** What the collection's ten-star units are worth to the hold's production. */
+export interface TenStarBonus {
+  /** Distinct ten-star units owned. Copies of the same unit count once. */
+  units: string[];
+  /** Added multiplier, e.g. 0.4 for two ten-stars at 20% each. */
+  multiplier: number;
+  resources: ResourceId[];
+}
+
+/**
+ * Every distinct ten-star unit in the collection raises grain, ore and timber production.
+ *
+ * Distinct, not total: a second copy of the same ten-star is worth a card merge (see
+ * `core/src/cosmetics.ts`), not a second 20%. Stacking copies would make the buff a pure function
+ * of luck at the summoning bell, and a player who drew one of each would fall behind a player who
+ * drew the same one four times.
+ */
+export function tenStarBonus(reg: Registry, k: KingdomState): TenStarBonus {
+  const cfg = reg.kingdom.tenStarProduction;
+  if (!cfg) return { units: [], multiplier: 0, resources: [] };
+  const units: string[] = [];
+  for (const [id, copies] of Object.entries(k.collection)) {
+    if (copies <= 0) continue;
+    const u = reg.units.get(id);
+    if (u && u.stars === 10) units.push(id);
+  }
+  units.sort();
+  return { units, multiplier: units.length * cfg.bonusPerUnit, resources: cfg.resources };
+}
+
 export interface TickReport { produced: Resources; finishedBuildings: BuildingId[]; finishedResearch: string[] }
 
 /** Advance the holding by `seconds`: production, build queue and research all move together. */
 export function tick(reg: Registry, k: KingdomState, seconds: number): TickReport {
   const report: TickReport = { produced: {}, finishedBuildings: [], finishedResearch: [] };
   const cap = storageCap(reg, k);
+  const uncapped = new Set(reg.kingdom.uncappedResources ?? []);
   const hours = seconds / 3600;
+  const buff = tenStarBonus(reg, k);
   for (const b of BUILDING_IDS) {
     const d = reg.kingdom.buildings[b];
     if (!d.produces || k.levels[b] === 0) continue;
     for (const [r, v] of Object.entries(d.produces) as Array<[ResourceId, number]>) {
-      const gain = Math.floor(v * k.levels[b] * hours);
+      const gain = Math.floor(v * k.levels[b] * hours * (1 + (buff.resources.includes(r) ? buff.multiplier : 0)));
       if (gain <= 0) continue;
       const before = k.resources[r];
-      k.resources[r] = Math.min(cap, before + gain);
+      // Gold and ruby are coin, not stores: the City Hall's granary does not bound them.
+      k.resources[r] = uncapped.has(r) ? before + gain : Math.min(cap, before + gain);
       report.produced[r] = (report.produced[r] ?? 0) + (k.resources[r] - before);
     }
   }

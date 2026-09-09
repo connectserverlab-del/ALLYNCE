@@ -17,7 +17,14 @@ from PIL import Image
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Longest edge each class of asset is drawn at, with a little headroom for high-density screens.
-SIZES = {"token": 440, "frame": 620, "icon": 96, "star": 96, "tier": 560, "art": 1500}
+SIZES = {"token": 440, "frame": 620, "icon": 96, "star": 96, "tier": 560, "art": 1500,
+         # Interface textures sit behind text under a darkening gradient, so they carry the
+         # grain and the foxing and nothing that needs to be legible. Small is enough.
+         "texture": 720,
+         # Scenery and terrain marks are drawn small — a prop is about 90px on screen and a
+         # terrain symbol about 40 — and packing them at token size pushed the page over its
+         # 16 MB budget for detail nobody can see.
+         "prop": 300, "symbol": 200}
 
 
 def uri(rel, kind):
@@ -43,8 +50,19 @@ def uri(rel, kind):
 
 UI = "art/ui"
 ICONS = ["BLD-BARRACKS", "BLD-BUILD", "BLD-FORGE", "BLD-KEEP", "BLD-RECRUIT", "BLD-RESEARCH",
-         "RES-IRON", "RES-KOKU", "RES-SILVER", "RES-TIMBER", "UI-BANNER", "UI-DRAW",
+         "RES-IRON", "RES-KOKU", "RES-SILVER", "RES-TIMBER", "RES-GOLD", "RES-RUBY",
+         "UI-BANNER", "UI-DRAW", "UI-POWER",
          "STAT-LIFE", "STAT-ATK", "STAT-DEF"]
+
+# Painted plan-view terrain symbols. The field drew these as bare SVG paths — a triangle for a
+# mountain, four little wedges for a wood — which is what a map looks like before anyone paints it.
+MAP_SYMBOLS = ["FOREST", "TREE", "MOUNTAIN", "HILL", "BRIDGE", "RIVER", "FORD",
+               "RUINS", "PALISADE", "ROAD", "MARSH", "WATCHTOWER"]
+
+# Scenery for the city's isometric tiles. Not gameplay: a hold with nothing between its
+# buildings but bare ground reads as a spreadsheet, and these are what fill it.
+PROPS = ["TREE", "TREES", "BRAZIER", "BANNER", "WELL", "CART", "CRATES",
+         "RUBBLE", "DUMMIES", "BASIN", "AWNING", "STEPS"]
 
 
 def main(out_path):
@@ -69,10 +87,29 @@ def main(out_path):
             "hold": uri("art/concepts/BASE_STRONGHOLD-TOPDOWN_CONCEPT_V01.jpg", "art"),
             "holdAngle": uri("art/concepts/BASE_STRONGHOLD-ANGLED_CONCEPT_V01.jpg", "art"),
             "cardback": uri(f"{UI}/CARD-BACK-PAPER_V01.png", "frame"),
+            # Painted interface chrome. These were made for the web client and never reached this
+            # page, so every panel here was flat CSS colour while the same textures sat unused on
+            # disk. Each is laid under a darkening gradient at use, never raw, or the text on top
+            # of it stops being readable.
+            "panelTexture": uri(f"{UI}/UI_PANEL-PARCHMENT_V01.jpg", "texture"),
+            "bannerTexture": uri(f"{UI}/UI_TOPBAR-BANNER_V01.jpg", "texture"),
+            "boardGround": uri(f"{UI}/UI_BOARD-GROUND_V01.jpg", "texture"),
+            # A second painted ground, so the field is not the mountain pass on every map.
+            "groundMarsh": uri("art/concepts/MAP_DROWNED-MARSH_CONCEPT_V01.jpg", "art"),
         },
         "tiers": {},
         "tokens": {},
+        "map": {},
+        "props": {},
     }
+    for pr in PROPS:
+        u = uri(f"art/props/PROP_{pr}_V01.png", "prop")
+        if u:
+            assets["props"][pr] = u
+    for m in MAP_SYMBOLS:
+        u = uri(f"art/map/MAP_{m}_V01.png", "symbol")
+        if u:
+            assets["map"][m] = u
     for i in ICONS:
         u = uri(f"{UI}/ICON_{i}_V01.png", "icon")
         if u:
@@ -90,12 +127,24 @@ def main(out_path):
         u = uri(cutout, "token")
         if u:
             assets["tokens"][unit["id"]] = u
+    # A stratagem summons nothing, so it has no unit token to borrow and the Rites screen drew it
+    # blank. Its own painted emblem goes in under the card id, which is the first key the template's
+    # `tok()` tries.
+    for entry in registry:
+        if entry.get("group") != "Side cards" or entry.get("status") != "present":
+            continue
+        if entry.get("note") != "stratagem emblem":
+            continue
+        u = uri(entry["path"], "token")
+        if u:
+            assets["tokens"][entry["id"]] = u
 
     with open(out_path, "w") as fh:
         json.dump(assets, fh)
     size = os.path.getsize(out_path) / 1e6
-    print(f"packed {len(assets['tokens'])}/{len(units)} unit tokens, "
-          f"{len(assets['tiers'])} building tiers, {len(assets['icons'])} icons "
+    print(f"packed {len(assets['tokens'])} tokens ({len(units)} units + stratagem emblems), "
+          f"{len(assets['tiers'])} building tiers, {len(assets['icons'])} icons, "
+          f"{len(assets['map'])} map symbols, {len(assets['props'])} props "
           f"({size:.1f} MB)")
 
 

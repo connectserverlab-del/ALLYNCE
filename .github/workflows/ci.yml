@@ -31,7 +31,13 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
+      # The art pipeline is Python: cutting a plate, packing the sample page, and auditing that a
+      # cut actually cut. `npm run check` runs the last of those.
+      - name: Install Python dependencies
+        run: python3 -m pip install --disable-pip-version-check -r requirements.txt
+
       # One command: generated-data drift, typecheck, rules tests, browser
-      # checks and the roster invariants. Same thing a contributor runs locally.
+      # checks, the cut-out art audit and the roster invariants. Same thing a
+      # contributor runs locally.
       - name: npm run check
         run: npm run check

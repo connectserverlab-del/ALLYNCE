@@ -221,6 +221,321 @@
         "serrated ridge crest",
         "mid-stride"
       ]
+    },
+    {
+      "unitId": "ANG_LEVY_ASHWING-NOVICE",
+      "concept": "art/samples/ANG_LEVY_ASHWING-NOVICE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ANG_LEVY_ASHWING-NOVICE_CUTOUT_V01.png",
+      "jobId": "4b3a09ed-898e-4310-9f86-cc0392eb58e8",
+      "approved": false
+    },
+    {
+      "unitId": "ARC_CAVALRY_WARDBOUND-COURSER",
+      "concept": "art/samples/ARC_CAVALRY_WARDBOUND-COURSER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ARC_CAVALRY_WARDBOUND-COURSER_CUTOUT_V01.png",
+      "jobId": "bdbb283c-0631-49d0-a095-358e1670de42",
+      "approved": false
+    },
+    {
+      "unitId": "ARC_SIEGE_WARDED-CULVERIN",
+      "concept": "art/samples/ARC_SIEGE_WARDED-CULVERIN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ARC_SIEGE_WARDED-CULVERIN_CUTOUT_V01.png",
+      "jobId": "915b44cf-e25a-4ca4-8994-de3e379f0f7f",
+      "approved": false
+    },
+    {
+      "unitId": "DEM_LEVY_PIT-STRAY",
+      "concept": "art/samples/DEM_LEVY_PIT-STRAY_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DEM_LEVY_PIT-STRAY_CUTOUT_V01.png",
+      "jobId": "cb772079-9c29-4bb4-8d0d-a83730610e57",
+      "approved": false
+    },
+    {
+      "unitId": "DRG_COMMANDER_ASHWING-DOMINANT",
+      "concept": "art/samples/DRG_COMMANDER_ASHWING-DOMINANT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_COMMANDER_ASHWING-DOMINANT_CUTOUT_V01.png",
+      "jobId": "46a60d0a-8e72-40bc-a4d5-5d35677cd42d",
+      "approved": false
+    },
+    {
+      "unitId": "DRG_COMMANDER_STORMSCALE-SOVEREIGN",
+      "concept": "art/samples/DRG_COMMANDER_STORMSCALE-SOVEREIGN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_COMMANDER_STORMSCALE-SOVEREIGN_CUTOUT_V01.png",
+      "jobId": "1a331cec-bd26-4ce5-b25f-b0e874e10e56",
+      "approved": false
+    },
+    {
+      "unitId": "DRG_ELITE_ASHFANG-RAVAGER",
+      "concept": "art/samples/DRG_ELITE_ASHFANG-RAVAGER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_ELITE_ASHFANG-RAVAGER_CUTOUT_V01.png",
+      "jobId": "bd67008b-0af6-45e5-b684-cc1f631fbaa8",
+      "approved": false
+    },
+    {
+      "unitId": "DRG_ELITE_CINDERMAW-STALKER",
+      "concept": "art/samples/DRG_ELITE_CINDERMAW-STALKER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_ELITE_CINDERMAW-STALKER_CUTOUT_V01.png",
+      "jobId": "14b97608-f1ba-477d-9ff7-6e2f6b7b96ac",
+      "approved": false
+    },
+    {
+      "unitId": "DRG_FOOT_ASHSCALE-DRAKE",
+      "concept": "art/samples/DRG_FOOT_ASHSCALE-DRAKE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_FOOT_ASHSCALE-DRAKE_CUTOUT_V01.png",
+      "jobId": "5523ffe3-0cdf-43e3-9924-579c2b642049",
+      "approved": false
+    },
+    {
+      "unitId": "DRG_SECOND_DUSKWING-SECOND",
+      "concept": "art/samples/DRG_SECOND_DUSKWING-SECOND_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_SECOND_DUSKWING-SECOND_CUTOUT_V01.png",
+      "jobId": "b81e9bbd-0eba-44ef-b3d2-f4f5bcc008a0",
+      "approved": false
+    },
+    {
+      "unitId": "DRG_SECOND_EMBERCLAW-WINGSECOND",
+      "concept": "art/samples/DRG_SECOND_EMBERCLAW-WINGSECOND_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_SECOND_EMBERCLAW-WINGSECOND_CUTOUT_V01.png",
+      "jobId": "e6ff2663-929e-4ca2-aa89-2aa6438387b7",
+      "approved": false
+    },
+    {
+      "unitId": "DRG_SIEGE_BONEFORGE-BALLISTA",
+      "concept": "art/samples/DRG_SIEGE_BONEFORGE-BALLISTA_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DRG_SIEGE_BONEFORGE-BALLISTA_CUTOUT_V01.png",
+      "jobId": "11fbd692-a2da-4276-8289-3c938ae81927",
+      "approved": false
+    },
+    {
+      "unitId": "DUN_CAVALRY_DUNEWAKE-VANGUARD",
+      "concept": "art/samples/DUN_CAVALRY_DUNEWAKE-VANGUARD_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DUN_CAVALRY_DUNEWAKE-VANGUARD_CUTOUT_V01.png",
+      "jobId": "8dc40d34-fc73-45eb-9b55-9bbb35ad77a8",
+      "approved": false
+    },
+    {
+      "unitId": "DUN_SIEGE_GLASSROAD-BALLISTA",
+      "concept": "art/samples/DUN_SIEGE_GLASSROAD-BALLISTA_CONCEPT_V01.jpg",
+      "cutout": "art/samples/DUN_SIEGE_GLASSROAD-BALLISTA_CUTOUT_V01.png",
+      "jobId": "ba4299fb-68dc-4731-9939-15d9016a8058",
+      "approved": false
+    },
+    {
+      "unitId": "KNI_COMMANDER_IRONWALL-MARSHAL",
+      "concept": "art/samples/KNI_COMMANDER_IRONWALL-MARSHAL_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_COMMANDER_IRONWALL-MARSHAL_CUTOUT_V01.png",
+      "jobId": "078625ad-9edb-458b-b022-936b27a96b7a",
+      "approved": false
+    },
+    {
+      "unitId": "KNI_COMMANDER_VIGIL-BASTION-LORD",
+      "concept": "art/samples/KNI_COMMANDER_VIGIL-BASTION-LORD_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_COMMANDER_VIGIL-BASTION-LORD_CUTOUT_V01.png",
+      "jobId": "1ebe174b-aee2-412c-94b5-091b8253fada",
+      "approved": false
+    },
+    {
+      "unitId": "KNI_ELITE_SILVER-VOW-CHAMPION",
+      "concept": "art/samples/KNI_ELITE_SILVER-VOW-CHAMPION_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_ELITE_SILVER-VOW-CHAMPION_CUTOUT_V01.png",
+      "jobId": "3ac2ce42-5e50-4d4b-8df3-419842b60fe3",
+      "approved": false
+    },
+    {
+      "unitId": "KNI_ELITE_STORMBREAKER-PALADIN",
+      "concept": "art/samples/KNI_ELITE_STORMBREAKER-PALADIN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_ELITE_STORMBREAKER-PALADIN_CUTOUT_V01.png",
+      "jobId": "3e866317-2a21-4e4a-8150-f5674c6bd567",
+      "approved": false
+    },
+    {
+      "unitId": "KNI_SECOND_DAWNGUARD-LIEUTENANT",
+      "concept": "art/samples/KNI_SECOND_DAWNGUARD-LIEUTENANT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_SECOND_DAWNGUARD-LIEUTENANT_CUTOUT_V01.png",
+      "jobId": "64f67b8e-f114-4e68-95d4-a3b345b9d26f",
+      "approved": false
+    },
+    {
+      "unitId": "KNI_SECOND_OATH-SHIELD-KNIGHT",
+      "concept": "art/samples/KNI_SECOND_OATH-SHIELD-KNIGHT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_SECOND_OATH-SHIELD-KNIGHT_CUTOUT_V01.png",
+      "jobId": "7f4a5b86-6daf-4ae2-8403-474671907427",
+      "approved": false
+    },
+    {
+      "unitId": "KNI_SIEGE_WARDENS-BOMBARD",
+      "concept": "art/samples/KNI_SIEGE_WARDENS-BOMBARD_CONCEPT_V01.jpg",
+      "cutout": "art/samples/KNI_SIEGE_WARDENS-BOMBARD_CUTOUT_V01.png",
+      "jobId": "06a36b80-bfae-4e7e-a8c1-275377d8cea7",
+      "approved": false
+    },
+    {
+      "unitId": "ROG_CAVALRY_BACKSTREET-COURSER",
+      "concept": "art/samples/ROG_CAVALRY_BACKSTREET-COURSER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ROG_CAVALRY_BACKSTREET-COURSER_CUTOUT_V01.png",
+      "jobId": "8cbec48d-fefc-4134-88a9-fe4e693af33f",
+      "approved": false
+    },
+    {
+      "unitId": "ROG_SIEGE_STOLEN-BOMBARD",
+      "concept": "art/samples/ROG_SIEGE_STOLEN-BOMBARD_CONCEPT_V01.jpg",
+      "cutout": "art/samples/ROG_SIEGE_STOLEN-BOMBARD_CUTOUT_V01.png",
+      "jobId": "5e57f2c9-58c1-4b86-8eaf-c07a2ace64b1",
+      "approved": false
+    },
+    {
+      "unitId": "SAM_CAVALRY_CHARWIND-LANCERS",
+      "concept": "art/samples/SAM_CAVALRY_CHARWIND-LANCERS_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_CAVALRY_CHARWIND-LANCERS_CUTOUT_V01.png",
+      "jobId": "ad807b41-478f-4493-825a-646dc0e19e99",
+      "approved": false
+    },
+    {
+      "unitId": "SAM_COMMANDER_CINDERWATCH-CAPTAIN",
+      "concept": "art/samples/SAM_COMMANDER_CINDERWATCH-CAPTAIN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_COMMANDER_CINDERWATCH-CAPTAIN_CUTOUT_V01.png",
+      "jobId": "f25e0f3b-cd12-4d40-a3fd-986be10294d1",
+      "approved": false
+    },
+    {
+      "unitId": "SAM_COMMANDER_STONEGATE-WARDEN",
+      "concept": "art/samples/SAM_COMMANDER_STONEGATE-WARDEN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_COMMANDER_STONEGATE-WARDEN_CUTOUT_V01.png",
+      "jobId": "596f0eb9-5a62-433f-b5a4-a0c2feb718d4",
+      "approved": false
+    },
+    {
+      "unitId": "SAM_ELITE_ASHEN-BLADE-SENTINEL",
+      "concept": "art/samples/SAM_ELITE_ASHEN-BLADE-SENTINEL_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_ELITE_ASHEN-BLADE-SENTINEL_CUTOUT_V01.png",
+      "jobId": "a9a7c331-cf4a-4e50-9607-da602cd61932",
+      "approved": false
+    },
+    {
+      "unitId": "SAM_ELITE_CRIMSON-FANG-DUELIST",
+      "concept": "art/samples/SAM_ELITE_CRIMSON-FANG-DUELIST_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_ELITE_CRIMSON-FANG-DUELIST_CUTOUT_V01.png",
+      "jobId": "eeb50625-780c-4c7c-9aa2-46b8791768c6",
+      "approved": false
+    },
+    {
+      "unitId": "SAM_SECOND_IRON-SASH-LIEUTENANT",
+      "concept": "art/samples/SAM_SECOND_IRON-SASH-LIEUTENANT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_SECOND_IRON-SASH-LIEUTENANT_CUTOUT_V01.png",
+      "jobId": "8c8dd05b-9468-4129-b779-24a584d580b5",
+      "approved": false
+    },
+    {
+      "unitId": "SAM_SECOND_JADE-CREST-RETAINER",
+      "concept": "art/samples/SAM_SECOND_JADE-CREST-RETAINER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_SECOND_JADE-CREST-RETAINER_CUTOUT_V01.png",
+      "jobId": "46603312-4942-46d8-9bee-58af1a05f2cb",
+      "approved": false
+    },
+    {
+      "unitId": "SAM_SIEGE_CINDERTHROAT-BATTERY",
+      "concept": "art/samples/SAM_SIEGE_CINDERTHROAT-BATTERY_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SAM_SIEGE_CINDERTHROAT-BATTERY_CUTOUT_V01.png",
+      "jobId": "c8d27dab-1719-4239-94d1-a9bfa59f14cc",
+      "approved": false
+    },
+    {
+      "unitId": "SHI_CAVALRY_REED-MARSH-OUTRIDERS",
+      "concept": "art/samples/SHI_CAVALRY_REED-MARSH-OUTRIDERS_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_CAVALRY_REED-MARSH-OUTRIDERS_CUTOUT_V01.png",
+      "jobId": "2e19ca29-2401-4e98-99bb-f3cf8705412c",
+      "approved": false
+    },
+    {
+      "unitId": "SHI_COMMANDER_ASHVEIL-STRATEGIST",
+      "concept": "art/samples/SHI_COMMANDER_ASHVEIL-STRATEGIST_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_COMMANDER_ASHVEIL-STRATEGIST_CUTOUT_V01.png",
+      "jobId": "1aa9d5d7-64bb-47b2-9d7b-daaab086f82f",
+      "approved": false
+    },
+    {
+      "unitId": "SHI_COMMANDER_HOLLOW-REED-JONIN",
+      "concept": "art/samples/SHI_COMMANDER_HOLLOW-REED-JONIN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_COMMANDER_HOLLOW-REED-JONIN_CUTOUT_V01.png",
+      "jobId": "44e19f2b-6860-4079-a0a0-ae9e2853850a",
+      "approved": false
+    },
+    {
+      "unitId": "SHI_ELITE_HOLLOW-MASK-ADEPT",
+      "concept": "art/samples/SHI_ELITE_HOLLOW-MASK-ADEPT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_ELITE_HOLLOW-MASK-ADEPT_CUTOUT_V01.png",
+      "jobId": "daa10d56-b92c-470f-865e-bbc3e130507f",
+      "approved": false
+    },
+    {
+      "unitId": "SHI_ELITE_NIGHT-GLASS-ASSASSIN",
+      "concept": "art/samples/SHI_ELITE_NIGHT-GLASS-ASSASSIN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_ELITE_NIGHT-GLASS-ASSASSIN_CUTOUT_V01.png",
+      "jobId": "80acd1e1-27d7-44fe-b94b-a7b1d6cafd89",
+      "approved": false
+    },
+    {
+      "unitId": "SHI_FOOT_ASH-STEP-INFILTRATOR",
+      "concept": "art/samples/SHI_FOOT_ASH-STEP-INFILTRATOR_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_FOOT_ASH-STEP-INFILTRATOR_CUTOUT_V01.png",
+      "jobId": "3c88dc1c-f882-4a6a-bea9-b09bc1347477",
+      "approved": false
+    },
+    {
+      "unitId": "SHI_SECOND_INK-STEP-LIEUTENANT",
+      "concept": "art/samples/SHI_SECOND_INK-STEP-LIEUTENANT_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_SECOND_INK-STEP-LIEUTENANT_CUTOUT_V01.png",
+      "jobId": "09f18762-63cf-4c2f-abcd-864096a1ebd5",
+      "approved": false
+    },
+    {
+      "unitId": "SHI_SECOND_SILENT-BELL-OPERATIVE",
+      "concept": "art/samples/SHI_SECOND_SILENT-BELL-OPERATIVE_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_SECOND_SILENT-BELL-OPERATIVE_CUTOUT_V01.png",
+      "jobId": "c2a5fcc7-0c3e-4849-bb7b-acdd304e7e67",
+      "approved": false
+    },
+    {
+      "unitId": "SHI_SIEGE_HOLLOW-REED-MORTAR",
+      "concept": "art/samples/SHI_SIEGE_HOLLOW-REED-MORTAR_CONCEPT_V01.jpg",
+      "cutout": "art/samples/SHI_SIEGE_HOLLOW-REED-MORTAR_CUTOUT_V01.png",
+      "jobId": "322e3b5d-bd5a-4fd0-8864-4f413d9f62e7",
+      "approved": false
+    },
+    {
+      "unitId": "STP_SIEGE_STEPPE-FALCONET",
+      "concept": "art/samples/STP_SIEGE_STEPPE-FALCONET_CONCEPT_V01.jpg",
+      "cutout": "art/samples/STP_SIEGE_STEPPE-FALCONET_CUTOUT_V01.png",
+      "jobId": "658205c5-5d3a-4b1e-a7f9-ce1d528059ae",
+      "approved": false
+    },
+    {
+      "unitId": "WEN_LEVY_GAUNT-STRAGGLER",
+      "concept": "art/samples/WEN_LEVY_GAUNT-STRAGGLER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WEN_LEVY_GAUNT-STRAGGLER_CUTOUT_V01.png",
+      "jobId": "98fc489f-0adf-473d-ac9b-d866d3fea2a4",
+      "approved": false
+    },
+    {
+      "unitId": "WEN_SECOND_RIME-ANTLER-WARDEN",
+      "concept": "art/samples/WEN_SECOND_RIME-ANTLER-WARDEN_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WEN_SECOND_RIME-ANTLER-WARDEN_CUTOUT_V01.png",
+      "jobId": "a2d2585c-bc9c-4ce0-a496-b2f9db403069",
+      "approved": false
+    },
+    {
+      "unitId": "WIT_CAVALRY_BRAMBLEHORN-RIDER",
+      "concept": "art/samples/WIT_CAVALRY_BRAMBLEHORN-RIDER_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WIT_CAVALRY_BRAMBLEHORN-RIDER_CUTOUT_V01.png",
+      "jobId": "14db773f-125d-4fe8-be9d-a644419c00f5",
+      "approved": false
+    },
+    {
+      "unitId": "WIT_SIEGE_BLIGHT-MORTAR",
+      "concept": "art/samples/WIT_SIEGE_BLIGHT-MORTAR_CONCEPT_V01.jpg",
+      "cutout": "art/samples/WIT_SIEGE_BLIGHT-MORTAR_CUTOUT_V01.png",
+      "jobId": "d82c76fb-98fc-41de-a7ac-8b18e8340704",
+      "approved": false
     }
   ],
   "pending": [
@@ -244,6 +559,493 @@
       "id": "UI_HUD-MATERIALS",
       "file": "art/concepts/UI_HUD-MATERIALS_CONCEPT_V01.jpg",
       "jobId": "62044cef-bde3-46d1-8ed6-599bc71159a1",
+      "approved": false
+    }
+  ],
+  "buildings": [
+    {
+      "buildingTier": "ARMORY_T1",
+      "file": "art/buildings/BLD_ARMORY_T1_V01.png",
+      "jobId": "889bc9f4-bb00-4620-9839-16cf478ac137",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "ARMORY_T2",
+      "file": "art/buildings/BLD_ARMORY_T2_V01.png",
+      "jobId": "902b01f4-9969-4954-b00b-6d0d07956ca3",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "ARMORY_T3",
+      "file": "art/buildings/BLD_ARMORY_T3_V01.png",
+      "jobId": "6814d3b5-241b-44de-8abe-54f04efb7ef0",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "BARRACKS_T1",
+      "file": "art/buildings/BLD_BARRACKS_T1_V01.png",
+      "jobId": "3050939a-b797-4027-810c-9a3ac9132d9a",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "BARRACKS_T2",
+      "file": "art/buildings/BLD_BARRACKS_T2_V01.png",
+      "jobId": "a6ebd355-90e5-41e4-9f70-71367501933e",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "BARRACKS_T3",
+      "file": "art/buildings/BLD_BARRACKS_T3_V01.png",
+      "jobId": "420b1d7e-f80d-4230-9983-427a434140db",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "FORGE_T1",
+      "file": "art/buildings/BLD_FORGE_T1_V01.png",
+      "jobId": "b82abc76-358a-4d79-9dce-a19e57d92a1a",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "FORGE_T2",
+      "file": "art/buildings/BLD_FORGE_T2_V01.png",
+      "jobId": "9c18d77a-f05e-4fb1-bdd3-7f93c6d9f0e3",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "FORGE_T3",
+      "file": "art/buildings/BLD_FORGE_T3_V01.png",
+      "jobId": "50d6ecdf-31cf-4f1d-b0f3-639864f4edb0",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "GRANARY_T1",
+      "file": "art/buildings/BLD_GRANARY_T1_V01.png",
+      "jobId": "7cc1b13a-e5af-408c-90a1-31434c11f42d",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "GRANARY_T2",
+      "file": "art/buildings/BLD_GRANARY_T2_V01.png",
+      "jobId": "4c64cb7c-a941-4a7e-893e-e343689ae24c",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "GRANARY_T3",
+      "file": "art/buildings/BLD_GRANARY_T3_V01.png",
+      "jobId": "1d6a2f67-c8b4-416e-8822-909c0c7c6f04",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "KEEP_T1",
+      "file": "art/buildings/BLD_KEEP_T1_V01.png",
+      "jobId": "77539ea1-d585-4e70-ab74-7ea9cef74723",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "KEEP_T2",
+      "file": "art/buildings/BLD_KEEP_T2_V01.png",
+      "jobId": "6a1c1bc6-af2a-4a69-a2d7-5e44fe94e3c4",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "KEEP_T3",
+      "file": "art/buildings/BLD_KEEP_T3_V01.png",
+      "jobId": "b9f6e3a6-30e0-48e0-9cec-71c71028dcf0",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "MINE_T1",
+      "file": "art/buildings/BLD_MINE_T1_V01.png",
+      "jobId": "5aa2783d-02e3-4db2-865c-deed92caf0e9",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "MINE_T2",
+      "file": "art/buildings/BLD_MINE_T2_V01.png",
+      "jobId": "27d56eac-edfe-4894-8549-03eb0eea411b",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "MINE_T3",
+      "file": "art/buildings/BLD_MINE_T3_V01.png",
+      "jobId": "85f48083-3676-449b-9fd8-8e08374b6acd",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "RECRUITMENT_HALL_T1",
+      "file": "art/buildings/BLD_RECRUITMENT_HALL_T1_V01.png",
+      "jobId": "d5682a50-96c0-4e68-a109-b6120aab31bd",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "RECRUITMENT_HALL_T2",
+      "file": "art/buildings/BLD_RECRUITMENT_HALL_T2_V01.png",
+      "jobId": "ea9ddb09-1e02-465d-876f-05beef55499e",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "RECRUITMENT_HALL_T3",
+      "file": "art/buildings/BLD_RECRUITMENT_HALL_T3_V01.png",
+      "jobId": "0cdc4e3a-1808-4b88-ac6c-4440ff81c57c",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "RESEARCH_HALL_T1",
+      "file": "art/buildings/BLD_RESEARCH_HALL_T1_V01.png",
+      "jobId": "a32bd52c-a9ad-4e15-b3d0-27bf824de8e0",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "RESEARCH_HALL_T2",
+      "file": "art/buildings/BLD_RESEARCH_HALL_T2_V01.png",
+      "jobId": "5e30e08b-6dd8-4f31-97aa-ce294ce86018",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "RESEARCH_HALL_T3",
+      "file": "art/buildings/BLD_RESEARCH_HALL_T3_V01.png",
+      "jobId": "4f3f29d9-8ed6-4ca8-94d1-3529027a7a4f",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SAWPIT_T1",
+      "file": "art/buildings/BLD_SAWPIT_T1_V01.png",
+      "jobId": "3cca48ea-bab5-4cc3-8f85-86932fc37eb8",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SAWPIT_T2",
+      "file": "art/buildings/BLD_SAWPIT_T2_V01.png",
+      "jobId": "b789f337-2295-4422-be8b-110cd951e671",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SAWPIT_T3",
+      "file": "art/buildings/BLD_SAWPIT_T3_V01.png",
+      "jobId": "57fc1bc7-2cb9-48f6-8600-e7a4610ac067",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SHOP_T1",
+      "file": "art/buildings/BLD_SHOP_T1_V01.png",
+      "jobId": "c4dddaef-f5ab-45af-8f84-a766c6874fed",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SHOP_T2",
+      "file": "art/buildings/BLD_SHOP_T2_V01.png",
+      "jobId": "04691d94-6727-4ff4-a24b-0168d503cc26",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SHOP_T3",
+      "file": "art/buildings/BLD_SHOP_T3_V01.png",
+      "jobId": "4f8eafa2-a2d5-4963-b613-738fe202a0b1",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SHRINE_T1",
+      "file": "art/buildings/BLD_SHRINE_T1_V01.png",
+      "jobId": "06732883-de87-4e89-9d95-e70e3d05f5dc",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SHRINE_T2",
+      "file": "art/buildings/BLD_SHRINE_T2_V01.png",
+      "jobId": "f847b3a1-1403-4d9e-9f8d-50ff1a991725",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "SHRINE_T3",
+      "file": "art/buildings/BLD_SHRINE_T3_V01.png",
+      "jobId": "c69a7f9a-c200-4834-b502-652d4ae65ac7",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "STABLE_T1",
+      "file": "art/buildings/BLD_STABLE_T1_V01.png",
+      "jobId": "0de0f256-fe35-47ae-b7cc-e6e04a275d7b",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "STABLE_T2",
+      "file": "art/buildings/BLD_STABLE_T2_V01.png",
+      "jobId": "aeaf0222-fb71-40d9-85a9-22f21098504c",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "STABLE_T3",
+      "file": "art/buildings/BLD_STABLE_T3_V01.png",
+      "jobId": "4e3077ac-ba0f-4f31-84f9-d40f5ce87963",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "WALL_T1",
+      "file": "art/buildings/BLD_WALL_T1_V01.png",
+      "jobId": "7a9f5f80-2ab3-4dd4-9097-7444c62df1d3",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "WALL_T2",
+      "file": "art/buildings/BLD_WALL_T2_V01.png",
+      "jobId": "606010c3-9ab5-4c74-bf0e-2a59e8868964",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "buildingTier": "WALL_T3",
+      "file": "art/buildings/BLD_WALL_T3_V01.png",
+      "jobId": "3a4bb70a-cd1b-4b56-8d97-f1b7a03921b0",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    }
+  ],
+  "cards": [
+    {
+      "cardId": "SIDE_STRAT_FORCED-MARCH",
+      "file": "art/cards/SIDE_STRAT_FORCED-MARCH_V01.png",
+      "jobId": "b93166de-d3bf-42dc-af0e-78855d034ddb",
+      "approved": false
+    },
+    {
+      "cardId": "SIDE_STRAT_SMOKESCREEN",
+      "file": "art/cards/SIDE_STRAT_SMOKESCREEN_V01.png",
+      "jobId": "f708549a-d443-4f74-be8d-a354643ba008",
+      "approved": false
+    },
+    {
+      "cardId": "SIDE_STRAT_FALSE-RETREAT",
+      "file": "art/cards/SIDE_STRAT_FALSE-RETREAT_V01.png",
+      "jobId": "7573b33d-87f0-4ffb-bab2-7f2153b4b1ce",
+      "approved": false
+    }
+  ],
+  "mapSymbols": [
+    {
+      "id": "MAP_BRIDGE",
+      "file": "art/map/MAP_BRIDGE_V01.png",
+      "jobId": "6d20b8c2-ed77-4933-bfb0-1cde4ab77f59",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_FORD",
+      "file": "art/map/MAP_FORD_V01.png",
+      "jobId": "1bc993c6-b4d8-48fc-9ac3-2c618f2c7ab9",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_FOREST",
+      "file": "art/map/MAP_FOREST_V01.png",
+      "jobId": "ae5e0ceb-1d48-4362-aecf-ecf00c851d90",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_HILL",
+      "file": "art/map/MAP_HILL_V01.png",
+      "jobId": "ba63d3e7-ece2-4cdb-8e0d-6f6fbcf0e2cc",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_MARSH",
+      "file": "art/map/MAP_MARSH_V01.png",
+      "jobId": "4d7f1e48-9001-46c3-b318-7b5475c7f645",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_MOUNTAIN",
+      "file": "art/map/MAP_MOUNTAIN_V01.png",
+      "jobId": "bd11f3ca-e3db-4318-87fe-e7c32fe216cd",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_PALISADE",
+      "file": "art/map/MAP_PALISADE_V01.png",
+      "jobId": "b62e8bdf-9106-4f43-9981-e7756b183439",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_RIVER",
+      "file": "art/map/MAP_RIVER_V01.png",
+      "jobId": "f6ad79c7-b1dc-4223-9bcb-538e4242d812",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_ROAD",
+      "file": "art/map/MAP_ROAD_V01.png",
+      "jobId": "7dff92b6-1ad0-4119-abba-bccbcbbd7b86",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_RUINS",
+      "file": "art/map/MAP_RUINS_V01.png",
+      "jobId": "712dbc2c-8f9b-4e65-b086-b49be4ad39a6",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_TREE",
+      "file": "art/map/MAP_TREE_V01.png",
+      "jobId": "7b404600-e156-4838-ae9e-28a43793450f",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    },
+    {
+      "id": "MAP_WATCHTOWER",
+      "file": "art/map/MAP_WATCHTOWER_V01.png",
+      "jobId": "e4c0fd0d-53c5-411b-b208-a28e83e89c0f",
+      "approved": false,
+      "note": "plan view, straight down; the field is painted from above"
+    }
+  ],
+  "icons": [
+    {
+      "id": "ICON_RES-GOLD",
+      "file": "art/ui/ICON_RES-GOLD_V01.png",
+      "jobId": "883028d0-f853-43bf-a2c7-db678055a9d3",
+      "approved": false
+    },
+    {
+      "id": "ICON_RES-RUBY",
+      "file": "art/ui/ICON_RES-RUBY_V01.png",
+      "jobId": "10e46c9c-dbe7-48d8-90a9-64c8b8aed956",
+      "approved": false
+    },
+    {
+      "id": "ICON_UI-POWER",
+      "file": "art/ui/ICON_UI-POWER_V01.png",
+      "jobId": "d47b08e4-b65d-42a8-be76-a818427f3251",
+      "approved": false
+    }
+  ],
+  "props": [
+    {
+      "id": "PROP_AWNING",
+      "file": "art/props/PROP_AWNING_V01.png",
+      "jobId": "9fcf65bd-527d-40da-9b3d-c7c914c651ac",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_BANNER",
+      "file": "art/props/PROP_BANNER_V01.png",
+      "jobId": "d463d747-53c6-4bbe-9d9e-bfb2d01f1705",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_BASIN",
+      "file": "art/props/PROP_BASIN_V01.png",
+      "jobId": "458c3e21-fba0-411b-94b0-f49d70c63c6c",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_BRAZIER",
+      "file": "art/props/PROP_BRAZIER_V01.png",
+      "jobId": "8d8ff87d-a350-4ca1-b3c7-41514a665c36",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_CART",
+      "file": "art/props/PROP_CART_V01.png",
+      "jobId": "128acf34-ec67-4bb1-b8a4-acfb99684315",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_CRATES",
+      "file": "art/props/PROP_CRATES_V01.png",
+      "jobId": "ec6d855e-2919-49fd-867a-2be90f1f3ad1",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_DUMMIES",
+      "file": "art/props/PROP_DUMMIES_V01.png",
+      "jobId": "45b1bbb7-4294-473e-8902-2a39689e9a96",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_RUBBLE",
+      "file": "art/props/PROP_RUBBLE_V01.png",
+      "jobId": "beca691f-de7c-4c2a-9eaf-dc6e913839d1",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_STEPS",
+      "file": "art/props/PROP_STEPS_V01.png",
+      "jobId": "7769e748-6fc8-4a0c-a63b-af68a49918b1",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_TREE",
+      "file": "art/props/PROP_TREE_V01.png",
+      "jobId": "a04026b4-5ced-404c-993e-fbda13f634c5",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_TREES",
+      "file": "art/props/PROP_TREES_V01.png",
+      "jobId": "413127b9-078c-4409-9d28-5173a506ade8",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
+      "approved": false
+    },
+    {
+      "id": "PROP_WELL",
+      "file": "art/props/PROP_WELL_V01.png",
+      "jobId": "7594c7c6-41a9-456b-813f-0863f6abd058",
+      "projection": "true isometric, 45-degree camera, cut to alpha",
       "approved": false
     }
   ]

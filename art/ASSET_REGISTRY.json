@@ -1,23 +1,23 @@
 {
   "generated": "npm run assets",
   "total": {
-    "present": 213,
-    "missing": 118
+    "present": 355,
+    "missing": 0
   },
   "summary": {
     "Units": {
-      "present": 176,
-      "missing": 90,
+      "present": 266,
+      "missing": 0,
       "derived": 0
     },
     "Buildings": {
-      "present": 8,
-      "missing": 25,
+      "present": 39,
+      "missing": 0,
       "derived": 0
     },
     "Side cards": {
-      "present": 7,
-      "missing": 3,
+      "present": 10,
+      "missing": 0,
       "derived": 4
     },
     "World and interface": {
@@ -26,6 +26,11 @@
       "derived": 0
     },
     "Icons": {
+      "present": 18,
+      "missing": 0,
+      "derived": 0
+    },
+    "Map symbols": {
       "present": 12,
       "missing": 0,
       "derived": 0
@@ -380,7 +385,7 @@
       "label": "Cinderthroat Battery",
       "kind": "concept",
       "path": "art/samples/SAM_SIEGE_CINDERTHROAT-BATTERY_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "1★ SAM"
     },
     {
@@ -389,7 +394,7 @@
       "label": "Cinderthroat Battery",
       "kind": "cutout",
       "path": "art/samples/SAM_SIEGE_CINDERTHROAT-BATTERY_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "1★ SAM"
     },
     {
@@ -398,7 +403,7 @@
       "label": "Hollow Reed Mortar",
       "kind": "concept",
       "path": "art/samples/SHI_SIEGE_HOLLOW-REED-MORTAR_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "1★ SHI"
     },
     {
@@ -407,7 +412,7 @@
       "label": "Hollow Reed Mortar",
       "kind": "cutout",
       "path": "art/samples/SHI_SIEGE_HOLLOW-REED-MORTAR_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "1★ SHI"
     },
     {
@@ -416,7 +421,7 @@
       "label": "Warden's Bombard",
       "kind": "concept",
       "path": "art/samples/KNI_SIEGE_WARDENS-BOMBARD_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "1★ KNI"
     },
     {
@@ -425,7 +430,7 @@
       "label": "Warden's Bombard",
       "kind": "cutout",
       "path": "art/samples/KNI_SIEGE_WARDENS-BOMBARD_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "1★ KNI"
     },
     {
@@ -434,7 +439,7 @@
       "label": "Boneforge Ballista",
       "kind": "concept",
       "path": "art/samples/DRG_SIEGE_BONEFORGE-BALLISTA_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "1★ DRG"
     },
     {
@@ -443,7 +448,7 @@
       "label": "Boneforge Ballista",
       "kind": "cutout",
       "path": "art/samples/DRG_SIEGE_BONEFORGE-BALLISTA_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "1★ DRG"
     },
     {
@@ -452,7 +457,7 @@
       "label": "Charwind Lancers",
       "kind": "concept",
       "path": "art/samples/SAM_CAVALRY_CHARWIND-LANCERS_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "1★ SAM"
     },
     {
@@ -461,7 +466,7 @@
       "label": "Charwind Lancers",
       "kind": "cutout",
       "path": "art/samples/SAM_CAVALRY_CHARWIND-LANCERS_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "1★ SAM"
     },
     {
@@ -470,7 +475,7 @@
       "label": "Reed Marsh Outriders",
       "kind": "concept",
       "path": "art/samples/SHI_CAVALRY_REED-MARSH-OUTRIDERS_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "1★ SHI"
     },
     {
@@ -479,7 +484,7 @@
       "label": "Reed Marsh Outriders",
       "kind": "cutout",
       "path": "art/samples/SHI_CAVALRY_REED-MARSH-OUTRIDERS_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "1★ SHI"
     },
     {
@@ -1244,7 +1249,7 @@
       "label": "Ashwing Novice",
       "kind": "concept",
       "path": "art/samples/ANG_LEVY_ASHWING-NOVICE_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "1★ ANG"
     },
     {
@@ -1253,7 +1258,7 @@
       "label": "Ashwing Novice",
       "kind": "cutout",
       "path": "art/samples/ANG_LEVY_ASHWING-NOVICE_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "1★ ANG"
     },
     {
@@ -1334,7 +1339,7 @@
       "label": "Pit Stray",
       "kind": "concept",
       "path": "art/samples/DEM_LEVY_PIT-STRAY_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "1★ DEM"
     },
     {
@@ -1343,7 +1348,7 @@
       "label": "Pit Stray",
       "kind": "cutout",
       "path": "art/samples/DEM_LEVY_PIT-STRAY_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "1★ DEM"
     },
     {
@@ -1568,7 +1573,7 @@
       "label": "Gaunt Straggler",
       "kind": "concept",
       "path": "art/samples/WEN_LEVY_GAUNT-STRAGGLER_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "1★ WEN"
     },
     {
@@ -1577,7 +1582,7 @@
       "label": "Gaunt Straggler",
       "kind": "cutout",
       "path": "art/samples/WEN_LEVY_GAUNT-STRAGGLER_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "1★ WEN"
     },
     {
@@ -1586,7 +1591,7 @@
       "label": "Rime-Antler Warden",
       "kind": "concept",
       "path": "art/samples/WEN_SECOND_RIME-ANTLER-WARDEN_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "5★ WEN"
     },
     {
@@ -1595,7 +1600,7 @@
       "label": "Rime-Antler Warden",
       "kind": "cutout",
       "path": "art/samples/WEN_SECOND_RIME-ANTLER-WARDEN_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "5★ WEN"
     },
     {
@@ -1802,7 +1807,7 @@
       "label": "Warded Culverin",
       "kind": "concept",
       "path": "art/samples/ARC_SIEGE_WARDED-CULVERIN_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "5★ ARC"
     },
     {
@@ -1811,7 +1816,7 @@
       "label": "Warded Culverin",
       "kind": "cutout",
       "path": "art/samples/ARC_SIEGE_WARDED-CULVERIN_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "5★ ARC"
     },
     {
@@ -1820,7 +1825,7 @@
       "label": "Wardbound Courser",
       "kind": "concept",
       "path": "art/samples/ARC_CAVALRY_WARDBOUND-COURSER_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "4★ ARC"
     },
     {
@@ -1829,7 +1834,7 @@
       "label": "Wardbound Courser",
       "kind": "cutout",
       "path": "art/samples/ARC_CAVALRY_WARDBOUND-COURSER_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "4★ ARC"
     },
     {
@@ -1838,7 +1843,7 @@
       "label": "Blight Mortar",
       "kind": "concept",
       "path": "art/samples/WIT_SIEGE_BLIGHT-MORTAR_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "5★ WIT"
     },
     {
@@ -1847,7 +1852,7 @@
       "label": "Blight Mortar",
       "kind": "cutout",
       "path": "art/samples/WIT_SIEGE_BLIGHT-MORTAR_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "5★ WIT"
     },
     {
@@ -1856,7 +1861,7 @@
       "label": "Bramblehorn Rider",
       "kind": "concept",
       "path": "art/samples/WIT_CAVALRY_BRAMBLEHORN-RIDER_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "4★ WIT"
     },
     {
@@ -1865,7 +1870,7 @@
       "label": "Bramblehorn Rider",
       "kind": "cutout",
       "path": "art/samples/WIT_CAVALRY_BRAMBLEHORN-RIDER_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "4★ WIT"
     },
     {
@@ -1874,7 +1879,7 @@
       "label": "Stolen Bombard",
       "kind": "concept",
       "path": "art/samples/ROG_SIEGE_STOLEN-BOMBARD_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "4★ ROG"
     },
     {
@@ -1883,7 +1888,7 @@
       "label": "Stolen Bombard",
       "kind": "cutout",
       "path": "art/samples/ROG_SIEGE_STOLEN-BOMBARD_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "4★ ROG"
     },
     {
@@ -1892,7 +1897,7 @@
       "label": "Backstreet Courser",
       "kind": "concept",
       "path": "art/samples/ROG_CAVALRY_BACKSTREET-COURSER_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "4★ ROG"
     },
     {
@@ -1901,7 +1906,7 @@
       "label": "Backstreet Courser",
       "kind": "cutout",
       "path": "art/samples/ROG_CAVALRY_BACKSTREET-COURSER_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "4★ ROG"
     },
     {
@@ -1910,7 +1915,7 @@
       "label": "Steppe Falconet",
       "kind": "concept",
       "path": "art/samples/STP_SIEGE_STEPPE-FALCONET_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "4★ STP"
     },
     {
@@ -1919,7 +1924,7 @@
       "label": "Steppe Falconet",
       "kind": "cutout",
       "path": "art/samples/STP_SIEGE_STEPPE-FALCONET_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "4★ STP"
     },
     {
@@ -1928,7 +1933,7 @@
       "label": "Glassroad Ballista",
       "kind": "concept",
       "path": "art/samples/DUN_SIEGE_GLASSROAD-BALLISTA_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "5★ DUN"
     },
     {
@@ -1937,7 +1942,7 @@
       "label": "Glassroad Ballista",
       "kind": "cutout",
       "path": "art/samples/DUN_SIEGE_GLASSROAD-BALLISTA_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "5★ DUN"
     },
     {
@@ -1946,7 +1951,7 @@
       "label": "Dunewake Vanguard",
       "kind": "concept",
       "path": "art/samples/DUN_CAVALRY_DUNEWAKE-VANGUARD_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "4★ DUN"
     },
     {
@@ -1955,7 +1960,7 @@
       "label": "Dunewake Vanguard",
       "kind": "cutout",
       "path": "art/samples/DUN_CAVALRY_DUNEWAKE-VANGUARD_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "4★ DUN"
     },
     {
@@ -1964,7 +1969,7 @@
       "label": "Stonegate Warden",
       "kind": "concept",
       "path": "art/samples/SAM_COMMANDER_STONEGATE-WARDEN_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "6★ SAM"
     },
     {
@@ -1973,7 +1978,7 @@
       "label": "Stonegate Warden",
       "kind": "cutout",
       "path": "art/samples/SAM_COMMANDER_STONEGATE-WARDEN_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "6★ SAM"
     },
     {
@@ -1982,7 +1987,7 @@
       "label": "Cinderwatch Captain",
       "kind": "concept",
       "path": "art/samples/SAM_COMMANDER_CINDERWATCH-CAPTAIN_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "5★ SAM"
     },
     {
@@ -1991,7 +1996,7 @@
       "label": "Cinderwatch Captain",
       "kind": "cutout",
       "path": "art/samples/SAM_COMMANDER_CINDERWATCH-CAPTAIN_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "5★ SAM"
     },
     {
@@ -2000,7 +2005,7 @@
       "label": "Iron Sash Lieutenant",
       "kind": "concept",
       "path": "art/samples/SAM_SECOND_IRON-SASH-LIEUTENANT_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "4★ SAM"
     },
     {
@@ -2009,7 +2014,7 @@
       "label": "Iron Sash Lieutenant",
       "kind": "cutout",
       "path": "art/samples/SAM_SECOND_IRON-SASH-LIEUTENANT_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "4★ SAM"
     },
     {
@@ -2018,7 +2023,7 @@
       "label": "Jade Crest Retainer",
       "kind": "concept",
       "path": "art/samples/SAM_SECOND_JADE-CREST-RETAINER_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "5★ SAM"
     },
     {
@@ -2027,7 +2032,7 @@
       "label": "Jade Crest Retainer",
       "kind": "cutout",
       "path": "art/samples/SAM_SECOND_JADE-CREST-RETAINER_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "5★ SAM"
     },
     {
@@ -2036,7 +2041,7 @@
       "label": "Crimson Fang Duelist",
       "kind": "concept",
       "path": "art/samples/SAM_ELITE_CRIMSON-FANG-DUELIST_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "7★ SAM"
     },
     {
@@ -2045,7 +2050,7 @@
       "label": "Crimson Fang Duelist",
       "kind": "cutout",
       "path": "art/samples/SAM_ELITE_CRIMSON-FANG-DUELIST_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "7★ SAM"
     },
     {
@@ -2054,7 +2059,7 @@
       "label": "Ashen Blade Sentinel",
       "kind": "concept",
       "path": "art/samples/SAM_ELITE_ASHEN-BLADE-SENTINEL_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "6★ SAM"
     },
     {
@@ -2063,7 +2068,7 @@
       "label": "Ashen Blade Sentinel",
       "kind": "cutout",
       "path": "art/samples/SAM_ELITE_ASHEN-BLADE-SENTINEL_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "6★ SAM"
     },
     {
@@ -2072,7 +2077,7 @@
       "label": "Ironwall Marshal",
       "kind": "concept",
       "path": "art/samples/KNI_COMMANDER_IRONWALL-MARSHAL_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "6★ KNI"
     },
     {
@@ -2081,7 +2086,7 @@
       "label": "Ironwall Marshal",
       "kind": "cutout",
       "path": "art/samples/KNI_COMMANDER_IRONWALL-MARSHAL_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "6★ KNI"
     },
     {
@@ -2090,7 +2095,7 @@
       "label": "Vigil Bastion Lord",
       "kind": "concept",
       "path": "art/samples/KNI_COMMANDER_VIGIL-BASTION-LORD_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "5★ KNI"
     },
     {
@@ -2099,7 +2104,7 @@
       "label": "Vigil Bastion Lord",
       "kind": "cutout",
       "path": "art/samples/KNI_COMMANDER_VIGIL-BASTION-LORD_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "5★ KNI"
     },
     {
@@ -2108,7 +2113,7 @@
       "label": "Dawnguard Lieutenant",
       "kind": "concept",
       "path": "art/samples/KNI_SECOND_DAWNGUARD-LIEUTENANT_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "4★ KNI"
     },
     {
@@ -2117,7 +2122,7 @@
       "label": "Dawnguard Lieutenant",
       "kind": "cutout",
       "path": "art/samples/KNI_SECOND_DAWNGUARD-LIEUTENANT_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "4★ KNI"
     },
     {
@@ -2126,7 +2131,7 @@
       "label": "Oath Shield Knight",
       "kind": "concept",
       "path": "art/samples/KNI_SECOND_OATH-SHIELD-KNIGHT_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "5★ KNI"
     },
     {
@@ -2135,7 +2140,7 @@
       "label": "Oath Shield Knight",
       "kind": "cutout",
       "path": "art/samples/KNI_SECOND_OATH-SHIELD-KNIGHT_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "5★ KNI"
     },
     {
@@ -2144,7 +2149,7 @@
       "label": "Stormbreaker Paladin",
       "kind": "concept",
       "path": "art/samples/KNI_ELITE_STORMBREAKER-PALADIN_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "7★ KNI"
     },
     {
@@ -2153,7 +2158,7 @@
       "label": "Stormbreaker Paladin",
       "kind": "cutout",
       "path": "art/samples/KNI_ELITE_STORMBREAKER-PALADIN_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "7★ KNI"
     },
     {
@@ -2162,7 +2167,7 @@
       "label": "Silver Vow Champion",
       "kind": "concept",
       "path": "art/samples/KNI_ELITE_SILVER-VOW-CHAMPION_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "6★ KNI"
     },
     {
@@ -2171,7 +2176,7 @@
       "label": "Silver Vow Champion",
       "kind": "cutout",
       "path": "art/samples/KNI_ELITE_SILVER-VOW-CHAMPION_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "6★ KNI"
     },
     {
@@ -2180,7 +2185,7 @@
       "label": "Hollow Reed Jonin",
       "kind": "concept",
       "path": "art/samples/SHI_COMMANDER_HOLLOW-REED-JONIN_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "6★ SHI"
     },
     {
@@ -2189,7 +2194,7 @@
       "label": "Hollow Reed Jonin",
       "kind": "cutout",
       "path": "art/samples/SHI_COMMANDER_HOLLOW-REED-JONIN_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "6★ SHI"
     },
     {
@@ -2198,7 +2203,7 @@
       "label": "Ashveil Strategist",
       "kind": "concept",
       "path": "art/samples/SHI_COMMANDER_ASHVEIL-STRATEGIST_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "5★ SHI"
     },
     {
@@ -2207,7 +2212,7 @@
       "label": "Ashveil Strategist",
       "kind": "cutout",
       "path": "art/samples/SHI_COMMANDER_ASHVEIL-STRATEGIST_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "5★ SHI"
     },
     {
@@ -2216,7 +2221,7 @@
       "label": "Ink Step Lieutenant",
       "kind": "concept",
       "path": "art/samples/SHI_SECOND_INK-STEP-LIEUTENANT_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "4★ SHI"
     },
     {
@@ -2225,7 +2230,7 @@
       "label": "Ink Step Lieutenant",
       "kind": "cutout",
       "path": "art/samples/SHI_SECOND_INK-STEP-LIEUTENANT_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "4★ SHI"
     },
     {
@@ -2234,7 +2239,7 @@
       "label": "Silent Bell Operative",
       "kind": "concept",
       "path": "art/samples/SHI_SECOND_SILENT-BELL-OPERATIVE_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "4★ SHI"
     },
     {
@@ -2243,7 +2248,7 @@
       "label": "Silent Bell Operative",
       "kind": "cutout",
       "path": "art/samples/SHI_SECOND_SILENT-BELL-OPERATIVE_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "4★ SHI"
     },
     {
@@ -2252,7 +2257,7 @@
       "label": "Hollow Mask Adept",
       "kind": "concept",
       "path": "art/samples/SHI_ELITE_HOLLOW-MASK-ADEPT_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "7★ SHI"
     },
     {
@@ -2261,7 +2266,7 @@
       "label": "Hollow Mask Adept",
       "kind": "cutout",
       "path": "art/samples/SHI_ELITE_HOLLOW-MASK-ADEPT_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "7★ SHI"
     },
     {
@@ -2270,7 +2275,7 @@
       "label": "Night Glass Assassin",
       "kind": "concept",
       "path": "art/samples/SHI_ELITE_NIGHT-GLASS-ASSASSIN_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "6★ SHI"
     },
     {
@@ -2279,7 +2284,7 @@
       "label": "Night Glass Assassin",
       "kind": "cutout",
       "path": "art/samples/SHI_ELITE_NIGHT-GLASS-ASSASSIN_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "6★ SHI"
     },
     {
@@ -2288,7 +2293,7 @@
       "label": "Ash Step Infiltrator",
       "kind": "concept",
       "path": "art/samples/SHI_FOOT_ASH-STEP-INFILTRATOR_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "2★ SHI"
     },
     {
@@ -2297,7 +2302,7 @@
       "label": "Ash Step Infiltrator",
       "kind": "cutout",
       "path": "art/samples/SHI_FOOT_ASH-STEP-INFILTRATOR_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "2★ SHI"
     },
     {
@@ -2306,7 +2311,7 @@
       "label": "Ashwing Dominant",
       "kind": "concept",
       "path": "art/samples/DRG_COMMANDER_ASHWING-DOMINANT_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "8★ DRG"
     },
     {
@@ -2315,7 +2320,7 @@
       "label": "Ashwing Dominant",
       "kind": "cutout",
       "path": "art/samples/DRG_COMMANDER_ASHWING-DOMINANT_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "8★ DRG"
     },
     {
@@ -2324,7 +2329,7 @@
       "label": "Stormscale Sovereign",
       "kind": "concept",
       "path": "art/samples/DRG_COMMANDER_STORMSCALE-SOVEREIGN_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "7★ DRG"
     },
     {
@@ -2333,7 +2338,7 @@
       "label": "Stormscale Sovereign",
       "kind": "cutout",
       "path": "art/samples/DRG_COMMANDER_STORMSCALE-SOVEREIGN_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "7★ DRG"
     },
     {
@@ -2342,7 +2347,7 @@
       "label": "Emberclaw Wingsecond",
       "kind": "concept",
       "path": "art/samples/DRG_SECOND_EMBERCLAW-WINGSECOND_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "6★ DRG"
     },
     {
@@ -2351,7 +2356,7 @@
       "label": "Emberclaw Wingsecond",
       "kind": "cutout",
       "path": "art/samples/DRG_SECOND_EMBERCLAW-WINGSECOND_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "6★ DRG"
     },
     {
@@ -2360,7 +2365,7 @@
       "label": "Duskwing Second",
       "kind": "concept",
       "path": "art/samples/DRG_SECOND_DUSKWING-SECOND_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "5★ DRG"
     },
     {
@@ -2369,7 +2374,7 @@
       "label": "Duskwing Second",
       "kind": "cutout",
       "path": "art/samples/DRG_SECOND_DUSKWING-SECOND_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "5★ DRG"
     },
     {
@@ -2378,7 +2383,7 @@
       "label": "Cindermaw Stalker",
       "kind": "concept",
       "path": "art/samples/DRG_ELITE_CINDERMAW-STALKER_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "8★ DRG"
     },
     {
@@ -2387,7 +2392,7 @@
       "label": "Cindermaw Stalker",
       "kind": "cutout",
       "path": "art/samples/DRG_ELITE_CINDERMAW-STALKER_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "8★ DRG"
     },
     {
@@ -2396,7 +2401,7 @@
       "label": "Ashfang Ravager",
       "kind": "concept",
       "path": "art/samples/DRG_ELITE_ASHFANG-RAVAGER_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "7★ DRG"
     },
     {
@@ -2405,7 +2410,7 @@
       "label": "Ashfang Ravager",
       "kind": "cutout",
       "path": "art/samples/DRG_ELITE_ASHFANG-RAVAGER_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "7★ DRG"
     },
     {
@@ -2414,7 +2419,7 @@
       "label": "Ashscale Drake",
       "kind": "concept",
       "path": "art/samples/DRG_FOOT_ASHSCALE-DRAKE_CONCEPT_V01.jpg",
-      "status": "missing",
+      "status": "present",
       "note": "3★ DRG"
     },
     {
@@ -2423,33 +2428,33 @@
       "label": "Ashscale Drake",
       "kind": "cutout",
       "path": "art/samples/DRG_FOOT_ASHSCALE-DRAKE_CUTOUT_V01.png",
-      "status": "missing",
+      "status": "present",
       "note": "3★ DRG"
     },
     {
       "group": "Buildings",
       "id": "KEEP_T1",
-      "label": "Keep tier 1",
+      "label": "City Hall tier 1",
       "kind": "building",
-      "path": "art/buildings/BLD_KEEP_T1_V01.jpg",
+      "path": "art/buildings/BLD_KEEP_T1_V01.png",
       "status": "present",
       "note": "levels 1-3"
     },
     {
       "group": "Buildings",
       "id": "KEEP_T2",
-      "label": "Keep tier 2",
+      "label": "City Hall tier 2",
       "kind": "building",
-      "path": "art/buildings/BLD_KEEP_T2_V01.jpg",
+      "path": "art/buildings/BLD_KEEP_T2_V01.png",
       "status": "present",
       "note": "levels 4-7"
     },
     {
       "group": "Buildings",
       "id": "KEEP_T3",
-      "label": "Keep tier 3",
+      "label": "City Hall tier 3",
       "kind": "building",
-      "path": "art/buildings/BLD_KEEP_T3_V01.jpg",
+      "path": "art/buildings/BLD_KEEP_T3_V01.png",
       "status": "present",
       "note": "levels 8-10"
     },
@@ -2458,8 +2463,8 @@
       "id": "GRANARY_T1",
       "label": "Granary tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_GRANARY_T1_V01.png",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2467,8 +2472,8 @@
       "id": "GRANARY_T2",
       "label": "Granary tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_GRANARY_T2_V01.png",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2476,8 +2481,8 @@
       "id": "GRANARY_T3",
       "label": "Granary tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_GRANARY_T3_V01.png",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2485,8 +2490,8 @@
       "id": "MINE_T1",
       "label": "Iron Mine tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_MINE_T1_V01.png",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2494,8 +2499,8 @@
       "id": "MINE_T2",
       "label": "Iron Mine tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_MINE_T2_V01.png",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2503,8 +2508,8 @@
       "id": "MINE_T3",
       "label": "Iron Mine tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_MINE_T3_V01.png",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2512,8 +2517,8 @@
       "id": "SAWPIT_T1",
       "label": "Sawpit tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_SAWPIT_T1_V01.png",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2521,8 +2526,8 @@
       "id": "SAWPIT_T2",
       "label": "Sawpit tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_SAWPIT_T2_V01.png",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2530,8 +2535,8 @@
       "id": "SAWPIT_T3",
       "label": "Sawpit tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_SAWPIT_T3_V01.png",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2539,7 +2544,7 @@
       "id": "BARRACKS_T1",
       "label": "Barracks tier 1",
       "kind": "building",
-      "path": "art/buildings/BLD_BARRACKS_T1_V01.jpg",
+      "path": "art/buildings/BLD_BARRACKS_T1_V01.png",
       "status": "present",
       "note": "levels 1-3"
     },
@@ -2548,8 +2553,8 @@
       "id": "BARRACKS_T2",
       "label": "Barracks tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_BARRACKS_T2_V01.png",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2557,7 +2562,7 @@
       "id": "BARRACKS_T3",
       "label": "Barracks tier 3",
       "kind": "building",
-      "path": "art/buildings/BLD_BARRACKS_T3_V01.jpg",
+      "path": "art/buildings/BLD_BARRACKS_T3_V01.png",
       "status": "present",
       "note": "levels 8-10"
     },
@@ -2566,8 +2571,8 @@
       "id": "RESEARCH_HALL_T1",
       "label": "Research Hall tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_RESEARCH_HALL_T1_V01.png",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2575,8 +2580,8 @@
       "id": "RESEARCH_HALL_T2",
       "label": "Research Hall tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_RESEARCH_HALL_T2_V01.png",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2584,8 +2589,8 @@
       "id": "RESEARCH_HALL_T3",
       "label": "Research Hall tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_RESEARCH_HALL_T3_V01.png",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2593,8 +2598,8 @@
       "id": "RECRUITMENT_HALL_T1",
       "label": "Recruitment Hall tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_RECRUITMENT_HALL_T1_V01.png",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2602,8 +2607,8 @@
       "id": "RECRUITMENT_HALL_T2",
       "label": "Recruitment Hall tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_RECRUITMENT_HALL_T2_V01.png",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2611,8 +2616,8 @@
       "id": "RECRUITMENT_HALL_T3",
       "label": "Recruitment Hall tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_RECRUITMENT_HALL_T3_V01.png",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2620,8 +2625,8 @@
       "id": "FORGE_T1",
       "label": "Forge tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_FORGE_T1_V01.png",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2629,8 +2634,8 @@
       "id": "FORGE_T2",
       "label": "Forge tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_FORGE_T2_V01.png",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2638,8 +2643,8 @@
       "id": "FORGE_T3",
       "label": "Forge tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_FORGE_T3_V01.png",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2647,8 +2652,8 @@
       "id": "STABLE_T1",
       "label": "Stable tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_STABLE_T1_V01.png",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2656,8 +2661,8 @@
       "id": "STABLE_T2",
       "label": "Stable tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_STABLE_T2_V01.png",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2665,8 +2670,8 @@
       "id": "STABLE_T3",
       "label": "Stable tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_STABLE_T3_V01.png",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2674,7 +2679,7 @@
       "id": "WALL_T1",
       "label": "Curtain Wall tier 1",
       "kind": "building",
-      "path": "art/buildings/BLD_WALL_T1_V01.jpg",
+      "path": "art/buildings/BLD_WALL_T1_V01.png",
       "status": "present",
       "note": "levels 1-3"
     },
@@ -2683,7 +2688,7 @@
       "id": "WALL_T2",
       "label": "Curtain Wall tier 2",
       "kind": "building",
-      "path": "art/buildings/BLD_WALL_T2_V01.jpg",
+      "path": "art/buildings/BLD_WALL_T2_V01.png",
       "status": "present",
       "note": "levels 4-7"
     },
@@ -2692,7 +2697,7 @@
       "id": "WALL_T3",
       "label": "Curtain Wall tier 3",
       "kind": "building",
-      "path": "art/buildings/BLD_WALL_T3_V01.jpg",
+      "path": "art/buildings/BLD_WALL_T3_V01.png",
       "status": "present",
       "note": "levels 8-10"
     },
@@ -2701,8 +2706,8 @@
       "id": "SHRINE_T1",
       "label": "Ritual Shrine tier 1",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_SHRINE_T1_V01.png",
+      "status": "present",
       "note": "levels 1-3"
     },
     {
@@ -2710,8 +2715,8 @@
       "id": "SHRINE_T2",
       "label": "Ritual Shrine tier 2",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_SHRINE_T2_V01.png",
+      "status": "present",
       "note": "levels 4-7"
     },
     {
@@ -2719,8 +2724,62 @@
       "id": "SHRINE_T3",
       "label": "Ritual Shrine tier 3",
       "kind": "building",
-      "path": null,
-      "status": "missing",
+      "path": "art/buildings/BLD_SHRINE_T3_V01.png",
+      "status": "present",
+      "note": "levels 8-10"
+    },
+    {
+      "group": "Buildings",
+      "id": "SHOP_T1",
+      "label": "Shop tier 1",
+      "kind": "building",
+      "path": "art/buildings/BLD_SHOP_T1_V01.png",
+      "status": "present",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "SHOP_T2",
+      "label": "Shop tier 2",
+      "kind": "building",
+      "path": "art/buildings/BLD_SHOP_T2_V01.png",
+      "status": "present",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "SHOP_T3",
+      "label": "Shop tier 3",
+      "kind": "building",
+      "path": "art/buildings/BLD_SHOP_T3_V01.png",
+      "status": "present",
+      "note": "levels 8-10"
+    },
+    {
+      "group": "Buildings",
+      "id": "ARMORY_T1",
+      "label": "Armory tier 1",
+      "kind": "building",
+      "path": "art/buildings/BLD_ARMORY_T1_V01.png",
+      "status": "present",
+      "note": "levels 1-3"
+    },
+    {
+      "group": "Buildings",
+      "id": "ARMORY_T2",
+      "label": "Armory tier 2",
+      "kind": "building",
+      "path": "art/buildings/BLD_ARMORY_T2_V01.png",
+      "status": "present",
+      "note": "levels 4-7"
+    },
+    {
+      "group": "Buildings",
+      "id": "ARMORY_T3",
+      "label": "Armory tier 3",
+      "kind": "building",
+      "path": "art/buildings/BLD_ARMORY_T3_V01.png",
+      "status": "present",
       "note": "levels 8-10"
     },
     {
@@ -2827,27 +2886,27 @@
       "id": "SIDE_STRAT_FORCED-MARCH",
       "label": "Forced March",
       "kind": "card",
-      "path": "art/samples/undefined_CUTOUT_V01.png",
-      "status": "missing",
-      "note": "ritual result"
+      "path": "art/cards/SIDE_STRAT_FORCED-MARCH_V01.png",
+      "status": "present",
+      "note": "stratagem emblem"
     },
     {
       "group": "Side cards",
       "id": "SIDE_STRAT_SMOKESCREEN",
       "label": "Smokescreen",
       "kind": "card",
-      "path": "art/samples/undefined_CUTOUT_V01.png",
-      "status": "missing",
-      "note": "ritual result"
+      "path": "art/cards/SIDE_STRAT_SMOKESCREEN_V01.png",
+      "status": "present",
+      "note": "stratagem emblem"
     },
     {
       "group": "Side cards",
       "id": "SIDE_STRAT_FALSE-RETREAT",
       "label": "False Retreat",
       "kind": "card",
-      "path": "art/samples/undefined_CUTOUT_V01.png",
-      "status": "missing",
-      "note": "ritual result"
+      "path": "art/cards/SIDE_STRAT_FALSE-RETREAT_V01.png",
+      "status": "present",
+      "note": "stratagem emblem"
     },
     {
       "group": "World and interface",
@@ -2977,6 +3036,24 @@
     },
     {
       "group": "Icons",
+      "id": "RES-GOLD",
+      "label": "res gold",
+      "kind": "icon",
+      "path": "art/ui/ICON_RES-GOLD_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "RES-RUBY",
+      "label": "res ruby",
+      "kind": "icon",
+      "path": "art/ui/ICON_RES-RUBY_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
       "id": "BLD-FORGE",
       "label": "bld forge",
       "kind": "icon",
@@ -3040,10 +3117,154 @@
     },
     {
       "group": "Icons",
+      "id": "UI-POWER",
+      "label": "ui power",
+      "kind": "icon",
+      "path": "art/ui/ICON_UI-POWER_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
       "id": "BLD-BUILD",
       "label": "bld build",
       "kind": "icon",
       "path": "art/ui/ICON_BLD-BUILD_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "STAT-LIFE",
+      "label": "stat life",
+      "kind": "icon",
+      "path": "art/ui/ICON_STAT-LIFE_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "STAT-ATK",
+      "label": "stat atk",
+      "kind": "icon",
+      "path": "art/ui/ICON_STAT-ATK_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Icons",
+      "id": "STAT-DEF",
+      "label": "stat def",
+      "kind": "icon",
+      "path": "art/ui/ICON_STAT-DEF_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "FOREST",
+      "label": "forest",
+      "kind": "map",
+      "path": "art/map/MAP_FOREST_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "TREE",
+      "label": "tree",
+      "kind": "map",
+      "path": "art/map/MAP_TREE_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "MOUNTAIN",
+      "label": "mountain",
+      "kind": "map",
+      "path": "art/map/MAP_MOUNTAIN_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "HILL",
+      "label": "hill",
+      "kind": "map",
+      "path": "art/map/MAP_HILL_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "BRIDGE",
+      "label": "bridge",
+      "kind": "map",
+      "path": "art/map/MAP_BRIDGE_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "RIVER",
+      "label": "river",
+      "kind": "map",
+      "path": "art/map/MAP_RIVER_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "FORD",
+      "label": "ford",
+      "kind": "map",
+      "path": "art/map/MAP_FORD_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "RUINS",
+      "label": "ruins",
+      "kind": "map",
+      "path": "art/map/MAP_RUINS_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "PALISADE",
+      "label": "palisade",
+      "kind": "map",
+      "path": "art/map/MAP_PALISADE_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "ROAD",
+      "label": "road",
+      "kind": "map",
+      "path": "art/map/MAP_ROAD_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "MARSH",
+      "label": "marsh",
+      "kind": "map",
+      "path": "art/map/MAP_MARSH_V01.png",
+      "status": "present",
+      "note": ""
+    },
+    {
+      "group": "Map symbols",
+      "id": "WATCHTOWER",
+      "label": "watchtower",
+      "kind": "map",
+      "path": "art/map/MAP_WATCHTOWER_V01.png",
       "status": "present",
       "note": ""
     }

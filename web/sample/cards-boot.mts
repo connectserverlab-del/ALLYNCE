@@ -12,33 +12,9 @@
  * Nothing is reimplemented in the template. If the deck screen calls a build illegal, `validateDeck`
  * said so.
  */
-import { Registry } from "../../core/src/registry.js";
 import { validateDeck, effectiveCopyLimit } from "../../core/src/cards.js";
+import { reg } from "./registry-boot.mjs";
 
-import units from "../../data/units/units.json";
-import abilities from "../../data/abilities/abilities.json";
-import factions from "../../data/factions/factions.json";
-import platoon from "../../data/compositions/platoon.json";
-// Only the two factions that have a ladder; `loadRegistry` probes the disk for the rest, which a
-// bundle cannot do, so the list is written out and stays in step with `data/factions/ranks/`.
-import ranksSAM from "../../data/factions/ranks/SAM.json";
-import ranksSHI from "../../data/factions/ranks/SHI.json";
-import fusions from "../../data/abilities/fusions.json";
-import deckRules from "../../data/cards/deck_rules.json";
-import sideCards from "../../data/cards/side_cards.json";
-import buildings from "../../data/kingdom/buildings.json";
-import research from "../../data/kingdom/research.json";
-import banners from "../../data/kingdom/banners.json";
-import wanted from "../../data/missions/wanted.json";
-import marchRules from "../../data/movement/march.json";
-
-const any = (x: unknown) => x as never;
-
-/** The same registry the build-time export uses, assembled from JSON inlined by the bundler. */
-export const reg = new Registry(
-  any(units), any(abilities), any(factions), any(platoon),
-  any([ranksSAM, ranksSHI]), any(fusions), any(deckRules), any(sideCards),
-  any(buildings), any(research), any(banners), any(wanted), any(marchRules),
-);
+export { reg };
 
 export { validateDeck, effectiveCopyLimit };

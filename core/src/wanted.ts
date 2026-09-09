@@ -2,6 +2,7 @@ import type { Registry } from "./data.js";
 import type { Battle, Capture } from "./state.js";
 import type { UnitDef } from "./types.js";
 import type { KingdomState, Resources, ResourceId } from "./kingdom.js";
+import { emptyResources } from "./kingdom.js";
 import type { DeckList, Collection } from "./cards.js";
 import { copyLimit, ownedCopies, starOf } from "./cards.js";
 import { Rng } from "./rng.js";
@@ -46,7 +47,7 @@ export interface ContractOutcome {
 /** A holding's warrant state. Kept small and serialisable, like the rest of KingdomState. */
 export interface WantedState { cycle: number; accepted: string[]; completed: string[] }
 
-const EMPTY: Required<Resources> = { koku: 0, iron: 0, timber: 0, silver: 0 };
+
 
 /** Which board cycle a holding is in right now. Warrants rotate with the clock, not with play. */
 export function boardCycle(reg: Registry, k: KingdomState): number {
@@ -145,10 +146,10 @@ export function markWanted(b: Battle, side: string, contracts: Contract[]): void
  */
 export function resolveContract(reg: Registry, k: KingdomState, contract: Contract, captures: Capture[], side = "A"): ContractOutcome {
   const held = k.wanted.accepted.includes(contract.id);
-  if (!held) return { ok: false, reason: "That warrant is not in hand", copies: 0, unitId: contract.targetId, bounty: { ...EMPTY } };
+  if (!held) return { ok: false, reason: "That warrant is not in hand", copies: 0, unitId: contract.targetId, bounty: emptyResources() };
   const took = captures.filter((c) => c.defId === contract.targetId && c.by === side).length;
   if (took === 0) {
-    return { ok: false, reason: `${contract.targetName} was not taken alive; the warrant pays for a prisoner, not a body`, copies: 0, unitId: contract.targetId, bounty: { ...EMPTY } };
+    return { ok: false, reason: `${contract.targetName} was not taken alive; the warrant pays for a prisoner, not a body`, copies: 0, unitId: contract.targetId, bounty: emptyResources() };
   }
   // several of the same target on the field pays the writ once, plus one card for each extra taken
   const copies = contract.copies + (took - 1);

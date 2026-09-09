@@ -33,6 +33,15 @@ for (const [id, b] of Object.entries(kingdom.buildings)) {
 // --- side cards borrow the art of what they summon, so only rituals with no result need their own ---
 for (const c of sideCards) {
   if (c.kind === "fusion") { rows.push({ group: "Side cards", id: c.id, label: c.name, kind: "card", path: null, status: "derived", note: "shows its materials' art" }); continue; }
+  // A stratagem summons nothing, so there is no unit cutout for it to borrow. This read
+  // `art/samples/${c.result}_CUTOUT_V01.png` for every side card, and a stratagem's absent `result`
+  // spelled that literally `art/samples/undefined_CUTOUT_V01.png` — three rows pointing at one
+  // impossible file, reported as three ordinary missing assets rather than as the modelling gap it
+  // was. Stratagems carry their own painted emblem instead.
+  if (c.kind === "stratagem") {
+    add("Side cards", c.id, c.name, "card", `art/cards/${c.id}_V01.png`, "stratagem emblem");
+    continue;
+  }
   add("Side cards", c.id, c.name, "card", `art/samples/${c.result}_CUTOUT_V01.png`, "ritual result");
 }
 // --- fixed interface and world art ---
@@ -48,8 +57,11 @@ for (const [id, label, p] of [
   ["STAR_FILLED", "Star: earned", "art/ui/STAR_FILLED_V01.png"],
   ["STAR_EMPTY", "Star: unearned", "art/ui/STAR_EMPTY_V01.png"],
 ]) add("World and interface", id, label, "art", p);
-for (const n of ["RES-KOKU","RES-IRON","RES-TIMBER","RES-SILVER","BLD-FORGE","BLD-RESEARCH","BLD-RECRUIT","BLD-BARRACKS","BLD-KEEP","UI-BANNER","UI-DRAW","BLD-BUILD"])
+for (const n of ["RES-KOKU","RES-IRON","RES-TIMBER","RES-SILVER","RES-GOLD","RES-RUBY","BLD-FORGE","BLD-RESEARCH","BLD-RECRUIT","BLD-BARRACKS","BLD-KEEP","UI-BANNER","UI-DRAW","UI-POWER","BLD-BUILD","STAT-LIFE","STAT-ATK","STAT-DEF"])
   add("Icons", n, n.replace(/-/g, " ").toLowerCase(), "icon", `art/ui/ICON_${n}_V01.png`);
+// Painted plan-view terrain symbols for the field.
+for (const n of ["FOREST","TREE","MOUNTAIN","HILL","BRIDGE","RIVER","FORD","RUINS","PALISADE","ROAD","MARSH","WATCHTOWER"])
+  add("Map symbols", n, n.toLowerCase(), "map", `art/map/MAP_${n}_V01.png`);
 
 const summary = {};
 for (const r of rows) {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { blob, deploy, KNI, newBattle, reg, SAM, SHI } from "./helpers.js";
+import { blob, deploy, KNI, newBattle, reg, SAM, SHI, fill, enable } from "./helpers.js";
 import { loadBattle, SAVE_VERSION, saveBattle } from "../src/save.js";
 import { applyCommand } from "../src/commands.js";
 import { assistRitual, createRitual, disruptRitual, tickRitual } from "../src/rituals.js";
@@ -78,8 +78,8 @@ describe("saving and loading a battle with a holding attached", () => {
     const { b, ctrl } = newBattle();
     const p = deploy(b, "K", "A", KNI, blob(5, 5));
     const k = newKingdom(reg, "KNI");
-    k.resources = { koku: 999999, iron: 999999, timber: 999999, silver: 999999 };
-    for (const bld of ["FORGE", "RESEARCH_HALL"] as const) { startUpgrade(reg, k, bld); tick(reg, k, 100000); }
+    k.resources = fill(999999);
+    for (const bld of ["FORGE", "RESEARCH_HALL"] as const) { enable(reg, k, bld); startUpgrade(reg, k, bld); tick(reg, k, 100000); }
     startResearch(reg, k, "RES_FORGED_EDGE"); tick(reg, k, 100000);
     applyKingdom(b, "A", k);
 

@@ -15,7 +15,8 @@
     "gen:content": "node tools/generate-content.mjs",
     "test:ui": "node tools/ui-smoke.mjs",
     "check": "node tools/health-check.mjs",
-    "build:standalone": "node tools/build-standalone.mjs"
+    "build:standalone": "node tools/build-standalone.mjs",
+    "audit:art": "python3 scripts/audit-cutouts.py"
   },
   "repository": {
     "type": "git",

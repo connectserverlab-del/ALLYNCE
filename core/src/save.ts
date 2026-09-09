@@ -2,6 +2,7 @@ import { Battle } from "./state.js";
 import type { Registry } from "./data.js";
 import type { UnitState, PlatoonState, Terrain, GameEvent } from "./types.js";
 import type { KingdomState, KingdomEffects } from "./kingdom.js";
+import { normalizeKingdom } from "./kingdom.js";
 import type { DeckList } from "./cards.js";
 import { DeckState } from "./cards.js";
 import { Rng } from "./rng.js";
@@ -11,7 +12,7 @@ import type { Capture } from "./state.js";
 import type { Command } from "./commands.js";
 import type { WeatherId, TimeOfDayId } from "./weather.js";
 
-export const SAVE_VERSION = 7;
+export const SAVE_VERSION = 8;
 
 export interface BattleSave {
   version: number; seed: number; round: number; phase: string;
@@ -123,5 +124,7 @@ export function saveGame(b: Battle | null, k: KingdomState | null): GameSave {
 }
 export function loadGame(reg: Registry, save: GameSave): { battle: Battle | null; kingdom: KingdomState | null } {
   if (save.version !== SAVE_VERSION) throw new Error(`Save version ${save.version} cannot be read by this build (expects ${SAVE_VERSION})`);
-  return { battle: save.battle ? loadBattle(reg, save.battle) : null, kingdom: save.kingdom ?? null };
+  // A holding round-trips as plain JSON, so nothing is lost on the way out; what it can lack is a
+  // field that did not exist when it was written. `normalizeKingdom` supplies those defaults.
+  return { battle: save.battle ? loadBattle(reg, save.battle) : null, kingdom: save.kingdom ? normalizeKingdom(reg, save.kingdom) : null };
 }
