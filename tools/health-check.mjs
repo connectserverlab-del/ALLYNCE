@@ -60,6 +60,14 @@ step("browser checks", () => run(["run", "test:ui"]));
    ceiling catches and no one sees. Running it here is what makes the refusal mean anything. */
 step("standalone page budget", () => run(["run", "build:standalone"]));
 
+/* And then open what that build wrote. The budget only weighs the file; this plays it — every
+   screen, then the three clicks to a live battlefield — and fails on any request the page makes
+   for anything but itself. Succeeding is not good enough: the board's tokens asked for six plates
+   by relative path, which resolves to the real files when `dist/` sits inside the repository and
+   to nothing at all anywhere else, so the fault was invisible exactly where the build is tested
+   and total everywhere it is used. */
+step("standalone page is self-contained", () => run(["run", "test:standalone"]));
+
 /* Every cut-out asset must actually have been cut. A plate that kept its background or lost its
    subject is a file the registry happily counts as present: one fully opaque unit cutout sat on the
    deck screen for several passes, and cutting the approved building plates against a pale ground

@@ -2,6 +2,7 @@
  * Battle screen. Renders the hex board, drives selection and actions, and plays one
  * short effect per attack or ability before applying the next step of the turn.
  */
+import { plateFor } from "../art.js";
 import { esc } from "../cards.js";
 import * as save from "../save.js";
 import { Skirmish, key, distance } from "../engine/skirmish.js";
@@ -29,9 +30,9 @@ const corners = (c) => Array.from({ length: 6 }, (_, i) => {
  * plain marker to work from, not a broken attempt at art.
  */
 function pawnArt(def, r) {
-  const painted = def.art?.concept ?? def.art?.cutout;
-  if (painted) {
-    return `<image href="../${painted}" x="${-r}" y="${-r}" width="${r * 2}" height="${r * 2}"
+  const src = plateFor(def, { prefer: "concept" });
+  if (src) {
+    return `<image href="${src}" x="${-r}" y="${-r}" width="${r * 2}" height="${r * 2}"
       preserveAspectRatio="xMidYMid slice"/>`;
   }
   return `<text class="pawn-initials" y="1">${esc(initials(def.name))}</text>`;
